@@ -1,0 +1,622 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+
+interface BrandingData {
+  brand_name: string;
+  tagline: string;
+  logo_url: string | null;
+  college_logo_url: string | null;
+  favicon_url: string | null;
+  default_banner_url: string | null;
+  primary_color: string;
+  secondary_color: string;
+  accent_color: string;
+  background_color: string;
+  text_color: string;
+  success_color: string;
+  warning_color: string;
+  error_color: string;
+  font_family: string;
+  border_radius: number;
+  white_label_enabled: boolean;
+  footer_text: string;
+  support_email: string;
+  support_phone: string;
+  social_links: Record<string, string>;
+  email_from_name: string;
+  email_from_address: string;
+  email_reply_to: string;
+  footer_company_name: string;
+  footer_website_url: string;
+  footer_copyright: string;
+}
+
+export default function BrandingSettingsPage() {
+  const [branding, setBranding] = useState<BrandingData>({
+    brand_name: '',
+    tagline: '',
+    logo_url: null,
+    college_logo_url: null,
+    favicon_url: null,
+    default_banner_url: null,
+    primary_color: '#3B82F6',
+    secondary_color: '#1D4ED8',
+    accent_color: '#10B981',
+    background_color: '#FFFFFF',
+    text_color: '#1F2937',
+    success_color: '#10B981',
+    warning_color: '#F59E0B',
+    error_color: '#EF4444',
+    font_family: 'Inter, system-ui, sans-serif',
+    border_radius: 8,
+    white_label_enabled: false,
+    footer_text: '',
+    support_email: '',
+    support_phone: '',
+    social_links: {},
+    email_from_name: '',
+    email_from_address: '',
+    email_reply_to: '',
+    footer_company_name: '',
+    footer_website_url: '',
+    footer_copyright: '',
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const fetchBranding = useCallback(async () => {
+    try {
+      const response = await fetch('/api/branding');
+      const data = await response.json();
+      if (data.data?.branding) {
+        setBranding(data.data.branding);
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Failed to load branding' });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBranding();
+  }, [fetchBranding]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/branding', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(branding),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: 'Branding saved successfully' });
+        if (data.data?.branding) {
+          setBranding(data.data.branding);
+        }
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Failed to save branding' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Failed to save branding' });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleFileUpload = async (type: string, file: File) => {
+    setUploading(type);
+    setMessage(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const endpoint = type === 'banner'
+        ? '/api/branding/banner'
+        : type === 'college-logo'
+        ? '/api/branding/college-logo'
+        : type === 'favicon'
+        ? '/api/branding/favicon'
+        : '/api/branding/logo';
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const urlField = type === 'banner'
+          ? 'default_banner_url'
+          : type === 'college-logo'
+          ? 'college_logo_url'
+          : type === 'favicon'
+          ? 'favicon_url'
+          : 'logo_url';
+
+        setBranding((prev) => ({
+          ...prev,
+          [urlField]: data.data[urlField],
+        }));
+        setMessage({ type: 'success', text: `${type} uploaded successfully` });
+      } else {
+        setMessage({ type: 'error', text: data.error || `Failed to upload ${type}` });
+      }
+    } catch {
+      setMessage({ type: 'error', text: `Failed to upload ${type}` });
+    } finally {
+      setUploading(null);
+    }
+  };
+
+  const handleDeleteAsset = async (type: string) => {
+    if (!confirm(`Are you sure you want to delete the ${type}?`)) return;
+
+    setMessage(null);
+
+    try {
+      const endpoint = type === 'banner' ? '/api/branding/banner' : `/api/branding/${type}`;
+      const response = await fetch(endpoint, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        const urlField = type === 'banner'
+          ? 'default_banner_url'
+          : type === 'college-logo'
+          ? 'college_logo_url'
+          : type === 'favicon'
+          ? 'favicon_url'
+          : 'logo_url';
+
+        setBranding((prev) => ({
+          ...prev,
+          [urlField]: null,
+        }));
+        setMessage({ type: 'success', text: `${type} deleted successfully` });
+      } else {
+        const data = await response.json();
+        setMessage({ type: 'error', text: data.error || `Failed to delete ${type}` });
+      }
+    } catch {
+      setMessage({ type: 'error', text: `Failed to delete ${type}` });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">Branding Settings</h1>
+
+      {message && (
+        <div
+          className={`p-4 mb-6 rounded ${
+            message.type === 'success'
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-red-50 text-red-800 border border-red-200'
+          }`}
+        >
+          {message.text}
+        </div>
+      )}
+
+      <div className="space-y-8">
+        {/* Identity */}
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-4">Identity</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Brand Name
+              </label>
+              <input
+                type="text"
+                value={branding.brand_name}
+                onChange={(e) =>
+                  setBranding((prev) => ({ ...prev, brand_name: e.target.value }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+                placeholder="Your Brand Name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Tagline
+              </label>
+              <input
+                type="text"
+                value={branding.tagline}
+                onChange={(e) =>
+                  setBranding((prev) => ({ ...prev, tagline: e.target.value }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+                placeholder="Your tagline"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Logos */}
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-4">Logos & Images</h2>
+          <div className="grid grid-cols-2 gap-6">
+            {/* Organization Logo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Organization Logo
+              </label>
+              {branding.logo_url && (
+                <div className="mb-2">
+                  <img
+                    src={branding.logo_url}
+                    alt="Organization Logo"
+                    className="h-20 object-contain"
+                  />
+                </div>
+              )}
+              <div className="flex gap-2">
+                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                  {uploading === 'logo' ? 'Uploading...' : 'Upload'}
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload('logo', file);
+                    }}
+                    disabled={uploading !== null}
+                  />
+                </label>
+                {branding.logo_url && (
+                  <button
+                    onClick={() => handleDeleteAsset('logo')}
+                    className="text-red-600 text-sm hover:text-red-800"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* College Logo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                College Logo
+              </label>
+              {branding.college_logo_url && (
+                <div className="mb-2">
+                  <img
+                    src={branding.college_logo_url}
+                    alt="College Logo"
+                    className="h-20 object-contain"
+                  />
+                </div>
+              )}
+              <div className="flex gap-2">
+                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                  {uploading === 'college-logo' ? 'Uploading...' : 'Upload'}
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload('college-logo', file);
+                    }}
+                    disabled={uploading !== null}
+                  />
+                </label>
+                {branding.college_logo_url && (
+                  <button
+                    onClick={() => handleDeleteAsset('college-logo')}
+                    className="text-red-600 text-sm hover:text-red-800"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Favicon */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Favicon
+              </label>
+              {branding.favicon_url && (
+                <div className="mb-2">
+                  <img
+                    src={branding.favicon_url}
+                    alt="Favicon"
+                    className="h-8 object-contain"
+                  />
+                </div>
+              )}
+              <div className="flex gap-2">
+                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                  {uploading === 'favicon' ? 'Uploading...' : 'Upload'}
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/png,image/x-icon,image/svg+xml"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload('favicon', file);
+                    }}
+                    disabled={uploading !== null}
+                  />
+                </label>
+                {branding.favicon_url && (
+                  <button
+                    onClick={() => handleDeleteAsset('favicon')}
+                    className="text-red-600 text-sm hover:text-red-800"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Default Banner */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Default Banner
+              </label>
+              {branding.default_banner_url && (
+                <div className="mb-2">
+                  <img
+                    src={branding.default_banner_url}
+                    alt="Default Banner"
+                    className="h-20 object-cover rounded"
+                  />
+                </div>
+              )}
+              <div className="flex gap-2">
+                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                  {uploading === 'banner' ? 'Uploading...' : 'Upload'}
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/png,image/jpeg,image/webp"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload('banner', file);
+                    }}
+                    disabled={uploading !== null}
+                  />
+                </label>
+                {branding.default_banner_url && (
+                  <button
+                    onClick={() => handleDeleteAsset('banner')}
+                    className="text-red-600 text-sm hover:text-red-800"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Colors */}
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-4">Colors</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {[
+              { key: 'primary_color', label: 'Primary' },
+              { key: 'secondary_color', label: 'Secondary' },
+              { key: 'accent_color', label: 'Accent' },
+              { key: 'background_color', label: 'Background' },
+              { key: 'text_color', label: 'Text' },
+              { key: 'success_color', label: 'Success' },
+              { key: 'warning_color', label: 'Warning' },
+              { key: 'error_color', label: 'Error' },
+            ].map(({ key, label }) => (
+              <div key={key}>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {label}
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={(branding as any)[key]}
+                    onChange={(e) =>
+                      setBranding((prev) => ({ ...prev, [key]: e.target.value }))
+                    }
+                    className="h-10 w-10 rounded border cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={(branding as any)[key]}
+                    onChange={(e) =>
+                      setBranding((prev) => ({ ...prev, [key]: e.target.value }))
+                    }
+                    className="flex-1 border rounded px-2 py-1 text-sm font-mono"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Typography & Shape */}
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-4">Typography & Shape</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Font Family
+              </label>
+              <input
+                type="text"
+                value={branding.font_family}
+                onChange={(e) =>
+                  setBranding((prev) => ({ ...prev, font_family: e.target.value }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Border Radius (px)
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="24"
+                value={branding.border_radius}
+                onChange={(e) =>
+                  setBranding((prev) => ({
+                    ...prev,
+                    border_radius: parseInt(e.target.value) || 0,
+                  }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+            <div className="flex items-end">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={branding.white_label_enabled}
+                  onChange={(e) =>
+                    setBranding((prev) => ({
+                      ...prev,
+                      white_label_enabled: e.target.checked,
+                    }))
+                  }
+                  className="rounded"
+                />
+                <span className="text-sm text-gray-700">White Label Mode</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer & Support */}
+        <section className="bg-white rounded-lg border p-6">
+          <h2 className="text-lg font-semibold mb-4">Footer & Support</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Footer Company Name
+              </label>
+              <input
+                type="text"
+                value={branding.footer_company_name}
+                onChange={(e) =>
+                  setBranding((prev) => ({
+                    ...prev,
+                    footer_company_name: e.target.value,
+                  }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Footer Website URL
+              </label>
+              <input
+                type="url"
+                value={branding.footer_website_url}
+                onChange={(e) =>
+                  setBranding((prev) => ({
+                    ...prev,
+                    footer_website_url: e.target.value,
+                  }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Footer Copyright
+              </label>
+              <input
+                type="text"
+                value={branding.footer_copyright}
+                onChange={(e) =>
+                  setBranding((prev) => ({
+                    ...prev,
+                    footer_copyright: e.target.value,
+                  }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Footer Text
+              </label>
+              <textarea
+                value={branding.footer_text}
+                onChange={(e) =>
+                  setBranding((prev) => ({ ...prev, footer_text: e.target.value }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+                rows={3}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Support Email
+              </label>
+              <input
+                type="email"
+                value={branding.support_email}
+                onChange={(e) =>
+                  setBranding((prev) => ({ ...prev, support_email: e.target.value }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Support Phone
+              </label>
+              <input
+                type="tel"
+                value={branding.support_phone}
+                onChange={(e) =>
+                  setBranding((prev) => ({ ...prev, support_phone: e.target.value }))
+                }
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Save Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+          >
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
