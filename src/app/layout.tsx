@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import "./globals.css";
 
@@ -66,6 +67,7 @@ export default function RootLayout({
         <ThemeProvider>
           <div className="hp-bg-gradient" />
           <div className="min-h-screen">{children}</div>
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
