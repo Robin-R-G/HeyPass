@@ -1,15 +1,13 @@
 -- Certificate Security Fixes
 
 -- ============================================================
--- 1. Add HMAC hash column to certificates
+-- 1. Add content hash column to certificates
 -- ============================================================
 ALTER TABLE certificates
   ADD COLUMN content_hash VARCHAR(64),
-  ADD COLUMN token_expires_at TIMESTAMPTZ,
-  ADD COLUMN watermark_id VARCHAR(100);
+  ADD COLUMN token_expires_at TIMESTAMPTZ;
 
 CREATE INDEX idx_cert_content_hash ON certificates(content_hash);
-CREATE INDEX idx_cert_watermark ON certificates(watermark_id);
 
 -- ============================================================
 -- 2. Template snapshot: store layout at generation time
@@ -34,21 +32,7 @@ CREATE INDEX idx_downloads_cert ON certificate_downloads(certificate_id, downloa
 CREATE INDEX idx_downloads_ip ON certificate_downloads(ip_address, downloaded_at DESC);
 
 -- ============================================================
--- 4. Add expiry to access tokens (nullable = never expires for legacy)
--- ============================================================
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns
-    WHERE table_name = 'certificates'
-    AND column_name = 'token_expires_at'
-  ) THEN
-    ALTER TABLE certificates ADD COLUMN token_expires_at TIMESTAMPTZ;
-  END IF;
-END $$;
-
--- ============================================================
--- 5. Add generation rate limit tracking
+-- 4. Add generation rate limit tracking
 -- ============================================================
 CREATE TABLE certificate_generation_limits (
   id                UUID PRIMARY KEY DEFAULT uuid_generate_v7(),

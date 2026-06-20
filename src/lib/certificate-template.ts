@@ -6,7 +6,6 @@ export interface RenderOptions {
   logo_urls?: Record<string, string>;
   signature_urls?: Record<string, string>;
   qr_code_url?: string;
-  watermark_id?: string;
   output_type: 'pdf' | 'png';
 }
 
@@ -71,7 +70,7 @@ function renderElement(element: TemplateElement, placeholders: Record<string, st
 }
 
 export function renderCertificateHTML(options: RenderOptions): string {
-  const { layout, placeholders, logo_urls = {}, signature_urls = {}, qr_code_url, watermark_id, output_type } = options;
+  const { layout, placeholders, logo_urls = {}, signature_urls = {}, qr_code_url, output_type } = options;
 
   const images: Record<string, string> = {
     ...logo_urls,
@@ -80,21 +79,6 @@ export function renderCertificateHTML(options: RenderOptions): string {
   };
 
   const elementsHTML = layout.elements.map(el => renderElement(el, placeholders, images)).join('\n');
-
-  const watermarkHTML = watermark_id ? `
-    <div style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-30deg);
-      font-size: 14px;
-      color: rgba(0,0,0,0.03);
-      white-space: nowrap;
-      pointer-events: none;
-      user-select: none;
-      z-index: 1;
-    ">${watermark_id}</div>
-  ` : '';
 
   const isLandscape = layout.orientation === 'landscape';
   const width = isLandscape ? '1123px' : '794px';
@@ -124,7 +108,6 @@ export function renderCertificateHTML(options: RenderOptions): string {
 </head>
 <body>
   <div class="certificate">
-    ${watermarkHTML}
     ${elementsHTML}
   </div>
 </body>

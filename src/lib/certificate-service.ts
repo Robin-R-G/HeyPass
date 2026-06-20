@@ -32,7 +32,6 @@ export interface CertificateData {
   token_expires_at: string | null;
   template_snapshot: CertificateTemplateLayout | null;
   content_hash: string | null;
-  watermark_id: string | null;
   pdf_url: string | null;
   png_url: string | null;
   status: string;
@@ -81,10 +80,6 @@ class CertificateServiceImpl {
     return crypto.randomBytes(32).toString('hex');
   }
 
-  private generateWatermarkId(): string {
-    return `WM-${Date.now()}-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
-  }
-
   private computeContentHash(data: string): string {
     return crypto.createHash('sha256').update(data).digest('hex');
   }
@@ -118,7 +113,7 @@ class CertificateServiceImpl {
       .from('certificates')
       .select(`
         id, certificate_number, access_token, token_expires_at,
-        template_snapshot, content_hash, watermark_id,
+        template_snapshot, content_hash,
         pdf_url, png_url, status, issued_at, metadata,
         events!inner(title),
         certificate_types!inner(name),
@@ -138,7 +133,6 @@ class CertificateServiceImpl {
       token_expires_at: cert.token_expires_at,
       template_snapshot: cert.template_snapshot,
       content_hash: cert.content_hash,
-      watermark_id: cert.watermark_id,
       pdf_url: cert.pdf_url,
       png_url: cert.png_url,
       status: cert.status,
@@ -175,7 +169,6 @@ class CertificateServiceImpl {
     // Generate secure identifiers
     const certificateNumber = this.generateCertificateNumber(clientId);
     const accessToken = this.generateAccessToken();
-    const watermarkId = this.generateWatermarkId();
     const tokenExpiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(); // 1 year
 
     // Build certificate data for hashing
@@ -216,7 +209,6 @@ class CertificateServiceImpl {
         template_version: template.version,
         template_snapshot: templateSnapshot,
         content_hash: contentHash,
-        watermark_id: watermarkId,
         is_manual: !input.registration_id,
         manual_data: input.registration_id ? null : {
           name: input.name,
@@ -232,7 +224,7 @@ class CertificateServiceImpl {
         },
         status: 'generated',
       })
-      .select('id, certificate_number, access_token, token_expires_at, template_snapshot, content_hash, watermark_id, pdf_url, png_url, status, issued_at, metadata')
+      .select('id, certificate_number, access_token, token_expires_at, template_snapshot, content_hash, pdf_url, png_url, status, issued_at, metadata')
       .single();
 
     if (error) throw error;
@@ -244,7 +236,6 @@ class CertificateServiceImpl {
       token_expires_at: cert.token_expires_at,
       template_snapshot: cert.template_snapshot,
       content_hash: cert.content_hash,
-      watermark_id: cert.watermark_id,
       pdf_url: cert.pdf_url,
       png_url: cert.png_url,
       status: cert.status,
@@ -282,7 +273,7 @@ class CertificateServiceImpl {
       .from('certificates')
       .select(`
         id, certificate_number, access_token, token_expires_at,
-        template_snapshot, content_hash, watermark_id,
+        template_snapshot, content_hash,
         pdf_url, png_url, status, issued_at, metadata,
         events!inner(title),
         certificate_types!inner(name),
@@ -301,7 +292,6 @@ class CertificateServiceImpl {
       token_expires_at: data.token_expires_at,
       template_snapshot: data.template_snapshot,
       content_hash: data.content_hash,
-      watermark_id: data.watermark_id,
       pdf_url: data.pdf_url,
       png_url: data.png_url,
       status: data.status,
@@ -319,7 +309,7 @@ class CertificateServiceImpl {
       .from('certificates')
       .select(`
         id, certificate_number, access_token, token_expires_at,
-        template_snapshot, content_hash, watermark_id,
+        template_snapshot, content_hash,
         pdf_url, png_url, status, issued_at, metadata,
         events!inner(title),
         certificate_types!inner(name),
@@ -343,7 +333,6 @@ class CertificateServiceImpl {
       token_expires_at: data.token_expires_at,
       template_snapshot: data.template_snapshot,
       content_hash: data.content_hash,
-      watermark_id: data.watermark_id,
       pdf_url: data.pdf_url,
       png_url: data.png_url,
       status: data.status,
