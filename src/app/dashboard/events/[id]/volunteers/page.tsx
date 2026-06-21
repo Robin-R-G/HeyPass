@@ -1,0 +1,228 @@
+"use client";
+
+import { use, useEffect, useState } from "react";
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+interface Volunteer { id: string; first_name: string; last_name: string; email: string; phone: string; status: string; checked_in_at: string | null; checked_out_at: string | null; }
+interface VolunteerTask { id: string; title: string; task_type: string; start_time: string; end_time: string; slots_total: number; slots_filled: number; is_active: boolean; }
+interface VolunteerStats { total: number; approved: number; pending: number; checked_in: number; tasks_total: number; tasks_filled: number; }
+
+export default function VolunteerPage(props: { params: Promise<{ id: string }> }) {
+  const { id: eventId } = use(props.params);
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
+  const [tasks, setTasks] = useState<VolunteerTask[]>([]);
+  const [stats, setStats] = useState<VolunteerStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [taskDialogOpen, setTaskDialogOpen] = useState(false);
+  const [newTask, setNewTask] = useState({ title: "", description: "", task_type: "general", location: "", start_time: "", end_time: "", slots_total: 1 });
+
+  useEffect(() => {
+    Promise.all([
+      fetch(`/api/events/${eventId}/volunteers`).then(r => r.json()),
+      fetch(`/api/events/${eventId}/volunteers/tasks`).then(r => r.json()),
+      fetch(`/api/events/${eventId}/volunteers/analytics`).then(r => r.json()),
+    ]).then(([vData, tData, sData]) => {
+      setVolunteers(vData.volunteers || []);
+      setTasks(tData.tasks || []);
+      setStats(sData.stats || { total: 0, approved: 0, pending: 0, checked_in: 0, tasks_total: 0, tasks_filled: 0 });
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, [eventId]);
+
+  const createTask = async () => {
+    await fetch(`/api/events/${eventId}/volunteers/tasks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newTask) });
+    setTaskDialogOpen(false);
+    const tData = await fetch(`/api/events/${eventId}/volunteers/tasks`).then(r => r.json());
+    setTasks(tData.tasks || []);
+  };
+
+  const filtered = volunteers.filter(v => `${v.first_name} ${v.last_name} ${v.email}`.toLowerCase().includes(search.toLowerCase()));
+
+  const statusColor = (s: string) => {
+    switch (s) { case "approved": return "bg-green-100 text-green-800"; case "pending": return "bg-yellow-100 text-yellow-800"; case "checked_in": return "bg-blue-100 text-blue-800"; case "completed": return "bg-gray-100 text-gray-800"; default: return "bg-red-100 text-red-800"; }
+  };
+
+  if (loading) return <div className="p-8 text-center">Loading...</div>;
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+        <Link href="/dashboard" className="hover:text-gray-700">Dashboard</Link>
+        <span>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hover:text-gray-700">Event</Link>
+        <span>/</span>
+        <span className="text-gray-900 font-medium">Volunteers</span>
+      </nav>
+
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Volunteer Management</h1>
+        <div className="flex gap-2">
+          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Dashboard</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/tickets`}><Button variant="outline" size="sm">Tickets</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/volunteers`}><Button size="sm">Volunteers</Button></Link>
+        </div>
+      </div>
+
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="volunteers">Volunteers</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+          <TabsTrigger value="schedule">Schedule</TabsTrigger>
+          <TabsTrigger value="communicate">Communicate</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            {[
+              { label: "Total", value: stats?.total || 0 },
+              { label: "Approved", value: stats?.approved || 0 },
+              { label: "Pending", value: stats?.pending || 0 },
+              { label: "Checked In", value: stats?.checked_in || 0 },
+              { label: "Tasks", value: stats?.tasks_total || 0 },
+              { label: "Slots Filled", value: stats?.tasks_filled || 0 },
+            ].map(k => (
+              <Card key={k.label}><CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold">{k.value}</p>
+                <p className="text-sm text-gray-500">{k.label}</p>
+              </CardContent></Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="volunteers" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Volunteers ({volunteers.length})</CardTitle>
+              <Input placeholder="Search..." className="w-64" value={search} onChange={e => setSearch(e.target.value)} />
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Email</TableHead><TableHead>Phone</TableHead><TableHead>Status</TableHead><TableHead>Checked In</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {filtered.map(v => (
+                    <TableRow key={v.id}>
+                      <TableCell>{v.first_name} {v.last_name}</TableCell>
+                      <TableCell>{v.email}</TableCell>
+                      <TableCell>{v.phone || "-"}</TableCell>
+                      <TableCell><Badge className={statusColor(v.status)}>{v.status}</Badge></TableCell>
+                      <TableCell>{v.checked_in_at ? new Date(v.checked_in_at).toLocaleString() : "-"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="tasks" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Tasks ({tasks.length})</CardTitle>
+              <Dialog open={taskDialogOpen} onOpenChange={setTaskDialogOpen}>
+                <DialogTrigger asChild><Button>Create Task</Button></DialogTrigger>
+                <DialogContent>
+                  <DialogHeader><DialogTitle>New Volunteer Task</DialogTitle></DialogHeader>
+                  <div className="space-y-4 mt-4">
+                    <div><Label>Title</Label><Input value={newTask.title} onChange={e => setNewTask({ ...newTask, title: e.target.value })} /></div>
+                    <div><Label>Description</Label><Input value={newTask.description} onChange={e => setNewTask({ ...newTask, description: e.target.value })} /></div>
+                    <div><Label>Type</Label>
+                      <Select value={newTask.task_type} onValueChange={v => setNewTask({ ...newTask, task_type: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {["general", "registration", "usher", "stage", "hospitality", "security", "transport", "media"].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div><Label>Location</Label><Input value={newTask.location} onChange={e => setNewTask({ ...newTask, location: e.target.value })} /></div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div><Label>Start</Label><Input type="datetime-local" value={newTask.start_time} onChange={e => setNewTask({ ...newTask, start_time: e.target.value })} /></div>
+                      <div><Label>End</Label><Input type="datetime-local" value={newTask.end_time} onChange={e => setNewTask({ ...newTask, end_time: e.target.value })} /></div>
+                    </div>
+                    <div><Label>Slots</Label><Input type="number" value={newTask.slots_total} onChange={e => setNewTask({ ...newTask, slots_total: parseInt(e.target.value) || 1 })} /></div>
+                    <Button onClick={createTask}>Create</Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Type</TableHead><TableHead>Location</TableHead><TableHead>Slots</TableHead><TableHead>Start</TableHead><TableHead>End</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {tasks.map(t => (
+                    <TableRow key={t.id}>
+                      <TableCell className="font-medium">{t.title}</TableCell>
+                      <TableCell><Badge variant="outline">{t.task_type}</Badge></TableCell>
+                      <TableCell>{t.location || "-"}</TableCell>
+                      <TableCell>{t.slots_filled}/{t.slots_total}</TableCell>
+                      <TableCell>{new Date(t.start_time).toLocaleString()}</TableCell>
+                      <TableCell>{new Date(t.end_time).toLocaleString()}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="schedule" className="mt-6">
+          <Card>
+            <CardHeader><CardTitle>Schedule</CardTitle></CardHeader>
+            <CardContent>
+              {tasks.length === 0 ? <p className="text-gray-500">No tasks scheduled</p> : (
+                <div className="space-y-4">
+                  {tasks.sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime()).map(t => (
+                    <div key={t.id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-medium">{t.title}</p>
+                          <p className="text-sm text-gray-500">{t.location || "No location"}</p>
+                        </div>
+                        <Badge className={t.slots_filled >= t.slots_total ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
+                          {t.slots_filled}/{t.slots_total} slots
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-gray-500 mt-2">{new Date(t.start_time).toLocaleString()} - {new Date(t.end_time).toLocaleString()}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="communicate" className="mt-6">
+          <Card>
+            <CardHeader><CardTitle>Bulk Communication</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <div><Label>Recipient Group</Label>
+                <Select defaultValue="all">
+                  <SelectTrigger className="w-64"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Volunteers</SelectItem>
+                    <SelectItem value="approved">Approved Only</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="checked_in">Checked In</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div><Label>Subject</Label><Input placeholder="Message subject..." /></div>
+              <div><Label>Message</Label><Input placeholder="Type your message..." /></div>
+              <Button>Send Message</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}

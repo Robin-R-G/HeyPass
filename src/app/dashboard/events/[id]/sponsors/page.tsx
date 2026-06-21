@@ -1,211 +1,65 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { use, useEffect, useState } from "react";
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface Sponsor {
-  id: string;
-  name: string;
-  tier: string;
-  logo_url: string | null;
-  website_url: string | null;
-  booth_location: string | null;
-  contact_name: string | null;
-  contact_email: string | null;
-  amount_paid: number;
-  is_active: boolean;
-  created_at: string;
-}
+interface Sponsor { id: string; name: string; tier: string; website_url: string; booth_location: string; amount_paid: number; is_active: boolean; }
+interface Branding { id: string; sponsor_id: string; placement_type: string; impressions: number; unique_views: number; clicks: number; scans: number; }
+interface Analytics { total_impressions: number; total_unique_views: number; total_scans: number; total_clicks: number; }
 
-interface Branding {
-  id: string;
-  sponsor_id: string;
-  placement_type: string;
-  impressions: number;
-  unique_views: number;
-  clicks: number;
-  scans: number;
-  last_scanned_at: string | null;
-  sponsor: { name: string; tier: string } | null;
-}
-
-interface Analytics {
-  total_impressions: number;
-  total_unique_views: number;
-  total_scans: number;
-  total_clicks: number;
-  top_performers: {
-    branding_id: string;
-    placement_type: string;
-    impressions: number;
-    scans: number;
-    clicks: number;
-  }[];
-  scan_timeline: { date: string; count: number }[];
-}
-
-interface Scan {
-  id: string;
-  scan_type: string;
-  device_info: string | null;
-  scanned_at: string;
-  sponsor: { name: string; tier: string } | null;
-  branding: { placement_type: string } | null;
-  registration: { first_name: string; last_name: string; email: string } | null;
-}
-
-const TIER_COLORS: Record<string, string> = {
-  platinum: 'bg-violet-100 text-violet-800',
-  gold: 'bg-yellow-100 text-yellow-800',
-  silver: 'bg-gray-100 text-gray-800',
-  bronze: 'bg-orange-100 text-orange-800',
-  custom: 'bg-blue-100 text-blue-800',
-};
-
-const PLACEMENT_LABELS: Record<string, string> = {
-  banner: 'Banner',
-  stage_digital: 'Stage Digital',
-  hall_screen: 'Hall Screen',
-  badge: 'Badge',
-  certificate: 'Certificate',
-  webpage: 'Webpage',
-};
-
-export default function SponsorsPage() {
-  const params = useParams();
-  const eventId = params.id as string;
-
+export default function SponsorsPage(props: { params: Promise<{ id: string }> }) {
+  const { id: eventId } = use(props.params);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [branding, setBranding] = useState<Branding[]>([]);
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
-  const [scans, setScans] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('sponsors');
-
-  const [showAddSponsor, setShowAddSponsor] = useState(false);
-  const [showAddBranding, setShowAddBranding] = useState(false);
-  const [newSponsor, setNewSponsor] = useState({ name: '', tier: 'silver', contact_name: '', contact_email: '', amount_paid: '' });
-  const [newBranding, setNewBranding] = useState({ placement_type: 'banner' });
+  const [createOpen, setCreateOpen] = useState(false);
+  const [newSponsor, setNewSponsor] = useState({ name: "", tier: "silver", website_url: "", booth_location: "", amount_paid: 0, contact_name: "", contact_email: "" });
 
   useEffect(() => {
-    fetchAll();
+    fetch(`/api/events/${eventId}/sponsors`).then(r => r.json()).then(data => {
+      setSponsors(data.sponsors || []);
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, [eventId]);
 
-  useEffect(() => {
-    if (activeTab === 'branding') fetchBranding();
-    if (activeTab === 'analytics') fetchAnalytics();
-    if (activeTab === 'scans') fetchScans();
-  }, [activeTab]);
+  const createSponsor = async () => {
+    await fetch(`/api/events/${eventId}/sponsors`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newSponsor) });
+    setCreateOpen(false);
+    const data = await fetch(`/api/events/${eventId}/sponsors`).then(r => r.json());
+    setSponsors(data.sponsors || []);
+  };
 
-  async function fetchAll() {
-    try {
-      const res = await fetch(`/api/events/${eventId}/sponsors`);
-      const data = await res.json();
-      setSponsors(data.data?.sponsors || []);
-    } catch (err) {
-      console.error('Failed to fetch sponsors:', err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const tierColor = (t: string) => {
+    switch (t) { case "platinum": return "bg-gray-100 text-gray-800"; case "gold": return "bg-yellow-100 text-yellow-800"; case "silver": return "bg-slate-100 text-slate-800"; case "bronze": return "bg-orange-100 text-orange-800"; default: return "bg-blue-100 text-blue-800"; }
+  };
 
-  async function fetchBranding() {
-    try {
-      const res = await fetch(`/api/events/${eventId}/sponsors/all/branding`);
-      const data = await res.json();
-      setBranding(data.data?.branding || []);
-    } catch (err) {
-      console.error('Failed to fetch branding:', err);
-    }
-  }
-
-  async function fetchAnalytics() {
-    try {
-      const res = await fetch(`/api/events/${eventId}/sponsors/all/analytics`);
-      const data = await res.json();
-      setAnalytics(data.data?.analytics || null);
-    } catch (err) {
-      console.error('Failed to fetch analytics:', err);
-    }
-  }
-
-  async function fetchScans() {
-    try {
-      const res = await fetch(`/api/events/${eventId}/sponsors/all/scan`);
-      const data = await res.json();
-      setScans(data.data?.scans || []);
-    } catch (err) {
-      console.error('Failed to fetch scans:', err);
-    }
-  }
-
-  async function handleAddSponsor() {
-    try {
-      const res = await fetch(`/api/events/${eventId}/sponsors`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...newSponsor,
-          amount_paid: newSponsor.amount_paid ? parseFloat(newSponsor.amount_paid) : 0,
-        }),
-      });
-      if (res.ok) {
-        setShowAddSponsor(false);
-        setNewSponsor({ name: '', tier: 'silver', contact_name: '', contact_email: '', amount_paid: '' });
-        fetchAll();
-      }
-    } catch (err) {
-      console.error('Failed to add sponsor:', err);
-    }
-  }
-
-  async function handleAddBranding(sponsorId: string) {
-    try {
-      const res = await fetch(`/api/events/${eventId}/sponsors/${sponsorId}/branding`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newBranding),
-      });
-      if (res.ok) {
-        setShowAddBranding(false);
-        setNewBranding({ placement_type: 'banner' });
-        fetchBranding();
-      }
-    } catch (err) {
-      console.error('Failed to add branding:', err);
-    }
-  }
-
-  async function handleDeleteSponsor(sponsorId: string) {
-    if (!confirm('Delete this sponsor?')) return;
-    try {
-      await fetch(`/api/events/${eventId}/sponsors/${sponsorId}`, { method: 'DELETE' });
-      fetchAll();
-    } catch (err) {
-      console.error('Failed to delete sponsor:', err);
-    }
-  }
-
-  if (loading) {
-    return <div className="text-center py-8">Loading sponsors...</div>;
-  }
+  if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Sponsor Analytics</h1>
-        <Button onClick={() => setShowAddSponsor(true)}>Add Sponsor</Button>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+        <Link href="/dashboard" className="hover:text-gray-700">Dashboard</Link><span>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hover:text-gray-700">Event</Link><span>/</span>
+        <span className="text-gray-900 font-medium">Sponsors</span>
+      </nav>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Sponsor Management</h1>
+        <div className="flex gap-2">
+          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Dashboard</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/sponsors`}><Button size="sm">Sponsors</Button></Link>
+        </div>
       </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs defaultValue="sponsors">
         <TabsList>
           <TabsTrigger value="sponsors">Sponsors</TabsTrigger>
           <TabsTrigger value="branding">Branding</TabsTrigger>
@@ -213,354 +67,105 @@ export default function SponsorsPage() {
           <TabsTrigger value="scans">Scan Activity</TabsTrigger>
         </TabsList>
 
-        {/* Sponsors Tab */}
-        <TabsContent value="sponsors" className="space-y-4">
-          {sponsors.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                No sponsors yet. Add your first sponsor to get started.
-              </CardContent>
-            </Card>
-          ) : (
-            <Card>
-              <CardContent className="p-0">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b bg-muted/50">
-                      <th className="text-left p-3">Name</th>
-                      <th className="text-left p-3">Tier</th>
-                      <th className="text-left p-3">Contact</th>
-                      <th className="text-right p-3">Amount Paid</th>
-                      <th className="text-right p-3">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sponsors.map((s) => (
-                      <tr key={s.id} className="border-b">
-                        <td className="p-3 font-medium">{s.name}</td>
-                        <td className="p-3">
-                          <Badge className={TIER_COLORS[s.tier] || ''}>{s.tier}</Badge>
-                        </td>
-                        <td className="p-3 text-muted-foreground">{s.contact_email || '-'}</td>
-                        <td className="p-3 text-right font-mono">₹{Number(s.amount_paid).toLocaleString()}</td>
-                        <td className="p-3 text-right">
-                          <Button variant="ghost" size="sm" onClick={() => handleDeleteSponsor(s.id)}>
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
+        <TabsContent value="sponsors" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Sponsors ({sponsors.length})</CardTitle>
+              <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                <DialogTrigger asChild><Button>Add Sponsor</Button></DialogTrigger>
+                <DialogContent>
+                  <DialogHeader><DialogTitle>New Sponsor</DialogTitle></DialogHeader>
+                  <div className="space-y-4 mt-4">
+                    <div><Label>Name</Label><Input value={newSponsor.name} onChange={e => setNewSponsor({ ...newSponsor, name: e.target.value })} /></div>
+                    <div><Label>Tier</Label>
+                      <Select value={newSponsor.tier} onValueChange={v => setNewSponsor({ ...newSponsor, tier: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="platinum">Platinum</SelectItem><SelectItem value="gold">Gold</SelectItem><SelectItem value="silver">Silver</SelectItem><SelectItem value="bronze">Bronze</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div><Label>Website</Label><Input value={newSponsor.website_url} onChange={e => setNewSponsor({ ...newSponsor, website_url: e.target.value })} /></div>
+                    <div><Label>Booth Location</Label><Input value={newSponsor.booth_location} onChange={e => setNewSponsor({ ...newSponsor, booth_location: e.target.value })} /></div>
+                    <div><Label>Amount Paid</Label><Input type="number" value={newSponsor.amount_paid} onChange={e => setNewSponsor({ ...newSponsor, amount_paid: parseFloat(e.target.value) || 0 })} /></div>
+                    <Button onClick={createSponsor}>Create</Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Tier</TableHead><TableHead>Booth</TableHead><TableHead>Amount Paid</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  {sponsors.map(s => (
+                    <TableRow key={s.id}>
+                      <TableCell className="font-medium">{s.name}</TableCell>
+                      <TableCell><Badge className={tierColor(s.tier)}>{s.tier}</Badge></TableCell>
+                      <TableCell>{s.booth_location || "-"}</TableCell>
+                      <TableCell>₹{s.amount_paid.toLocaleString()}</TableCell>
+                      <TableCell><Badge variant={s.is_active ? "default" : "secondary"}>{s.is_active ? "Active" : "Inactive"}</Badge></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="branding" className="mt-6">
+          <Card>
+            <CardHeader><CardTitle>Branding Placements</CardTitle></CardHeader>
+            <CardContent>
+              {branding.length === 0 ? <p className="text-gray-500">No branding placements configured</p> : (
+                <Table>
+                  <TableHeader><TableRow><TableHead>Placement</TableHead><TableHead>Impressions</TableHead><TableHead>Unique Views</TableHead><TableHead>Scans</TableHead><TableHead>Clicks</TableHead></TableRow></TableHeader>
+                  <TableBody>
+                    {branding.map(b => (
+                      <TableRow key={b.id}>
+                        <TableCell className="font-medium">{b.placement_type}</TableCell>
+                        <TableCell>{b.impressions.toLocaleString()}</TableCell>
+                        <TableCell>{b.unique_views.toLocaleString()}</TableCell>
+                        <TableCell>{b.scans.toLocaleString()}</TableCell>
+                        <TableCell>{b.clicks.toLocaleString()}</TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
-        {/* Branding Tab */}
-        <TabsContent value="branding" className="space-y-4">
-          <div className="flex justify-end">
-            <Button onClick={() => setShowAddBranding(true)}>Add Placement</Button>
-          </div>
-          {branding.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                No branding placements yet.
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4">
-              {branding.map((b) => (
-                <Card key={b.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">{PLACEMENT_LABELS[b.placement_type] || b.placement_type}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {b.sponsor?.name} ({b.sponsor?.tier})
-                        </div>
-                      </div>
-                      <div className="flex gap-4 text-sm">
-                        <div className="text-center">
-                          <div className="font-mono font-bold">{(b.impressions || 0).toLocaleString()}</div>
-                          <div className="text-muted-foreground text-xs">Impressions</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-mono font-bold">{(b.unique_views || 0).toLocaleString()}</div>
-                          <div className="text-muted-foreground text-xs">Unique Views</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-mono font-bold">{(b.scans || 0).toLocaleString()}</div>
-                          <div className="text-muted-foreground text-xs">Scans</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-mono font-bold">{(b.clicks || 0).toLocaleString()}</div>
-                          <div className="text-muted-foreground text-xs">Clicks</div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-
-        {/* Analytics Tab */}
-        <TabsContent value="analytics" className="space-y-6">
-          {analytics && (
-            <>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="text-2xl font-bold">{analytics.total_impressions.toLocaleString()}</div>
-                    <div className="text-sm text-muted-foreground">Total Impressions</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-blue-600">{analytics.total_unique_views.toLocaleString()}</div>
-                    <div className="text-sm text-muted-foreground">Unique Views</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-green-600">{analytics.total_scans.toLocaleString()}</div>
-                    <div className="text-sm text-muted-foreground">Total Scans</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-purple-600">{analytics.total_clicks.toLocaleString()}</div>
-                    <div className="text-sm text-muted-foreground">Total Clicks</div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Top Performing Placements</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {analytics.top_performers.length === 0 ? (
-                    <div className="text-sm text-muted-foreground">No data</div>
-                  ) : (
-                    <div className="space-y-2">
-                      {analytics.top_performers.map((p) => {
-                        const max = Math.max(...analytics.top_performers.map(t => t.impressions), 1);
-                        return (
-                          <div key={p.branding_id} className="flex items-center gap-2">
-                            <span className="text-xs w-28 truncate">{PLACEMENT_LABELS[p.placement_type] || p.placement_type}</span>
-                            <div className="flex-1 bg-muted rounded-full h-4 overflow-hidden">
-                              <div
-                                className="h-full rounded-full bg-blue-500 transition-all"
-                                style={{ width: `${(p.impressions / max) * 100}%` }}
-                              />
-                            </div>
-                            <span className="text-xs font-mono w-16 text-right">{p.impressions.toLocaleString()}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {analytics.scan_timeline.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-sm">Scan Timeline</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-1">
-                      {analytics.scan_timeline.slice(-14).map((row) => {
-                        const max = Math.max(...analytics.scan_timeline.map(t => t.count), 1);
-                        return (
-                          <div key={row.date} className="flex items-center gap-2 text-sm">
-                            <span className="w-20">{row.date}</span>
-                            <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
-                              <div
-                                className="h-full bg-green-500 rounded-full"
-                                style={{ width: `${(row.count / max) * 100}%` }}
-                              />
-                            </div>
-                            <span className="font-mono w-12 text-right">{row.count}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </CardContent>
-                </Card>
+                  </TableBody>
+                </Table>
               )}
-            </>
-          )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        {/* Scan Activity Tab */}
-        <TabsContent value="scans" className="space-y-4">
-          {scans.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                No scans recorded yet.
-              </CardContent>
-            </Card>
-          ) : (
-            <Card>
-              <CardContent className="p-0">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b bg-muted/50">
-                      <th className="text-left p-3">Time</th>
-                      <th className="text-left p-3">Sponsor</th>
-                      <th className="text-left p-3">Placement</th>
-                      <th className="text-left p-3">Scan Type</th>
-                      <th className="text-left p-3">Attendee</th>
-                      <th className="text-left p-3">Device</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {scans.map((s) => (
-                      <tr key={s.id} className="border-b">
-                        <td className="p-3 font-mono text-xs">
-                          {new Date(s.scanned_at).toLocaleString()}
-                        </td>
-                        <td className="p-3">{s.sponsor?.name || '-'}</td>
-                        <td className="p-3">{PLACEMENT_LABELS[s.branding?.placement_type || ''] || '-'}</td>
-                        <td className="p-3">
-                          <Badge variant="outline">{s.scan_type}</Badge>
-                        </td>
-                        <td className="p-3">
-                          {s.registration
-                            ? `${s.registration.first_name} ${s.registration.last_name}`
-                            : '-'}
-                        </td>
-                        <td className="p-3 text-xs text-muted-foreground max-w-32 truncate">
-                          {s.device_info || '-'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </CardContent>
-            </Card>
-          )}
+        <TabsContent value="analytics" className="mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {[
+              { label: "Impressions", value: analytics?.total_impressions || 0 },
+              { label: "Unique Views", value: analytics?.total_unique_views || 0 },
+              { label: "Scans", value: analytics?.total_scans || 0 },
+              { label: "Clicks", value: analytics?.total_clicks || 0 },
+            ].map(k => (
+              <Card key={k.label}><CardContent className="p-4 text-center">
+                <p className="text-2xl font-bold">{k.value.toLocaleString()}</p><p className="text-sm text-gray-500">{k.label}</p>
+              </CardContent></Card>
+            ))}
+          </div>
+          <Card>
+            <CardHeader><CardTitle>ROI Summary</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-gray-500">Analytics will populate once sponsor scans and impressions are recorded.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="scans" className="mt-6">
+          <Card>
+            <CardHeader><CardTitle>Recent Scans</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-gray-500">Scan activity will appear here once sponsors are scanned at the event.</p>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Add Sponsor Dialog */}
-      <Dialog open={showAddSponsor} onOpenChange={setShowAddSponsor}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Sponsor</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>Sponsor Name *</Label>
-              <Input
-                value={newSponsor.name}
-                onChange={(e) => setNewSponsor({ ...newSponsor, name: e.target.value })}
-                placeholder="Acme Corp"
-              />
-            </div>
-            <div>
-              <Label>Tier</Label>
-              <Select
-                value={newSponsor.tier}
-                onValueChange={(v) => setNewSponsor({ ...newSponsor, tier: v })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="platinum">Platinum</SelectItem>
-                  <SelectItem value="gold">Gold</SelectItem>
-                  <SelectItem value="silver">Silver</SelectItem>
-                  <SelectItem value="bronze">Bronze</SelectItem>
-                  <SelectItem value="custom">Custom</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Contact Name</Label>
-                <Input
-                  value={newSponsor.contact_name}
-                  onChange={(e) => setNewSponsor({ ...newSponsor, contact_name: e.target.value })}
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <Label>Contact Email</Label>
-                <Input
-                  value={newSponsor.contact_email}
-                  onChange={(e) => setNewSponsor({ ...newSponsor, contact_email: e.target.value })}
-                  placeholder="john@acme.com"
-                />
-              </div>
-            </div>
-            <div>
-              <Label>Amount Paid (₹)</Label>
-              <Input
-                type="number"
-                value={newSponsor.amount_paid}
-                onChange={(e) => setNewSponsor({ ...newSponsor, amount_paid: e.target.value })}
-                placeholder="50000"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddSponsor(false)}>Cancel</Button>
-            <Button onClick={handleAddSponsor} disabled={!newSponsor.name}>Add Sponsor</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Branding Dialog */}
-      <Dialog open={showAddBranding} onOpenChange={setShowAddBranding}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Branding Placement</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>Sponsor</Label>
-              <Select onValueChange={(v) => setNewBranding({ ...newBranding, placement_type: v })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select sponsor" />
-                </SelectTrigger>
-                <SelectContent>
-                  {sponsors.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Placement Type</Label>
-              <Select
-                value={newBranding.placement_type}
-                onValueChange={(v) => setNewBranding({ ...newBranding, placement_type: v })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="banner">Banner</SelectItem>
-                  <SelectItem value="stage_digital">Stage Digital</SelectItem>
-                  <SelectItem value="hall_screen">Hall Screen</SelectItem>
-                  <SelectItem value="badge">Badge</SelectItem>
-                  <SelectItem value="certificate">Certificate</SelectItem>
-                  <SelectItem value="webpage">Webpage</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddBranding(false)}>Cancel</Button>
-            <Button onClick={() => handleAddBranding(sponsors[0]?.id)}>Add Placement</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
