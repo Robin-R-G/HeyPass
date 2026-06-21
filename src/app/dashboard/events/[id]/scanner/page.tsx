@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, use } from 'react';
+import { useOfflineSync } from '@/hooks/use-offline-sync';
 
 interface ScanResult {
   result: string;
@@ -19,10 +20,12 @@ interface ScanLog {
   message: string;
   ticket_number?: string;
   attendee_name?: string;
+  offline?: boolean;
 }
 
 export default function ScannerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const { isOnline, pendingCount, queueScan, syncPendingScans, syncing } = useOfflineSync();
   const [scanType, setScanType] = useState<'check_in' | 'check_out'>('check_in');
   const [manualInput, setManualInput] = useState('');
   const [scanning, setScanning] = useState(false);
@@ -37,6 +40,31 @@ export default function ScannerPage({ params }: { params: Promise<{ id: string }
     setScanning(true);
 
     try {
+      if (!isOnline) {
+        // Queue for offline sync
+        await queueScan({
+          ticket_id: qrString.trim(),
+          gate_id: 'offline-gate',
+          scan_type: scanType,
+          scanned_at: new Date().toISOString(),
+        });
+
+        logIdRef.current += 1;
+        setScanLog(prev => [{
+          id: logIdRef.current,
+          time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          result: 'queued',
+          message: 'Queued for sync (offline)',
+          offline: true,
+        }, ...prev].slice(0, 50));
+
+        setLastResult({ result: 'queued', message: 'Queued for sync — will process when online' });
+        setTimeout(() => setLastResult(null), 4000);
+        setManualInput('');
+        inputRef.current?.focus();
+        return;
+      }
+
       const res = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -51,7 +79,6 @@ export default function ScannerPage({ params }: { params: Promise<{ id: string }
 
       setLastResult(result);
 
-      // Add to log
       logIdRef.current += 1;
       setScanLog(prev => [{
         id: logIdRef.current,
@@ -62,10 +89,7 @@ export default function ScannerPage({ params }: { params: Promise<{ id: string }
         attendee_name: result.attendee_name,
       }, ...prev].slice(0, 50));
 
-      // Auto-clear last result after 4 seconds
       setTimeout(() => setLastResult(null), 4000);
-
-      // Clear input for next scan
       setManualInput('');
       inputRef.current?.focus();
     } catch (e) {
@@ -74,7 +98,7 @@ export default function ScannerPage({ params }: { params: Promise<{ id: string }
     } finally {
       setScanning(false);
     }
-  }, [eventId, scanType, scanning]);
+  }, [eventId, scanType, scanning, isOnline, queueScan]);
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +134,20 @@ export default function ScannerPage({ params }: { params: Promise<{ id: string }
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>QR Scanner</h1>
-        <p style={{ color: '#71717a', fontSize: '0.8rem' }}>HMAC-verified • Replay-protected</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+          <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'}`} />
+          <span style={{ color: '#71717a', fontSize: '0.75rem' }}>
+            {isOnline ? 'Online' : 'Offline'}
+          </span>
+          {pendingCount > 0 && (
+            <span style={{ color: '#f59e0b', fontSize: '0.7rem', background: 'rgba(245,158,11,0.1)', padding: '0.1rem 0.4rem', borderRadius: '9999px' }}>
+              {pendingCount} pending
+            </span>
+          )}
+          {syncing && (
+            <span style={{ color: '#3b82f6', fontSize: '0.7rem' }}>Syncing...</span>
+          )}
+        </div>
       </div>
 
       {/* Scan Type Toggle */}

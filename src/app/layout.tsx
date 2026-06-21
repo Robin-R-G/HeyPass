@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { PWAInstallPrompt } from "@/components/pwa-install";
 import "./globals.css";
+import { PWARegister } from "./pwa-register";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -52,6 +54,22 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  manifest: "/manifest.json",
+  themeColor: "#6366f1",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "HeyPass",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -67,6 +85,8 @@ export default function RootLayout({
         <ThemeProvider>
           <div className="hp-bg-gradient" />
           <div className="min-h-screen">{children}</div>
+          <PWAInstallPrompt />
+          <PWARegister />
           <Analytics />
         </ThemeProvider>
       </body>
