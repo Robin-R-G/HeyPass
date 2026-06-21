@@ -37,7 +37,7 @@ function isPublicPath(pathname: string): boolean {
   return false;
 }
 
-export async function middleware(request: NextRequest) {
+async function handleMiddleware(request: NextRequest) {
   let response = NextResponse.next({
     request: { headers: request.headers },
   });
@@ -124,6 +124,9 @@ export async function middleware(request: NextRequest) {
 
   return response;
 }
+
+export default handleMiddleware;
+export const middleware = handleMiddleware;
 
 export const config = {
   matcher: [
