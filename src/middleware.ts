@@ -37,7 +37,7 @@ function isPublicPath(pathname: string): boolean {
   return false;
 }
 
-export async function updateSession(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: { headers: request.headers },
   });
@@ -124,3 +124,9 @@ export async function updateSession(request: NextRequest) {
 
   return response;
 }
+
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
+  ],
+};

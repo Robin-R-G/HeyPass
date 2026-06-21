@@ -35,6 +35,7 @@ export const PERMISSIONS = {
   EVENTS_DELETE: 'events.delete',
   EVENTS_PUBLISH: 'events.publish',
   EVENTS_CLOSE: 'events.close',
+  EVENTS_CLONE: 'events.clone',
   EVENT_MANAGE_STAFF: 'event.manage_staff',
   EVENT_CONFIGURE_BRANDING: 'event.configure_branding',
 
@@ -145,6 +146,18 @@ export const PERMISSIONS = {
 
   // Branding
   BRANDING_UPDATE: 'branding.update',
+
+  // Volunteer
+  VOLUNTEER_VIEW: 'volunteer.view',
+  VOLUNTEER_MANAGE: 'volunteer.manage',
+  VOLUNTEER_TASKS_MANAGE: 'volunteer.tasks_manage',
+  VOLUNTEER_COMMUNICATE: 'volunteer.communicate',
+
+  // Food Tokens
+  FOOD_TOKEN_VIEW: 'food_token.view',
+  FOOD_TOKEN_MANAGE: 'food_token.manage',
+  FOOD_TOKEN_GENERATE: 'food_token.generate',
+  FOOD_TOKEN_VALIDATE: 'food_token.validate',
 } as const;
 
 export type PermissionName = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

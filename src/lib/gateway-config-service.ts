@@ -21,10 +21,20 @@ export interface CreateGatewayInput {
 }
 
 class GatewayConfigServiceImpl {
-  private readonly ENCRYPTION_KEY = process.env.BILLING_ENCRYPTION_KEY || process.env.JWT_SECRET || '';
+  private readonly ENCRYPTION_KEY: string;
   private readonly ALGORITHM = 'aes-256-gcm';
 
+  constructor() {
+    this.ENCRYPTION_KEY = process.env.BILLING_ENCRYPTION_KEY || '';
+    if (!this.ENCRYPTION_KEY || this.ENCRYPTION_KEY.length < 32) {
+      console.error('CRITICAL: BILLING_ENCRYPTION_KEY must be set and at least 32 characters');
+    }
+  }
+
   private encrypt(text: string): string {
+    if (!this.ENCRYPTION_KEY || this.ENCRYPTION_KEY.length < 32) {
+      throw new Error('BILLING_ENCRYPTION_KEY not configured');
+    }
     const key = crypto.createHash('sha256').update(this.ENCRYPTION_KEY).digest();
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(this.ALGORITHM, key, iv);

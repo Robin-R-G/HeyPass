@@ -86,7 +86,7 @@ class FraudPreventionServiceImpl {
     for (const rule of rules) {
       if (!rule.is_active) continue;
 
-      const check = this.evaluateRule(rule, input, clientId);
+      const check = await this.evaluateRule(rule, input, clientId);
       if (check) {
         alerts.push(check);
       }
@@ -109,7 +109,7 @@ class FraudPreventionServiceImpl {
     };
   }
 
-  private evaluateRule(
+  private async evaluateRule(
     rule: FraudRule,
     input: { amount: number; transaction_id: string; event_id?: string },
     clientId: string

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/client';
+import { supabaseAdmin } from '@/lib/supabase/client';
 import { randomUUID } from 'crypto';
 
 export interface PaymentMethod {

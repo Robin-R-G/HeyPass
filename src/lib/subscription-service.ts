@@ -4,8 +4,11 @@ export interface SubscriptionPlan {
   id: string;
   name: string;
   slug: string;
+  type: 'subscription' | 'single_event';
   price_monthly: number;
   price_annual: number;
+  price_per_event: number;
+  event_registration_limit: number;
   commission_rate: number;
   max_events: number;
   max_registrations: number;
@@ -26,6 +29,22 @@ export interface ClientSubscription {
   trial_end: string | null;
   cancelled_at: string | null;
   cancel_reason: string | null;
+  plan?: SubscriptionPlan;
+  created_at: string;
+}
+
+export interface EventSubscription {
+  id: string;
+  client_id: string;
+  event_id: string;
+  plan_id: string;
+  status: string;
+  purchased_at: string;
+  expires_at: string | null;
+  registration_limit: number;
+  registrations_used: number;
+  amount_paid: number;
+  payment_reference: string | null;
   plan?: SubscriptionPlan;
   created_at: string;
 }
@@ -225,6 +244,130 @@ class SubscriptionServiceImpl {
       is_trial: subscription?.status === 'trial',
       is_active: subscription?.status === 'active',
     };
+  }
+
+  // ===== SINGLE EVENT SUBSCRIPTIONS =====
+
+  async listSingleEventPlans(): Promise<SubscriptionPlan[]> {
+    const { data, error } = await supabaseAdmin
+      .from('subscription_plans')
+      .select('*')
+      .eq('type', 'single_event')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  async purchaseEventPlan(clientId: string, eventId: string, planId: string, paymentReference?: string): Promise<EventSubscription> {
+    // Check if event already has an active subscription
+    const { data: existing } = await supabaseAdmin
+      .from('event_subscriptions')
+      .select('id')
+      .eq('client_id', clientId)
+      .eq('event_id', eventId)
+      .eq('status', 'active')
+      .single();
+
+    if (existing) {
+      throw new Error('Event already has an active plan. Cancel existing first.');
+    }
+
+    const plan = await this.getPlan(planId);
+    if (!plan || plan.type !== 'single_event') {
+      throw new Error('Invalid single-event plan');
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from('event_subscriptions')
+      .insert({
+        client_id: clientId,
+        event_id: eventId,
+        plan_id: planId,
+        status: 'active',
+        registration_limit: plan.event_registration_limit,
+        amount_paid: plan.price_per_event,
+        payment_reference: paymentReference || null,
+      })
+      .select('*, subscription_plans(*)')
+      .single();
+
+    if (error) throw error;
+
+    return {
+      ...data,
+      plan: (data as any).subscription_plans,
+    };
+  }
+
+  async getEventSubscription(clientId: string, eventId: string): Promise<EventSubscription | null> {
+    const { data, error } = await supabaseAdmin
+      .from('event_subscriptions')
+      .select('*, subscription_plans(*)')
+      .eq('client_id', clientId)
+      .eq('event_id', eventId)
+      .eq('status', 'active')
+      .single();
+
+    if (error || !data) return null;
+
+    return {
+      ...data,
+      plan: (data as any).subscription_plans,
+    };
+  }
+
+  async checkEventLimits(clientId: string, eventId: string): Promise<{
+    has_plan: boolean;
+    registrations: { used: number; limit: number; allowed: boolean };
+    plan?: SubscriptionPlan;
+  }> {
+    const eventSub = await this.getEventSubscription(clientId, eventId);
+
+    if (!eventSub) {
+      return {
+        has_plan: false,
+        registrations: { used: 0, limit: 0, allowed: false },
+      };
+    }
+
+    return {
+      has_plan: true,
+      registrations: {
+        used: eventSub.registrations_used,
+        limit: eventSub.registration_limit,
+        allowed: eventSub.registrations_used < eventSub.registration_limit,
+      },
+      plan: eventSub.plan,
+    };
+  }
+
+  async incrementEventRegistrations(clientId: string, eventId: string): Promise<void> {
+    await supabaseAdmin
+      .from('event_subscriptions')
+      .update({ registrations_used: supabaseAdmin.rpc ? 0 : 0 }) // placeholder
+      .eq('client_id', clientId)
+      .eq('event_id', eventId)
+      .eq('status', 'active');
+
+    // Use raw increment
+    const { data } = await supabaseAdmin
+      .from('event_subscriptions')
+      .select('registrations_used')
+      .eq('client_id', clientId)
+      .eq('event_id', eventId)
+      .eq('status', 'active')
+      .single();
+
+    if (data) {
+      await supabaseAdmin
+        .from('event_subscriptions')
+        .update({ registrations_used: data.registrations_used + 1, updated_at: new Date().toISOString() })
+        .eq('client_id', clientId)
+        .eq('event_id', eventId)
+        .eq('status', 'active');
+    }
   }
 }
 

@@ -30,6 +30,13 @@ export default function PaymentMethodsPage() {
   });
   const [saving, setSaving] = useState(false);
 
+  // CSV Export state
+  const [exportFrom, setExportFrom] = useState('');
+  const [exportTo, setExportTo] = useState('');
+  const [exportStatus, setExportStatus] = useState('');
+  const [exportMethodType, setExportMethodType] = useState('');
+  const [exporting, setExporting] = useState(false);
+
   useEffect(() => {
     fetchMethods();
   }, []);
@@ -94,6 +101,34 @@ export default function PaymentMethodsPage() {
       }
     } catch (e) {
       alert('Failed to toggle');
+    }
+  };
+
+  const handleExportCSV = async () => {
+    setExporting(true);
+    try {
+      const params = new URLSearchParams();
+      if (exportFrom) params.set('from', exportFrom);
+      if (exportTo) params.set('to', exportTo);
+      if (exportStatus) params.set('status', exportStatus);
+      if (exportMethodType) params.set('method_type', exportMethodType);
+
+      const res = await fetch(`/api/payments/export?${params.toString()}`);
+      if (!res.ok) throw new Error('Export failed');
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `payments-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (e) {
+      alert('Failed to export payments');
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -191,6 +226,75 @@ export default function PaymentMethodsPage() {
           Limits: Maximum 2 bank accounts and 1 UPI method per organization.
           Currently: {bankCount}/2 bank accounts, {upiCount}/1 UPI.
         </p>
+      </div>
+
+      {/* Payment Transactions Export */}
+      <div className="hp-card" style={{ marginTop: '2rem' }}>
+        <div style={{ marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff' }}>Export Payment Transactions</h2>
+          <p style={{ color: '#a1a1aa', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+            Download CSV of all transactions (Bank, UPI, Razorpay)
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>From Date</label>
+            <input
+              type="date"
+              className="hp-input"
+              value={exportFrom}
+              onChange={(e) => setExportFrom(e.target.value)}
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>To Date</label>
+            <input
+              type="date"
+              className="hp-input"
+              value={exportTo}
+              onChange={(e) => setExportTo(e.target.value)}
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Status</label>
+            <select
+              className="hp-input"
+              value={exportStatus}
+              onChange={(e) => setExportStatus(e.target.value)}
+              style={{ width: '100%' }}
+            >
+              <option value="">All Statuses</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
+            </select>
+          </div>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Payment Method</label>
+            <select
+              className="hp-input"
+              value={exportMethodType}
+              onChange={(e) => setExportMethodType(e.target.value)}
+              style={{ width: '100%' }}
+            >
+              <option value="">All Methods</option>
+              <option value="bank_account">Bank Transfer</option>
+              <option value="upi">UPI</option>
+            </select>
+          </div>
+        </div>
+
+        <button
+          onClick={handleExportCSV}
+          className="hp-btn hp-btn-primary"
+          disabled={exporting}
+        >
+          {exporting ? 'Exporting...' : 'Download CSV'}
+        </button>
       </div>
 
       {/* Add Modal */}

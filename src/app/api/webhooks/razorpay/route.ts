@@ -4,8 +4,36 @@ import { commissionInvoiceService } from '@/lib/commission-invoice-service';
 import { gatewayConfigService } from '@/lib/gateway-config-service';
 import crypto from 'crypto';
 
+// Simple in-memory rate limit (production: use Redis)
+const webhookRateLimit = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 100;
+const RATE_WINDOW = 60 * 1000; // 1 minute
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = webhookRateLimit.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    webhookRateLimit.set(ip, { count: 1, resetAt: now + RATE_WINDOW });
+    return true;
+  }
+
+  if (entry.count >= RATE_LIMIT) {
+    return false;
+  }
+
+  entry.count++;
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+    }
+
     const body = await request.text();
     const signature = request.headers.get('x-razorpay-signature');
 
@@ -17,8 +45,7 @@ export async function POST(request: NextRequest) {
     const event = JSON.parse(body);
     const eventType = event.event;
 
-    // Find client by looking up gateway config
-    // In production, you'd map webhook to client via route/merchant
+    // Find client with matching webhook secret
     const { data: configs } = await supabaseAdmin
       .from('payment_gateway_config')
       .select('client_id, webhook_secret_encrypted')
@@ -29,19 +56,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No gateway configured' }, { status: 400 });
     }
 
-    // Try each client's webhook secret
+    // Verify signature against each client's webhook secret
     let matchedClientId: string | null = null;
-    let webhookSecret = '';
 
     for (const config of configs) {
-      // Decrypt webhook secret (simplified - in production use proper decryption)
-      // For now, we'll verify using the event's account_id
-      matchedClientId = config.client_id;
-      break;
+      try {
+        const secret = await gatewayConfigService.getDecrypted(config.client_id, 'razorpay');
+        if (!secret?.webhook_secret) continue;
+
+        const expectedSignature = crypto
+          .createHmac('sha256', secret.webhook_secret)
+          .update(body)
+          .digest('hex');
+
+        if (signature === expectedSignature) {
+          matchedClientId = config.client_id;
+          break;
+        }
+      } catch {
+        continue;
+      }
     }
 
     if (!matchedClientId) {
-      return NextResponse.json({ error: 'Client not found' }, { status: 400 });
+      console.error('Razorpay webhook: Invalid signature for all clients');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
 
     // Log webhook event

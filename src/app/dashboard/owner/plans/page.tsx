@@ -14,8 +14,11 @@ interface Plan {
   id: string;
   name: string;
   slug: string;
+  type: 'subscription' | 'single_event';
   price_monthly: number;
   price_annual: number;
+  price_per_event: number;
+  event_registration_limit: number;
   commission_rate: number;
   max_events: number;
   max_registrations: number;
@@ -34,8 +37,11 @@ export default function OwnerPlansPage() {
   const [form, setForm] = useState({
     name: '',
     slug: '',
+    type: 'subscription' as 'subscription' | 'single_event',
     price_monthly: 0,
     price_annual: 0,
+    price_per_event: 0,
+    event_registration_limit: 100,
     commission_rate: 2.5,
     max_events: 3,
     max_registrations: 100,
@@ -62,8 +68,11 @@ export default function OwnerPlansPage() {
     setForm({
       name: '',
       slug: '',
+      type: 'subscription',
       price_monthly: 0,
       price_annual: 0,
+      price_per_event: 0,
+      event_registration_limit: 100,
       commission_rate: 2.5,
       max_events: 3,
       max_registrations: 100,
@@ -78,8 +87,11 @@ export default function OwnerPlansPage() {
     setForm({
       name: plan.name,
       slug: plan.slug,
+      type: plan.type,
       price_monthly: plan.price_monthly,
       price_annual: plan.price_annual,
+      price_per_event: plan.price_per_event,
+      event_registration_limit: plan.event_registration_limit,
       commission_rate: plan.commission_rate,
       max_events: plan.max_events,
       max_registrations: plan.max_registrations,
@@ -186,11 +198,12 @@ export default function OwnerPlansPage() {
                 <TableRow>
                   <TableHead>Order</TableHead>
                   <TableHead>Name</TableHead>
+                  <TableHead>Type</TableHead>
                   <TableHead>Monthly</TableHead>
                   <TableHead>Annual</TableHead>
+                  <TableHead>Per Event</TableHead>
+                  <TableHead>Reg Limit</TableHead>
                   <TableHead>Commission</TableHead>
-                  <TableHead>Events</TableHead>
-                  <TableHead>Registrations</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -200,11 +213,12 @@ export default function OwnerPlansPage() {
                   <TableRow key={plan.id}>
                     <TableCell>{plan.display_order}</TableCell>
                     <TableCell className="font-medium">{plan.name}</TableCell>
+                    <TableCell><Badge variant="outline">{plan.type}</Badge></TableCell>
                     <TableCell>₹{plan.price_monthly.toLocaleString()}</TableCell>
                     <TableCell>₹{plan.price_annual.toLocaleString()}</TableCell>
+                    <TableCell>₹{plan.price_per_event.toLocaleString()}</TableCell>
+                    <TableCell>{plan.event_registration_limit.toLocaleString()}</TableCell>
                     <TableCell>{plan.commission_rate}%</TableCell>
-                    <TableCell>{plan.max_events === -1 ? '∞' : plan.max_events}</TableCell>
-                    <TableCell>{plan.max_registrations === -1 ? '∞' : plan.max_registrations.toLocaleString()}</TableCell>
                     <TableCell>
                       <Badge variant={plan.is_active ? 'default' : 'secondary'}>
                         {plan.is_active ? 'Active' : 'Inactive'}
@@ -270,16 +284,41 @@ function PlanForm({ form, setForm, onSubmit, isEdit }: {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Price Monthly (₹)</Label>
-          <Input type="number" value={form.price_monthly} onChange={(e) => setForm({ ...form, price_monthly: parseFloat(e.target.value) || 0 })} />
-        </div>
-        <div className="space-y-2">
-          <Label>Price Annual (₹)</Label>
-          <Input type="number" value={form.price_annual} onChange={(e) => setForm({ ...form, price_annual: parseFloat(e.target.value) || 0 })} />
-        </div>
+      <div className="space-y-2">
+        <Label>Plan Type</Label>
+        <select
+          className="w-full border rounded px-3 py-2"
+          value={form.type}
+          onChange={(e) => setForm({ ...form, type: e.target.value })}
+        >
+          <option value="subscription">Subscription (Monthly/Annual)</option>
+          <option value="single_event">Single Event</option>
+        </select>
       </div>
+
+      {form.type === 'subscription' ? (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Price Monthly (₹)</Label>
+            <Input type="number" value={form.price_monthly} onChange={(e) => setForm({ ...form, price_monthly: parseFloat(e.target.value) || 0 })} />
+          </div>
+          <div className="space-y-2">
+            <Label>Price Annual (₹)</Label>
+            <Input type="number" value={form.price_annual} onChange={(e) => setForm({ ...form, price_annual: parseFloat(e.target.value) || 0 })} />
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Price Per Event (₹)</Label>
+            <Input type="number" value={form.price_per_event} onChange={(e) => setForm({ ...form, price_per_event: parseFloat(e.target.value) || 0 })} />
+          </div>
+          <div className="space-y-2">
+            <Label>Registration Limit</Label>
+            <Input type="number" value={form.event_registration_limit} onChange={(e) => setForm({ ...form, event_registration_limit: parseInt(e.target.value) || 100 })} />
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -292,20 +331,22 @@ function PlanForm({ form, setForm, onSubmit, isEdit }: {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="space-y-2">
-          <Label>Max Events (-1 = unlimited)</Label>
-          <Input type="number" value={form.max_events} onChange={(e) => setForm({ ...form, max_events: parseInt(e.target.value) || -1 })} />
+      {form.type === 'subscription' && (
+        <div className="grid grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label>Max Events (-1 = unlimited)</Label>
+            <Input type="number" value={form.max_events} onChange={(e) => setForm({ ...form, max_events: parseInt(e.target.value) || -1 })} />
+          </div>
+          <div className="space-y-2">
+            <Label>Max Registrations</Label>
+            <Input type="number" value={form.max_registrations} onChange={(e) => setForm({ ...form, max_registrations: parseInt(e.target.value) || -1 })} />
+          </div>
+          <div className="space-y-2">
+            <Label>Max Team Members</Label>
+            <Input type="number" value={form.max_team_members} onChange={(e) => setForm({ ...form, max_team_members: parseInt(e.target.value) || -1 })} />
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label>Max Registrations</Label>
-          <Input type="number" value={form.max_registrations} onChange={(e) => setForm({ ...form, max_registrations: parseInt(e.target.value) || -1 })} />
-        </div>
-        <div className="space-y-2">
-          <Label>Max Team Members</Label>
-          <Input type="number" value={form.max_team_members} onChange={(e) => setForm({ ...form, max_team_members: parseInt(e.target.value) || -1 })} />
-        </div>
-      </div>
+      )}
 
       <div className="space-y-2">
         <Label>Features (one per line)</Label>

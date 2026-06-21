@@ -20,7 +20,7 @@ const planSchema = z.object({
 export async function GET(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
-      // Only owner can manage plans
+      // Owner check via JWT membership
       const { data: membership } = await supabaseAdmin
         .from('memberships')
         .select('role_slug')
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         .single();
 
       if (membership?.role_slug !== 'owner') {
-        return NextResponse.json({ error: 'Only owners can manage plans' }, { status: 403 });
+        return NextResponse.json({ error: 'Only owners can view plans' }, { status: 403 });
       }
 
       const { data: plans, error } = await supabaseAdmin

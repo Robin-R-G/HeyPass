@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, use } from 'react';
+import CloneEventButton from '@/components/clone-event-button';
 
 interface DashboardData {
   total_registered: number;
@@ -75,6 +76,34 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Event Navigation */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        {[
+          { label: 'Dashboard', href: `/dashboard/events/${eventId}/dashboard` },
+          { label: 'Tickets', href: `/dashboard/events/${eventId}/tickets` },
+          { label: 'Gates', href: `/dashboard/events/${eventId}/gates` },
+          { label: 'Staff', href: `/dashboard/events/${eventId}/staff` },
+          { label: 'Volunteers', href: `/dashboard/events/${eventId}/volunteers` },
+          { label: 'Forms', href: `/dashboard/events/${eventId}/forms` },
+          { label: 'Branding', href: `/dashboard/events/${eventId}/branding` },
+          { label: 'Analytics', href: `/dashboard/events/${eventId}/analytics` },
+          { label: 'Certificates', href: `/dashboard/events/${eventId}/certificates` },
+        ].map((nav) => (
+          <a
+            key={nav.href}
+            href={nav.href}
+            style={{
+              padding: '0.35rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.8rem',
+              background: 'rgba(99,102,241,0.1)', color: '#818cf8',
+              textDecoration: 'none', whiteSpace: 'nowrap',
+              border: '1px solid rgba(99,102,241,0.2)',
+            }}
+          >
+            {nav.label}
+          </a>
+        ))}
+      </div>
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Attendance Dashboard</h1>
@@ -93,6 +122,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
           <button onClick={fetchDashboard} className="hp-btn hp-btn-secondary" style={{ fontSize: '0.8rem' }}>
             Refresh
           </button>
+          <CloneEventButton eventId={eventId} />
         </div>
       </div>
 

@@ -141,7 +141,7 @@ BEGIN
     -- Roles
     'roles.view',
     -- Events
-    'events.view', 'events.create', 'events.edit', 'events.publish', 'events.close',
+    'events.view', 'events.create', 'events.edit', 'events.publish', 'events.close', 'events.clone',
     'event.manage_staff', 'event.configure_branding',
     -- Sessions
     'sessions.view', 'sessions.create', 'sessions.edit',

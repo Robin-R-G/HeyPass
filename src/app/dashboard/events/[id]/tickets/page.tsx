@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, use } from 'react';
+import CloneEventButton from '@/components/clone-event-button';
 
 interface Ticket {
   id: string;
@@ -120,9 +121,12 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
             HMAC-signed QR codes with rotation and replay detection
           </p>
         </div>
-        <button onClick={() => setShowScanner(!showScanner)} className="hp-btn hp-btn-primary">
-          {showScanner ? 'Close Scanner' : 'Open Scanner'}
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <CloneEventButton eventId={eventId} />
+          <button onClick={() => setShowScanner(!showScanner)} className="hp-btn hp-btn-primary">
+            {showScanner ? 'Close Scanner' : 'Open Scanner'}
+          </button>
+        </div>
       </div>
 
       {/* Stats */}

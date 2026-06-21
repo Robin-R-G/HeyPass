@@ -172,6 +172,7 @@ INSERT INTO permissions (name, resource, action, description) VALUES
   ('events.delete', 'events', 'delete', 'Delete events'),
   ('events.publish', 'events', 'publish', 'Publish/unpublish events'),
   ('events.close', 'events', 'close', 'Close events'),
+  ('events.clone', 'events', 'clone', 'Clone events'),
   -- Session management
   ('sessions.view', 'sessions', 'view', 'View sessions'),
   ('sessions.create', 'sessions', 'create', 'Create sessions'),
