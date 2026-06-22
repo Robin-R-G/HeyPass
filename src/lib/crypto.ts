@@ -1,5 +1,5 @@
 /**
- * Cryptographic utilities for EntryPass
+ * Cryptographic utilities for HeyPass
  * Production-grade password hashing and token generation
  */
 
@@ -153,6 +153,6 @@ export function generateQRCodeData(
   verificationCode: string,
   clientId: string
 ): string {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://entrypass.app';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://heypass.app';
   return `${baseUrl}/verify?id=${certificateId}&code=${verificationCode}&client=${clientId}`;
 }

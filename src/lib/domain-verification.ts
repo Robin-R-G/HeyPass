@@ -39,10 +39,10 @@ const BLOCKED_DOMAINS = new Set([
   'localhost',
   '127.0.0.1',
   '0.0.0.0',
-  'entrypass.app',
-  'entrypass.io',
-  '*.entrypass.app',
-  '*.entrypass.io',
+  'heypass.app',
+  'heypass.io',
+  '*.heypass.app',
+  '*.heypass.io',
   'localhost.localdomain',
   'invalid',
   'internal',
@@ -83,8 +83,8 @@ function validateDomain(domain: string): { valid: boolean; error?: string } {
   }
 
   // Check blocked patterns
-  if (domain.endsWith('.entrypass.app') || domain.endsWith('.entrypass.io')) {
-    return { valid: false, error: 'Subdomains of EntryPass are not allowed' };
+  if (domain.endsWith('.heypass.app') || domain.endsWith('.heypass.io')) {
+    return { valid: false, error: 'Subdomains of HeyPass are not allowed' };
   }
 
   return { valid: true, error: undefined };
@@ -95,7 +95,7 @@ function validateDomain(domain: string): { valid: boolean; error?: string } {
 // ============================================================
 
 function generateVerificationToken(): string {
-  return `entrypass-verify-${Array.from(crypto.getRandomValues(new Uint8Array(32)))
+  return `heypass-verify-${Array.from(crypto.getRandomValues(new Uint8Array(32)))
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('')}`;
 }
@@ -361,7 +361,7 @@ export async function getDnsInstructions(
     {
       type: 'CNAME',
       name: domain.domain,
-      value: 'entrypass.app',
+      value: 'heypass.app',
       ttl: 300,
     },
   ];

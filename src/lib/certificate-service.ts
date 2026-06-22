@@ -447,7 +447,13 @@ class CertificateServiceImpl {
     };
   }
 
-  async getShareLink(certificateId: string) {
+  async getShareLink(certificateId: string): Promise<{
+    token: string;
+    expires_at: string;
+    access_count: number;
+    max_access: number;
+    certificate_id: string;
+  } | null> {
     const { data, error } = await supabaseAdmin
       .from('certificate_share_links')
       .select('*')

@@ -522,7 +522,7 @@ export async function requestPasswordReset(
     subject: 'Password Reset Request',
     html: `
       <h1>Password Reset</h1>
-      <p>You requested a password reset for your EntryPass account.</p>
+      <p>You requested a password reset for your HeyPass account.</p>
       <p>Your reset code: <strong>${resetToken.slice(0, 8).toUpperCase()}</strong></p>
       <p>This code expires in 1 hour.</p>
       <p>If you didn't request this, ignore this email.</p>

@@ -31,7 +31,7 @@ export async function sendEmail(params: SendEmailParams) {
 
     return sgMail.send({
       to,
-      from: from || process.env.SENDGRID_FROM_EMAIL || 'noreply@entrypass.com',
+      from: from || process.env.SENDGRID_FROM_EMAIL || 'noreply@heypass.com',
       subject,
       html,
       attachments: attachments?.map((a) => ({
@@ -67,7 +67,7 @@ export async function sendTicketEmail(
       <p>Please find your ticket attached.</p>
       <p>Show the QR code at the entrance for check-in.</p>
       <hr />
-      <p>Powered by EntryPass</p>
+      <p>Powered by HeyPass</p>
     `,
   });
 }
@@ -90,7 +90,7 @@ export async function sendCertificateEmail(
       <p><a href="${certificatePdfUrl}">Download Certificate</a></p>
       <p>Verify your certificate: ${process.env.NEXT_PUBLIC_APP_URL}/verify/${certificateNumber}</p>
       <hr />
-      <p>Powered by EntryPass</p>
+      <p>Powered by HeyPass</p>
     `,
   });
 }

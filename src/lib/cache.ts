@@ -21,7 +21,7 @@ function getRedisClient(): Redis {
       return delay;
     },
     lazyConnect: true,
-    keyPrefix: 'entrypass:',
+    keyPrefix: 'heypass:',
   });
 
   redis.on('error', (err) => {
@@ -173,7 +173,7 @@ async function getEncryptionKey(): Promise<CryptoKey> {
     return crypto.subtle.deriveKey(
       {
         name: 'PBKDF2',
-        salt: encoder.encode('entrypass-redis-salt'),
+        salt: encoder.encode('heypass-redis-salt'),
         iterations: 100000,
         hash: 'SHA-256',
       },
