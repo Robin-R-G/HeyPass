@@ -22,6 +22,7 @@ export interface Notification {
   recipient_name: string | null;
   type: string;
   subject: string;
+  body: string;
   status: string;
   template_id: string | null;
   metadata: Record<string, unknown>;
