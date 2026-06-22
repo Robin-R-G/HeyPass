@@ -94,8 +94,8 @@ export async function GET(request: NextRequest) {
 
       const csvContent = [
         headers.map(h => `"${h}"`).join(','),
-        ...rows.map(row =>
-          row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+        ...rows.map((row: unknown[]) =>
+          row.map((cell: unknown) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
         ),
       ].join('\n');
 
