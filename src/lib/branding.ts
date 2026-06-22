@@ -579,6 +579,7 @@ export async function resolveBranding(clientId: string): Promise<ResolvedBrandin
   const defaults: ResolvedBranding = {
     brand_name: null,
     tagline: null,
+    banner_url: null,
     logo_url: null,
     college_logo_url: null,
     favicon_url: null,
