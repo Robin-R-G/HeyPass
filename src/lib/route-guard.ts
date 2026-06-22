@@ -10,7 +10,7 @@ type LegacyRouteHandler = (
   req: NextRequest,
   userId: string,
   clientId: string
-) => Promise<NextResponse>;
+) => Promise<Response>;
 
 interface WithPermissionOptions {
   permission: PermissionName;
@@ -60,17 +60,17 @@ export function withPermission(
 export function withAuth(
   request: NextRequest,
   handler: LegacyRouteHandler
-): Promise<NextResponse>;
+): Promise<Response>;
 export function withAuth(
   handler: RouteHandler
 ): (req: NextRequest) => Promise<NextResponse>;
 export function withAuth(
   requestOrHandler: NextRequest | RouteHandler,
   handler?: LegacyRouteHandler
-): Promise<NextResponse> | ((req: NextRequest) => Promise<NextResponse>) {
+): Promise<Response> | ((req: NextRequest) => Promise<NextResponse>) {
   if (requestOrHandler instanceof NextRequest && handler) {
     const req = requestOrHandler;
-    return (async (): Promise<NextResponse> => {
+    return (async (): Promise<Response> => {
       const auth = extractAuthPayload(req);
       if (!auth) {
         return NextResponse.json(
