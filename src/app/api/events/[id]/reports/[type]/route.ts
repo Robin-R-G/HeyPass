@@ -69,7 +69,7 @@ export async function GET(
           return NextResponse.json({ error: 'Invalid report type' }, { status: 400 });
       }
 
-      return new NextResponse(body, {
+      return new NextResponse(body as BodyInit, {
         headers: {
           'Content-Type': contentType,
           'Content-Disposition': `attachment; filename="${filename}"`,
