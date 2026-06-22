@@ -52,6 +52,8 @@ export interface ClientBranding {
   footer_company_name: string | null;
   footer_website_url: string | null;
   footer_copyright: string | null;
+  custom_css: string | null;
+  custom_js: string | null;
   created_at: string;
   updated_at: string;
 }
