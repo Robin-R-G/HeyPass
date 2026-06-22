@@ -286,7 +286,7 @@ export async function getEventFormsAnalytics(
 
   if (!forms) return [];
 
-  const results = [];
+  const results: { form_id: string; form_name: string; views: number; starts: number; completions: number; conversion_rate: number }[] = [];
 
   for (const form of forms) {
     const { data: analytics } = await supabaseAdmin

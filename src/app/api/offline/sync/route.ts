@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, error: 'Maximum 100 scans per sync' }, { status: 400 });
       }
 
-      const results = [];
+      const results: { sync_id: string; status: string; error?: string }[] = [];
 
       for (const scan of scans) {
         const { scan_type, ticket_id, event_id, registration_id, station_id, scanned_at, qr_data, sync_id } = scan;
