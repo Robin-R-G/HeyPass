@@ -113,7 +113,7 @@ class FraudPreventionServiceImpl {
     rule: FraudRule,
     input: { amount: number; transaction_id: string; event_id?: string },
     clientId: string
-  ): { rule: string; severity: string; message: string } | null {
+  ): Promise<{ rule: string; severity: string; message: string } | null> {
     const config = rule.config;
 
     switch (rule.rule_type) {
