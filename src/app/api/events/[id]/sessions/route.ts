@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase/client';
-import { extractAuthPayload, requirePermission, successResponse, errorResponse } from '@/lib/route-guard';
+import { successResponse, errorResponse } from '@/lib/route-guard';
+import { extractAuthPayload, requirePermission } from '@/lib/permissions';
 import { PERMISSIONS } from '@/lib/permissions';
 import type { NextRequest } from 'next/server';
 
