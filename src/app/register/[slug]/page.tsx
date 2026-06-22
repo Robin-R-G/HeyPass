@@ -29,6 +29,14 @@ interface FormField {
     }>;
     logic: 'and' | 'or';
   } | null;
+  conditional_required: {
+    enabled: boolean;
+    rules: Array<{
+      field_id: string;
+      operator: string;
+      value: string;
+    }>;
+  } | null;
   default_value: string | null;
   help_text: string | null;
   section_id: string | null;
