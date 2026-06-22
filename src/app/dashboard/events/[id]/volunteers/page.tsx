@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,18 +14,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Volunteer { id: string; first_name: string; last_name: string; email: string; phone: string; status: string; checked_in_at: string | null; checked_out_at: string | null; }
-interface VolunteerTask { id: string; title: string; task_type: string; start_time: string; end_time: string; slots_total: number; slots_filled: number; is_active: boolean; }
+interface VolunteerTask { id: string; title: string; task_type: string; start_time: string; end_time: string; slots_total: number; slots_filled: number; is_active: boolean; location?: string; description?: string; }
 interface VolunteerStats { total: number; approved: number; pending: number; checked_in: number; tasks_total: number; tasks_filled: number; }
 
-export default function VolunteerPage(props: { params: Promise<{ id: string }> }) {
-  const { id: eventId } = use(props.params);
+export default function VolunteerPage() {
+  const params = useParams();
+  const eventId = params.id as string;
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [tasks, setTasks] = useState<VolunteerTask[]>([]);
   const [stats, setStats] = useState<VolunteerStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
-  const [newTask, setNewTask] = useState({ title: "", description: "", task_type: "general", location: "", start_time: "", end_time: "", slots_total: 1 });
+  const [newTask, setNewTask] = useState({ title: "", description: "", task_type: "general", task_location: "", start_time: "", end_time: "", slots_total: 1 });
 
   useEffect(() => {
     Promise.all([
@@ -40,7 +42,7 @@ export default function VolunteerPage(props: { params: Promise<{ id: string }> }
   }, [eventId]);
 
   const createTask = async () => {
-    await fetch(`/api/events/${eventId}/volunteers/tasks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newTask) });
+    await fetch(`/api/events/${eventId}/volunteers/tasks`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...newTask, location: newTask.task_location }) });
     setTaskDialogOpen(false);
     const tData = await fetch(`/api/events/${eventId}/volunteers/tasks`).then(r => r.json());
     setTasks(tData.tasks || []);
@@ -144,7 +146,7 @@ export default function VolunteerPage(props: { params: Promise<{ id: string }> }
                         </SelectContent>
                       </Select>
                     </div>
-                    <div><Label>Location</Label><Input value={newTask.location} onChange={e => setNewTask({ ...newTask, location: e.target.value })} /></div>
+                    <div><Label>Location</Label><Input value={newTask.task_location} onChange={e => setNewTask({ ...newTask, task_location: e.target.value })} /></div>
                     <div className="grid grid-cols-2 gap-4">
                       <div><Label>Start</Label><Input type="datetime-local" value={newTask.start_time} onChange={e => setNewTask({ ...newTask, start_time: e.target.value })} /></div>
                       <div><Label>End</Label><Input type="datetime-local" value={newTask.end_time} onChange={e => setNewTask({ ...newTask, end_time: e.target.value })} /></div>

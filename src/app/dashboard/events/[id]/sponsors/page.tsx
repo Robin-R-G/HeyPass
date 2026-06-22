@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,8 +17,9 @@ interface Sponsor { id: string; name: string; tier: string; website_url: string;
 interface Branding { id: string; sponsor_id: string; placement_type: string; impressions: number; unique_views: number; clicks: number; scans: number; }
 interface Analytics { total_impressions: number; total_unique_views: number; total_scans: number; total_clicks: number; }
 
-export default function SponsorsPage(props: { params: Promise<{ id: string }> }) {
-  const { id: eventId } = use(props.params);
+export default function SponsorsPage() {
+  const params = useParams();
+  const eventId = params.id as string;
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [branding, setBranding] = useState<Branding[]>([]);
   const [analytics, setAnalytics] = useState<Analytics | null>(null);

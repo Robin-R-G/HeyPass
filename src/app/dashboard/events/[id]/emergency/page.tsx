@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,8 +18,9 @@ interface Incident { id: string; incident_type: string; severity: string; title:
 interface Contact { id: string; name: string; role: string; phone: string; is_primary: boolean; }
 interface LostItem { id: string; item_description: string; reported_by: string; contact_info: string; location_found: string; status: string; created_at: string; }
 
-export default function EmergencyPage(props: { params: Promise<{ id: string }> }) {
-  const { id: eventId } = use(props.params);
+export default function EmergencyPage() {
+  const params = useParams();
+  const eventId = params.id as string;
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [lostItems, setLostItems] = useState<LostItem[]>([]);

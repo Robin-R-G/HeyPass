@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +16,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 interface TokenType { id: string; name: string; meal_time: string; valid_from: string; valid_to: string; max_uses_per_person: number; total_quantity: number; used_quantity: number; is_active: boolean; }
 interface TokenStat { token_type_id: string; name: string; meal_time: string; total_issued: number; total_used: number; remaining: number; }
 
-export default function FoodTokensPage(props: { params: Promise<{ id: string }> }) {
-  const { id: eventId } = use(props.params);
+export default function FoodTokensPage() {
+  const params = useParams();
+  const eventId = params.id as string;
   const [tokenTypes, setTokenTypes] = useState<TokenType[]>([]);
   const [stats, setStats] = useState<TokenStat[]>([]);
   const [loading, setLoading] = useState(true);
