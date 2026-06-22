@@ -64,7 +64,7 @@ export async function PUT(
 
       const { id } = await params;
       const body = await req.json();
-      const parsed = updateSchema.parse(body);
+      const parsed = updateSchema.parse(body) as any;
 
       const { data: plan, error } = await supabaseAdmin
         .from('subscription_plans')

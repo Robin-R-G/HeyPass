@@ -27,7 +27,7 @@ export async function PUT(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
       const body = await req.json();
-      const parsed = preferencesSchema.parse(body);
+      const parsed = preferencesSchema.parse(body) as any;
       const preferences = await notificationService.updatePreferences(userId, clientId, parsed);
       return NextResponse.json({ preferences });
     } catch (error) {

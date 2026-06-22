@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Single certificate
-      const parsed = generateSchema.parse(body);
+      const parsed = generateSchema.parse(body) as any;
       const cert = await certificateService.generate(clientId, parsed);
       return NextResponse.json({ certificate: cert }, { status: 201 });
     } catch (error) {

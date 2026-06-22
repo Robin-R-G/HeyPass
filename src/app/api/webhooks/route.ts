@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
       const body = await req.json();
-      const parsed = createSchema.parse(body);
+      const parsed = createSchema.parse(body) as any;
       const endpoint = await webhookService.create(clientId, parsed);
       return NextResponse.json({ endpoint }, { status: 201 });
     } catch (error) {

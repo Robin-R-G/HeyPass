@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
       const body = await req.json();
-      const parsed = templateSchema.parse(body);
+      const parsed = templateSchema.parse(body) as any;
       const template = await notificationService.createTemplate(clientId, parsed);
       return NextResponse.json({ template }, { status: 201 });
     } catch (error) {

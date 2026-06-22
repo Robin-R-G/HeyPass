@@ -19,7 +19,7 @@ export async function PUT(
     try {
       const { provider } = await params;
       const body = await req.json();
-      const parsed = updateSchema.parse(body);
+      const parsed = updateSchema.parse(body) as any;
       const gateway = await gatewayConfigService.update(clientId, provider, parsed);
       return NextResponse.json({ gateway });
     } catch (error) {

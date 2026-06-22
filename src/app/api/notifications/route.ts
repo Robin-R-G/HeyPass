@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Single send
-      const parsed = sendSchema.parse(body);
+      const parsed = sendSchema.parse(body) as any;
       const notification = await notificationService.send(clientId, parsed);
       return NextResponse.json({ notification }, { status: 201 });
     } catch (error) {

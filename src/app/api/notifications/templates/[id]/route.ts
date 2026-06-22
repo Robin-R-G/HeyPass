@@ -37,7 +37,7 @@ export async function PUT(
     try {
       const { id } = await params;
       const body = await req.json();
-      const parsed = updateSchema.parse(body);
+      const parsed = updateSchema.parse(body) as any;
       const template = await notificationService.updateTemplate(clientId, id, parsed);
       return NextResponse.json({ template });
     } catch (error) {

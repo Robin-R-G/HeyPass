@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
       const body = await req.json();
-      const parsed = createSchema.parse(body);
+      const parsed = createSchema.parse(body) as any;
       const link = await registrationLinkService.create(clientId, parsed);
       return NextResponse.json({ link }, { status: 201 });
     } catch (error) {

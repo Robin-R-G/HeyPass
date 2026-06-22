@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       }
 
       const body = await req.json();
-      const parsed = planSchema.parse(body);
+      const parsed = planSchema.parse(body) as any;
 
       const { data: plan, error } = await supabaseAdmin
         .from('subscription_plans')

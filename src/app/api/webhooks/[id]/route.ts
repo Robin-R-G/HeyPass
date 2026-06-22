@@ -36,7 +36,7 @@ export async function PUT(
     try {
       const { id } = await params;
       const body = await req.json();
-      const parsed = updateSchema.parse(body);
+      const parsed = updateSchema.parse(body) as any;
       const endpoint = await webhookService.update(clientId, id, parsed);
       return NextResponse.json({ endpoint });
     } catch (error) {
