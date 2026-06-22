@@ -8,6 +8,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const authResult = await new Promise<{ clientId: string }>((resolve, reject) => {
     withAuth(req, async (_req, auth) => {
       resolve({ clientId: auth.clientId! });
+      return new Response();
     }).catch(reject);
   });
 
