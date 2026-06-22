@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/events/[id]/attendance-export — Export attendance as CSV
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, userId, clientId) => {
     try {
       const { id: eventId } = await params;
-      const data = await attendanceDashboard.exportAttendance(user.client_id!, eventId);
+      const data = await attendanceDashboard.exportAttendance(clientId, eventId);
 
       // Build CSV
       const headers = ['Name', 'Email', 'Phone', 'Check In', 'Check Out', 'Duration (min)', 'Attendance %', 'Eligible', 'Reason'];
