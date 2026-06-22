@@ -173,7 +173,7 @@ export default function SendNotificationPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Body * (HTML supported, use {{variable}} for placeholders)</Label>
+            <Label>Body * (HTML supported, use {'{{variable}}'} for placeholders)</Label>
             <Textarea
               value={form.body}
               onChange={(e) => setForm({ ...form, body: e.target.value })}
