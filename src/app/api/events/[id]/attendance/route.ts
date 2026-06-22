@@ -1,17 +1,25 @@
 import { NextRequest } from 'next/server';
 import { supabase } from '@/lib/supabase/client';
-import { withAuth } from '@/lib/route-guard';
+import { verifyAccessToken, extractTokenFromHeader } from '@/lib/auth';
 
 // GET /api/events/[id]/attendance — SSE stream of live attendance per sub-event
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const authResult = await new Promise<{ clientId: string }>((resolve, reject) => {
-    withAuth(req, async (_req, auth) => {
-      resolve({ clientId: auth.clientId! });
-    }).catch(reject);
-  });
+  const token = extractTokenFromHeader(req.headers.get('authorization'));
+  if (!token) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+
+  const payload = await verifyAccessToken(token);
+  if (!payload) {
+    return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+
+  const clientId = payload.client_id;
+  if (!clientId) {
+    return new Response(JSON.stringify({ error: 'No client context' }), { status: 403, headers: { 'Content-Type': 'application/json' } });
+  }
 
   const { id: eventId } = await params;
-  const { clientId } = authResult;
 
   const encoder = new TextEncoder();
 
