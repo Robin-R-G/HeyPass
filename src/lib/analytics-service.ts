@@ -171,7 +171,7 @@ class AnalyticsServiceImpl {
         .is('deleted_at', null),
     ]);
 
-    const gateMap = new Map((gates.data || []).map((g: any) => [g.id, { name: g.gate_name, type: g.gate_type }]));
+    const gateMap = new Map<string, { name: string; type: string }>((gates.data || []).map((g: any) => [g.id, { name: g.gate_name, type: g.gate_type }]));
 
     // Timeline by date
     const timelineMap = new Map<string, { check_ins: number; check_outs: number }>();
