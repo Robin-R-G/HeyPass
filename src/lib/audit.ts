@@ -23,7 +23,10 @@ export type AuditAction =
   | 'member.add'
   | 'member.remove'
   | 'member.role_change'
-  | 'settings.update';
+  | 'settings.update'
+  | 'volunteer.status_update'
+  | 'volunteer.assign'
+  | 'volunteer.unassign';
 
 export async function createAuditLog(params: {
   client_id?: string | null;
