@@ -18,7 +18,7 @@ export async function GET(
 
       const options = { format, date_from: dateFrom, date_to: dateTo, gate_id: gateId, session_id: sessionId };
 
-      let result: string | Buffer;
+      let result: string;
       let contentType: string;
       let filename: string;
 
@@ -57,7 +57,7 @@ export async function GET(
           return NextResponse.json({ error: 'Invalid report type' }, { status: 400 });
       }
 
-      return new NextResponse(new Uint8Array(result), {
+      return new NextResponse(result, {
         headers: {
           'Content-Type': contentType,
           'Content-Disposition': `attachment; filename="${filename}"`,
