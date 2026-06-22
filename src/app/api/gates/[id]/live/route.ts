@@ -1,16 +1,11 @@
 import { NextRequest } from 'next/server';
 import { gateService } from '@/lib/gate-service';
-import { withAuth } from '@/lib/route-guard';
-import { supabaseAdmin } from '@/lib/supabase/client';
+import { extractAuthPayload } from '@/lib/route-guard';
 
 // GET /api/gates/[id]/live — SSE live feed for gate
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const authResult = await new Promise<{ clientId: string }>((resolve, reject) => {
-    withAuth(req, async (_req, auth) => {
-      resolve({ clientId: auth.clientId! });
-      return new Response();
-    }).catch(reject);
-  });
+  const auth = extractAuthPayload(req);
+  if (!auth || !auth.clientId) return new Response('Forbidden', { status: 403 });
 
   const { id: gateId } = await params;
   const encoder = new TextEncoder();
