@@ -4,7 +4,7 @@ import { verifyAccessToken, extractTokenFromHeader } from '@/lib/auth';
 
 // GET /api/events/[id]/attendance — SSE stream of live attendance per sub-event
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const token = extractTokenFromHeader(req.headers.get('authorization'));
+  const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
   if (!token) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
