@@ -18,46 +18,58 @@ export async function GET(
 
       const options = { format, date_from: dateFrom, date_to: dateTo, gate_id: gateId, session_id: sessionId };
 
-      let result: string;
+      let body: string | Uint8Array;
       let contentType: string;
       let filename: string;
 
       switch (type) {
-        case 'attendance':
-          result = await reportService.attendanceReport(clientId, id, options);
+        case 'attendance': {
+          const result = await reportService.attendanceReport(clientId, id, options);
+          body = typeof result === 'string' ? result : new Uint8Array(result);
           contentType = format === 'csv' ? 'text/csv' : 'text/html';
           filename = `attendance-report.${format === 'csv' ? 'csv' : 'html'}`;
           break;
-        case 'revenue':
-          result = await reportService.revenueReport(clientId, id, options);
+        }
+        case 'revenue': {
+          const result = await reportService.revenueReport(clientId, id, options);
+          body = typeof result === 'string' ? result : new Uint8Array(result);
           contentType = format === 'csv' ? 'text/csv' : 'text/html';
           filename = `revenue-report.${format === 'csv' ? 'csv' : 'html'}`;
           break;
-        case 'volunteers':
-          result = await reportService.volunteerReport(clientId, id, options);
+        }
+        case 'volunteers': {
+          const result = await reportService.volunteerReport(clientId, id, options);
+          body = typeof result === 'string' ? result : new Uint8Array(result);
           contentType = format === 'csv' ? 'text/csv' : 'text/html';
           filename = `volunteer-report.${format === 'csv' ? 'csv' : 'html'}`;
           break;
-        case 'certificates':
-          result = await reportService.certificateReport(clientId, id, options);
+        }
+        case 'certificates': {
+          const result = await reportService.certificateReport(clientId, id, options);
+          body = typeof result === 'string' ? result : new Uint8Array(result);
           contentType = format === 'csv' ? 'text/csv' : 'text/html';
           filename = `certificate-report.${format === 'csv' ? 'csv' : 'html'}`;
           break;
-        case 'gates':
-          result = await reportService.gateReport(clientId, id, options);
+        }
+        case 'gates': {
+          const result = await reportService.gateReport(clientId, id, options);
+          body = typeof result === 'string' ? result : new Uint8Array(result);
           contentType = format === 'csv' ? 'text/csv' : 'text/html';
           filename = `gate-report.${format === 'csv' ? 'csv' : 'html'}`;
           break;
-        case 'full':
-          result = await reportService.fullReport(clientId, id, options);
+        }
+        case 'full': {
+          const result = await reportService.fullReport(clientId, id, options);
+          body = new Uint8Array(result);
           contentType = 'application/zip';
-          filename = `full-report.zip`;
+          filename = 'full-report.zip';
           break;
+        }
         default:
           return NextResponse.json({ error: 'Invalid report type' }, { status: 400 });
       }
 
-      return new NextResponse(result, {
+      return new NextResponse(body, {
         headers: {
           'Content-Type': contentType,
           'Content-Disposition': `attachment; filename="${filename}"`,

@@ -178,11 +178,11 @@ class ReportServiceImpl {
     ]);
 
     const zip = new JSZip();
-    zip.file('attendance.csv', attendance);
-    zip.file('revenue.csv', revenue);
-    zip.file('volunteers.csv', volunteers);
-    zip.file('certificates.csv', certificates);
-    zip.file('gates.csv', gates);
+    zip.file('attendance.csv', typeof attendance === 'string' ? attendance : attendance.toString('utf-8'));
+    zip.file('revenue.csv', typeof revenue === 'string' ? revenue : revenue.toString('utf-8'));
+    zip.file('volunteers.csv', typeof volunteers === 'string' ? volunteers : volunteers.toString('utf-8'));
+    zip.file('certificates.csv', typeof certificates === 'string' ? certificates : certificates.toString('utf-8'));
+    zip.file('gates.csv', typeof gates === 'string' ? gates : gates.toString('utf-8'));
 
     return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
   }
