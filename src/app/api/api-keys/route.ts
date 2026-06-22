@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/route-guard';
-import { apiKeyService } from '@/lib/api-key-service';
+import { apiKeyService, type CreateApiKeyInput } from '@/lib/api-key-service';
 import { z } from 'zod';
 
 const createSchema = z.object({
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
       const body = await req.json();
-      const parsed = createSchema.parse(body);
+      const parsed = createSchema.parse(body) as CreateApiKeyInput;
       const result = await apiKeyService.create(clientId, parsed);
       return NextResponse.json(result, { status: 201 });
     } catch (error) {
