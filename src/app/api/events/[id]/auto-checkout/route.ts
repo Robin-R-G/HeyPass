@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // POST /api/events/[id]/auto-checkout — Trigger auto-checkout
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
-      const result = await autoCheckoutService.processEvent(eventId, user.client_id!, new Date().toISOString());
+      const result = await autoCheckoutService.processEvent(eventId, clientId, new Date().toISOString());
       return NextResponse.json({ success: true, data: result });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to process auto-checkout';

@@ -4,7 +4,7 @@ import { withAuth } from '@/lib/route-guard';
 
 // POST /api/offline/sync — Sync offline scans
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, userId, clientId) => {
     try {
       const { scans } = await req.json();
 
@@ -65,11 +65,11 @@ export async function POST(req: NextRequest) {
         const { error } = await supabaseAdmin
           .from('check_ins')
           .insert({
-            client_id: user.client_id,
+            client_id: clientId,
             event_id,
             registration_id,
             ticket_id,
-            staff_id: user.id,
+            staff_id: userId,
             station_id: station_id || null,
             scan_type,
             scanned_at,

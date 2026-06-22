@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/events/[id]/gates — List gates for event
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
-      const gates = await gateService.listGates(user.client_id!, eventId);
+      const gates = await gateService.listGates(clientId, eventId);
       return NextResponse.json({ success: true, data: gates });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to list gates';
@@ -18,11 +18,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 // POST /api/events/[id]/gates — Create gate
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
       const body = await req.json();
-      const gate = await gateService.createGate(user.client_id!, eventId, body);
+      const gate = await gateService.createGate(clientId, eventId, body);
       return NextResponse.json({ success: true, data: gate }, { status: 201 });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to create gate';

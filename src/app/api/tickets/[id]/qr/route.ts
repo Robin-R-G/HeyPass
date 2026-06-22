@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // POST /api/tickets/[id]/qr — Generate fresh QR code for ticket
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id } = await params;
-      const qrData = await qrGenerator.generate(user.client_id!, id);
+      const qrData = await qrGenerator.generate(clientId, id);
       if (!qrData) {
         return NextResponse.json({ success: false, error: 'Ticket not found' }, { status: 404 });
       }

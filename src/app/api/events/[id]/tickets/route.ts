@@ -4,7 +4,7 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/events/[id]/tickets — List tickets with QR status
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
       const { searchParams } = new URL(req.url);
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
           )
         `, { count: 'exact' })
         .eq('event_id', eventId)
-        .eq('client_id', user.client_id!)
+        .eq('client_id', clientId)
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1);
 

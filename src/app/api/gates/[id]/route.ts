@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/gates/[id] — Get single gate
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id } = await params;
-      const gate = await gateService.getGate(user.client_id!, id);
+      const gate = await gateService.getGate(clientId, id);
       if (!gate) return NextResponse.json({ success: false, error: 'Gate not found' }, { status: 404 });
       return NextResponse.json({ success: true, data: gate });
     } catch (error: unknown) {
@@ -19,11 +19,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 // PATCH /api/gates/[id] — Update gate
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id } = await params;
       const body = await req.json();
-      const gate = await gateService.updateGate(user.client_id!, id, body);
+      const gate = await gateService.updateGate(clientId, id, body);
       return NextResponse.json({ success: true, data: gate });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to update gate';
@@ -34,10 +34,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
 // DELETE /api/gates/[id] — Delete gate
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id } = await params;
-      await gateService.deleteGate(user.client_id!, id);
+      await gateService.deleteGate(clientId, id);
       return NextResponse.json({ success: true, message: 'Gate deleted' });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to delete gate';

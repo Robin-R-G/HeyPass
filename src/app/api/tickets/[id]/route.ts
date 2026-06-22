@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/tickets/[id] — Get ticket preview with secure QR
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id } = await params;
-      const qrData = await qrGenerator.generateForDisplay(user.client_id!, id);
+      const qrData = await qrGenerator.generateForDisplay(clientId, id);
       if (!qrData) {
         return NextResponse.json({ success: false, error: 'Ticket not found' }, { status: 404 });
       }

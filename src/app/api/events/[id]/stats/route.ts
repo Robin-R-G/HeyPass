@@ -6,29 +6,29 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/events/[id]/stats — Admin dashboard ticket/certificate stats
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
 
       // Get ticket stats
-      const ticketStats = await ticketService.getEventTicketStats(user.client_id!, eventId);
+      const ticketStats = await ticketService.getEventTicketStats(clientId, eventId);
 
       // Get certificate stats
-      const certStats = await manualCertificateService.getStats(user.client_id!, eventId);
+      const certStats = await manualCertificateService.getStats(clientId, eventId);
 
       // Get session attendance summary
       const { data: sessionAttendance } = await supabase
         .from('session_attendance')
         .select('session_id, total_registered, total_checked_in, total_checked_out')
         .eq('event_id', eventId)
-        .eq('client_id', user.client_id!);
+        .eq('client_id', clientId);
 
       // Get recent registrations
       const { data: recentRegistrations } = await supabase
         .from('registrations')
         .select('id, first_name, last_name, email, status, created_at')
         .eq('event_id', eventId)
-        .eq('client_id', user.client_id!)
+        .eq('client_id', clientId)
         .is('deleted_at', null)
         .order('created_at', { ascending: false })
         .limit(10);

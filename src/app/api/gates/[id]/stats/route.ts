@@ -4,13 +4,13 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/gates/[id]/stats — Get gate statistics
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: gateId } = await params;
-      const gate = await gateService.getGate(user.client_id!, gateId);
+      const gate = await gateService.getGate(clientId, gateId);
       if (!gate) return NextResponse.json({ success: false, error: 'Gate not found' }, { status: 404 });
 
-      const performance = await gateService.getGatePerformance(user.client_id!, gate.event_id);
+      const performance = await gateService.getGatePerformance(clientId, gate.event_id);
       const gateStats = performance.find((g: { gate_id: string }) => g.gate_id === gateId);
 
       return NextResponse.json({ success: true, data: gateStats || { gate_id: gateId, total_scans: 0 } });

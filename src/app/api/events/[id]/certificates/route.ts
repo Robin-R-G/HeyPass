@@ -4,10 +4,10 @@ import { withAuth } from '@/lib/route-guard';
 
 // GET /api/events/[id]/certificates — List manual certificates
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
-      const certs = await manualCertificateService.list(user.client_id!, eventId);
+      const certs = await manualCertificateService.list(clientId, eventId);
       return NextResponse.json({ success: true, data: certs });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to list certificates';
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
 // POST /api/events/[id]/certificates — Create manual certificate
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
       const body = await req.json();
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         );
       }
 
-      const cert = await manualCertificateService.create(user.client_id!, {
+      const cert = await manualCertificateService.create(clientId, {
         event_id: eventId,
         template_id,
         type_id,

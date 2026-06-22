@@ -4,7 +4,7 @@ import { withAuth } from '@/lib/route-guard';
 
 // POST /api/events/[id]/certificates/batch — Batch create manual certificates
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const { id: eventId } = await params;
       const { entries } = await req.json();
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         }
       }
 
-      const certs = await manualCertificateService.batchCreate(user.client_id!, eventId, entries);
+      const certs = await manualCertificateService.batchCreate(clientId, eventId, entries);
       return NextResponse.json({ success: true, data: certs }, { status: 201 });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to batch create certificates';

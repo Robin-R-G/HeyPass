@@ -3,9 +3,9 @@ import { paymentMethodService } from '@/lib/payment-methods';
 import { withAuth } from '@/lib/route-guard';
 
 export async function GET(req: NextRequest) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
-      const methods = await paymentMethodService.list(user.client_id!);
+      const methods = await paymentMethodService.list(clientId);
       return NextResponse.json({ success: true, data: methods });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to list payment methods';
@@ -15,10 +15,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, _userId, clientId) => {
     try {
       const body = await req.json();
-      const method = await paymentMethodService.create(user.client_id!, body);
+      const method = await paymentMethodService.create(clientId, body);
       return NextResponse.json({ success: true, data: method }, { status: 201 });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to create payment method';

@@ -5,7 +5,7 @@ import { checkRateLimit } from '@/lib/cache';
 
 // POST /api/scan — Validate QR and process check-in/check-out
 export async function POST(req: NextRequest) {
-  return withAuth(req, async (req, user) => {
+  return withAuth(req, async (req, userId, clientId) => {
     try {
       const body = await req.json();
       const { qr_string, event_id, station_id, scan_type } = body;
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Global rate limit: 100 scans per user per minute
-      const { allowed } = await checkRateLimit(`scan:user:${user.id}`, 100, 60);
+      const { allowed } = await checkRateLimit(`scan:user:${userId}`, 100, 60);
       if (!allowed) {
         return NextResponse.json(
           { success: false, error: 'Too many scan attempts. Please slow down.' },
@@ -29,9 +29,9 @@ export async function POST(req: NextRequest) {
       const result = await scanValidation.validate({
         qr_string,
         event_id,
-        client_id: user.client_id!,
+        client_id: clientId,
         station_id: station_id || undefined,
-        staff_id: user.id,
+        staff_id: userId,
         scan_type: scan_type || 'check_in',
         ip_address: req.headers.get('x-forwarded-for') || undefined,
         device_id: req.headers.get('x-device-id') || undefined,
