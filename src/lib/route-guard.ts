@@ -6,6 +6,12 @@ type RouteHandler = (
   auth: AuthPayload
 ) => Promise<NextResponse>;
 
+type LegacyRouteHandler = (
+  req: NextRequest,
+  userId: string,
+  clientId: string | null
+) => Promise<NextResponse>;
+
 interface WithPermissionOptions {
   permission: PermissionName;
   audit?: boolean;
@@ -13,11 +19,11 @@ interface WithPermissionOptions {
 
 export function withPermission(
   handler: RouteHandler,
-  options: WithPermissionOptions | PermissionName
+  options?: WithPermissionOptions | PermissionName
 ): (req: NextRequest) => Promise<NextResponse> {
-  const config: WithPermissionOptions = typeof options === 'string'
-    ? { permission: options }
-    : options;
+  const config: WithPermissionOptions | undefined = options
+    ? (typeof options === 'string' ? { permission: options } : options)
+    : undefined;
 
   return async (req: NextRequest): Promise<NextResponse> => {
     const auth = extractAuthPayload(req);
@@ -36,13 +42,15 @@ export function withPermission(
       );
     }
 
-    const guard = await requirePermission(req, config.permission, { audit: config.audit });
+    if (config) {
+      const guard = await requirePermission(req, config.permission, { audit: config.audit });
 
-    if (!guard.allowed) {
-      return NextResponse.json(
-        { error: guard.error, message: 'You do not have permission to perform this action' },
-        { status: guard.status }
-      );
+      if (!guard.allowed) {
+        return NextResponse.json(
+          { error: guard.error, message: 'You do not have permission to perform this action' },
+          { status: guard.status }
+        );
+      }
     }
 
     return handler(req, auth);
@@ -50,19 +58,40 @@ export function withPermission(
 }
 
 export function withAuth(
+  request: NextRequest,
+  handler: LegacyRouteHandler
+): Promise<NextResponse>;
+export function withAuth(
   handler: RouteHandler
-): (req: NextRequest) => Promise<NextResponse> {
+): (req: NextRequest) => Promise<NextResponse>;
+export function withAuth(
+  requestOrHandler: NextRequest | RouteHandler,
+  handler?: LegacyRouteHandler
+): Promise<NextResponse> | ((req: NextRequest) => Promise<NextResponse>) {
+  if (requestOrHandler instanceof NextRequest && handler) {
+    const req = requestOrHandler;
+    return (async (): Promise<NextResponse> => {
+      const auth = extractAuthPayload(req);
+      if (!auth) {
+        return NextResponse.json(
+          { error: 'Unauthorized', message: 'Authentication required' },
+          { status: 401 }
+        );
+      }
+      return handler(req, auth.userId, auth.clientId);
+    })();
+  }
+
+  const routeHandler = requestOrHandler as RouteHandler;
   return async (req: NextRequest): Promise<NextResponse> => {
     const auth = extractAuthPayload(req);
-
     if (!auth) {
       return NextResponse.json(
         { error: 'Unauthorized', message: 'Authentication required' },
         { status: 401 }
       );
     }
-
-    return handler(req, auth);
+    return routeHandler(req, auth);
   };
 }
 
