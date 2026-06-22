@@ -385,7 +385,7 @@ class CertificateServiceImpl {
       organization: cert.organization_name,
       status: cert.status,
       verification_count: count || 0,
-      pdf_url: cert.pdf_url,
+      pdf_url: cert.pdf_url ?? undefined,
     };
   }
 
