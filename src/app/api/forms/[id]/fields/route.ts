@@ -6,9 +6,10 @@ import { addField } from '@/lib/form-builder';
 // POST /api/forms/[id]/fields — Add field to form
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -23,7 +24,7 @@ export async function POST(
     }
 
     const body = await req.json();
-    const field = await addField(params.id, auth.clientId, auth.userId, {
+    const field = await addField(id, auth.clientId, auth.userId, {
       label: body.label,
       field_type: body.field_type,
       placeholder: body.placeholder,

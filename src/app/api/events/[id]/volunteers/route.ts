@@ -2,20 +2,21 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { volunteerService } from '@/lib/volunteer-service';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
-    const volunteers = await volunteerService.listVolunteers(auth.clientId, params.id);
+    const volunteers = await volunteerService.listVolunteers(auth.clientId, id);
     return successResponse({ volunteers });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');

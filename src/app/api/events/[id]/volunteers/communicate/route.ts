@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { supabaseAdmin } from '@/lib/supabase/client';
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       .from('volunteer_applications')
       .select('email, first_name, last_name')
       .eq('client_id', auth.clientId)
-      .eq('event_id', params.id)
+      .eq('event_id', id)
       .eq('status', 'approved');
 
     if (volunteer_ids && Array.isArray(volunteer_ids)) {
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
     const notifications = volunteers.map((v) => ({
       client_id: auth.clientId,
-      event_id: params.id,
+      event_id: id,
       recipient_email: v.email,
       recipient_name: `${v.first_name} ${v.last_name}`,
       type: 'volunteer_communication',

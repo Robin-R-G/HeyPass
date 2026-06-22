@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { foodTokenService } from '@/lib/food-token-service';
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');

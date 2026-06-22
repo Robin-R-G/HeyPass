@@ -5,9 +5,10 @@ import { getFormAnalytics, getFormAnalyticsDaily } from '@/lib/form-analytics';
 // GET /api/forms/[id]/analytics — Get form analytics
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) {
@@ -21,7 +22,7 @@ export async function GET(
 
     if (startDate && endDate) {
       const data = await getFormAnalyticsDaily(
-        params.id,
+        id,
         auth.clientId,
         startDate,
         endDate
@@ -29,7 +30,7 @@ export async function GET(
       return successResponse({ analytics: data });
     }
 
-    const summary = await getFormAnalytics(params.id, auth.clientId, days);
+    const summary = await getFormAnalytics(id, auth.clientId, days);
     return successResponse({ analytics: summary });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';

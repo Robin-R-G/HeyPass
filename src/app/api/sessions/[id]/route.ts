@@ -1,11 +1,16 @@
 import { supabase } from '@/lib/supabase/client';
-import { withAuth, withPermission, successResponse, errorResponse } from '@/lib/route-guard';
+import { extractAuthPayload, requirePermission, successResponse, errorResponse } from '@/lib/route-guard';
 import { PERMISSIONS } from '@/lib/permissions';
 import type { NextRequest } from 'next/server';
 
 // GET /api/sessions/[id] — Get single sub-event
-export const GET = withAuth(async (req: NextRequest, auth, { params }) => {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const { id } = await params;
+  const auth = extractAuthPayload(req);
+  if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
   const { data: session, error } = await supabase
     .from('sessions')
@@ -26,10 +31,19 @@ export const GET = withAuth(async (req: NextRequest, auth, { params }) => {
 
   if (error || !session) return errorResponse('Session not found', 404);
   return successResponse({ session });
-});
+}
 
 // PATCH /api/sessions/[id] — Update sub-event (Manager+)
-export const PATCH = withPermission(async (req: NextRequest, auth, { params }) => {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const auth = extractAuthPayload(req);
+  if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
+
+  const guard = await requirePermission(req, PERMISSIONS.EVENTS_EDIT);
+  if (!guard.allowed) return errorResponse(guard.error, guard.status);
+
   const { id } = await params;
   const body = await req.json();
 
@@ -66,10 +80,19 @@ export const PATCH = withPermission(async (req: NextRequest, auth, { params }) =
 
   if (error) return errorResponse(error.message, 400);
   return successResponse({ session });
-}, PERMISSIONS.EVENTS_EDIT);
+}
 
 // DELETE /api/sessions/[id] — Remove sub-event (Manager+)
-export const DELETE = withPermission(async (req: NextRequest, auth, { params }) => {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const auth = extractAuthPayload(req);
+  if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
+
+  const guard = await requirePermission(req, PERMISSIONS.EVENTS_EDIT);
+  if (!guard.allowed) return errorResponse(guard.error, guard.status);
+
   const { id } = await params;
 
   const { data: existing } = await supabase
@@ -93,4 +116,4 @@ export const DELETE = withPermission(async (req: NextRequest, auth, { params }) 
 
   if (error) return errorResponse(error.message, 400);
   return successResponse({ deleted: true });
-}, PERMISSIONS.EVENTS_EDIT);
+}

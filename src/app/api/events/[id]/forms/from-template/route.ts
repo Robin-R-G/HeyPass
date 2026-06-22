@@ -7,9 +7,10 @@ import { createFormFromTemplate } from '@/lib/form-templates';
 // Note: [id] here is actually the event_id
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -32,7 +33,7 @@ export async function POST(
 
     const formId = await createFormFromTemplate(
       template_id,
-      params.id,
+      id,
       auth.clientId,
       auth.userId,
       form_name

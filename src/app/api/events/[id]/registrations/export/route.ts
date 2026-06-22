@@ -6,9 +6,10 @@ import { supabaseAdmin } from '@/lib/supabase/client';
 // GET /api/events/[id]/registrations/export — Export registrations as CSV
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -46,7 +47,7 @@ export async function GET(
         checked_in_at,
         checked_out_at
       `)
-      .eq('event_id', params.id)
+      .eq('event_id', id)
       .eq('client_id', auth.clientId)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
@@ -79,7 +80,7 @@ export async function GET(
     const { data: form } = await supabaseAdmin
       .from('registration_forms')
       .select('id')
-      .eq('event_id', params.id)
+      .eq('event_id', id)
       .eq('client_id', auth.clientId)
       .is('deleted_at', null)
       .limit(1)
@@ -160,7 +161,7 @@ export async function GET(
       status: 200,
       headers: {
         'Content-Type': 'text/csv',
-        'Content-Disposition': `attachment; filename="registrations-${params.id}.csv"`,
+        'Content-Disposition': `attachment; filename="registrations-${id}.csv"`,
       },
     });
   } catch (err) {

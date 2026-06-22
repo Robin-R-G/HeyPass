@@ -5,9 +5,10 @@ import { eventCloneService } from '@/lib/event-clone-service';
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
 
@@ -24,7 +25,7 @@ export async function POST(
     const { data: event } = await supabaseAdmin
       .from('events')
       .select('id, title')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('client_id', auth.clientId)
       .single();
 
@@ -45,7 +46,7 @@ export async function POST(
     };
 
     const result = await eventCloneService.cloneEvent(
-      params.id,
+      id,
       auth.clientId,
       auth.userId,
       options

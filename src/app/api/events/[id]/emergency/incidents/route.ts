@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { emergencyService } from '@/lib/emergency-service';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
@@ -13,7 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const severity = url.searchParams.get('severity') || undefined;
     const type = url.searchParams.get('type') || undefined;
 
-    const incidents = await emergencyService.getIncidents(auth.clientId, params.id, {
+    const incidents = await emergencyService.getIncidents(auth.clientId, id, {
       status,
       severity,
       incident_type: type,
@@ -24,8 +25,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -38,7 +40,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return errorResponse('title and incident_type are required');
     }
 
-    const incident = await emergencyService.createIncident(auth.clientId, params.id, {
+    const incident = await emergencyService.createIncident(auth.clientId, id, {
       incident_type: body.incident_type,
       severity: body.severity,
       title: body.title,

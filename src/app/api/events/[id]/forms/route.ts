@@ -6,16 +6,17 @@ import { listForms, createForm } from '@/lib/form-builder';
 // GET /api/events/[id]/forms — List forms for event
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) {
       return errorResponse('Forbidden', 403);
     }
 
-    const forms = await listForms(params.id, auth.clientId);
+    const forms = await listForms(id, auth.clientId);
     return successResponse({ forms });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';
@@ -26,9 +27,10 @@ export async function GET(
 // POST /api/events/[id]/forms — Create form
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -43,7 +45,7 @@ export async function POST(
     }
 
     const body = await req.json();
-    const form = await createForm(params.id, auth.clientId, auth.userId, {
+    const form = await createForm(id, auth.clientId, auth.userId, {
       name: body.name,
       is_active: body.is_active,
       is_multi_step: body.is_multi_step,

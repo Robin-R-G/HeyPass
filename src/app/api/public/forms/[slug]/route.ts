@@ -9,10 +9,11 @@ import { v4 as uuidv4 } from 'uuid';
 // GET /api/public/forms/[slug] — Get public form
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const form = await getPublicForm(params.slug);
+    const { slug } = await params;
+    const form = await getPublicForm(slug);
 
     if (!form) {
       return errorResponse('Event not found or registration is closed', 404);

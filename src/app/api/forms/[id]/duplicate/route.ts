@@ -6,9 +6,10 @@ import { duplicateForm } from '@/lib/form-builder';
 // POST /api/forms/[id]/duplicate — Duplicate form
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -24,7 +25,7 @@ export async function POST(
 
     const body = await req.json();
     const form = await duplicateForm(
-      params.id,
+      id,
       auth.clientId,
       auth.userId,
       body.target_event_id

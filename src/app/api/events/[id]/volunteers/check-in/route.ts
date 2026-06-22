@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { volunteerService } from '@/lib/volunteer-service';
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -18,9 +19,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
     let result;
     if (action === 'check_in') {
-      result = await volunteerService.checkInVolunteer(auth.clientId, params.id, auth.userId, assignment_id);
+      result = await volunteerService.checkInVolunteer(auth.clientId, id, auth.userId, assignment_id);
     } else {
-      result = await volunteerService.checkOutVolunteer(auth.clientId, params.id, auth.userId, assignment_id);
+      result = await volunteerService.checkOutVolunteer(auth.clientId, id, auth.userId, assignment_id);
     }
 
     return successResponse({ assignment: result });

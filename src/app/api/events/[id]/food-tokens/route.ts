@@ -2,21 +2,23 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { foodTokenService } from '@/lib/food-token-service';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
-    const tokenTypes = await foodTokenService.getTokenTypes(auth.clientId, params.id);
+    const tokenTypes = await foodTokenService.getTokenTypes(auth.clientId, id);
     return successResponse({ tokenTypes });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
     if (!name || !meal_time) return errorResponse('name and meal_time are required');
 
-    const tokenType = await foodTokenService.createTokenType(auth.clientId, params.id, {
+    const tokenType = await foodTokenService.createTokenType(auth.clientId, id, {
       name,
       meal_time,
       description,

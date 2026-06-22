@@ -2,21 +2,23 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { volunteerService } from '@/lib/volunteer-service';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
-    const tasks = await volunteerService.listTasks(auth.clientId, params.id);
+    const tasks = await volunteerService.listTasks(auth.clientId, id);
     return successResponse({ tasks });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -25,14 +27,14 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     if (!guard.allowed) return errorResponse('Forbidden', 403);
 
     const body = await req.json();
-    const task = await volunteerService.createTask(auth.clientId, params.id, body);
+    const task = await volunteerService.createTask(auth.clientId, id, body);
     return successResponse({ task }, 201);
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
@@ -51,7 +53,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');

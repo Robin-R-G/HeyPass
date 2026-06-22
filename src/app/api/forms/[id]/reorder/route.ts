@@ -6,9 +6,10 @@ import { reorderFields } from '@/lib/form-builder';
 // PUT /api/forms/[id]/reorder — Reorder fields and sections
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -29,7 +30,7 @@ export async function PUT(
       return errorResponse('field_orders must be an array');
     }
 
-    await reorderFields(params.id, auth.clientId, auth.userId, field_orders);
+    await reorderFields(id, auth.clientId, auth.userId, field_orders);
     return successResponse({ reordered: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';

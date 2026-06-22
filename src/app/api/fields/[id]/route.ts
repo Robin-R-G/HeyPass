@@ -6,9 +6,10 @@ import { updateField, deleteField } from '@/lib/form-builder';
 // PUT /api/fields/[id] — Update field
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -23,7 +24,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const field = await updateField(params.id, auth.clientId, auth.userId, body);
+    const field = await updateField(id, auth.clientId, auth.userId, body);
 
     return successResponse({ field });
   } catch (err) {
@@ -35,9 +36,10 @@ export async function PUT(
 // DELETE /api/fields/[id] — Delete field
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -51,7 +53,7 @@ export async function DELETE(
       return errorResponse('Forbidden', 403);
     }
 
-    await deleteField(params.id, auth.clientId, auth.userId);
+    await deleteField(id, auth.clientId, auth.userId);
     return successResponse({ deleted: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';

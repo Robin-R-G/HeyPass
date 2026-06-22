@@ -7,9 +7,10 @@ import { supabaseAdmin } from '@/lib/supabase/client';
 // GET /api/events/[id]/branding — Get event branding
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const authHeader = req.headers.get('authorization');
     if (!authHeader) {
       return errorResponse('Unauthorized', 401);
@@ -25,7 +26,7 @@ export async function GET(
     const { data: event } = await supabaseAdmin
       .from('events')
       .select('id')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('client_id', auth.clientId)
       .single();
 
@@ -33,7 +34,7 @@ export async function GET(
       return errorResponse('Event not found', 404);
     }
 
-    const branding = await getEventBranding(params.id);
+    const branding = await getEventBranding(id);
     return successResponse({ branding });
   } catch {
     return errorResponse('Internal server error', 500);
@@ -43,9 +44,10 @@ export async function GET(
 // PUT /api/events/[id]/branding — Update event branding
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
     const { PERMISSIONS } = await import('@/lib/permissions');
@@ -64,7 +66,7 @@ export async function PUT(
     const { data: event } = await supabaseAdmin
       .from('events')
       .select('id')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('client_id', auth.clientId)
       .single();
 
@@ -93,7 +95,7 @@ export async function PUT(
     }
 
     const branding = await upsertEventBranding(
-      params.id,
+      id,
       auth.clientId!,
       auth.userId,
       filteredInput
@@ -109,9 +111,10 @@ export async function PUT(
 // POST /api/events/[id]/branding — Upload event branding asset
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
     const { PERMISSIONS } = await import('@/lib/permissions');
@@ -130,7 +133,7 @@ export async function POST(
     const { data: event } = await supabaseAdmin
       .from('events')
       .select('id')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('client_id', auth.clientId)
       .single();
 
@@ -151,7 +154,7 @@ export async function POST(
     }
 
     const result = await uploadEventBrandingAsset(
-      params.id,
+      id,
       auth.clientId!,
       auth.userId,
       assetType,

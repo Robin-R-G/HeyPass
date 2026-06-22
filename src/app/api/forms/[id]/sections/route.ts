@@ -6,9 +6,10 @@ import { addSection } from '@/lib/form-builder';
 // POST /api/forms/[id]/sections — Add section to form
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -23,7 +24,7 @@ export async function POST(
     }
 
     const body = await req.json();
-    const section = await addSection(params.id, auth.clientId, auth.userId, {
+    const section = await addSection(id, auth.clientId, auth.userId, {
       title: body.title,
       description: body.description,
       sort_order: body.sort_order,

@@ -2,8 +2,9 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { volunteerService } from '@/lib/volunteer-service';
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     if (!task_id || !application_id) return errorResponse('task_id and application_id are required');
 
     const assignment = await volunteerService.assignVolunteer(
-      auth.clientId, params.id, auth.userId, task_id, application_id
+      auth.clientId, id, auth.userId, task_id, application_id
     );
     return successResponse({ assignment }, 201);
   } catch (err) {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');

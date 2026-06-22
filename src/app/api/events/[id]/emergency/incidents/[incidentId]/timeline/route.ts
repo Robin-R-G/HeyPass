@@ -4,14 +4,15 @@ import { emergencyService } from '@/lib/emergency-service';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string; incidentId: string } }
+  { params }: { params: Promise<{ id: string; incidentId: string }> }
 ) {
   try {
+    const { id, incidentId } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
-    const timeline = await emergencyService.getIncidentTimeline(auth.clientId, params.incidentId);
+    const timeline = await emergencyService.getIncidentTimeline(auth.clientId, incidentId);
     return successResponse({ timeline });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
@@ -20,9 +21,10 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string; incidentId: string } }
+  { params }: { params: Promise<{ id: string; incidentId: string }> }
 ) {
   try {
+    const { id, incidentId } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -35,7 +37,7 @@ export async function POST(
 
     const entry = await emergencyService.addIncidentTimeline(
       auth.clientId,
-      params.incidentId,
+      incidentId,
       body.action,
       body.notes || null,
       auth.userId

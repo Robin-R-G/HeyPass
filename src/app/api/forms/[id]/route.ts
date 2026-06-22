@@ -6,16 +6,17 @@ import { getForm, updateForm, deleteForm } from '@/lib/form-builder';
 // GET /api/forms/[id] — Get form with fields and sections
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) {
       return errorResponse('Forbidden', 403);
     }
 
-    const form = await getForm(params.id, auth.clientId);
+    const form = await getForm(id, auth.clientId);
     if (!form) {
       return errorResponse('Form not found', 404);
     }
@@ -30,9 +31,10 @@ export async function GET(
 // PUT /api/forms/[id] — Update form
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -47,7 +49,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const form = await updateForm(params.id, auth.clientId, auth.userId, {
+    const form = await updateForm(id, auth.clientId, auth.userId, {
       name: body.name,
       is_active: body.is_active,
       is_multi_step: body.is_multi_step,
@@ -64,9 +66,10 @@ export async function PUT(
 // DELETE /api/forms/[id] — Delete form
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -80,7 +83,7 @@ export async function DELETE(
       return errorResponse('Forbidden', 403);
     }
 
-    await deleteForm(params.id, auth.clientId, auth.userId);
+    await deleteForm(id, auth.clientId, auth.userId);
     return successResponse({ deleted: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';

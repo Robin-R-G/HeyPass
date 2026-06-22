@@ -4,9 +4,10 @@ import { emergencyService } from '@/lib/emergency-service';
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string; itemId: string } }
+  { params }: { params: Promise<{ id: string; itemId: string }> }
 ) {
   try {
+    const { id, itemId } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -15,7 +16,7 @@ export async function PATCH(
     if (!guard.allowed) return errorResponse('Forbidden', 403);
 
     const body = await req.json();
-    const item = await emergencyService.updateLostFoundItem(auth.clientId, params.itemId, {
+    const item = await emergencyService.updateLostFoundItem(auth.clientId, itemId, {
       status: body.status,
       claimed_by_name: body.claimed_by_name,
       claimed_at: body.claimed_at,

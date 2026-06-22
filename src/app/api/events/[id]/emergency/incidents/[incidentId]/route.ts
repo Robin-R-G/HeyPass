@@ -4,15 +4,16 @@ import { emergencyService } from '@/lib/emergency-service';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string; incidentId: string } }
+  { params }: { params: Promise<{ id: string; incidentId: string }> }
 ) {
   try {
+    const { id, incidentId } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
-    const incidents = await emergencyService.getIncidents(auth.clientId, params.id);
-    const incident = incidents.find((i) => i.id === params.incidentId);
+    const incidents = await emergencyService.getIncidents(auth.clientId, id);
+    const incident = incidents.find((i) => i.id === incidentId);
     if (!incident) return errorResponse('Incident not found', 404);
 
     return successResponse({ incident });
@@ -23,9 +24,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string; incidentId: string } }
+  { params }: { params: Promise<{ id: string; incidentId: string }> }
 ) {
   try {
+    const { id, incidentId } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -34,7 +36,7 @@ export async function PATCH(
     if (!guard.allowed) return errorResponse('Forbidden', 403);
 
     const body = await req.json();
-    const incident = await emergencyService.updateIncident(auth.clientId, params.incidentId, {
+    const incident = await emergencyService.updateIncident(auth.clientId, incidentId, {
       status: body.status,
       severity: body.severity,
       assigned_to: body.assigned_to,

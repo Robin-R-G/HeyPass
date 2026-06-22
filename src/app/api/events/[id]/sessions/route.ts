@@ -1,11 +1,16 @@
 import { supabase } from '@/lib/supabase/client';
-import { withAuth, withPermission, successResponse, errorResponse } from '@/lib/route-guard';
+import { extractAuthPayload, requirePermission, successResponse, errorResponse } from '@/lib/route-guard';
 import { PERMISSIONS } from '@/lib/permissions';
 import type { NextRequest } from 'next/server';
 
 // GET /api/events/[id]/sessions — List sub-events
-export const GET = withAuth(async (req: NextRequest, auth, { params }) => {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const { id: eventId } = await params;
+  const auth = extractAuthPayload(req);
+  if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
   const { data: sessions, error } = await supabase
     .from('sessions')
@@ -25,10 +30,19 @@ export const GET = withAuth(async (req: NextRequest, auth, { params }) => {
 
   if (error) return errorResponse(error.message, 400);
   return successResponse({ sessions: sessions || [] });
-});
+}
 
 // POST /api/events/[id]/sessions — Create sub-event (Manager+)
-export const POST = withPermission(async (req: NextRequest, auth, { params }) => {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const auth = extractAuthPayload(req);
+  if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
+
+  const guard = await requirePermission(req, PERMISSIONS.EVENTS_EDIT);
+  if (!guard.allowed) return errorResponse(guard.error, guard.status);
+
   const { id: eventId } = await params;
   const body = await req.json();
   const {
@@ -41,12 +55,10 @@ export const POST = withPermission(async (req: NextRequest, auth, { params }) =>
     return errorResponse('title, start_time, end_time are required');
   }
 
-  // Validate times
   if (new Date(end_time) <= new Date(start_time)) {
     return errorResponse('end_time must be after start_time');
   }
 
-  // Check event belongs to client
   const { data: event } = await supabase
     .from('events')
     .select('id, start_date, end_date')
@@ -78,6 +90,5 @@ export const POST = withPermission(async (req: NextRequest, auth, { params }) =>
     .single();
 
   if (error) return errorResponse(error.message, 400);
-
   return successResponse({ session }, 201);
-}, PERMISSIONS.EVENTS_EDIT);
+}

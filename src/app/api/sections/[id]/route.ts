@@ -6,9 +6,10 @@ import { updateSection, deleteSection } from '@/lib/form-builder';
 // PUT /api/sections/[id] — Update section
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -23,7 +24,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const section = await updateSection(params.id, auth.clientId, auth.userId, {
+    const section = await updateSection(id, auth.clientId, auth.userId, {
       title: body.title,
       description: body.description,
       sort_order: body.sort_order,
@@ -41,9 +42,10 @@ export async function PUT(
 // DELETE /api/sections/[id] — Delete section
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const { requirePermission } = await import('@/lib/permissions');
 
@@ -57,7 +59,7 @@ export async function DELETE(
       return errorResponse('Forbidden', 403);
     }
 
-    await deleteSection(params.id, auth.clientId, auth.userId);
+    await deleteSection(id, auth.clientId, auth.userId);
     return successResponse({ deleted: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';

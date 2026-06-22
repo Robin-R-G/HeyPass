@@ -2,21 +2,23 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/route-guard';
 import { emergencyService } from '@/lib/emergency-service';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload } = await import('@/lib/route-guard');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
-    const contacts = await emergencyService.getEmergencyContacts(auth.clientId, params.id);
+    const contacts = await emergencyService.getEmergencyContacts(auth.clientId, id);
     return successResponse({ contacts });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const { extractAuthPayload, requirePermission } = await import('@/lib/route-guard');
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return errorResponse('name, role, and phone are required');
     }
 
-    const contact = await emergencyService.createEmergencyContact(auth.clientId, params.id, {
+    const contact = await emergencyService.createEmergencyContact(auth.clientId, id, {
       name: body.name,
       role: body.role,
       phone: body.phone,
