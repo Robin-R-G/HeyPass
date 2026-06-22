@@ -78,6 +78,7 @@ export interface EventBranding {
 export interface ResolvedBranding {
   brand_name: string | null;
   tagline: string | null;
+  banner_url: string | null;
   logo_url: string | null;
   college_logo_url: string | null;
   favicon_url: string | null;
