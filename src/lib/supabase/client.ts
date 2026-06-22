@@ -4,6 +4,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _supabaseAdmin: any = null;
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: false,
@@ -11,9 +14,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-let _supabaseAdmin: ReturnType<typeof createClient> | null = null;
-
-export const supabaseAdmin: ReturnType<typeof createClient> = new Proxy({} as ReturnType<typeof createClient>, {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const supabaseAdmin: any = new Proxy({} as any, {
   get(_target, prop) {
     if (typeof window !== 'undefined') {
       throw new Error('supabaseAdmin must not be used in client-side code');
@@ -26,7 +28,7 @@ export const supabaseAdmin: ReturnType<typeof createClient> = new Proxy({} as Re
         },
       });
     }
-    const value = (_supabaseAdmin as Record<string | symbol, unknown>)[prop];
+    const value = _supabaseAdmin[prop];
     return typeof value === 'function' ? value.bind(_supabaseAdmin) : value;
   },
 });
