@@ -5,7 +5,7 @@ import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middl
 
 export async function POST(req: NextRequest) {
   try {
-    const token = extractTokenFromHeader(req.headers.get('authorization'));
+    const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
     const clientId = req.headers.get('x-client-id') || undefined;
 
     if (token) {

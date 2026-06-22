@@ -39,7 +39,7 @@ export const GET = withAuth(async (_req: NextRequest, auth) => {
 // POST /api/clients — Create a new client (available to all authenticated users)
 export async function POST(req: NextRequest) {
   try {
-    const token = extractTokenFromHeader(req.headers.get('authorization'));
+    const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
     if (!token) return createErrorResponse(401, 'Unauthorized');
     const payload = verifyAccessToken(token);
     if (!payload) return createErrorResponse(401, 'Invalid token');

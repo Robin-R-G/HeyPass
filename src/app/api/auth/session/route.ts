@@ -5,7 +5,7 @@ import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middl
 
 export async function GET(req: NextRequest) {
   try {
-    const token = extractTokenFromHeader(req.headers.get('authorization'));
+    const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
 
     if (!token) {
       return createErrorResponse(401, 'No token provided');

@@ -238,7 +238,7 @@ export interface AuthPayload {
 }
 
 export function extractAuthPayload(req: NextRequest): AuthPayload | null {
-  const token = extractTokenFromHeader(req.headers.get('authorization'));
+  const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
   if (!token) return null;
 
   const payload = verifyAccessToken(token);
