@@ -50,7 +50,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
 
   const fetchData = async () => {
     try {
-      const [certsRes, templatesRes, typesRes, statsRes] = await Promise.all([
+      const [certsRes, templatesRes, statsRes] = await Promise.all([
         fetch(`/api/events/${eventId}/certificates`),
         fetch(`/api/form-templates`),
         fetch(`/api/events/${eventId}/stats`),
