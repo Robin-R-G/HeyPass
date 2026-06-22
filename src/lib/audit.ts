@@ -13,6 +13,7 @@ export type AuditAction =
   | 'event.create'
   | 'event.update'
   | 'event.delete'
+  | 'event.clone'
   | 'ticket.validate'
   | 'check_in.perform'
   | 'check_out.perform'
