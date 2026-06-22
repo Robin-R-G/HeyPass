@@ -294,7 +294,7 @@ class NotificationServiceImpl {
         .update({
           status: 'sent',
           sent_at: new Date().toISOString(),
-          sendgrid_message_id: result?.messageId || null,
+          sendgrid_message_id: (result as any)?.messageId || null,
           updated_at: new Date().toISOString(),
         })
         .eq('id', notificationId);
