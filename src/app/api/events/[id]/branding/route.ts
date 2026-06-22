@@ -153,6 +153,16 @@ export async function POST(
       return errorResponse('Invalid asset type');
     }
 
+    // Validate file type and size
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (!allowedTypes.includes(file.type)) {
+      return errorResponse('Invalid file type. Allowed: JPEG, PNG, WebP, SVG');
+    }
+    if (file.size > maxSize) {
+      return errorResponse('File too large. Maximum 10MB');
+    }
+
     const result = await uploadEventBrandingAsset(
       id,
       auth.clientId!,

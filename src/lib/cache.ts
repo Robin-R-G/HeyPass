@@ -142,8 +142,8 @@ export async function checkRateLimit(
     return { allowed: true, remaining: maxAttempts - count - 1 };
   } catch (err) {
     console.error(`[Cache] Rate limit error for key ${key}:`, err);
-    // Allow request if Redis is down
-    return { allowed: true, remaining: maxAttempts - 1 };
+    // Fail closed: deny request if Redis is down
+    return { allowed: false, remaining: 0, retryAfter: windowSeconds };
   }
 }
 
@@ -214,8 +214,8 @@ async function encryptData(data: string): Promise<string> {
     return btoa(String.fromCharCode(...combined));
   } catch (err) {
     console.error('[Cache] Encryption error:', err);
-    // Fallback to plain text if encryption fails
-    return data;
+    // Throw instead of falling back to plaintext
+    throw new Error('Encryption failed — refusing to store PII in plaintext');
   }
 }
 

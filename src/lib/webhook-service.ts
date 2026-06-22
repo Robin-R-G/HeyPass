@@ -248,7 +248,7 @@ class WebhookServiceImpl {
       const signature = crypto
         .createHmac('sha256', (endpoint as any).secret)
         .update(`${timestamp}.${JSON.stringify(testPayload.data)}`)
-        .digest('signature');
+        .digest('hex');
 
       const response = await fetch(endpoint.url, {
         method: 'POST',

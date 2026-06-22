@@ -1,6 +1,15 @@
 import { supabaseAdmin } from '@/lib/supabase/client';
 import { createAuditLog } from '@/lib/audit';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export interface SendEmailParams {
   to: string;
   subject: string;
@@ -34,12 +43,8 @@ export async function sendEmail(params: SendEmailParams) {
     });
   }
 
-  // Fallback: log to console
-  console.log('Email sent (SendGrid not configured):', {
-    to,
-    subject,
-    attachmentCount: attachments?.length || 0,
-  });
+  // Fallback: log to console (no PII)
+  console.log('Email sent (SendGrid not configured): attachmentCount=%d', attachments?.length || 0);
 
   return { success: true };
 }
@@ -56,9 +61,9 @@ export async function sendTicketEmail(
     subject: `Your Ticket for ${eventTitle}`,
     html: `
       <h1>Ticket Confirmed!</h1>
-      <p>Hi ${attendeeName},</p>
-      <p>Your ticket for <strong>${eventTitle}</strong> is ready.</p>
-      <p>Ticket Number: <strong>${ticketNumber}</strong></p>
+      <p>Hi ${escapeHtml(attendeeName)},</p>
+      <p>Your ticket for <strong>${escapeHtml(eventTitle)}</strong> is ready.</p>
+      <p>Ticket Number: <strong>${escapeHtml(ticketNumber)}</strong></p>
       <p>Please find your ticket attached.</p>
       <p>Show the QR code at the entrance for check-in.</p>
       <hr />
@@ -79,9 +84,9 @@ export async function sendCertificateEmail(
     subject: `Your Certificate for ${eventTitle}`,
     html: `
       <h1>Certificate Ready!</h1>
-      <p>Hi ${attendeeName},</p>
-      <p>Your certificate for <strong>${eventTitle}</strong> has been generated.</p>
-      <p>Certificate Number: <strong>${certificateNumber}</strong></p>
+      <p>Hi ${escapeHtml(attendeeName)},</p>
+      <p>Your certificate for <strong>${escapeHtml(eventTitle)}</strong> has been generated.</p>
+      <p>Certificate Number: <strong>${escapeHtml(certificateNumber)}</strong></p>
       <p><a href="${certificatePdfUrl}">Download Certificate</a></p>
       <p>Verify your certificate: ${process.env.NEXT_PUBLIC_APP_URL}/verify/${certificateNumber}</p>
       <hr />

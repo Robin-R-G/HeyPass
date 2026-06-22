@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/client';
 import { commissionInvoiceService } from '@/lib/commission-invoice-service';
+import { gatewayConfigService } from '@/lib/gateway-config-service';
 import crypto from 'crypto';
 
 export async function POST(request: NextRequest) {
@@ -30,17 +31,23 @@ export async function POST(request: NextRequest) {
     let matchedClientId: string | null = null;
 
     for (const config of configs) {
-      // Verify signature
-      const secret = config.webhook_secret_encrypted;
-      const payload = `${timestamp}${body}`;
-      const expectedSignature = crypto
-        .createHmac('sha256', secret)
-        .update(payload)
-        .digest('base64');
+      try {
+        const secretConfig = await gatewayConfigService.getDecrypted(config.client_id, 'cashfree');
+        if (!secretConfig?.webhook_secret) continue;
 
-      if (signature === expectedSignature) {
-        matchedClientId = config.client_id;
-        break;
+        const payload = `${timestamp}${body}`;
+        const expectedSignature = crypto
+          .createHmac('sha256', secretConfig.webhook_secret)
+          .update(payload)
+          .digest('base64');
+
+        if (Buffer.byteLength(signature) === Buffer.byteLength(expectedSignature) &&
+            crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+          matchedClientId = config.client_id;
+          break;
+        }
+      } catch {
+        continue;
       }
     }
 

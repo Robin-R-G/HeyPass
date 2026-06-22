@@ -2,35 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/client';
 import { commissionInvoiceService } from '@/lib/commission-invoice-service';
 import { gatewayConfigService } from '@/lib/gateway-config-service';
+import { checkRateLimit } from '@/lib/cache';
 import crypto from 'crypto';
-
-// Simple in-memory rate limit (production: use Redis)
-const webhookRateLimit = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 100;
-const RATE_WINDOW = 60 * 1000; // 1 minute
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = webhookRateLimit.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    webhookRateLimit.set(ip, { count: 1, resetAt: now + RATE_WINDOW });
-    return true;
-  }
-
-  if (entry.count >= RATE_LIMIT) {
-    return false;
-  }
-
-  entry.count++;
-  return true;
-}
 
 export async function POST(request: NextRequest) {
   try {
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
-    if (!checkRateLimit(ip)) {
+    const { allowed } = await checkRateLimit(`webhook:razorpay:${ip}`, 100, 60);
+    if (!allowed) {
       return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
     }
 
@@ -69,7 +49,8 @@ export async function POST(request: NextRequest) {
           .update(body)
           .digest('hex');
 
-        if (signature === expectedSignature) {
+        if (Buffer.byteLength(signature) === Buffer.byteLength(expectedSignature) &&
+            crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
           matchedClientId = config.client_id;
           break;
         }

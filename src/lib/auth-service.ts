@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase/client';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '@/lib/auth';
 import { createAuditLog } from '@/lib/audit';
 import { cacheGet, cacheSet, cacheDelete, checkRateLimit } from '@/lib/cache';
+import crypto from 'crypto';
 import type { JWTPayload } from '@/types';
 
 export interface AuthUser {
@@ -565,7 +566,8 @@ export async function resetPassword(
   // Verify token
   const tokenHash = await hashToken(token);
 
-  if (tokenHash !== storedHash) {
+  if (Buffer.byteLength(tokenHash) !== Buffer.byteLength(storedHash) ||
+      !crypto.timingSafeEqual(Buffer.from(tokenHash), Buffer.from(storedHash))) {
     throw new Error('Invalid reset token');
   }
 
