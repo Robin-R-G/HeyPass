@@ -312,7 +312,7 @@ async function getEmergencyStats(clientId: string, eventId: string): Promise<Eme
     severity,
     count: activeIncidents.filter((i) => i.severity === severity).length,
   }));
-  const activeByType: { type: string; count: number }[] = [...new Set(activeIncidents.map((i) => i.incident_type))].map((type: string) => ({
+  const activeByType: { type: string; count: number }[] = (Array.from(new Set(activeIncidents.map((i) => i.incident_type))) as string[]).map((type) => ({
     type,
     count: activeIncidents.filter((i) => i.incident_type === type).length,
   }));
