@@ -27,7 +27,7 @@ export async function POST(
       .select('id, title')
       .eq('id', id)
       .eq('client_id', auth.clientId)
-      .single();
+      .single() as { data: { id: string; title: string } | null };
 
     if (!event) {
       return errorResponse('Event not found', 404);
