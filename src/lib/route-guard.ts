@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requirePermission, extractAuthPayload, type AuthPayload, type PermissionName } from '@/lib/permissions';
 export { extractAuthPayload } from '@/lib/permissions';
+export { requirePermission } from '@/lib/permissions';
 
 type RouteHandler = (
   req: NextRequest,
