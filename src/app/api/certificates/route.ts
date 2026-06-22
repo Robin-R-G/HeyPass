@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       // Check if batch
       if (Array.isArray(body.certificates)) {
         const parsed = batchSchema.parse(body);
-        const result = await certificateService.batchGenerate(clientId, parsed.event_id, parsed.certificates);
+        const result = await certificateService.batchGenerate(clientId, parsed.event_id, parsed.certificates.map(c => ({ ...c, event_id: parsed.event_id })));
         return NextResponse.json(result, {
           status: result.errors.length > 0 ? 207 : 201,
         });
