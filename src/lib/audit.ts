@@ -25,7 +25,7 @@ export type AuditAction =
   | 'settings.update';
 
 export async function createAuditLog(params: {
-  client_id?: string;
+  client_id?: string | null;
   user_id?: string;
   action: AuditAction;
   resource_type: string;
