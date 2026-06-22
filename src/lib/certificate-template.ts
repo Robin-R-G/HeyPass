@@ -124,7 +124,7 @@ export async function renderCertificatePDF(html: string): Promise<Buffer> {
 
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.setContent(html, { waitUntil: 'load' });
     const pdfBuffer = await page.pdf({
       format: 'A4',
       landscape: true,
@@ -148,7 +148,7 @@ export async function renderCertificatePNG(html: string): Promise<Buffer> {
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: 1123, height: 794 });
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    await page.setContent(html, { waitUntil: 'load' });
     const screenshot = await page.screenshot({ type: 'png', fullPage: false });
     return Buffer.from(screenshot);
   } finally {
