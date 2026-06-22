@@ -13,7 +13,7 @@ export async function GET(
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
 
     const incidents = await emergencyService.getIncidents(auth.clientId, id);
-    const incident = incidents.find((i) => i.id === incidentId);
+    const incident = incidents.find((i: Record<string, unknown>) => i.id === incidentId);
     if (!incident) return errorResponse('Incident not found', 404);
 
     return successResponse({ incident });
