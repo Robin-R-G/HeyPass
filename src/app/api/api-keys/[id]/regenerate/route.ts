@@ -8,7 +8,6 @@ export async function POST(
 ) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
-      if (!clientId) return NextResponse.json({ error: 'No client context' }, { status: 403 });
       const { id } = await params;
       const result = await apiKeyService.regenerate(clientId, id);
       return NextResponse.json(result);

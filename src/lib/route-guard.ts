@@ -9,7 +9,7 @@ type RouteHandler = (
 type LegacyRouteHandler = (
   req: NextRequest,
   userId: string,
-  clientId: string | null
+  clientId: string
 ) => Promise<NextResponse>;
 
 interface WithPermissionOptions {
@@ -76,6 +76,12 @@ export function withAuth(
         return NextResponse.json(
           { error: 'Unauthorized', message: 'Authentication required' },
           { status: 401 }
+        );
+      }
+      if (!auth.clientId) {
+        return NextResponse.json(
+          { error: 'Forbidden', message: 'No client context' },
+          { status: 403 }
         );
       }
       return handler(req, auth.userId, auth.clientId);
