@@ -22,13 +22,6 @@ export function initAuthInterceptor() {
 
     const response = await originalFetch.call(window, input, init);
 
-    // If 401, clear tokens and redirect to login
-    if (response.status === 401 && url.startsWith('/api/') && !url.includes('/api/auth/')) {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      window.location.href = '/auth/login';
-    }
-
     return response;
   };
 }

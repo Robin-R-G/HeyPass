@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { isAuthenticated } from '@/lib/auth-client';
+import { isAuthenticated, authFetch } from '@/lib/auth-client';
 
 interface PlatformStats {
   total_clients: number;
@@ -50,15 +50,25 @@ export default function SuperAdminPage() {
     }
 
     Promise.all([
-      fetch('/api/superadmin/stats').then(r => r.json()),
-      fetch('/api/superadmin/clients').then(r => r.json()),
+      authFetch('/api/superadmin/stats').then(r => {
+        if (r.status === 401) throw new Error('AUTH');
+        return r.json();
+      }),
+      authFetch('/api/superadmin/clients').then(r => {
+        if (r.status === 401) throw new Error('AUTH');
+        return r.json();
+      }),
     ])
       .then(([statsData, clientsData]) => {
         setStats(statsData.data || statsData);
         setClients(clientsData.data?.clients || clientsData.clients || []);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err?.message === 'AUTH') {
+          window.location.href = '/auth/login';
+          return;
+        }
         setError('Failed to load platform data');
         setLoading(false);
       });
