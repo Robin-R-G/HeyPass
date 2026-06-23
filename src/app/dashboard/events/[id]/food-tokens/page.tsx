@@ -86,12 +86,12 @@ export default function FoodTokensPage() {
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#5a7a8a' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#5a7a8a' }}>/</span>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#888888' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#888888' }}>/</span>
         <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Food Tokens</span>
       </nav>
       <div className="flex items-center justify-between mb-6">
@@ -163,7 +163,7 @@ export default function FoodTokensPage() {
           <Card>
             <CardHeader><CardTitle>Generate Tokens</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-[#5a7a8a]">Select a token type to bulk-generate food tokens for all registrations.</p>
+              <p className="text-sm text-[#888888]">Select a token type to bulk-generate food tokens for all registrations.</p>
               <div><Label>Token Type</Label>
                 <Select value={generateTypeId} onValueChange={setGenerateTypeId}>
                   <SelectTrigger className="w-full"><SelectValue placeholder="Select token type..." /></SelectTrigger>
@@ -176,7 +176,7 @@ export default function FoodTokensPage() {
                 {generating ? "Generating..." : "Generate Tokens"}
               </Button>
               {generateResult && (
-                <div className={`border-[rgba(167,235,242,0.12)] rounded-lg p-3 ${generateResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
+                <div className={`border-[rgba(229,229,229,0.12)] rounded-lg p-3 ${generateResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
                   <p className={`font-medium text-sm ${generateResult.success ? "text-[#10b981]" : "text-[#ef4444]"}`}>
                     {generateResult.success ? `Generated ${generateResult.count} tokens successfully` : "Generation failed"}
                   </p>
@@ -195,7 +195,7 @@ export default function FoodTokensPage() {
                 <Button onClick={validateToken} disabled={validating || !validateCode}>{validating ? "Validating..." : "Validate"}</Button>
               </div>
               {validateResult && (
-                <div className={`border-[rgba(167,235,242,0.12)] rounded-lg p-4 ${validateResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
+                <div className={`border-[rgba(229,229,229,0.12)] rounded-lg p-4 ${validateResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
                   <p className={`font-medium ${validateResult.success ? "text-[#10b981]" : "text-[#ef4444]"}`}>{validateResult.success ? "Valid" : "Invalid"}</p>
                   <p className="text-sm mt-1">{validateResult.message}</p>
                 </div>
@@ -213,7 +213,7 @@ export default function FoodTokensPage() {
               { label: "Token Types", value: tokenTypes.length },
             ].map(k => (
               <Card key={k.label}><CardContent className="p-4 text-center">
-                <p className="text-2xl font-bold">{k.value}</p><p className="text-sm text-[#5a7a8a]">{k.label}</p>
+                <p className="text-2xl font-bold">{k.value}</p><p className="text-sm text-[#888888]">{k.label}</p>
               </CardContent></Card>
             ))}
           </div>

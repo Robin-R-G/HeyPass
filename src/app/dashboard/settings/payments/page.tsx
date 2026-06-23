@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 
@@ -222,7 +222,7 @@ export default function PaymentMethodsPage() {
 
       {/* Limits info */}
       <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(84, 172, 191, 0.05)', borderRadius: '0.75rem', border: '1px solid rgba(84, 172, 191, 0.1)' }}>
-        <p style={{ color: '#A7EBF2', fontSize: '0.8rem' }}>
+        <p style={{ color: '#E5E5E5', fontSize: '0.8rem' }}>
           Limits: Maximum 2 bank accounts and 1 UPI method per organization.
           Currently: {bankCount}/2 bank accounts, {upiCount}/1 UPI.
         </p>

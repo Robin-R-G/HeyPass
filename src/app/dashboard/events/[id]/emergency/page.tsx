@@ -74,18 +74,18 @@ export default function EmergencyPage() {
     switch (s) { case "critical": return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; case "high": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "medium": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; default: return "bg-[rgba(59,130,246,0.15)] text-[#3b82f6]"; }
   };
   const statusColor = (s: string) => {
-    switch (s) { case "resolved": return "bg-[rgba(16,185,129,0.15)] text-[#10b981]"; case "in_progress": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "reported": return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; default: return "bg-[rgba(167,235,242,0.08)] text-white"; }
+    switch (s) { case "resolved": return "bg-[rgba(16,185,129,0.15)] text-[#10b981]"; case "in_progress": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "reported": return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; default: return "bg-[rgba(229,229,229,0.08)] text-white"; }
   };
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#5a7a8a' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#5a7a8a' }}>/</span>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#888888' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#888888' }}>/</span>
         <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Emergency</span>
       </nav>
       <div className="flex items-center justify-between mb-6">
@@ -112,7 +112,7 @@ export default function EmergencyPage() {
               { label: "Resolved", value: incidents.filter(i => i.status === "resolved").length, color: "text-green-600" },
             ].map(k => (
               <Card key={k.label}><CardContent className="p-4 text-center">
-                <p className={`text-2xl font-bold ${k.color}`}>{k.value}</p><p className="text-sm text-[#5a7a8a]">{k.label}</p>
+                <p className={`text-2xl font-bold ${k.color}`}>{k.value}</p><p className="text-sm text-[#888888]">{k.label}</p>
               </CardContent></Card>
             ))}
           </div>
@@ -231,7 +231,7 @@ export default function EmergencyPage() {
           <Card>
             <CardHeader><CardTitle>Incident Timeline</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-[#5a7a8a]">Timeline view will show chronological incident history as events are reported.</p>
+              <p className="text-[#888888]">Timeline view will show chronological incident history as events are reported.</p>
             </CardContent>
           </Card>
         </TabsContent>

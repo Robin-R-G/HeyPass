@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -130,17 +130,17 @@ export default function WebhooksPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
     <nav style={{
       display: 'flex', alignItems: 'center', gap: '0.5rem',
-      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(167,235,242,0.08)',
-      background: 'rgba(2,56,89,0.6)',
+      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
+      background: 'rgba(20,33,61,0.6)',
     }}>
-      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-      <span style={{ color: '#5a7a8a' }}>/</span>
-      <Link href="/dashboard" style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Dashboard</Link>
-      <span style={{ color: '#5a7a8a' }}>/</span>
-      <span style={{ color: '#A7EBF2', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
+      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+      <span style={{ color: '#888888' }}>/</span>
+      <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Dashboard</Link>
+      <span style={{ color: '#888888' }}>/</span>
+      <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
     </nav>
     <div className="space-y-6" style={{ padding: '1.5rem' }}>
       <div className="flex items-center justify-between">

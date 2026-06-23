@@ -120,10 +120,10 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#5a7a8a' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#5a7a8a' }}>/</span>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#888888' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#888888' }}>/</span>
         <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Certs</span>
       </nav>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -142,7 +142,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {[
           { label: 'Total', value: stats.total, color: '#fff' },
-          { label: 'Generated', value: stats.generated, color: '#54ACBF' },
+          { label: 'Generated', value: stats.generated, color: '#FCA311' },
           { label: 'Downloaded', value: stats.downloaded, color: '#10b981' },
           { label: 'Revoked', value: stats.revoked, color: '#ef4444' },
         ].map((s) => (
@@ -219,7 +219,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
               >Download PNG</button>
               <button
                 className="hp-btn hp-btn-ghost"
-                style={{ color: '#A7EBF2' }}
+                style={{ color: '#E5E5E5' }}
                 onClick={() => {
                   const url = `${window.location.origin}/verify?token=${showPreview.access_token}`;
                   navigator.clipboard.writeText(url).then(() => {

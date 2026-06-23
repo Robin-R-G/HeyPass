@@ -6,57 +6,57 @@
    ============================================================ */
 
 :root {
-  /* Core Brand Colors — LUNA Palette */
-  --hp-primary: #54ACBF;
-  --hp-primary-light: #A7EBF2;
-  --hp-primary-dark: #26658C;
-  --hp-primary-glow: rgba(84, 172, 191, 0.4);
+  /* Core Brand Colors — Black & Gold Elegance */
+  --hp-primary: #FCA311;
+  --hp-primary-light: #FCD34D;
+  --hp-primary-dark: #E09800;
+  --hp-primary-glow: rgba(252, 163, 17, 0.4);
 
   /* Accent Colors */
-  --hp-accent: #A7EBF2;
-  --hp-accent-light: #d4f5f9;
-  --hp-accent-dark: #54ACBF;
+  --hp-accent: #FCA311;
+  --hp-accent-light: #FCD34D;
+  --hp-accent-dark: #E09800;
 
   /* Gradient Stops */
-  --hp-gradient-start: #26658C;
-  --hp-gradient-mid: #54ACBF;
-  --hp-gradient-end: #A7EBF2;
+  --hp-gradient-start: #14213D;
+  --hp-gradient-mid: #FCA311;
+  --hp-gradient-end: #FCD34D;
 
   /* Surface Colors */
-  --hp-bg: #011C40;
-  --hp-bg-secondary: #023859;
-  --hp-bg-tertiary: #0a2a4d;
-  --hp-surface: rgba(167, 235, 242, 0.04);
-  --hp-surface-hover: rgba(167, 235, 242, 0.08);
-  --hp-surface-active: rgba(167, 235, 242, 0.12);
+  --hp-bg: #000000;
+  --hp-bg-secondary: #14213D;
+  --hp-bg-tertiary: #1a2a4a;
+  --hp-surface: rgba(229, 229, 229, 0.04);
+  --hp-surface-hover: rgba(229, 229, 229, 0.08);
+  --hp-surface-active: rgba(229, 229, 229, 0.12);
 
   /* Text Colors */
   --hp-text: #ffffff;
-  --hp-text-secondary: #9cb8c4;
-  --hp-text-muted: #5a7a8a;
-  --hp-text-accent: #A7EBF2;
+  --hp-text-secondary: #E5E5E5;
+  --hp-text-muted: #888888;
+  --hp-text-accent: #FCA311;
 
   /* Border Colors */
-  --hp-border: rgba(167, 235, 242, 0.08);
-  --hp-border-light: rgba(167, 235, 242, 0.14);
-  --hp-border-accent: rgba(84, 172, 191, 0.35);
+  --hp-border: rgba(229, 229, 229, 0.08);
+  --hp-border-light: rgba(229, 229, 229, 0.15);
+  --hp-border-accent: rgba(252, 163, 17, 0.35);
 
   /* Status Colors */
   --hp-success: #10b981;
   --hp-warning: #f59e0b;
   --hp-error: #ef4444;
-  --hp-info: #54ACBF;
+  --hp-info: #FCA311;
 
   /* Shadows */
-  --hp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --hp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
-  --hp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
-  --hp-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+  --hp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --hp-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.6), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --hp-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+  --hp-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
   --hp-shadow-glow: 0 0 40px var(--hp-primary-glow);
 
   /* Glass Effect */
-  --hp-glass-bg: rgba(2, 56, 89, 0.7);
-  --hp-glass-border: rgba(167, 235, 242, 0.1);
+  --hp-glass-bg: rgba(20, 33, 61, 0.8);
+  --hp-glass-border: rgba(229, 229, 229, 0.1);
   --hp-glass-blur: blur(20px);
 
   /* Border Radius */
@@ -121,9 +121,9 @@ body {
   bottom: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(84, 172, 191, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(167, 235, 242, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 60% at 50% 80%, rgba(38, 101, 140, 0.08) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(252, 163, 17, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(252, 163, 17, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 50% 80%, rgba(20, 33, 61, 0.3) 0%, transparent 50%);
   animation: hp-bg-pulse 15s ease-in-out infinite;
 }
 
@@ -297,9 +297,9 @@ body {
 }
 
 .hp-badge-primary {
-  background: rgba(84, 172, 191, 0.2);
+  background: rgba(252, 163, 17, 0.2);
   color: var(--hp-primary-light);
-  border-color: rgba(84, 172, 191, 0.3);
+  border-color: rgba(252, 163, 17, 0.3);
 }
 
 .hp-badge-success {

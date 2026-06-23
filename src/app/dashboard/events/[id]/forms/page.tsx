@@ -148,31 +148,31 @@ export default function FormsPage({ params }: FormsPageProps) {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
+      <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
     <div className="max-w-6xl mx-auto p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#5a7a8a' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#5a7a8a' }}>/</span>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#888888' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#888888' }}>/</span>
         <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Forms</span>
       </nav>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Registration Forms</h1>
-          <p className="text-[#5a7a8a]">Build and manage registration forms for this event</p>
+          <p className="text-[#888888]">Build and manage registration forms for this event</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setShowTemplates(!showTemplates)}
-            className="bg-[rgba(167,235,242,0.08)] text-[#9cb8c4] px-4 py-2 rounded-md hover:bg-[rgba(167,235,242,0.12)]"
+            className="bg-[rgba(229,229,229,0.08)] text-[#E5E5E5] px-4 py-2 rounded-md hover:bg-[rgba(229,229,229,0.12)]"
           >
             Use Template
           </button>
@@ -189,8 +189,8 @@ export default function FormsPage({ params }: FormsPageProps) {
         <div
           className={`p-4 mb-6 rounded ${
             message.type === 'success'
-              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(167,235,242,0.12)] border-[rgba(16,185,129,0.2)]'
-              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(167,235,242,0.12)] border-[rgba(239,68,68,0.2)]'
+              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(229,229,229,0.12)] border-[rgba(16,185,129,0.2)]'
+              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(229,229,229,0.12)] border-[rgba(239,68,68,0.2)]'
           }`}
         >
           {message.text}
@@ -199,13 +199,13 @@ export default function FormsPage({ params }: FormsPageProps) {
 
       {/* Template Selection */}
       {showTemplates && (
-        <div className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6 mb-6">
+        <div className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4">Choose a Template</h2>
           <div className="grid grid-cols-3 gap-4">
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="border-[rgba(167,235,242,0.12)] rounded-lg p-4 cursor-pointer hover:border-[#54ACBF] hover:bg-[rgba(84,172,191,0.08)]"
+                className="border-[rgba(229,229,229,0.12)] rounded-lg p-4 cursor-pointer hover:border-[#FCA311] hover:bg-[rgba(252,163,17,0.08)]"
                 onClick={() => handleCreateFromTemplate(template.id)}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -213,25 +213,25 @@ export default function FormsPage({ params }: FormsPageProps) {
                     className={`px-2 py-0.5 rounded text-xs ${
                       template.is_system
                         ? 'bg-[rgba(139,92,246,0.15)] text-[#a78bfa]'
-                        : 'bg-[rgba(167,235,242,0.08)] text-white'
+                        : 'bg-[rgba(229,229,229,0.08)] text-white'
                     }`}
                   >
                     {template.category}
                   </span>
                   {template.is_system && (
-                    <span className="text-xs text-[#5a7a8a]">System</span>
+                    <span className="text-xs text-[#888888]">System</span>
                   )}
                 </div>
                 <h3 className="font-medium">{template.name}</h3>
                 {template.description && (
-                  <p className="text-sm text-[#5a7a8a] mt-1">{template.description}</p>
+                  <p className="text-sm text-[#888888] mt-1">{template.description}</p>
                 )}
               </div>
             ))}
           </div>
           <button
             onClick={() => setShowTemplates(false)}
-            className="mt-4 text-sm text-[#9cb8c4] hover:text-white"
+            className="mt-4 text-sm text-[#E5E5E5] hover:text-white"
           >
             Cancel
           </button>
@@ -240,8 +240,8 @@ export default function FormsPage({ params }: FormsPageProps) {
 
       {/* Forms List */}
       {forms.length === 0 ? (
-        <div className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-12 text-center">
-          <p className="text-[#5a7a8a] mb-4">No forms created yet</p>
+        <div className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-12 text-center">
+          <p className="text-[#888888] mb-4">No forms created yet</p>
           <button
             onClick={handleCreateBlankForm}
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
@@ -254,7 +254,7 @@ export default function FormsPage({ params }: FormsPageProps) {
           {forms.map((form) => (
             <div
               key={form.id}
-              className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-4 flex items-center justify-between"
+              className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-4 flex items-center justify-between"
             >
               <div className="flex items-center gap-4">
                 <div>
@@ -264,7 +264,7 @@ export default function FormsPage({ params }: FormsPageProps) {
                       className={`px-2 py-0.5 rounded text-xs ${
                         form.is_active
                           ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981]'
-                          : 'bg-[rgba(167,235,242,0.08)] text-white'
+                          : 'bg-[rgba(229,229,229,0.08)] text-white'
                       }`}
                     >
                       {form.is_active ? 'Active' : 'Inactive'}
@@ -275,7 +275,7 @@ export default function FormsPage({ params }: FormsPageProps) {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-[#5a7a8a] mt-1">
+                  <p className="text-sm text-[#888888] mt-1">
                     Created {new Date(form.created_at).toLocaleDateString()}
                   </p>
                 </div>
@@ -285,13 +285,13 @@ export default function FormsPage({ params }: FormsPageProps) {
                   onClick={() =>
                     router.push(`/dashboard/events/${eventId}/forms/${form.id}`)
                   }
-                  className="text-[#A7EBF2] hover:text-white text-sm"
+                  className="text-[#E5E5E5] hover:text-white text-sm"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDuplicateForm(form.id)}
-                  className="text-[#9cb8c4] hover:text-white text-sm"
+                  className="text-[#E5E5E5] hover:text-white text-sm"
                 >
                   Duplicate
                 </button>

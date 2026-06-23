@@ -94,9 +94,9 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
             href={nav.href}
             style={{
               padding: '0.35rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.8rem',
-              background: 'rgba(84,172,191,0.1)', color: '#A7EBF2',
+              background: 'rgba(252,163,17,0.1)', color: '#E5E5E5',
               textDecoration: 'none', whiteSpace: 'nowrap',
-              border: '1px solid rgba(84,172,191,0.2)',
+              border: '1px solid rgba(252,163,17,0.2)',
             }}
           >
             {nav.label}
@@ -136,10 +136,10 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
             {[
               { label: 'Registered', value: data.total_registered, color: '#fff' },
-              { label: 'Checked In', value: data.total_checked_in, color: '#54ACBF' },
+              { label: 'Checked In', value: data.total_checked_in, color: '#FCA311' },
               { label: 'Checked Out', value: data.total_checked_out, color: '#a1a1aa' },
               { label: 'Inside Now', value: data.currently_inside, color: '#10b981' },
-              { label: 'Check-in Rate', value: `${data.check_in_rate}%`, color: '#A7EBF2' },
+              { label: 'Check-in Rate', value: `${data.check_in_rate}%`, color: '#E5E5E5' },
               { label: 'Avg Duration', value: formatDuration(data.avg_duration_minutes), color: '#f59e0b' },
             ].map((kpi) => (
               <div key={kpi.label} className="hp-card" style={{ textAlign: 'center' }}>
@@ -159,7 +159,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
                 {data.gate_breakdown.map((gate) => (
-                  <div key={gate.gate_id} className="hp-card" style={{ borderLeft: `3px solid ${gate.is_active ? '#54ACBF' : '#52525b'}` }}>
+                  <div key={gate.gate_id} className="hp-card" style={{ borderLeft: `3px solid ${gate.is_active ? '#FCA311' : '#52525b'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                       <div>
                         <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>{gate.gate_name}</div>
@@ -174,13 +174,13 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
                     <div style={{ marginBottom: '0.75rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                         <span style={{ color: '#71717a', fontSize: '0.7rem' }}>Check-ins / Check-outs</span>
-                        <span style={{ color: '#A7EBF2', fontSize: '0.7rem', fontWeight: 600 }}>{gate.checkins}</span>
+                        <span style={{ color: '#E5E5E5', fontSize: '0.7rem', fontWeight: 600 }}>{gate.checkins}</span>
                       </div>
                       <div style={{ height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
                         <div style={{
                           height: '100%', borderRadius: '3px',
                           width: `${Math.min((gate.checkins / Math.max(data.total_registered, 1)) * 100, 100)}%`,
-                          background: 'linear-gradient(90deg, #54ACBF, #A7EBF2)',
+                          background: 'linear-gradient(90deg, #FCA311, #FCD34D)',
                         }} />
                       </div>
                     </div>
@@ -230,7 +230,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
                           <span style={{ color: '#71717a', fontSize: '0.7rem' }}>
                             {s.total_checked_in} / {s.total_registered} checked in
                           </span>
-                          <span style={{ color: '#A7EBF2', fontSize: '0.7rem', fontWeight: 600 }}>
+                          <span style={{ color: '#E5E5E5', fontSize: '0.7rem', fontWeight: 600 }}>
                             {s.attendance_percentage.toFixed(0)}%
                           </span>
                         </div>
@@ -265,7 +265,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
                         title={`${String(h.hour).padStart(2, '0')}:00 — ${h.checkins} check-ins`}
                         style={{
                           width: '100%', height: `${Math.max(height, 2)}%`,
-                          background: h.checkins > 0 ? 'linear-gradient(180deg, #54ACBF, #26658C)' : 'transparent',
+                          background: h.checkins > 0 ? 'linear-gradient(180deg, #FCA311, #E09800)' : 'transparent',
                           borderRadius: '2px 2px 0 0',
                           transition: 'height 0.3s ease',
                         }}

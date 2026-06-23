@@ -106,29 +106,29 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
     setSaving(false);
   };
 
-  if (loading) return <div style={{ padding: '4rem', textAlign: 'center', color: '#9cb8c4' }}>Loading form...</div>;
+  if (loading) return <div style={{ padding: '4rem', textAlign: 'center', color: '#E5E5E5' }}>Loading form...</div>;
   if (!form) return <div style={{ padding: '4rem', textAlign: 'center', color: '#ef4444' }}>Form not found</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
       <nav style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '1rem 2rem', borderBottom: '1px solid rgba(167,235,242,0.08)',
-        background: 'rgba(2,56,89,0.6)', backdropFilter: 'blur(16px)',
+        padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
+        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button onClick={() => router.back()} style={{
-            background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer',
+            background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer',
             fontSize: '0.85rem', padding: '0.4rem 0.6rem', borderRadius: '6px',
           }}>← Back</button>
-          <span style={{ color: '#5a7a8a' }}>/</span>
-          <Link href={`/dashboard/events/${eventId}/forms`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Forms</Link>
-          <span style={{ color: '#5a7a8a' }}>/</span>
-          <span style={{ color: '#A7EBF2', fontSize: '0.85rem', fontWeight: 500 }}>{form.title}</span>
+          <span style={{ color: '#888888' }}>/</span>
+          <Link href={`/dashboard/events/${eventId}/forms`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Forms</Link>
+          <span style={{ color: '#888888' }}>/</span>
+          <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>{form.title}</span>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button onClick={updateForm} disabled={saving} style={{
-            background: 'linear-gradient(135deg, #54ACBF, #26658C)', color: '#fff',
+            background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
             padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', fontWeight: 600,
             fontSize: '0.8rem', cursor: 'pointer', opacity: saving ? 0.6 : 1,
           }}>{saving ? 'Saving...' : 'Save Form'}</button>
@@ -146,7 +146,7 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
           <Input
             value={form.description || ''}
             onChange={e => setForm({ ...form, description: e.target.value })}
-            style={{ color: '#9cb8c4', background: 'transparent', border: 'none', padding: '0.25rem 0' }}
+            style={{ color: '#E5E5E5', background: 'transparent', border: 'none', padding: '0.25rem 0' }}
             placeholder="Form description (optional)"
           />
         </div>
@@ -156,23 +156,23 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
           <Dialog open={addFieldOpen} onOpenChange={setAddFieldOpen}>
             <DialogTrigger asChild>
               <button style={{
-                background: 'rgba(167,235,242,0.08)', border: '1px solid rgba(167,235,242,0.15)',
-                color: '#A7EBF2', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer',
+                background: 'rgba(229,229,229,0.08)', border: '1px solid rgba(229,229,229,0.15)',
+                color: '#E5E5E5', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer',
                 fontSize: '0.8rem', fontWeight: 500,
               }}>+ Add Field</button>
             </DialogTrigger>
-            <DialogContent style={{ background: '#0a2a4d', border: '1px solid rgba(167,235,242,0.15)' }}>
+            <DialogContent style={{ background: '#1a2a4a', border: '1px solid rgba(229,229,229,0.15)' }}>
               <DialogHeader><DialogTitle style={{ color: '#fff' }}>Add Field</DialogTitle></DialogHeader>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                 <div>
-                  <Label style={{ color: '#9cb8c4' }}>Label</Label>
-                  <Input value={newField.label} onChange={e => setNewField({ ...newField, label: e.target.value })} placeholder="e.g. Full Name" style={{ background: 'rgba(167,235,242,0.05)', borderColor: 'rgba(167,235,242,0.15)', color: '#fff' }} />
+                  <Label style={{ color: '#E5E5E5' }}>Label</Label>
+                  <Input value={newField.label} onChange={e => setNewField({ ...newField, label: e.target.value })} placeholder="e.g. Full Name" style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }} />
                 </div>
                 <div>
-                  <Label style={{ color: '#9cb8c4' }}>Type</Label>
+                  <Label style={{ color: '#E5E5E5' }}>Type</Label>
                   <Select value={newField.field_type} onValueChange={v => setNewField({ ...newField, field_type: v })}>
-                    <SelectTrigger style={{ background: 'rgba(167,235,242,0.05)', borderColor: 'rgba(167,235,242,0.15)', color: '#fff' }}><SelectValue /></SelectTrigger>
-                    <SelectContent style={{ background: '#0a2a4d', border: '1px solid rgba(167,235,242,0.15)' }}>
+                    <SelectTrigger style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }}><SelectValue /></SelectTrigger>
+                    <SelectContent style={{ background: '#1a2a4a', border: '1px solid rgba(229,229,229,0.15)' }}>
                       <SelectItem value="text">Text</SelectItem>
                       <SelectItem value="email">Email</SelectItem>
                       <SelectItem value="number">Number</SelectItem>
@@ -188,17 +188,17 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
                 </div>
                 {(newField.field_type === 'select' || newField.field_type === 'checkbox_group') && (
                   <div>
-                    <Label style={{ color: '#9cb8c4' }}>Options (comma-separated)</Label>
-                    <Input value={newField.options} onChange={e => setNewField({ ...newField, options: e.target.value })} placeholder="Option 1, Option 2, Option 3" style={{ background: 'rgba(167,235,242,0.05)', borderColor: 'rgba(167,235,242,0.15)', color: '#fff' }} />
+                    <Label style={{ color: '#E5E5E5' }}>Options (comma-separated)</Label>
+                    <Input value={newField.options} onChange={e => setNewField({ ...newField, options: e.target.value })} placeholder="Option 1, Option 2, Option 3" style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }} />
                   </div>
                 )}
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <Label style={{ color: '#9cb8c4' }}>Required</Label>
+                  <Label style={{ color: '#E5E5E5' }}>Required</Label>
                   <button
                     onClick={() => setNewField({ ...newField, required: !newField.required })}
                     style={{
                       width: '40px', height: '22px', borderRadius: '11px', border: 'none',
-                      background: newField.required ? '#54ACBF' : '#26658C',
+                      background: newField.required ? '#FCA311' : '#E09800',
                       cursor: 'pointer', position: 'relative',
                     }}
                   >
@@ -210,7 +210,7 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
                   </button>
                 </div>
                 <button onClick={addField} disabled={!newField.label} style={{
-                  background: 'linear-gradient(135deg, #54ACBF, #26658C)', color: '#fff',
+                  background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
                   padding: '0.6rem', borderRadius: '8px', border: 'none', fontWeight: 600,
                   fontSize: '0.85rem', cursor: 'pointer', opacity: !newField.label ? 0.5 : 1,
                 }}>Add Field</button>
@@ -221,22 +221,22 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
 
         {fields.length === 0 ? (
           <div style={{
-            background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)',
+            background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)',
             borderRadius: '12px', padding: '3rem', textAlign: 'center',
           }}>
-            <p style={{ color: '#9cb8c4', marginBottom: '1rem' }}>No fields yet. Add your first field to start building the form.</p>
+            <p style={{ color: '#E5E5E5', marginBottom: '1rem' }}>No fields yet. Add your first field to start building the form.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {fields.sort((a, b) => a.sort_order - b.sort_order).map((field, idx) => (
               <div key={field.id} style={{
-                background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)',
+                background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)',
                 borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '1rem',
               }}>
-                <span style={{ color: '#5a7a8a', fontSize: '0.75rem', minWidth: '20px' }}>{idx + 1}</span>
+                <span style={{ color: '#888888', fontSize: '0.75rem', minWidth: '20px' }}>{idx + 1}</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#fff' }}>{field.label}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#9cb8c4' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#E5E5E5' }}>
                     {field.field_type} {field.required && '· required'}
                   </div>
                 </div>

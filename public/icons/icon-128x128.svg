@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="19" fill="#023859"/>
+  <rect width="128" height="128" rx="19" fill="#14213D"/>
   <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" 
     font-family="system-ui,-apple-system,sans-serif" font-size="45" font-weight="700" 
-    fill="#A7EBF2" letter-spacing="3">HP</text>
+    fill="#FCA311" letter-spacing="3">HP</text>
 </svg>

@@ -59,21 +59,21 @@ export default function BillingGatewaysPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
       <nav style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '1rem 2rem', borderBottom: '1px solid rgba(167,235,242,0.08)',
-        background: 'rgba(2,56,89,0.6)', backdropFilter: 'blur(16px)',
+        padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
+        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button onClick={() => router.back()} style={{
-            background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer',
+            background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer',
             fontSize: '0.85rem', padding: '0.4rem 0.6rem', borderRadius: '6px',
           }}>← Back</button>
-          <span style={{ color: '#5a7a8a' }}>/</span>
-          <Link href="/dashboard/settings/billing" style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Billing</Link>
-          <span style={{ color: '#5a7a8a' }}>/</span>
-          <span style={{ color: '#A7EBF2', fontSize: '0.85rem', fontWeight: 500 }}>Payment Gateways</span>
+          <span style={{ color: '#888888' }}>/</span>
+          <Link href="/dashboard/settings/billing" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Billing</Link>
+          <span style={{ color: '#888888' }}>/</span>
+          <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>Payment Gateways</span>
         </div>
       </nav>
 
@@ -81,47 +81,47 @@ export default function BillingGatewaysPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Payment Gateways</h1>
-            <p style={{ color: '#9cb8c4', fontSize: '0.85rem' }}>Configure Razorpay or Cashfree to accept payments</p>
+            <p style={{ color: '#E5E5E5', fontSize: '0.85rem' }}>Configure Razorpay or Cashfree to accept payments</p>
           </div>
           <button onClick={() => setShowAdd(!showAdd)} style={{
-            background: 'linear-gradient(135deg, #54ACBF, #26658C)', color: '#fff',
+            background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
             padding: '0.6rem 1.2rem', borderRadius: '8px', border: 'none',
             fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer',
           }}>+ Add Gateway</button>
         </div>
 
         {showAdd && (
-          <Card style={{ background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.1)', marginBottom: '1.5rem' }}>
+          <Card style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.1)', marginBottom: '1.5rem' }}>
             <CardHeader><CardTitle style={{ color: '#fff' }}>Add Payment Gateway</CardTitle></CardHeader>
             <CardContent style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <Label style={{ color: '#9cb8c4' }}>Provider</Label>
+                <Label style={{ color: '#E5E5E5' }}>Provider</Label>
                 <select value={provider} onChange={e => setProvider(e.target.value)} style={{
-                  width: '100%', padding: '0.6rem', background: 'rgba(167,235,242,0.05)',
-                  border: '1px solid rgba(167,235,242,0.15)', borderRadius: '8px', color: '#fff', marginTop: '0.25rem',
+                  width: '100%', padding: '0.6rem', background: 'rgba(229,229,229,0.05)',
+                  border: '1px solid rgba(229,229,229,0.15)', borderRadius: '8px', color: '#fff', marginTop: '0.25rem',
                 }}>
                   <option value="razorpay">Razorpay</option>
                   <option value="cashfree">Cashfree</option>
                 </select>
               </div>
               <div>
-                <Label style={{ color: '#9cb8c4' }}>API Key ID</Label>
-                <Input value={keyId} onChange={e => setKeyId(e.target.value)} placeholder="rzp_live_..." style={{ background: 'rgba(167,235,242,0.05)', borderColor: 'rgba(167,235,242,0.15)', color: '#fff' }} />
+                <Label style={{ color: '#E5E5E5' }}>API Key ID</Label>
+                <Input value={keyId} onChange={e => setKeyId(e.target.value)} placeholder="rzp_live_..." style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }} />
               </div>
               <div>
-                <Label style={{ color: '#9cb8c4' }}>API Key Secret</Label>
-                <Input type="password" value={keySecret} onChange={e => setKeySecret(e.target.value)} placeholder="Enter secret..." style={{ background: 'rgba(167,235,242,0.05)', borderColor: 'rgba(167,235,242,0.15)', color: '#fff' }} />
+                <Label style={{ color: '#E5E5E5' }}>API Key Secret</Label>
+                <Input type="password" value={keySecret} onChange={e => setKeySecret(e.target.value)} placeholder="Enter secret..." style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }} />
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button onClick={addGateway} disabled={!keyId || !keySecret || saving} style={{
-                  background: 'linear-gradient(135deg, #54ACBF, #26658C)', color: '#fff',
+                  background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
                   padding: '0.6rem 1.5rem', borderRadius: '8px', border: 'none',
                   fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer',
                   opacity: !keyId || !keySecret || saving ? 0.5 : 1,
                 }}>{saving ? 'Saving...' : 'Save Gateway'}</button>
                 <button onClick={() => setShowAdd(false)} style={{
-                  background: 'rgba(167,235,242,0.05)', color: '#9cb8c4',
-                  padding: '0.6rem 1.5rem', borderRadius: '8px', border: '1px solid rgba(167,235,242,0.15)',
+                  background: 'rgba(229,229,229,0.05)', color: '#E5E5E5',
+                  padding: '0.6rem 1.5rem', borderRadius: '8px', border: '1px solid rgba(229,229,229,0.15)',
                   fontSize: '0.85rem', cursor: 'pointer',
                 }}>Cancel</button>
               </div>
@@ -130,30 +130,30 @@ export default function BillingGatewaysPage() {
         )}
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: '#9cb8c4' }}>Loading gateways...</div>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#E5E5E5' }}>Loading gateways...</div>
         ) : gateways.length === 0 ? (
           <div style={{
-            background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)',
+            background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)',
             borderRadius: '12px', padding: '3rem', textAlign: 'center',
           }}>
-            <p style={{ color: '#9cb8c4', marginBottom: '1rem' }}>No payment gateways configured yet.</p>
-            <p style={{ color: '#5a7a8a', fontSize: '0.8rem' }}>Add Razorpay or Cashfree to start accepting payments.</p>
+            <p style={{ color: '#E5E5E5', marginBottom: '1rem' }}>No payment gateways configured yet.</p>
+            <p style={{ color: '#888888', fontSize: '0.8rem' }}>Add Razorpay or Cashfree to start accepting payments.</p>
           </div>
         ) : (
-          <Card style={{ background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)' }}>
+          <Card style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)' }}>
             <CardContent style={{ padding: 0 }}>
               <Table>
                 <TableHeader>
-                  <TableRow style={{ borderBottom: '1px solid rgba(167,235,242,0.08)' }}>
-                    <TableHead style={{ color: '#5a7a8a' }}>Provider</TableHead>
-                    <TableHead style={{ color: '#5a7a8a' }}>Status</TableHead>
-                    <TableHead style={{ color: '#5a7a8a' }}>Added</TableHead>
-                    <TableHead style={{ color: '#5a7a8a' }}>Actions</TableHead>
+                  <TableRow style={{ borderBottom: '1px solid rgba(229,229,229,0.08)' }}>
+                    <TableHead style={{ color: '#888888' }}>Provider</TableHead>
+                    <TableHead style={{ color: '#888888' }}>Status</TableHead>
+                    <TableHead style={{ color: '#888888' }}>Added</TableHead>
+                    <TableHead style={{ color: '#888888' }}>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {gateways.map(gw => (
-                    <TableRow key={gw.id} style={{ borderBottom: '1px solid rgba(167,235,242,0.05)' }}>
+                    <TableRow key={gw.id} style={{ borderBottom: '1px solid rgba(229,229,229,0.05)' }}>
                       <TableCell style={{ color: '#fff', fontWeight: 500 }}>{gw.provider === 'razorpay' ? 'Razorpay' : 'Cashfree'}</TableCell>
                       <TableCell>
                         <span style={{
@@ -162,7 +162,7 @@ export default function BillingGatewaysPage() {
                           color: gw.is_active ? '#10b981' : '#ef4444',
                         }}>{gw.is_active ? 'Active' : 'Inactive'}</span>
                       </TableCell>
-                      <TableCell style={{ color: '#9cb8c4', fontSize: '0.8rem' }}>{new Date(gw.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell style={{ color: '#E5E5E5', fontSize: '0.8rem' }}>{new Date(gw.created_at).toLocaleDateString()}</TableCell>
                       <TableCell>
                         <button onClick={() => removeGateway(gw.id)} style={{
                           background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem',

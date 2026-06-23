@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 
@@ -41,7 +41,7 @@ export default function Home() {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      background: '#011C40',
+      background: '#000000',
       color: '#fff',
       fontFamily: 'var(--font-inter, system-ui, sans-serif)',
     }}>
@@ -51,8 +51,8 @@ export default function Home() {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '1.25rem 2.5rem',
-        borderBottom: '1px solid rgba(167,235,242,0.08)',
-        background: 'rgba(2,56,89,0.6)',
+        borderBottom: '1px solid rgba(229,229,229,0.08)',
+        background: 'rgba(20,33,61,0.6)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         position: 'sticky',
@@ -64,21 +64,21 @@ export default function Home() {
             width: '38px',
             height: '38px',
             borderRadius: '10px',
-            background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+            background: 'linear-gradient(135deg, #FCA311, #E09800)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontWeight: 800,
             fontSize: '1.1rem',
             color: '#fff',
-            boxShadow: '0 2px 12px rgba(84,172,191,0.3)',
+            boxShadow: '0 2px 12px rgba(252,163,17,0.3)',
           }}>H</div>
           <span style={{ fontSize: '1.3rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em' }}>HeyPass</span>
         </Link>
 
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <Link href="/auth/register" style={{
-            color: '#9cb8c4',
+            color: '#E5E5E5',
             textDecoration: 'none',
             fontSize: '0.875rem',
             fontWeight: 500,
@@ -87,7 +87,7 @@ export default function Home() {
             transition: 'color 0.15s',
           }}>Register</Link>
           <Link href="/verify" style={{
-            color: '#9cb8c4',
+            color: '#E5E5E5',
             textDecoration: 'none',
             fontSize: '0.875rem',
             fontWeight: 500,
@@ -96,14 +96,14 @@ export default function Home() {
             transition: 'color 0.15s',
           }}>Verify</Link>
           <Link href="/dashboard" style={{
-            background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+            background: 'linear-gradient(135deg, #FCA311, #E09800)',
             color: '#fff',
             padding: '0.6rem 1.4rem',
             borderRadius: '10px',
             textDecoration: 'none',
             fontSize: '0.875rem',
             fontWeight: 600,
-            boxShadow: '0 2px 12px rgba(84,172,191,0.3)',
+            boxShadow: '0 2px 12px rgba(252,163,17,0.3)',
             transition: 'transform 0.15s, box-shadow 0.15s',
           }}>Dashboard</Link>
         </div>
@@ -127,7 +127,7 @@ export default function Home() {
           width: '500px',
           height: '500px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(84,172,191,0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(252,163,17,0.12) 0%, transparent 70%)',
           top: '-10%',
           left: '-10%',
           pointerEvents: 'none',
@@ -146,10 +146,10 @@ export default function Home() {
         <div style={{
           padding: '0.4rem 1.2rem',
           borderRadius: '9999px',
-          background: 'rgba(84,172,191,0.1)',
-          border: '1px solid rgba(84,172,191,0.2)',
+          background: 'rgba(252,163,17,0.1)',
+          border: '1px solid rgba(252,163,17,0.2)',
           fontSize: '0.8rem',
-          color: '#A7EBF2',
+          color: '#E5E5E5',
           marginBottom: '2rem',
           fontWeight: 500,
           letterSpacing: '0.02em',
@@ -167,7 +167,7 @@ export default function Home() {
         }}>
           Run Events{' '}
           <span style={{
-            background: 'linear-gradient(135deg, #A7EBF2, #54ACBF)',
+            background: 'linear-gradient(135deg, #FCD34D, #FCA311)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}>
@@ -177,7 +177,7 @@ export default function Home() {
 
         <p style={{
           fontSize: '1.1rem',
-          color: '#9cb8c4',
+          color: '#E5E5E5',
           maxWidth: '560px',
           lineHeight: 1.7,
           marginBottom: '3rem',
@@ -188,22 +188,22 @@ export default function Home() {
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link href="/dashboard" style={{
-            background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+            background: 'linear-gradient(135deg, #FCA311, #E09800)',
             color: '#fff',
             padding: '0.9rem 2.2rem',
             borderRadius: '12px',
             textDecoration: 'none',
             fontWeight: 600,
             fontSize: '1rem',
-            boxShadow: '0 4px 20px rgba(84,172,191,0.3)',
+            boxShadow: '0 4px 20px rgba(252,163,17,0.3)',
             transition: 'transform 0.15s, box-shadow 0.15s',
           }}>
             Get Started
           </Link>
           <Link href="/verify" style={{
-            background: 'rgba(167,235,242,0.06)',
-            border: '1px solid rgba(167,235,242,0.15)',
-            color: '#A7EBF2',
+            background: 'rgba(229,229,229,0.06)',
+            border: '1px solid rgba(229,229,229,0.15)',
+            color: '#E5E5E5',
             padding: '0.9rem 2.2rem',
             borderRadius: '12px',
             textDecoration: 'none',
@@ -219,8 +219,8 @@ export default function Home() {
       {/* Features */}
       <section style={{
         padding: '5rem 2rem',
-        borderTop: '1px solid rgba(167,235,242,0.06)',
-        background: 'rgba(2,56,89,0.3)',
+        borderTop: '1px solid rgba(229,229,229,0.06)',
+        background: 'rgba(20,33,61,0.3)',
       }}>
         <div style={{
           maxWidth: '1000px',
@@ -235,7 +235,7 @@ export default function Home() {
           }}>
             Everything you need to{' '}
             <span style={{
-              background: 'linear-gradient(135deg, #A7EBF2, #54ACBF)',
+              background: 'linear-gradient(135deg, #FCD34D, #FCA311)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}>
@@ -244,7 +244,7 @@ export default function Home() {
           </h2>
           <p style={{
             textAlign: 'center',
-            color: '#9cb8c4',
+            color: '#E5E5E5',
             fontSize: '0.95rem',
             marginBottom: '3rem',
             maxWidth: '500px',
@@ -261,8 +261,8 @@ export default function Home() {
           }}>
             {FEATURES.map((f) => (
               <div key={f.title} style={{
-                background: 'rgba(167,235,242,0.03)',
-                border: '1px solid rgba(167,235,242,0.08)',
+                background: 'rgba(229,229,229,0.03)',
+                border: '1px solid rgba(229,229,229,0.08)',
                 borderRadius: '16px',
                 padding: '1.5rem',
                 textAlign: 'left',
@@ -280,7 +280,7 @@ export default function Home() {
                 }}>{f.title}</h3>
                 <p style={{
                   fontSize: '0.85rem',
-                  color: '#9cb8c4',
+                  color: '#E5E5E5',
                   lineHeight: 1.6,
                 }}>{f.desc}</p>
               </div>
@@ -292,9 +292,9 @@ export default function Home() {
       {/* Footer */}
       <footer style={{
         padding: '2.5rem 2rem',
-        borderTop: '1px solid rgba(167,235,242,0.06)',
+        borderTop: '1px solid rgba(229,229,229,0.06)',
         textAlign: 'center',
-        color: '#5a7a8a',
+        color: '#888888',
         fontSize: '0.8rem',
       }}>
         HeyPass — Event Operations Platform

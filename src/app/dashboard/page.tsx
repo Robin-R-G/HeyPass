@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -45,25 +45,25 @@ export default function DashboardPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
       {/* Nav */}
       <nav style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '1rem 2rem', borderBottom: '1px solid rgba(167,235,242,0.08)',
-        background: 'rgba(2,56,89,0.6)', backdropFilter: 'blur(16px)',
+        padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
+        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
           <div style={{
             width: '32px', height: '32px', borderRadius: '8px',
-            background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+            background: 'linear-gradient(135deg, #FCA311, #E09800)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontWeight: 800, fontSize: '0.9rem', color: '#fff',
           }}>H</div>
           <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>HeyPass</span>
         </Link>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <Link href="/" style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Home</Link>
-          <Link href="/dashboard/settings/branding" style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Settings</Link>
+          <Link href="/" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Home</Link>
+          <Link href="/dashboard/settings/branding" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Settings</Link>
         </div>
       </nav>
 
@@ -71,12 +71,12 @@ export default function DashboardPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <div>
             <h1 style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.25rem' }}>Your Events</h1>
-            <p style={{ color: '#9cb8c4', fontSize: '0.9rem' }}>Manage and monitor all your events</p>
+            <p style={{ color: '#E5E5E5', fontSize: '0.9rem' }}>Manage and monitor all your events</p>
           </div>
         </div>
 
         {loading && (
-          <div style={{ textAlign: 'center', padding: '4rem', color: '#9cb8c4' }}>Loading events...</div>
+          <div style={{ textAlign: 'center', padding: '4rem', color: '#E5E5E5' }}>Loading events...</div>
         )}
 
         {error && (
@@ -90,18 +90,18 @@ export default function DashboardPage() {
 
         {!loading && !error && events.length === 0 && (
           <div style={{
-            background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)',
+            background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)',
             borderRadius: '16px', padding: '4rem 2rem', textAlign: 'center',
           }}>
             <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📋</div>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.5rem' }}>No events yet</h3>
-            <p style={{ color: '#9cb8c4', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+            <p style={{ color: '#E5E5E5', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
               Create your first event to get started
             </p>
             <button
               onClick={() => router.push('/dashboard/events/new')}
               style={{
-                background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+                background: 'linear-gradient(135deg, #FCA311, #E09800)',
                 color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '10px',
                 border: 'none', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               }}
@@ -119,7 +119,7 @@ export default function DashboardPage() {
                 href={`/dashboard/events/${event.id}/dashboard`}
                 style={{
                   display: 'block', textDecoration: 'none',
-                  background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)',
+                  background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)',
                   borderRadius: '14px', padding: '1.25rem 1.5rem',
                   transition: 'border-color 0.15s, transform 0.15s',
                 }}
@@ -129,27 +129,27 @@ export default function DashboardPage() {
                     <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#fff', marginBottom: '0.25rem' }}>
                       {event.title}
                     </h3>
-                    <p style={{ color: '#9cb8c4', fontSize: '0.8rem' }}>
+                    <p style={{ color: '#E5E5E5', fontSize: '0.8rem' }}>
                       {event.venue || 'No venue'} · {new Date(event.start_date).toLocaleDateString()}
                     </p>
                   </div>
                   <span style={{
                     padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.7rem', fontWeight: 600,
                     textTransform: 'uppercase',
-                    background: event.status === 'published' ? 'rgba(16,185,129,0.15)' : 'rgba(167,235,242,0.1)',
-                    color: event.status === 'published' ? '#10b981' : '#9cb8c4',
+                    background: event.status === 'published' ? 'rgba(16,185,129,0.15)' : 'rgba(229,229,229,0.1)',
+                    color: event.status === 'published' ? '#10b981' : '#E5E5E5',
                   }}>
                     {event.status}
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: '2rem', marginTop: '0.75rem' }}>
                   <div>
-                    <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#A7EBF2' }}>{event.registrations_count || 0}</span>
-                    <span style={{ color: '#5a7a8a', fontSize: '0.75rem', marginLeft: '0.3rem' }}>registered</span>
+                    <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#E5E5E5' }}>{event.registrations_count || 0}</span>
+                    <span style={{ color: '#888888', fontSize: '0.75rem', marginLeft: '0.3rem' }}>registered</span>
                   </div>
                   <div>
-                    <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#54ACBF' }}>{event.check_ins_count || 0}</span>
-                    <span style={{ color: '#5a7a8a', fontSize: '0.75rem', marginLeft: '0.3rem' }}>checked in</span>
+                    <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FCA311' }}>{event.check_ins_count || 0}</span>
+                    <span style={{ color: '#888888', fontSize: '0.75rem', marginLeft: '0.3rem' }}>checked in</span>
                   </div>
                 </div>
               </Link>

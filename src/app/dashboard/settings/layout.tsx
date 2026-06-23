@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -21,8 +21,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
       <nav style={{
         width: 220,
         flexShrink: 0,
-        background: 'rgba(167,235,242,0.03)',
-        borderRight: '1px solid rgba(167,235,242,0.08)',
+        background: 'rgba(229,229,229,0.03)',
+        borderRight: '1px solid rgba(229,229,229,0.08)',
         display: 'flex',
         flexDirection: 'column',
         padding: '1.5rem 0',
@@ -34,7 +34,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.5rem 1.25rem',
-            color: '#9cb8c4',
+            color: '#E5E5E5',
             textDecoration: 'none',
             fontSize: '0.85rem',
             marginBottom: '1rem',
@@ -45,7 +45,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         </Link>
 
         <div style={{
-          borderTop: '1px solid rgba(167,235,242,0.08)',
+          borderTop: '1px solid rgba(229,229,229,0.08)',
           margin: '0.5rem 1.25rem 1rem',
         }} />
 
@@ -53,7 +53,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           fontSize: '0.65rem',
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
-          color: '#5a7a8a',
+          color: '#888888',
           padding: '0 1.25rem',
           marginBottom: '0.5rem',
           fontWeight: 600,
@@ -70,11 +70,11 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
               style={{
                 display: 'block',
                 padding: '0.5rem 1.25rem',
-                color: isActive ? '#A7EBF2' : '#9cb8c4',
+                color: isActive ? '#E5E5E5' : '#E5E5E5',
                 textDecoration: 'none',
                 fontSize: '0.85rem',
-                background: isActive ? 'rgba(84,172,191,0.15)' : 'transparent',
-                borderLeft: isActive ? '2px solid #A7EBF2' : '2px solid transparent',
+                background: isActive ? 'rgba(252,163,17,0.15)' : 'transparent',
+                borderLeft: isActive ? '2px solid #E5E5E5' : '2px solid transparent',
                 transition: 'background 0.15s, color 0.15s',
               }}
             >

@@ -75,18 +75,18 @@ export default function VolunteerPage() {
   const filtered = volunteers.filter(v => `${v.first_name} ${v.last_name} ${v.email}`.toLowerCase().includes(search.toLowerCase()));
 
   const statusColor = (s: string) => {
-    switch (s) { case "approved": return "bg-[rgba(16,185,129,0.15)] text-[#10b981]"; case "pending": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "checked_in": return "bg-[rgba(59,130,246,0.15)] text-[#3b82f6]"; case "completed": return "bg-[rgba(167,235,242,0.08)] text-[#9cb8c4]"; default: return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; }
+    switch (s) { case "approved": return "bg-[rgba(16,185,129,0.15)] text-[#10b981]"; case "pending": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "checked_in": return "bg-[rgba(59,130,246,0.15)] text-[#3b82f6]"; case "completed": return "bg-[rgba(229,229,229,0.08)] text-[#E5E5E5]"; default: return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; }
   };
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#5a7a8a' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#5a7a8a' }}>/</span>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#888888' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#888888' }}>/</span>
         <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Volunteers</span>
       </nav>
 
@@ -120,7 +120,7 @@ export default function VolunteerPage() {
             ].map(k => (
               <Card key={k.label}><CardContent className="p-4 text-center">
                 <p className="text-2xl font-bold">{k.value}</p>
-                <p className="text-sm text-[#5a7a8a]">{k.label}</p>
+                <p className="text-sm text-[#888888]">{k.label}</p>
               </CardContent></Card>
             ))}
           </div>
@@ -205,20 +205,20 @@ export default function VolunteerPage() {
           <Card>
             <CardHeader><CardTitle>Schedule</CardTitle></CardHeader>
             <CardContent>
-              {tasks.length === 0 ? <p className="text-[#5a7a8a]">No tasks scheduled</p> : (
+              {tasks.length === 0 ? <p className="text-[#888888]">No tasks scheduled</p> : (
                 <div className="space-y-4">
                   {tasks.sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime()).map(t => (
-                    <div key={t.id} className="border-[rgba(167,235,242,0.12)] rounded-lg p-4">
+                    <div key={t.id} className="border-[rgba(229,229,229,0.12)] rounded-lg p-4">
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium">{t.title}</p>
-                          <p className="text-sm text-[#5a7a8a]">{t.location || "No location"}</p>
+                          <p className="text-sm text-[#888888]">{t.location || "No location"}</p>
                         </div>
                         <Badge className={t.slots_filled >= t.slots_total ? "bg-[rgba(16,185,129,0.15)] text-[#10b981]" : "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"}>
                           {t.slots_filled}/{t.slots_total} slots
                         </Badge>
                       </div>
-                      <p className="text-sm text-[#5a7a8a] mt-2">{new Date(t.start_time).toLocaleString()} - {new Date(t.end_time).toLocaleString()}</p>
+                      <p className="text-sm text-[#888888] mt-2">{new Date(t.start_time).toLocaleString()} - {new Date(t.end_time).toLocaleString()}</p>
                     </div>
                   ))}
                 </div>
@@ -248,7 +248,7 @@ export default function VolunteerPage() {
                 {sending ? "Sending..." : "Send Message"}
               </Button>
               {sendResult && (
-                <div className={`border-[rgba(167,235,242,0.12)] rounded-lg p-3 ${sendResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
+                <div className={`border-[rgba(229,229,229,0.12)] rounded-lg p-3 ${sendResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
                   <p className={`font-medium text-sm ${sendResult.success ? "text-[#10b981]" : "text-[#ef4444]"}`}>{sendResult.message}</p>
                 </div>
               )}

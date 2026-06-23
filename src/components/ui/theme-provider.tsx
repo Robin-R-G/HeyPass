@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
@@ -11,8 +11,8 @@ interface ThemeConfig {
 }
 
 const defaultTheme: ThemeConfig = {
-  primaryColor: '#54ACBF',
-  accentColor: '#A7EBF2',
+  primaryColor: '#FCA311',
+  accentColor: '#E5E5E5',
   backgroundStyle: 'gradient',
   glassEffect: true,
   animations: true,

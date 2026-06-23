@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -56,23 +56,23 @@ export default function VerifyPage() {
 
   const inputStyle = {
     width: '100%', padding: '0.7rem 1rem', borderRadius: '8px',
-    border: '1px solid rgba(167,235,242,0.12)', background: 'rgba(167,235,242,0.05)',
+    border: '1px solid rgba(229,229,229,0.12)', background: 'rgba(229,229,229,0.05)',
     color: '#fff', fontSize: '0.9rem', outline: 'none' as const,
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#011C40', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
       <div style={{ width: '100%', maxWidth: '440px', padding: '1.5rem' }}>
-        <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem', marginBottom: '1.5rem' }}>← Back to Home</a>
+        <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem', marginBottom: '1.5rem' }}>← Back to Home</a>
 
         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#fff' }}>Certificate Verification</h1>
-          <p style={{ color: '#9cb8c4', marginTop: '0.5rem' }}>Verify the authenticity of a certificate</p>
+          <p style={{ color: '#E5E5E5', marginTop: '0.5rem' }}>Verify the authenticity of a certificate</p>
         </div>
 
-        <div style={{ background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)', borderRadius: '16px', padding: '1.5rem' }}>
+        <div style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)', borderRadius: '16px', padding: '1.5rem' }}>
           {/* Tab buttons */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0', marginBottom: '1.25rem', background: 'rgba(167,235,242,0.05)', borderRadius: '10px', padding: '3px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0', marginBottom: '1.25rem', background: 'rgba(229,229,229,0.05)', borderRadius: '10px', padding: '3px' }}>
             {[
               { key: 'number' as const, label: 'Certificate Number' },
               { key: 'url' as const, label: 'Direct Link' },
@@ -81,8 +81,8 @@ export default function VerifyPage() {
                 style={{
                   padding: '0.6rem', borderRadius: '8px', border: 'none', fontSize: '0.8rem', fontWeight: 500,
                   cursor: 'pointer', transition: 'all 0.15s',
-                  background: method === t.key ? 'rgba(84,172,191,0.2)' : 'transparent',
-                  color: method === t.key ? '#A7EBF2' : '#5a7a8a',
+                  background: method === t.key ? 'rgba(252,163,17,0.2)' : 'transparent',
+                  color: method === t.key ? '#E5E5E5' : '#888888',
                 }}>
                 {t.label}
               </button>
@@ -91,7 +91,7 @@ export default function VerifyPage() {
 
           {/* Input */}
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', color: '#9cb8c4', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>
+            <label style={{ display: 'block', color: '#E5E5E5', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>
               {method === 'number' ? 'Certificate Number' : 'Verification Token'}
             </label>
             <input
@@ -105,7 +105,7 @@ export default function VerifyPage() {
           <button onClick={handleVerify} disabled={loading || !input.trim()}
             style={{
               width: '100%', padding: '0.7rem', borderRadius: '8px', border: 'none',
-              background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+              background: 'linear-gradient(135deg, #FCA311, #E09800)',
               color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               opacity: loading || !input.trim() ? 0.5 : 1,
             }}>
@@ -121,7 +121,7 @@ export default function VerifyPage() {
 
         {/* Result */}
         {result?.valid && (
-          <div style={{ background: 'rgba(167,235,242,0.03)', border: '1px solid rgba(167,235,242,0.08)', borderRadius: '16px', padding: '1.5rem', marginTop: '1rem' }}>
+          <div style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)', borderRadius: '16px', padding: '1.5rem', marginTop: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
               <span style={{ padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.7rem', fontWeight: 600, background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>Valid</span>
               <span style={{ fontWeight: 600, color: '#fff' }}>Certificate Verified</span>
@@ -137,19 +137,19 @@ export default function VerifyPage() {
                 { label: 'Issued', value: result.issued_at ? new Date(result.issued_at).toLocaleDateString() : '-' },
               ].map(item => (
                 <div key={item.label}>
-                  <div style={{ color: '#5a7a8a', fontSize: '0.75rem' }}>{item.label}</div>
-                  <div style={{ color: item.mono ? '#A7EBF2' : '#fff', fontFamily: item.mono ? 'var(--font-jetbrains, monospace)' : 'inherit' }}>{item.value}</div>
+                  <div style={{ color: '#888888', fontSize: '0.75rem' }}>{item.label}</div>
+                  <div style={{ color: item.mono ? '#E5E5E5' : '#fff', fontFamily: item.mono ? 'var(--font-jetbrains, monospace)' : 'inherit' }}>{item.value}</div>
                 </div>
               ))}
             </div>
 
-            <div style={{ borderTop: '1px solid rgba(167,235,242,0.08)', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
-              <div style={{ fontSize: '0.8rem', color: '#5a7a8a' }}>Verified {result.verification_count || 0} time(s)</div>
+            <div style={{ borderTop: '1px solid rgba(229,229,229,0.08)', paddingTop: '0.75rem', marginTop: '0.75rem' }}>
+              <div style={{ fontSize: '0.8rem', color: '#888888' }}>Verified {result.verification_count || 0} time(s)</div>
             </div>
 
             {result.pdf_url && (
               <button onClick={() => window.open(result.pdf_url, '_blank')}
-                style={{ width: '100%', marginTop: '1rem', padding: '0.7rem', borderRadius: '8px', background: 'rgba(167,235,242,0.06)', border: '1px solid rgba(167,235,242,0.15)', color: '#A7EBF2', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
+                style={{ width: '100%', marginTop: '1rem', padding: '0.7rem', borderRadius: '8px', background: 'rgba(229,229,229,0.06)', border: '1px solid rgba(229,229,229,0.15)', color: '#E5E5E5', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer' }}>
                 Download Certificate
               </button>
             )}
