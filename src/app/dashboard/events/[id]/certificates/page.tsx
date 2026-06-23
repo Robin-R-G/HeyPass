@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +27,7 @@ interface Certificate {
 
 export default function CertificatesPage() {
   const params = useParams();
+  const router = useRouter();
   const eventId = params.id as string;
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,9 +114,16 @@ export default function CertificatesPage() {
 
   return (
     <div className="space-y-6">
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Certificates</span>
+      </nav>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Certificates</h1>
-        <Button onClick={() => window.location.href = `/dashboard/events/${eventId}/certs/generate`}>
+        <Button onClick={() => window.location.href = `/dashboard/events/${eventId}/certificates/generate`}>
           Generate Certificate
         </Button>
       </div>

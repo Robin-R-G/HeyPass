@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Gate {
   id: string;
@@ -28,6 +30,7 @@ const GATE_TYPES = [
 
 export default function GatesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const [gates, setGates] = useState<Gate[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
@@ -107,6 +110,13 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Gates</span>
+      </nav>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Gates</h1>
@@ -138,7 +148,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
                   <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                     <div style={{
                       width: '56px', height: '56px', borderRadius: '0.75rem',
-                      background: gate.is_active ? 'rgba(99, 102, 241, 0.15)' : 'rgba(113, 113, 122, 0.1)',
+                      background: gate.is_active ? 'rgba(84, 172, 191, 0.15)' : 'rgba(113, 113, 122, 0.1)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem',
                     }}>
                       {info.icon}
@@ -175,7 +185,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
                         </div>
                         <div>
                           <span style={{ color: '#71717a', fontSize: '0.7rem' }}>Staff</span>
-                          <div style={{ color: '#818cf8', fontWeight: 600 }}>{gate.active_staff || 0}</div>
+                          <div style={{ color: '#A7EBF2', fontWeight: 600 }}>{gate.active_staff || 0}</div>
                         </div>
                         <div>
                           <span style={{ color: '#71717a', fontSize: '0.7rem' }}>Rate Limit</span>

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Gate {
   id: string;
@@ -33,6 +35,7 @@ interface StaffPerf {
 
 export default function StaffPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const [gates, setGates] = useState<Gate[]>([]);
   const [allStaff, setAllStaff] = useState<GateStaffMember[]>([]);
   const [performance, setPerformance] = useState<StaffPerf[]>([]);
@@ -108,6 +111,13 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Staff</span>
+      </nav>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Staff Management</h1>
@@ -143,9 +153,9 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                           <div style={{
                             width: '40px', height: '40px', borderRadius: '50%',
-                            background: 'rgba(99, 102, 241, 0.15)',
+                            background: 'rgba(84, 172, 191, 0.15)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '0.9rem', color: '#818cf8',
+                            fontSize: '0.9rem', color: '#A7EBF2',
                           }}>
                             {s.staff_name?.charAt(0) || '?'}
                           </div>

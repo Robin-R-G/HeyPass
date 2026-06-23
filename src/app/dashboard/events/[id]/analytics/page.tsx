@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -114,6 +115,7 @@ function BarChart({ data, labelKey, valueKey, color = '#3b82f6' }: {
 
 export default function AnalyticsPage() {
   const params = useParams();
+  const router = useRouter();
   const eventId = params.id as string;
 
   const [overview, setOverview] = useState<DashboardData | null>(null);
@@ -186,6 +188,13 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Analytics</span>
+      </nav>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
         <div className="flex items-center gap-4">
@@ -444,7 +453,7 @@ export default function AnalyticsPage() {
                       data={revenue.by_payment_method}
                       labelKey="method"
                       valueKey="amount"
-                      color="#8b5cf6"
+                      color="#54ACBF"
                     />
                   </CardContent>
                 </Card>

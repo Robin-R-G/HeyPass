@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,6 +26,7 @@ interface Link {
 
 export default function LinksPage() {
   const params = useParams();
+  const router = useRouter();
   const eventId = params.id as string;
   const [links, setLinks] = useState<Link[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,6 +100,13 @@ export default function LinksPage() {
 
   return (
     <div className="space-y-6">
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Links</span>
+      </nav>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Registration Links</h1>
         <Button onClick={() => setShowCreate(true)}>Create Link</Button>

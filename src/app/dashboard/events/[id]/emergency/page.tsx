@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,7 @@ interface LostItem { id: string; item_description: string; reported_by: string; 
 
 export default function EmergencyPage() {
   const params = useParams();
+  const router = useRouter();
   const eventId = params.id as string;
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -80,10 +81,12 @@ export default function EmergencyPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/dashboard" className="hover:text-gray-700">Dashboard</Link><span>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hover:text-gray-700">Event</Link><span>/</span>
-        <span className="text-gray-900 font-medium">Emergency</span>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Emergency</span>
       </nav>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Emergency Dashboard</h1>

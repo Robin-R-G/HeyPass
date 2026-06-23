@@ -11,8 +11,8 @@ interface ThemeConfig {
 }
 
 const defaultTheme: ThemeConfig = {
-  primaryColor: '#6366f1',
-  accentColor: '#06b6d4',
+  primaryColor: '#54ACBF',
+  accentColor: '#A7EBF2',
   backgroundStyle: 'gradient',
   glassEffect: true,
   animations: true,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ interface TokenStat { token_type_id: string; name: string; meal_time: string; to
 
 export default function FoodTokensPage() {
   const params = useParams();
+  const router = useRouter();
   const eventId = params.id as string;
   const [tokenTypes, setTokenTypes] = useState<TokenType[]>([]);
   const [stats, setStats] = useState<TokenStat[]>([]);
@@ -27,6 +28,9 @@ export default function FoodTokensPage() {
   const [validateCode, setValidateCode] = useState("");
   const [validateResult, setValidateResult] = useState<{ success: boolean; message: string; data?: unknown } | null>(null);
   const [validating, setValidating] = useState(false);
+  const [generateTypeId, setGenerateTypeId] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [generateResult, setGenerateResult] = useState<{ success: boolean; count: number } | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -44,6 +48,25 @@ export default function FoodTokensPage() {
     setCreateOpen(false);
     const tData = await fetch(`/api/events/${eventId}/food-tokens`).then(r => r.json());
     setTokenTypes(tData.tokenTypes || tData.token_types || []);
+  };
+
+  const generateTokens = async () => {
+    if (!generateTypeId) return;
+    setGenerating(true);
+    try {
+      const res = await fetch(`/api/events/${eventId}/food-tokens/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token_type_id: generateTypeId }),
+      });
+      const data = await res.json();
+      setGenerateResult({ success: res.ok, count: data.generated || data.count || 0 });
+      const sData = await fetch(`/api/events/${eventId}/food-tokens/stats`).then(r => r.json());
+      setStats(sData.stats || []);
+    } catch {
+      setGenerateResult({ success: false, count: 0 });
+    }
+    setGenerating(false);
   };
 
   const validateToken = async () => {
@@ -64,10 +87,12 @@ export default function FoodTokensPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/dashboard" className="hover:text-gray-700">Dashboard</Link><span>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hover:text-gray-700">Event</Link><span>/</span>
-        <span className="text-gray-900 font-medium">Food Tokens</span>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Food Tokens</span>
       </nav>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Food Tokens</h1>
@@ -138,16 +163,25 @@ export default function FoodTokensPage() {
           <Card>
             <CardHeader><CardTitle>Generate Tokens</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-500">Select a token type and registrations to bulk-generate food tokens.</p>
+              <p className="text-sm text-gray-500">Select a token type to bulk-generate food tokens for all registrations.</p>
               <div><Label>Token Type</Label>
-                <Select>
+                <Select value={generateTypeId} onValueChange={setGenerateTypeId}>
                   <SelectTrigger className="w-full"><SelectValue placeholder="Select token type..." /></SelectTrigger>
                   <SelectContent>
                     {tokenTypes.filter(t => t.is_active).map(t => <SelectItem key={t.id} value={t.id}>{t.name} ({t.meal_time})</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
-              <Button>Generate Tokens</Button>
+              <Button onClick={generateTokens} disabled={!generateTypeId || generating}>
+                {generating ? "Generating..." : "Generate Tokens"}
+              </Button>
+              {generateResult && (
+                <div className={`border rounded-lg p-3 ${generateResult.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+                  <p className={`font-medium text-sm ${generateResult.success ? "text-green-800" : "text-red-800"}`}>
+                    {generateResult.success ? `Generated ${generateResult.count} tokens successfully` : "Generation failed"}
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

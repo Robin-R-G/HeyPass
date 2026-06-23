@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Session {
   id: string;
@@ -26,6 +28,7 @@ interface Session {
 
 export default function SubEventsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
@@ -185,6 +188,13 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
 
   return (
     <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Sub-Events</span>
+      </nav>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Sub-Events</h1>
@@ -243,7 +253,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
                     <div style={{ marginTop: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                         <span style={{ color: '#71717a', fontSize: '0.75rem' }}>Live Attendance</span>
-                        <span style={{ color: '#818cf8', fontSize: '0.75rem', fontWeight: 600 }}>
+                        <span style={{ color: '#A7EBF2', fontSize: '0.75rem', fontWeight: 600 }}>
                           {att?.total_checked_in || 0} / {att?.total_registered || s.registrations_count || 0}
                           {s.max_capacity ? ` (cap: ${s.max_capacity})` : ''}
                           {' '}{pct.toFixed(0)}%
@@ -257,7 +267,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
                         <div style={{
                           height: '100%', borderRadius: '3px',
                           width: `${Math.min(pct, 100)}%`,
-                          background: 'linear-gradient(90deg, #6366f1, #06b6d4)',
+                          background: 'linear-gradient(90deg, #54ACBF, #A7EBF2)',
                           transition: 'width 0.5s ease',
                         }} />
                       </div>
@@ -357,7 +367,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
                     onClick={() => setForm({ ...form, is_free: !form.is_free })}
                     style={{
                       width: '44px', height: '24px', borderRadius: '12px',
-                      background: form.is_free ? '#27272a' : '#6366f1',
+                      background: form.is_free ? '#27272a' : '#54ACBF',
                       border: 'none', cursor: 'pointer', position: 'relative',
                     }}
                   >

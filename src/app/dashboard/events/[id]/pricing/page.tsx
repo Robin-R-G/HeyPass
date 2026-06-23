@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface PaymentMethod {
   id: string;
@@ -21,6 +23,7 @@ interface EventPricingData {
 
 export default function EventPricingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const [pricing, setPricing] = useState<EventPricingData>({
     is_free: true,
     ticket_price: 0,
@@ -101,6 +104,13 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
 
   return (
     <div style={{ padding: '2rem', maxWidth: '700px', margin: '0 auto' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Pricing</span>
+      </nav>
       <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
         Event Pricing
       </h1>
@@ -121,7 +131,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
             onClick={() => setPricing({ ...pricing, is_free: !pricing.is_free })}
             style={{
               width: '52px', height: '28px', borderRadius: '14px',
-              background: pricing.is_free ? '#6366f1' : '#27272a',
+              background: pricing.is_free ? '#54ACBF' : '#27272a',
               border: 'none', cursor: 'pointer', position: 'relative',
               transition: 'background 0.2s',
             }}
@@ -184,8 +194,8 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.75rem',
                   padding: '0.75rem', borderRadius: '0.5rem',
-                  background: pricing.payment_method_ids.includes(m.id) ? 'rgba(99, 102, 241, 0.1)' : 'transparent',
-                  border: `1px solid ${pricing.payment_method_ids.includes(m.id) ? 'rgba(99, 102, 241, 0.3)' : 'rgba(255,255,255,0.08)'}`,
+                  background: pricing.payment_method_ids.includes(m.id) ? 'rgba(84, 172, 191, 0.1)' : 'transparent',
+                  border: `1px solid ${pricing.payment_method_ids.includes(m.id) ? 'rgba(84, 172, 191, 0.3)' : 'rgba(255,255,255,0.08)'}`,
                   cursor: 'pointer',
                 }}
               >
@@ -193,7 +203,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
                   type="checkbox"
                   checked={pricing.payment_method_ids.includes(m.id)}
                   onChange={() => togglePaymentMethod(m.id)}
-                  style={{ accentColor: '#6366f1' }}
+                  style={{ accentColor: '#54ACBF' }}
                 />
                 <div>
                   <div style={{ color: '#fff', fontSize: '0.875rem' }}>
@@ -215,7 +225,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
         <div className="hp-card" style={{ marginBottom: '1.5rem', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
           <p style={{ color: '#f59e0b', fontSize: '0.875rem' }}>
             No payment methods configured. Add bank accounts or UPI in{' '}
-            <a href="/dashboard/settings/payments" style={{ color: '#818cf8' }}>Settings &gt; Payments</a>.
+            <a href="/dashboard/settings/payments" style={{ color: '#A7EBF2' }}>Settings &gt; Payments</a>.
           </p>
         </div>
       )}

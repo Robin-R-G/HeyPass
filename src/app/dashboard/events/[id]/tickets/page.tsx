@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import CloneEventButton from '@/components/clone-event-button';
 
 interface Ticket {
@@ -31,6 +33,7 @@ interface QRData {
 
 export default function EventTicketsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, active: 0, used: 0, cancelled: 0, fraud: 0 });
@@ -114,6 +117,13 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Tickets</span>
+      </nav>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Tickets & QR</h1>
@@ -133,7 +143,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {[
           { label: 'Total', value: stats.total, color: '#fff' },
-          { label: 'Active', value: stats.active, color: '#6366f1' },
+          { label: 'Active', value: stats.active, color: '#54ACBF' },
           { label: 'Checked In', value: stats.used, color: '#10b981' },
           { label: 'Cancelled', value: stats.cancelled, color: '#ef4444' },
           { label: 'Fraud Flags', value: stats.fraud, color: '#f59e0b' },
@@ -165,10 +175,10 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
             <div style={{
               background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
               borderRadius: '1rem', padding: '1.5rem',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
+              border: '1px solid rgba(84, 172, 191, 0.3)',
             }}>
               <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                <div style={{ color: '#818cf8', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                <div style={{ color: '#A7EBF2', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                   Heypass Secure Ticket
                 </div>
                 <div style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 700, marginTop: '0.25rem' }}>
@@ -214,11 +224,11 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
               }}>
                 <div>
                   <span style={{ color: '#71717a' }}>QR Version: </span>
-                  <span style={{ color: '#818cf8', fontFamily: 'var(--font-jetbrains)' }}>v{selectedTicket.qr_version}</span>
+                  <span style={{ color: '#A7EBF2', fontFamily: 'var(--font-jetbrains)' }}>v{selectedTicket.qr_version}</span>
                 </div>
                 <div>
                   <span style={{ color: '#71717a' }}>Rotations: </span>
-                  <span style={{ color: '#818cf8' }}>{selectedTicket.qr_rotation_count}</span>
+                  <span style={{ color: '#A7EBF2' }}>{selectedTicket.qr_rotation_count}</span>
                 </div>
                 <div>
                   <span style={{ color: '#71717a' }}>Status: </span>
@@ -326,7 +336,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
                     {t.status}
                   </span>
                 </div>
-                <div style={{ color: '#818cf8', fontFamily: 'var(--font-jetbrains)', fontSize: '0.8rem' }}>
+                <div style={{ color: '#A7EBF2', fontFamily: 'var(--font-jetbrains)', fontSize: '0.8rem' }}>
                   v{t.qr_version}
                 </div>
                 <div>

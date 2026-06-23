@@ -174,7 +174,7 @@ export default function PaymentMethodsPage() {
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                   <div style={{
                     width: '48px', height: '48px', borderRadius: '0.75rem',
-                    background: m.method_type === 'bank_account' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(6, 182, 212, 0.15)',
+                    background: m.method_type === 'bank_account' ? 'rgba(84, 172, 191, 0.15)' : 'rgba(6, 182, 212, 0.15)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem',
                   }}>
                     {m.method_type === 'bank_account' ? '🏦' : '💳'}
@@ -221,8 +221,8 @@ export default function PaymentMethodsPage() {
       )}
 
       {/* Limits info */}
-      <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: '0.75rem', border: '1px solid rgba(99, 102, 241, 0.1)' }}>
-        <p style={{ color: '#818cf8', fontSize: '0.8rem' }}>
+      <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(84, 172, 191, 0.05)', borderRadius: '0.75rem', border: '1px solid rgba(84, 172, 191, 0.1)' }}>
+        <p style={{ color: '#A7EBF2', fontSize: '0.8rem' }}>
           Limits: Maximum 2 bank accounts and 1 UPI method per organization.
           Currently: {bankCount}/2 bank accounts, {upiCount}/1 UPI.
         </p>

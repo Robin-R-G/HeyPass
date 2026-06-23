@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface ManualCert {
   id: string;
@@ -27,6 +29,7 @@ interface CertType {
 
 export default function EventCertsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const [certs, setCerts] = useState<ManualCert[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [certTypes, setCertTypes] = useState<CertType[]>([]);
@@ -116,6 +119,13 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Certs</span>
+      </nav>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Certificates</h1>
@@ -132,7 +142,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {[
           { label: 'Total', value: stats.total, color: '#fff' },
-          { label: 'Generated', value: stats.generated, color: '#6366f1' },
+          { label: 'Generated', value: stats.generated, color: '#54ACBF' },
           { label: 'Downloaded', value: stats.downloaded, color: '#10b981' },
           { label: 'Revoked', value: stats.revoked, color: '#ef4444' },
         ].map((s) => (
@@ -191,9 +201,34 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
             </div>
 
             <div style={{ marginTop: '1rem', display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-              <button className="hp-btn hp-btn-secondary">Download PDF</button>
-              <button className="hp-btn hp-btn-secondary">Download PNG</button>
-              <button className="hp-btn hp-btn-ghost" style={{ color: '#818cf8' }}>Share Link</button>
+              <button
+                className="hp-btn hp-btn-secondary"
+                onClick={() => {
+                  if (showPreview.pdf_url) {
+                    window.open(showPreview.pdf_url, '_blank');
+                  } else {
+                    window.location.href = `/api/events/${eventId}/certs/${showPreview.id}/download?format=pdf`;
+                  }
+                }}
+              >Download PDF</button>
+              <button
+                className="hp-btn hp-btn-secondary"
+                onClick={() => {
+                  window.location.href = `/api/events/${eventId}/certs/${showPreview.id}/download?format=png`;
+                }}
+              >Download PNG</button>
+              <button
+                className="hp-btn hp-btn-ghost"
+                style={{ color: '#A7EBF2' }}
+                onClick={() => {
+                  const url = `${window.location.origin}/verify?token=${showPreview.access_token}`;
+                  navigator.clipboard.writeText(url).then(() => {
+                    alert('Share link copied to clipboard!');
+                  }).catch(() => {
+                    prompt('Copy this link:', url);
+                  });
+                }}
+              >Share Link</button>
             </div>
           </div>
         </div>
@@ -294,7 +329,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <div style={{
                     width: '40px', height: '40px', borderRadius: '0.5rem',
-                    background: c.status === 'revoked' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(99, 102, 241, 0.15)',
+                    background: c.status === 'revoked' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(84, 172, 191, 0.15)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem',
                   }}>
                     📜

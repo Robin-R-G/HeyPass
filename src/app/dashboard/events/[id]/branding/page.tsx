@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface EventBrandingData {
   banner_url: string | null;
@@ -20,6 +22,7 @@ interface EventBrandingPageProps {
 
 export default function EventBrandingPage({ params }: EventBrandingPageProps) {
   const eventId = params.id;
+  const router = useRouter();
 
   const [branding, setBranding] = useState<EventBrandingData>({
     banner_url: null,
@@ -133,6 +136,13 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Branding</span>
+      </nav>
       <h1 className="text-2xl font-bold mb-2">Event Branding</h1>
       <p className="text-gray-500 mb-6">
         Customize the look and feel of this event. Overrides client branding.

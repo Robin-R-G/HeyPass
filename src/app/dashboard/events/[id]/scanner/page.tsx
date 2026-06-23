@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useCallback, use } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useOfflineSync } from '@/hooks/use-offline-sync';
 
 interface ScanResult {
@@ -25,6 +27,7 @@ interface ScanLog {
 
 export default function ScannerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
+  const router = useRouter();
   const { isOnline, pendingCount, queueScan, syncPendingScans, syncing } = useOfflineSync();
   const [scanType, setScanType] = useState<'check_in' | 'check_out'>('check_in');
   const [manualInput, setManualInput] = useState('');
@@ -131,6 +134,15 @@ export default function ScannerPage({ params }: { params: Promise<{ id: string }
 
   return (
     <div style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto', minHeight: '100vh' }}>
+      {/* Navigation */}
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Scanner</span>
+      </nav>
+
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff' }}>QR Scanner</h1>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ interface VolunteerStats { total: number; approved: number; pending: number; che
 
 export default function VolunteerPage() {
   const params = useParams();
+  const router = useRouter();
   const eventId = params.id as string;
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [tasks, setTasks] = useState<VolunteerTask[]>([]);
@@ -27,6 +28,11 @@ export default function VolunteerPage() {
   const [search, setSearch] = useState("");
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
   const [newTask, setNewTask] = useState({ title: "", description: "", task_type: "general", task_location: "", start_time: "", end_time: "", slots_total: 1 });
+  const [msgGroup, setMsgGroup] = useState("all");
+  const [msgSubject, setMsgSubject] = useState("");
+  const [msgBody, setMsgBody] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendResult, setSendResult] = useState<{ success: boolean; message: string } | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -48,6 +54,24 @@ export default function VolunteerPage() {
     setTasks(tData.tasks || []);
   };
 
+  const sendMessage = async () => {
+    if (!msgSubject || !msgBody) return;
+    setSending(true);
+    try {
+      const res = await fetch(`/api/events/${eventId}/volunteers/message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ group: msgGroup, subject: msgSubject, message: msgBody }),
+      });
+      const data = await res.json();
+      setSendResult({ success: res.ok, message: res.ok ? `Message sent to ${data.sent || 'volunteers'}` : (data.error || "Failed to send") });
+      if (res.ok) { setMsgSubject(""); setMsgBody(""); }
+    } catch {
+      setSendResult({ success: false, message: "Network error" });
+    }
+    setSending(false);
+  };
+
   const filtered = volunteers.filter(v => `${v.first_name} ${v.last_name} ${v.email}`.toLowerCase().includes(search.toLowerCase()));
 
   const statusColor = (s: string) => {
@@ -58,12 +82,12 @@ export default function VolunteerPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/dashboard" className="hover:text-gray-700">Dashboard</Link>
-        <span>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hover:text-gray-700">Event</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">Volunteers</span>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
+        <span style={{ color: '#5a7a8a' }}>/</span>
+        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Volunteers</span>
       </nav>
 
       <div className="flex items-center justify-between mb-6">
@@ -208,7 +232,7 @@ export default function VolunteerPage() {
             <CardHeader><CardTitle>Bulk Communication</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div><Label>Recipient Group</Label>
-                <Select defaultValue="all">
+                <Select value={msgGroup} onValueChange={setMsgGroup}>
                   <SelectTrigger className="w-64"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Volunteers</SelectItem>
@@ -218,9 +242,16 @@ export default function VolunteerPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div><Label>Subject</Label><Input placeholder="Message subject..." /></div>
-              <div><Label>Message</Label><Input placeholder="Type your message..." /></div>
-              <Button>Send Message</Button>
+              <div><Label>Subject</Label><Input placeholder="Message subject..." value={msgSubject} onChange={e => setMsgSubject(e.target.value)} /></div>
+              <div><Label>Message</Label><Input placeholder="Type your message..." value={msgBody} onChange={e => setMsgBody(e.target.value)} /></div>
+              <Button onClick={sendMessage} disabled={!msgSubject || !msgBody || sending}>
+                {sending ? "Sending..." : "Send Message"}
+              </Button>
+              {sendResult && (
+                <div className={`border rounded-lg p-3 ${sendResult.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+                  <p className={`font-medium text-sm ${sendResult.success ? "text-green-800" : "text-red-800"}`}>{sendResult.message}</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
