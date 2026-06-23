@@ -58,7 +58,8 @@ export async function addExportJob(data: {
   return exportQueue.add('export-certificates', data, {
     attempts: 2,
     backoff: { type: 'fixed', delay: 10000 },
-    timeout: 600000,
+    removeOnComplete: true,
+    removeOnFail: true,
   });
 }
 
