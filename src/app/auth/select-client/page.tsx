@@ -98,7 +98,7 @@ export default function SelectClientPage() {
                   {selecting === c.client_id ? 'Selecting...' : c.name}
                 </div>
                 <div style={{ color: '#888888', fontSize: '0.8rem', marginTop: '0.2rem' }}>
-                  {c.role} · {c.slug}
+                  {c.role} {'\u00B7'} {c.slug}
                 </div>
               </button>
             ))}
