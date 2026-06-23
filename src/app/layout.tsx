@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { PWAInstallPrompt } from "@/components/pwa-install";
+import { AuthInterceptor } from "@/components/auth-interceptor";
 import "./globals.css";
 import { PWARegister } from "./pwa-register";
 
@@ -84,6 +85,7 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <ThemeProvider>
+          <AuthInterceptor />
           <div className="hp-bg-gradient" />
           <div className="min-h-screen">{children}</div>
           <PWAInstallPrompt />

@@ -106,21 +106,9 @@ async function handleMiddleware(request: NextRequest) {
     return response;
   }
 
-  // Page routes
-  const isAuthPath = pathname.startsWith('/auth/') || pathname === '/login' || pathname === '/register';
-
-  if (user && isAuthPath) {
-    if (pathname !== '/auth/select-client') {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
-  }
-
-  if (!user && !isPublicPath(pathname)) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/auth/login';
-    url.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(url);
-  }
+  // Page routes — let client-side code handle auth via localStorage JWT tokens
+  // Middleware only redirects for pure page routes if user is not authenticated
+  // Client components check localStorage and handle auth display
 
   return response;
 }

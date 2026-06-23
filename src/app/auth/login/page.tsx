@@ -32,9 +32,10 @@ function LoginForm() {
         return;
       }
 
-      if (data.tokens?.access_token) {
-        localStorage.setItem('access_token', data.tokens.access_token);
-        localStorage.setItem('refresh_token', data.tokens.refresh_token);
+      const tokens = data.data?.tokens || data.data?.session;
+      if (tokens?.access_token) {
+        localStorage.setItem('access_token', tokens.access_token);
+        localStorage.setItem('refresh_token', tokens.refresh_token);
       }
 
       router.push(redirect);

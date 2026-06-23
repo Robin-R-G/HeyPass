@@ -1,35 +1,40 @@
 import Redis from 'ioredis';
 
 let redis: Redis | null = null;
+let redisAvailable: boolean | null = null;
 
-export function getRedisClient(): Redis {
+function getRedisClient(): Redis | null {
+  if (redisAvailable === false) return null;
   if (redis) return redis;
 
   const url = process.env.REDIS_URL;
 
   if (!url) {
-    throw new Error(
-      'FATAL: REDIS_URL environment variable is not set. ' +
-      'Application requires Redis for session management and caching.'
-    );
+    console.warn('[Redis] REDIS_URL not set. Running without cache/session store.');
+    redisAvailable = false;
+    return null;
   }
 
   redis = new Redis(url, {
-    maxRetriesPerRequest: 3,
+    maxRetriesPerRequest: 1,
     retryStrategy(times) {
-      const delay = Math.min(times * 200, 2000);
-      return delay;
+      if (times > 3) return null;
+      return Math.min(times * 200, 2000);
     },
+    connectTimeout: 3000,
+    commandTimeout: 3000,
     lazyConnect: true,
     keyPrefix: 'heypass:',
   });
 
   redis.on('error', (err) => {
     console.error('[Redis] Connection error:', err.message);
+    redisAvailable = false;
   });
 
   redis.on('connect', () => {
     console.log('[Redis] Connected');
+    redisAvailable = true;
   });
 
   return redis;
@@ -38,6 +43,7 @@ export function getRedisClient(): Redis {
 export async function cacheGet<T>(key: string): Promise<T | null> {
   try {
     const client = getRedisClient();
+    if (!client) return null;
     const data = await client.get(key);
 
     if (!data) return null;
@@ -59,6 +65,7 @@ export async function cacheGet<T>(key: string): Promise<T | null> {
 export async function cacheSet(key: string, value: unknown, ttlSeconds?: number): Promise<void> {
   try {
     const client = getRedisClient();
+    if (!client) return;
     const jsonValue = JSON.stringify(value);
 
     // Encrypt sensitive data (session data, PII)
@@ -77,6 +84,7 @@ export async function cacheSet(key: string, value: unknown, ttlSeconds?: number)
 export async function cacheDelete(key: string): Promise<void> {
   try {
     const client = getRedisClient();
+    if (!client) return;
     await client.del(key);
   } catch (err) {
     console.error(`[Cache] Delete error for key ${key}:`, err);
@@ -86,6 +94,7 @@ export async function cacheDelete(key: string): Promise<void> {
 export async function cacheIncrement(key: string): Promise<number> {
   try {
     const client = getRedisClient();
+    if (!client) return 0;
     return await client.incr(key);
   } catch (err) {
     console.error(`[Cache] Increment error for key ${key}:`, err);
@@ -100,6 +109,7 @@ export async function cacheSetWithExpire(
 ): Promise<void> {
   try {
     const client = getRedisClient();
+    if (!client) return;
     const encrypted = await encryptData(JSON.stringify(value));
     await client.setex(key, ttlSeconds, encrypted);
   } catch (err) {
@@ -114,6 +124,7 @@ export async function checkRateLimit(
 ): Promise<{ allowed: boolean; remaining: number; retryAfter?: number }> {
   try {
     const client = getRedisClient();
+    if (!client) return { allowed: true, remaining: maxAttempts, retryAfter: undefined };
     const now = Date.now();
     const windowStart = now - windowSeconds * 1000;
 
@@ -245,6 +256,7 @@ async function decryptData(data: string): Promise<string> {
 export async function cacheHealthCheck(): Promise<boolean> {
   try {
     const client = getRedisClient();
+    if (!client) return false;
     const result = await client.ping();
     return result === 'PONG';
   } catch {

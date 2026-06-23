@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { authFetch, isAuthenticated } from '@/lib/auth-client';
 
 interface Event {
   id: string;
@@ -23,10 +24,14 @@ export default function DashboardPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('/api/events')
+    if (!isAuthenticated()) {
+      window.location.href = '/auth/login';
+      return;
+    }
+    authFetch('/api/events')
       .then(r => r.json())
       .then(data => {
-        setEvents(data.events || data || []);
+        setEvents(data.events || data.data || data || []);
         setLoading(false);
       })
       .catch(() => {
