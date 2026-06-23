@@ -3,12 +3,19 @@
 import Link from 'next/link';
 
 const FEATURES = [
-  { icon: '📋', title: 'Registration', desc: 'Custom forms with conditional logic, file uploads, and real-time analytics.' },
-  { icon: '📱', title: 'Check-In/Out', desc: 'QR scanning, multi-gate support, and live attendance dashboards.' },
-  { icon: '🎓', title: 'Certificates', desc: 'Auto-generated PDFs with branded templates, verification, and share links.' },
-  { icon: '📊', title: 'Analytics', desc: 'Revenue reports, attendance insights, and exportable CSV data.' },
-  { icon: '🏷️', title: 'White Label', desc: 'Custom domains, branding overrides, and per-event theming.' },
-  { icon: '⚡', title: 'Offline Ready', desc: 'Queue scans offline and sync automatically when reconnected.' },
+  { icon: '📋', title: 'Smart Registration', desc: 'Custom forms with conditional logic, multi-step flows, file uploads, and real-time analytics.' },
+  { icon: '📱', title: 'QR Check-In/Out', desc: 'Instant QR scanning, multi-gate support, offline mode, and live attendance tracking.' },
+  { icon: '🎓', title: 'Auto Certificates', desc: 'Generate branded PDFs in bulk, share via link, and verify authenticity instantly.' },
+  { icon: '📊', title: 'Live Analytics', desc: 'Revenue reports, attendance heatmaps, session insights, and one-click CSV exports.' },
+  { icon: '🏷️', title: 'White Label', desc: 'Custom domains, logo overrides, per-event theming, and branded email templates.' },
+  { icon: '⚡', title: 'Works Offline', desc: 'Queue scans without internet and sync automatically when reconnected.' },
+];
+
+const STATS = [
+  { value: '10K+', label: 'Events Managed' },
+  { value: '500K+', label: 'Registrations' },
+  { value: '99.9%', label: 'Uptime' },
+  { value: '50+', label: 'Colleges & Orgs' },
 ];
 
 export default function Home() {
@@ -32,23 +39,22 @@ export default function Home() {
           }}>HeyPass</span>
         </Link>
 
-        <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-          <Link href="/auth/register" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 400, letterSpacing: '-0.01em' }}>Register</Link>
-          <Link href="/verify" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 400, letterSpacing: '-0.01em' }}>Verify</Link>
-          <Link href="/dashboard" style={{
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+          <Link href="/verify" style={{ color: '#888', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 400, transition: 'color 0.15s' }}>Verify</Link>
+          <Link href="/auth/login" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Sign In</Link>
+          <Link href="/auth/register" style={{
             background: '#FCA311', color: '#000',
-            padding: '0.45rem 1rem', borderRadius: '980px',
-            textDecoration: 'none', fontSize: '0.8rem', fontWeight: 500,
-          }}>Dashboard</Link>
+            padding: '0.5rem 1.1rem', borderRadius: '980px',
+            textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600,
+          }}>Get Started</Link>
         </div>
       </nav>
 
       {/* Hero */}
       <main style={{
         flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        padding: '8rem 2rem 6rem', textAlign: 'center', position: 'relative', overflow: 'hidden',
+        padding: '7rem 2rem 5rem', textAlign: 'center', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Subtle gradient orbs */}
         <div style={{
           position: 'absolute', width: '600px', height: '600px', borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(252,163,17,0.06) 0%, transparent 70%)',
@@ -60,62 +66,84 @@ export default function Home() {
           bottom: '-10%', right: '-5%', pointerEvents: 'none',
         }} />
 
-        <p style={{
-          fontSize: '0.75rem', color: '#888', marginBottom: '1.5rem',
-          fontWeight: 400, letterSpacing: '0.08em', textTransform: 'uppercase',
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          background: 'rgba(252,163,17,0.08)', border: '1px solid rgba(252,163,17,0.15)',
+          borderRadius: '980px', padding: '0.4rem 1rem', marginBottom: '2rem',
         }}>
-          Event Operations Platform
-        </p>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#FCA311' }} />
+          <span style={{ fontSize: '0.75rem', color: '#FCA311', fontWeight: 500 }}>Now in Public Beta</span>
+        </div>
 
         <h1 style={{
-          fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 700, lineHeight: 1.05,
-          marginBottom: '1.5rem', maxWidth: '800px', letterSpacing: '-0.04em',
+          fontSize: 'clamp(2.8rem, 7vw, 5rem)', fontWeight: 700, lineHeight: 1.05,
+          marginBottom: '1.5rem', maxWidth: '750px', letterSpacing: '-0.04em',
         }}>
-          Run Events{' '}
-          <span style={{ color: '#FCA311' }}>Smarter</span>
+          The Event Platform{' '}
+          <span style={{ color: '#FCA311' }}>That Just Works</span>
         </h1>
 
         <p style={{
-          fontSize: '1.15rem', color: '#888', maxWidth: '480px',
-          lineHeight: 1.6, marginBottom: '3rem', fontWeight: 400, letterSpacing: '-0.01em',
+          fontSize: '1.1rem', color: '#888', maxWidth: '500px',
+          lineHeight: 1.6, marginBottom: '2.5rem', fontWeight: 400, letterSpacing: '-0.01em',
         }}>
-          Registration, check-in, certificates, analytics — all in one platform built for colleges, conferences, and communities.
+          Registration, check-in, certificates, analytics — everything you need to run professional events, built for colleges, conferences, and communities.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Link href="/dashboard" style={{
+          <Link href="/auth/register" style={{
             background: '#FCA311', color: '#000',
             padding: '0.85rem 2rem', borderRadius: '980px',
-            textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem',
+            textDecoration: 'none', fontWeight: 600, fontSize: '0.95rem',
             letterSpacing: '-0.01em',
-          }}>Get Started</Link>
+          }}>Start for Free</Link>
           <Link href="/verify" style={{
-            background: 'transparent', border: '1px solid rgba(229,229,229,0.2)',
+            background: 'transparent', border: '1px solid rgba(229,229,229,0.15)',
             color: '#E5E5E5', padding: '0.85rem 2rem', borderRadius: '980px',
             textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem',
             letterSpacing: '-0.01em',
-          }}>Verify Certificate</Link>
+          }}>Verify a Certificate</Link>
         </div>
       </main>
 
-      {/* Features */}
+      {/* Stats Bar */}
       <section style={{
-        padding: '6rem 2rem',
         borderTop: '1px solid rgba(229,229,229,0.06)',
+        borderBottom: '1px solid rgba(229,229,229,0.06)',
+        padding: '2.5rem 2rem',
       }}>
+        <div style={{
+          maxWidth: '900px', margin: '0 auto',
+          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem',
+          textAlign: 'center',
+        }}>
+          {STATS.map(s => (
+            <div key={s.label}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#FCA311', letterSpacing: '-0.02em' }}>{s.value}</div>
+              <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.25rem' }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section style={{ padding: '6rem 2rem' }}>
         <div style={{ maxWidth: '980px', margin: '0 auto' }}>
+          <p style={{
+            fontSize: '0.75rem', color: '#FCA311', textAlign: 'center', marginBottom: '0.75rem',
+            fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase',
+          }}>Features</p>
           <h2 style={{
-            fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700,
-            textAlign: 'center', marginBottom: '0.75rem', letterSpacing: '-0.03em',
+            fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700,
+            textAlign: 'center', marginBottom: '0.5rem', letterSpacing: '-0.03em',
           }}>
             Everything you need.
           </h2>
           <p style={{
-            textAlign: 'center', color: '#888', fontSize: '1rem',
-            marginBottom: '4rem', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto',
-            letterSpacing: '-0.01em',
+            textAlign: 'center', color: '#888', fontSize: '0.95rem',
+            marginBottom: '4rem', maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto',
           }}>
-            From registration to certificates. One platform, zero hassle.
+            One platform to run it all. No more juggling 5 different tools.
           </p>
 
           <div style={{
@@ -136,21 +164,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section style={{
+        padding: '5rem 2rem', textAlign: 'center',
+        borderTop: '1px solid rgba(229,229,229,0.06)',
+      }}>
+        <h2 style={{
+          fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 700,
+          marginBottom: '1rem', letterSpacing: '-0.03em',
+        }}>
+          Ready to run better events?
+        </h2>
+        <p style={{ color: '#888', fontSize: '0.95rem', marginBottom: '2rem', maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto' }}>
+          Free to start. No credit card required. Set up in under 5 minutes.
+        </p>
+        <Link href="/auth/register" style={{
+          display: 'inline-block',
+          background: '#FCA311', color: '#000',
+          padding: '0.85rem 2.5rem', borderRadius: '980px',
+          textDecoration: 'none', fontWeight: 600, fontSize: '1rem',
+        }}>Create Your Account</Link>
+      </section>
+
       {/* Footer */}
       <footer style={{
         padding: '3rem 2rem',
         borderTop: '1px solid rgba(229,229,229,0.06)',
-        textAlign: 'center',
       }}>
-        <p style={{ fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>
-          HeyPass Event Operations Platform
-        </p>
-        <p style={{ fontSize: '0.8rem', color: '#555', marginBottom: '0.35rem' }}>
-          Developed from Kerala with ❤
-        </p>
-        <p style={{ fontSize: '0.7rem', color: '#444' }}>
-          &copy; 2026 Robin R G. All Rights Reserved.
-        </p>
+        <div style={{
+          maxWidth: '980px', margin: '0 auto',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          flexWrap: 'wrap', gap: '1rem',
+        }}>
+          <div>
+            <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#fff' }}>HeyPass</span>
+            <p style={{ fontSize: '0.75rem', color: '#555', marginTop: '0.25rem' }}>
+              Developed from Kerala with ❤ · Robin R G · &copy; 2026
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            <Link href="/auth/login" style={{ color: '#888', textDecoration: 'none', fontSize: '0.8rem' }}>Sign In</Link>
+            <Link href="/auth/register" style={{ color: '#888', textDecoration: 'none', fontSize: '0.8rem' }}>Sign Up</Link>
+            <Link href="/verify" style={{ color: '#888', textDecoration: 'none', fontSize: '0.8rem' }}>Verify</Link>
+          </div>
+        </div>
       </footer>
     </div>
   );

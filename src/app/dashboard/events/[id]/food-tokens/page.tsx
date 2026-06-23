@@ -97,7 +97,7 @@ export default function FoodTokensPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Food Tokens</h1>
         <div className="flex gap-2">
-          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Dashboard</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Event</Button></Link>
           <Link href={`/dashboard/events/${eventId}/food-tokens`}><Button size="sm">Food Tokens</Button></Link>
         </div>
       </div>

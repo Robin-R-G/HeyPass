@@ -60,7 +60,7 @@ export default function SponsorsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Sponsor Management</h1>
         <div className="flex gap-2">
-          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Dashboard</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Event</Button></Link>
           <Link href={`/dashboard/events/${eventId}/sponsors`}><Button size="sm">Sponsors</Button></Link>
         </div>
       </div>

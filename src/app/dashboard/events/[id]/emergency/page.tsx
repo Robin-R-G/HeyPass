@@ -91,7 +91,7 @@ export default function EmergencyPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Emergency Dashboard</h1>
         <div className="flex gap-2">
-          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Dashboard</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Event</Button></Link>
           <Link href={`/dashboard/events/${eventId}/emergency`}><Button size="sm">Emergency</Button></Link>
         </div>
       </div>

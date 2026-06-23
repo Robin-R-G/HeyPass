@@ -95,7 +95,7 @@ export default function SuperAdminPage() {
           }}>Superadmin</span>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <Link href="/superadmin" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Dashboard</Link>
+          <Link href="/superadmin" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Overview</Link>
           <button onClick={logout} style={{
             background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: 'none',
             padding: '0.4rem 0.8rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem',

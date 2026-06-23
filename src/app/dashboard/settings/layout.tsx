@@ -41,7 +41,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           }}
         >
           <span style={{ fontSize: '1rem' }}>←</span>
-          Back to Dashboard
+          Back to Events
         </Link>
 
         <div style={{

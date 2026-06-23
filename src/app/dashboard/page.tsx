@@ -72,12 +72,12 @@ export default function DashboardPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
       {/* Nav */}
       <nav style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
+        background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(16px)',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
           <div style={{
@@ -88,9 +88,11 @@ export default function DashboardPage() {
           }}>H</div>
           <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>HeyPass</span>
         </Link>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <Link href="/" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Home</Link>
-          <Link href="/dashboard/settings/branding" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Settings</Link>
+        <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+          <Link href="/dashboard" style={{ color: '#FCA311', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>Events</Link>
+          <Link href="/dashboard/settings/branding" style={{ color: '#888', textDecoration: 'none', fontSize: '0.85rem' }}>Settings</Link>
+          <button onClick={() => { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); window.location.href = '/auth/login'; }}
+            style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 500 }}>Sign Out</button>
         </div>
       </nav>
 

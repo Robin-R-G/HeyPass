@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -71,7 +71,7 @@ export default function SelectClientPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
       <div style={{ width: '100%', maxWidth: '480px', padding: '1.5rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>Select Organization</h1>
@@ -83,7 +83,7 @@ export default function SelectClientPage() {
         ) : clients.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '2rem', background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)', borderRadius: '16px' }}>
             <p style={{ color: '#E5E5E5', marginBottom: '1rem' }}>No organizations found.</p>
-            <Link href="/dashboard" style={{ color: '#FCA311', textDecoration: 'none', fontWeight: 500 }}>Continue to Dashboard →</Link>
+            <Link href="/dashboard" style={{ color: '#FCA311', textDecoration: 'none', fontWeight: 500 }}>Continue to App ?</Link>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -98,7 +98,7 @@ export default function SelectClientPage() {
                   {selecting === c.client_id ? 'Selecting...' : c.name}
                 </div>
                 <div style={{ color: '#888888', fontSize: '0.8rem', marginTop: '0.2rem' }}>
-                  {c.role} · {c.slug}
+                  {c.role} � {c.slug}
                 </div>
               </button>
             ))}
