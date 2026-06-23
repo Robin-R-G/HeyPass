@@ -35,7 +35,7 @@ class RegistrationLinkServiceImpl {
   }
 
   private getBaseUrl(): string {
-    return process.env.NEXT_PUBLIC_APP_URL || 'https://heypass.app';
+    return process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app';
   }
 
   async list(clientId: string, eventId?: string): Promise<RegistrationLink[]> {

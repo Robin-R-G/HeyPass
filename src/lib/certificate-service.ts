@@ -448,7 +448,7 @@ class CertificateServiceImpl {
     return {
       token,
       expiresAt,
-      url: `https://heypass.app/cert/${token}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app'}/cert/${token}`,
     };
   }
 

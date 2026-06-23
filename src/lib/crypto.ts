@@ -153,6 +153,6 @@ export function generateQRCodeData(
   verificationCode: string,
   clientId: string
 ): string {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://heypass.app';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app';
   return `${baseUrl}/verify?id=${certificateId}&code=${verificationCode}&client=${clientId}`;
 }
