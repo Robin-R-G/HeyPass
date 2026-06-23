@@ -57,7 +57,7 @@ export default function DashboardPage() {
             width: '32px', height: '32px', borderRadius: '8px',
             background: 'linear-gradient(135deg, #FCA311, #E09800)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 800, fontSize: '0.9rem', color: '#fff',
+            fontWeight: 800, fontSize: '0.9rem', color: '#000',
           }}>H</div>
           <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>HeyPass</span>
         </Link>
@@ -102,7 +102,7 @@ export default function DashboardPage() {
               onClick={() => router.push('/dashboard/events/new')}
               style={{
                 background: 'linear-gradient(135deg, #FCA311, #E09800)',
-                color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '10px',
+                color: '#000', padding: '0.75rem 1.5rem', borderRadius: '10px',
                 border: 'none', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               }}
             >

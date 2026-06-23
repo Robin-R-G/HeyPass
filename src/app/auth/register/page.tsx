@@ -61,7 +61,7 @@ export default function RegisterPage() {
                 width: '40px', height: '40px', borderRadius: '10px',
                 background: 'linear-gradient(135deg, #FCA311, #E09800)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 800, fontSize: '1.1rem', color: '#fff',
+                fontWeight: 800, fontSize: '1.1rem', color: '#000',
               }}>H</div>
               <span style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fff' }}>HeyPass</span>
             </div>
@@ -129,7 +129,7 @@ export default function RegisterPage() {
               style={{
                 width: '100%', padding: '0.75rem', borderRadius: '10px', border: 'none',
                 background: 'linear-gradient(135deg, #FCA311, #E09800)',
-                color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
+                color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
                 opacity: loading || !email || !password || !confirmPassword ? 0.5 : 1,
               }}
             >

@@ -12,7 +12,7 @@ export default function NotFound() {
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
           <Link href="/" style={{
             background: 'linear-gradient(135deg, #FCA311, #E09800)',
-            color: '#fff', padding: '0.7rem 1.5rem', borderRadius: '10px',
+            color: '#000', padding: '0.7rem 1.5rem', borderRadius: '10px',
             textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem',
           }}>Go Home</Link>
           <Link href="/dashboard" style={{

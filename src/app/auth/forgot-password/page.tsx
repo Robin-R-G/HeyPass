@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, #FCA311, #E09800)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.1rem', color: '#fff' }}>H</div>
+               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, #FCA311, #E09800)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.1rem', color: '#000' }}>H</div>
               <span style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fff' }}>HeyPass</span>
             </div>
           </Link>
@@ -79,7 +79,7 @@ export default function ForgotPasswordPage() {
                 style={{
                   width: '100%', padding: '0.75rem', borderRadius: '10px', border: 'none',
                   background: 'linear-gradient(135deg, #FCA311, #E09800)',
-                  color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
+                  color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
                   opacity: loading || !email ? 0.5 : 1,
                 }}
               >

@@ -106,7 +106,7 @@ export default function VerifyPage() {
             style={{
               width: '100%', padding: '0.7rem', borderRadius: '8px', border: 'none',
               background: 'linear-gradient(135deg, #FCA311, #E09800)',
-              color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
+              color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               opacity: loading || !input.trim() ? 0.5 : 1,
             }}>
             {loading ? 'Verifying...' : 'Verify Certificate'}

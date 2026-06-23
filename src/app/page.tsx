@@ -3,286 +3,133 @@
 import Link from 'next/link';
 
 const FEATURES = [
-  {
-    icon: '📋',
-    title: 'Registration',
-    desc: 'Custom forms with conditional logic, file uploads, and real-time analytics.',
-  },
-  {
-    icon: '📱',
-    title: 'Check-In/Out',
-    desc: 'QR scanning, multi-gate support, and live attendance dashboards.',
-  },
-  {
-    icon: '🎓',
-    title: 'Certificates',
-    desc: 'Auto-generated PDFs with branded templates, verification, and share links.',
-  },
-  {
-    icon: '📊',
-    title: 'Analytics',
-    desc: 'Revenue reports, attendance insights, and exportable CSV data.',
-  },
-  {
-    icon: '🏷️',
-    title: 'White Label',
-    desc: 'Custom domains, branding overrides, and per-event theming.',
-  },
-  {
-    icon: '⚡',
-    title: 'Offline Ready',
-    desc: 'Queue scans offline and sync automatically when reconnected.',
-  },
+  { icon: '📋', title: 'Registration', desc: 'Custom forms with conditional logic, file uploads, and real-time analytics.' },
+  { icon: '📱', title: 'Check-In/Out', desc: 'QR scanning, multi-gate support, and live attendance dashboards.' },
+  { icon: '🎓', title: 'Certificates', desc: 'Auto-generated PDFs with branded templates, verification, and share links.' },
+  { icon: '📊', title: 'Analytics', desc: 'Revenue reports, attendance insights, and exportable CSV data.' },
+  { icon: '🏷️', title: 'White Label', desc: 'Custom domains, branding overrides, and per-event theming.' },
+  { icon: '⚡', title: 'Offline Ready', desc: 'Queue scans offline and sync automatically when reconnected.' },
 ];
 
 export default function Home() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      background: '#000000',
-      color: '#fff',
-      fontFamily: 'var(--font-inter, system-ui, sans-serif)',
-    }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#000', color: '#fff', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}>
+
       {/* Nav */}
       <nav style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '1.25rem 2.5rem',
-        borderBottom: '1px solid rgba(229,229,229,0.08)',
-        background: 'rgba(20,33,61,0.6)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '1rem 2.5rem',
+        borderBottom: '1px solid rgba(229,229,229,0.06)',
+        background: 'rgba(0,0,0,0.8)',
+        backdropFilter: 'saturate(180%) blur(20px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+        position: 'sticky', top: 0, zIndex: 50,
       }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
-          <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #FCA311, #E09800)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 800,
-            fontSize: '1.1rem',
-            color: '#fff',
-            boxShadow: '0 2px 12px rgba(252,163,17,0.3)',
-          }}>H</div>
-          <span style={{ fontSize: '1.3rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em' }}>HeyPass</span>
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <span style={{
+            fontSize: '1.25rem', fontWeight: 600, color: '#fff',
+            letterSpacing: '-0.025em',
+          }}>HeyPass</span>
         </Link>
 
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <Link href="/auth/register" style={{
-            color: '#E5E5E5',
-            textDecoration: 'none',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-            padding: '0.5rem 0.75rem',
-            borderRadius: '8px',
-            transition: 'color 0.15s',
-          }}>Register</Link>
-          <Link href="/verify" style={{
-            color: '#E5E5E5',
-            textDecoration: 'none',
-            fontSize: '0.875rem',
-            fontWeight: 500,
-            padding: '0.5rem 0.75rem',
-            borderRadius: '8px',
-            transition: 'color 0.15s',
-          }}>Verify</Link>
+        <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+          <Link href="/auth/register" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 400, letterSpacing: '-0.01em' }}>Register</Link>
+          <Link href="/verify" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 400, letterSpacing: '-0.01em' }}>Verify</Link>
           <Link href="/dashboard" style={{
-            background: 'linear-gradient(135deg, #FCA311, #E09800)',
-            color: '#fff',
-            padding: '0.6rem 1.4rem',
-            borderRadius: '10px',
-            textDecoration: 'none',
-            fontSize: '0.875rem',
-            fontWeight: 600,
-            boxShadow: '0 2px 12px rgba(252,163,17,0.3)',
-            transition: 'transform 0.15s, box-shadow 0.15s',
+            background: '#FCA311', color: '#000',
+            padding: '0.45rem 1rem', borderRadius: '980px',
+            textDecoration: 'none', fontSize: '0.8rem', fontWeight: 500,
           }}>Dashboard</Link>
         </div>
       </nav>
 
       {/* Hero */}
       <main style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '6rem 2rem 4rem',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden',
+        flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: '8rem 2rem 6rem', textAlign: 'center', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Decorative orbs */}
+        {/* Subtle gradient orbs */}
         <div style={{
-          position: 'absolute',
-          width: '500px',
-          height: '500px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(252,163,17,0.12) 0%, transparent 70%)',
-          top: '-10%',
-          left: '-10%',
-          pointerEvents: 'none',
+          position: 'absolute', width: '600px', height: '600px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(252,163,17,0.06) 0%, transparent 70%)',
+          top: '-15%', left: '-10%', pointerEvents: 'none',
         }} />
         <div style={{
-          position: 'absolute',
-          width: '400px',
-          height: '400px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(38,101,140,0.15) 0%, transparent 70%)',
-          bottom: '-5%',
-          right: '-5%',
-          pointerEvents: 'none',
+          position: 'absolute', width: '500px', height: '500px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(252,163,17,0.04) 0%, transparent 70%)',
+          bottom: '-10%', right: '-5%', pointerEvents: 'none',
         }} />
 
-        <div style={{
-          padding: '0.4rem 1.2rem',
-          borderRadius: '9999px',
-          background: 'rgba(252,163,17,0.1)',
-          border: '1px solid rgba(252,163,17,0.2)',
-          fontSize: '0.8rem',
-          color: '#E5E5E5',
-          marginBottom: '2rem',
-          fontWeight: 500,
-          letterSpacing: '0.02em',
+        <p style={{
+          fontSize: '0.75rem', color: '#888', marginBottom: '1.5rem',
+          fontWeight: 400, letterSpacing: '0.08em', textTransform: 'uppercase',
         }}>
-          White Label Event Operations Platform
-        </div>
+          Event Operations Platform
+        </p>
 
         <h1 style={{
-          fontSize: 'clamp(2.5rem, 6vw, 4.2rem)',
-          fontWeight: 800,
-          lineHeight: 1.1,
-          marginBottom: '1.5rem',
-          maxWidth: '750px',
-          letterSpacing: '-0.03em',
+          fontSize: 'clamp(3rem, 8vw, 5.5rem)', fontWeight: 700, lineHeight: 1.05,
+          marginBottom: '1.5rem', maxWidth: '800px', letterSpacing: '-0.04em',
         }}>
           Run Events{' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #FCD34D, #FCA311)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            Smarter
-          </span>
+          <span style={{ color: '#FCA311' }}>Smarter</span>
         </h1>
 
         <p style={{
-          fontSize: '1.1rem',
-          color: '#E5E5E5',
-          maxWidth: '560px',
-          lineHeight: 1.7,
-          marginBottom: '3rem',
+          fontSize: '1.15rem', color: '#888', maxWidth: '480px',
+          lineHeight: 1.6, marginBottom: '3rem', fontWeight: 400, letterSpacing: '-0.01em',
         }}>
-          Registration, check-in, certificates, badges, analytics — all in one platform.
-          Built for colleges, conferences, and communities.
+          Registration, check-in, certificates, analytics — all in one platform built for colleges, conferences, and communities.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link href="/dashboard" style={{
-            background: 'linear-gradient(135deg, #FCA311, #E09800)',
-            color: '#fff',
-            padding: '0.9rem 2.2rem',
-            borderRadius: '12px',
-            textDecoration: 'none',
-            fontWeight: 600,
-            fontSize: '1rem',
-            boxShadow: '0 4px 20px rgba(252,163,17,0.3)',
-            transition: 'transform 0.15s, box-shadow 0.15s',
-          }}>
-            Get Started
-          </Link>
+            background: '#FCA311', color: '#000',
+            padding: '0.85rem 2rem', borderRadius: '980px',
+            textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem',
+            letterSpacing: '-0.01em',
+          }}>Get Started</Link>
           <Link href="/verify" style={{
-            background: 'rgba(229,229,229,0.06)',
-            border: '1px solid rgba(229,229,229,0.15)',
-            color: '#E5E5E5',
-            padding: '0.9rem 2.2rem',
-            borderRadius: '12px',
-            textDecoration: 'none',
-            fontWeight: 600,
-            fontSize: '1rem',
-            transition: 'background 0.15s, border-color 0.15s',
-          }}>
-            Verify Certificate
-          </Link>
+            background: 'transparent', border: '1px solid rgba(229,229,229,0.2)',
+            color: '#E5E5E5', padding: '0.85rem 2rem', borderRadius: '980px',
+            textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem',
+            letterSpacing: '-0.01em',
+          }}>Verify Certificate</Link>
         </div>
       </main>
 
       {/* Features */}
       <section style={{
-        padding: '5rem 2rem',
+        padding: '6rem 2rem',
         borderTop: '1px solid rgba(229,229,229,0.06)',
-        background: 'rgba(20,33,61,0.3)',
       }}>
-        <div style={{
-          maxWidth: '1000px',
-          margin: '0 auto',
-        }}>
+        <div style={{ maxWidth: '980px', margin: '0 auto' }}>
           <h2 style={{
-            fontSize: '1.8rem',
-            fontWeight: 700,
-            textAlign: 'center',
-            marginBottom: '0.75rem',
-            letterSpacing: '-0.02em',
+            fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700,
+            textAlign: 'center', marginBottom: '0.75rem', letterSpacing: '-0.03em',
           }}>
-            Everything you need to{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #FCD34D, #FCA311)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              run events
-            </span>
+            Everything you need.
           </h2>
           <p style={{
-            textAlign: 'center',
-            color: '#E5E5E5',
-            fontSize: '0.95rem',
-            marginBottom: '3rem',
-            maxWidth: '500px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            textAlign: 'center', color: '#888', fontSize: '1rem',
+            marginBottom: '4rem', maxWidth: '440px', marginLeft: 'auto', marginRight: 'auto',
+            letterSpacing: '-0.01em',
           }}>
-            From registration to certificates — one platform, zero hassle.
+            From registration to certificates. One platform, zero hassle.
           </p>
 
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '1.25rem',
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1px',
+            background: 'rgba(229,229,229,0.06)', borderRadius: '20px', overflow: 'hidden',
           }}>
             {FEATURES.map((f) => (
               <div key={f.title} style={{
-                background: 'rgba(229,229,229,0.03)',
-                border: '1px solid rgba(229,229,229,0.08)',
-                borderRadius: '16px',
-                padding: '1.5rem',
+                background: '#000', padding: '2rem',
                 textAlign: 'left',
-                transition: 'border-color 0.2s, transform 0.2s',
               }}>
-                <div style={{
-                  fontSize: '1.5rem',
-                  marginBottom: '0.75rem',
-                }}>{f.icon}</div>
-                <h3 style={{
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  marginBottom: '0.4rem',
-                  color: '#fff',
-                }}>{f.title}</h3>
-                <p style={{
-                  fontSize: '0.85rem',
-                  color: '#E5E5E5',
-                  lineHeight: 1.6,
-                }}>{f.desc}</p>
+                <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{f.icon}</div>
+                <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.4rem', color: '#fff', letterSpacing: '-0.02em' }}>{f.title}</h3>
+                <p style={{ fontSize: '0.85rem', color: '#888', lineHeight: 1.5 }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -291,13 +138,19 @@ export default function Home() {
 
       {/* Footer */}
       <footer style={{
-        padding: '2.5rem 2rem',
+        padding: '3rem 2rem',
         borderTop: '1px solid rgba(229,229,229,0.06)',
         textAlign: 'center',
-        color: '#888888',
-        fontSize: '0.8rem',
       }}>
-        HeyPass — Event Operations Platform
+        <p style={{ fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>
+          HeyPass Event Operations Platform
+        </p>
+        <p style={{ fontSize: '0.8rem', color: '#555', marginBottom: '0.35rem' }}>
+          Developed from Kerala with ❤
+        </p>
+        <p style={{ fontSize: '0.7rem', color: '#444' }}>
+          &copy; 2026 Robin R G. All Rights Reserved.
+        </p>
       </footer>
     </div>
   );

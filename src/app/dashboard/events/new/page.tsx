@@ -113,7 +113,7 @@ export default function NewEventPage() {
             style={{
               width: '100%', padding: '0.75rem', borderRadius: '10px', border: 'none',
               background: 'linear-gradient(135deg, #FCA311, #E09800)',
-              color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
+              color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               opacity: saving || !title || !startDate || !endDate ? 0.5 : 1,
             }}>
             {saving ? 'Creating...' : 'Create Event'}
