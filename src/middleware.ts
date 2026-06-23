@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { verifyAccessToken } from '@/lib/auth';
+import { verifyAccessTokenEdge } from '@/lib/auth';
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
@@ -65,7 +65,7 @@ async function handleMiddleware(request: NextRequest) {
 
     // Parse JWT for permission checks at middleware level
     const authHeader = request.headers.get('authorization');
-    const jwtPayload = authHeader ? verifyAccessToken(authHeader.replace('Bearer ', '')) : null;
+    const jwtPayload = authHeader ? await verifyAccessTokenEdge(authHeader.replace('Bearer ', '')) : null;
 
     if (!jwtPayload) {
       return NextResponse.json(
