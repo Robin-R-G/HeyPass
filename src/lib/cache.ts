@@ -1,44 +1,58 @@
 import Redis from 'ioredis';
 
 let redis: Redis | null = null;
-let redisAvailable: boolean | null = null;
+let redisAvailable = false;
 
 function getRedisClient(): Redis | null {
-  if (redisAvailable === false) return null;
-  if (redis) return redis;
-
-  const url = process.env.REDIS_URL;
-
-  if (!url) {
-    console.warn('[Redis] REDIS_URL not set. Running without cache/session store.');
-    redisAvailable = false;
-    return null;
-  }
-
-  redis = new Redis(url, {
-    maxRetriesPerRequest: 1,
-    retryStrategy(times) {
-      if (times > 3) return null;
-      return Math.min(times * 200, 2000);
-    },
-    connectTimeout: 3000,
-    commandTimeout: 3000,
-    lazyConnect: true,
-    keyPrefix: 'heypass:',
-  });
-
-  redis.on('error', (err) => {
-    console.error('[Redis] Connection error:', err.message);
-    redisAvailable = false;
-  });
-
-  redis.on('connect', () => {
-    console.log('[Redis] Connected');
-    redisAvailable = true;
-  });
-
+  if (!redisAvailable) return null;
   return redis;
 }
+
+function initRedis(): void {
+  if (redis) return;
+
+  const url = process.env.REDIS_URL;
+  if (!url) {
+    console.warn('[Redis] REDIS_URL not set. Running without cache/session store.');
+    return;
+  }
+
+  try {
+    redis = new Redis(url, {
+      maxRetriesPerRequest: 1,
+      retryStrategy(times) {
+        if (times > 2) return null;
+        return Math.min(times * 100, 500);
+      },
+      connectTimeout: 2000,
+      commandTimeout: 2000,
+      lazyConnect: true,
+      keyPrefix: 'heypass:',
+    });
+
+    redis.on('error', (err) => {
+      console.error('[Redis] Connection error:', err.message);
+      redisAvailable = false;
+    });
+
+    redis.on('connect', () => {
+      console.log('[Redis] Connected');
+      redisAvailable = true;
+    });
+
+    // Try to connect in background — don't block the request
+    redis.connect().catch(() => {
+      console.warn('[Redis] Could not connect. Running without cache.');
+      redisAvailable = false;
+    });
+  } catch {
+    console.warn('[Redis] Init failed. Running without cache.');
+    redisAvailable = false;
+  }
+}
+
+// Initialize Redis on module load (background, non-blocking)
+initRedis();
 
 export async function cacheGet<T>(key: string): Promise<T | null> {
   try {
