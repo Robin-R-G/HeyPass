@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { isAuthenticated, authFetch } from '@/lib/auth-client';
+import { isAuthenticated, getAccessToken } from '@/lib/auth-client';
 
 interface PlatformStats {
   total_clients: number;
@@ -49,13 +49,16 @@ export default function SuperAdminPage() {
       return;
     }
 
+    const token = getAccessToken();
+    const headers = { Authorization: `Bearer ${token}` };
+
     Promise.all([
-      authFetch('/api/superadmin/stats').then(r => {
-        if (r.status === 401) throw new Error('AUTH');
+      fetch('/api/superadmin/stats', { headers }).then(r => {
+        if (!r.ok) throw new Error(`Stats API ${r.status}`);
         return r.json();
       }),
-      authFetch('/api/superadmin/clients').then(r => {
-        if (r.status === 401) throw new Error('AUTH');
+      fetch('/api/superadmin/clients', { headers }).then(r => {
+        if (!r.ok) throw new Error(`Clients API ${r.status}`);
         return r.json();
       }),
     ])
@@ -65,11 +68,7 @@ export default function SuperAdminPage() {
         setLoading(false);
       })
       .catch((err) => {
-        if (err?.message === 'AUTH') {
-          window.location.href = '/auth/login';
-          return;
-        }
-        setError('Failed to load platform data');
+        setError(`Failed to load platform data: ${err.message}`);
         setLoading(false);
       });
   }, []);
