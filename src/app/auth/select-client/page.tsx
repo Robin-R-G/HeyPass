@@ -5,33 +5,69 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface Client {
-  id: string;
+  client_id: string;
   name: string;
   slug: string;
+  role: string;
 }
 
 export default function SelectClientPage() {
   const router = useRouter();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selecting, setSelecting] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/clients')
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      window.location.href = '/auth/login';
+      return;
+    }
+
+    fetch('/api/auth/my-clients', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then(r => r.json())
-      .then(data => { setClients(data.clients || data || []); setLoading(false); })
+      .then(data => {
+        const list = data.data?.clients || [];
+        setClients(list);
+        setLoading(false);
+
+        if (list.length === 1) {
+          autoSelect(list[0].client_id, token);
+        }
+      })
       .catch(() => setLoading(false));
   }, []);
 
-  const selectClient = async (clientId: string) => {
+  const autoSelect = async (clientId: string, token: string) => {
     try {
-      await fetch('/api/auth/select-client', {
+      const res = await fetch('/api/auth/select-client', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ client_id: clientId }),
       });
-      localStorage.setItem('client_id', clientId);
+      const data = await res.json();
+      const newTokens = data.data?.session;
+      if (newTokens?.access_token) {
+        localStorage.setItem('access_token', newTokens.access_token);
+        localStorage.setItem('refresh_token', newTokens.refresh_token);
+      }
       router.push('/dashboard');
     } catch {}
+  };
+
+  const selectClient = async (clientId: string) => {
+    setSelecting(clientId);
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      window.location.href = '/auth/login';
+      return;
+    }
+    await autoSelect(clientId, token);
   };
 
   return (
@@ -47,18 +83,23 @@ export default function SelectClientPage() {
         ) : clients.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '2rem', background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)', borderRadius: '16px' }}>
             <p style={{ color: '#E5E5E5', marginBottom: '1rem' }}>No organizations found.</p>
-            <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontWeight: 500 }}>Continue to Dashboard →</Link>
+            <Link href="/dashboard" style={{ color: '#FCA311', textDecoration: 'none', fontWeight: 500 }}>Continue to Dashboard →</Link>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {clients.map(c => (
-              <button key={c.id} onClick={() => selectClient(c.id)} style={{
+              <button key={c.client_id} onClick={() => selectClient(c.client_id)} disabled={selecting !== null} style={{
                 background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.1)',
-                borderRadius: '12px', padding: '1.25rem', textAlign: 'left', cursor: 'pointer',
+                borderRadius: '12px', padding: '1.25rem', textAlign: 'left', cursor: selecting ? 'default' : 'pointer',
+                opacity: selecting && selecting !== c.client_id ? 0.5 : 1,
                 transition: 'border-color 0.15s',
               }}>
-                <div style={{ fontWeight: 600, color: '#fff', fontSize: '1rem' }}>{c.name}</div>
-                <div style={{ color: '#888888', fontSize: '0.8rem', marginTop: '0.2rem' }}>{c.slug}</div>
+                <div style={{ fontWeight: 600, color: '#fff', fontSize: '1rem' }}>
+                  {selecting === c.client_id ? 'Selecting...' : c.name}
+                </div>
+                <div style={{ color: '#888888', fontSize: '0.8rem', marginTop: '0.2rem' }}>
+                  {c.role} · {c.slug}
+                </div>
               </button>
             ))}
           </div>
