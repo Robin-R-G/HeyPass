@@ -7,6 +7,7 @@ const PUBLIC_PATHS = [
   '/api/auth/register',
   '/api/auth/session',
   '/api/auth/refresh',
+  '/api/auth/my-clients',
   '/api/auth/reset-password',
   '/api/auth/reset-password/confirm',
   '/api/health',

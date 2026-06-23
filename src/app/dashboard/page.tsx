@@ -29,10 +29,19 @@ export default function DashboardPage() {
       return;
     }
     authFetch('/api/events')
-      .then(r => r.json())
+      .then(r => {
+        if (r.status === 403) {
+          setError('NO_CLIENT');
+          setLoading(false);
+          return;
+        }
+        return r.json();
+      })
       .then(data => {
-        setEvents(data.events || data.data || data || []);
-        setLoading(false);
+        if (data) {
+          setEvents(data.events || data.data || data || []);
+          setLoading(false);
+        }
       })
       .catch(() => {
         setError('Failed to load events');
@@ -84,12 +93,35 @@ export default function DashboardPage() {
           <div style={{ textAlign: 'center', padding: '4rem', color: '#E5E5E5' }}>Loading events...</div>
         )}
 
-        {error && (
+        {error && error !== 'NO_CLIENT' && (
           <div style={{
             background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
             borderRadius: '12px', padding: '1.5rem', textAlign: 'center', color: '#ef4444',
           }}>
             {error}
+          </div>
+        )}
+
+        {error === 'NO_CLIENT' && (
+          <div style={{
+            background: 'rgba(20,33,61,0.6)', border: '1px solid rgba(229,229,229,0.08)',
+            borderRadius: '16px', padding: '4rem 2rem', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🏢</div>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.5rem' }}>No organization found</h3>
+            <p style={{ color: '#E5E5E5', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+              You need to select or create an organization first
+            </p>
+            <button
+              onClick={() => window.location.href = '/auth/select-client'}
+              style={{
+                background: 'linear-gradient(135deg, #FCA311, #E09800)',
+                color: '#000', padding: '0.75rem 1.5rem', borderRadius: '10px',
+                border: 'none', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
+              }}
+            >
+              Select Organization
+            </button>
           </div>
         )}
 

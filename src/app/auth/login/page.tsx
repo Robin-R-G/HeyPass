@@ -38,6 +38,37 @@ function LoginForm() {
         localStorage.setItem('refresh_token', tokens.refresh_token);
       }
 
+      // Auto-select client if user has exactly one
+      try {
+        const clientsRes = await fetch('/api/auth/my-clients', {
+          headers: { Authorization: `Bearer ${tokens.access_token}` },
+        });
+        const clientsData = await clientsRes.json();
+        const clients = clientsData.data?.clients || [];
+
+        if (clients.length === 1) {
+          const selectRes = await fetch('/api/auth/select-client', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${tokens.access_token}`,
+            },
+            body: JSON.stringify({ client_id: clients[0].client_id }),
+          });
+          const selectData = await selectRes.json();
+          const newTokens = selectData.data?.session;
+          if (newTokens?.access_token) {
+            localStorage.setItem('access_token', newTokens.access_token);
+            localStorage.setItem('refresh_token', newTokens.refresh_token);
+          }
+        } else if (clients.length === 0) {
+          router.push('/auth/select-client');
+          return;
+        }
+      } catch {
+        // If my-clients fails, try going to dashboard anyway
+      }
+
       router.push(redirect);
     } catch {
       setError('Network error. Please try again.');
