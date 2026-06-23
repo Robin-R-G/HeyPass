@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       return createErrorResponse(400, 'Name and slug are required');
     }
 
-    const { data: client, error: clientError } = await supabase
+    const { data: client, error: clientError } = await supabaseAdmin
       .from('clients')
       .insert({ name, slug })
       .select()
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       return createErrorResponse(400, clientError.message);
     }
 
-    const { error: memberError } = await supabase
+    const { error: memberError } = await supabaseAdmin
       .from('client_memberships')
       .insert({
         client_id: client.id,
