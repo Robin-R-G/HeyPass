@@ -37,7 +37,7 @@ export function withPermission(
       );
     }
 
-    if (!auth.clientId) {
+    if (!auth.clientId && !auth.is_superadmin) {
       return NextResponse.json(
         { error: 'Forbidden', message: 'No client context. Select a client first.' },
         { status: 403 }

@@ -152,7 +152,7 @@ export async function authenticateUser(params: LoginParams): Promise<{
     .eq('id', authData.user.id);
 
   // Generate tokens with refresh token stored in Redis
-  const tokens = await generateAndStoreTokens(authData.user.id, email, null, null, ip_address, user_agent);
+  const tokens = await generateAndStoreTokens(authData.user.id, email, null, null, ip_address, user_agent, profile.is_superadmin || false);
 
   // Audit log
   await createAuditLog({
@@ -206,10 +206,10 @@ export async function authenticateWithClient(
 
   const role = (membership.role as { slug: string }).slug;
 
-  // Fetch user email
+  // Fetch user email and superadmin status
   const { data: user } = await supabaseAdmin
     .from('users')
-    .select('email')
+    .select('email, is_superadmin')
     .eq('id', userId)
     .single();
 
@@ -220,7 +220,7 @@ export async function authenticateWithClient(
   // Invalidate old refresh token and generate new one
   await invalidateRefreshToken(userId);
 
-  const tokens = await generateAndStoreTokens(userId, user.email, clientId, role, ip_address, user_agent);
+  const tokens = await generateAndStoreTokens(userId, user.email, clientId, role, ip_address, user_agent, user.is_superadmin || false);
 
   await createAuditLog({
     user_id: userId,
@@ -620,7 +620,8 @@ async function generateAndStoreTokens(
   clientId: string | null,
   role: string | null,
   ip_address?: string,
-  user_agent?: string
+  user_agent?: string,
+  is_superadmin?: boolean
 ): Promise<AuthTokens> {
   const refreshToken = signRefreshToken(userId);
 
@@ -642,6 +643,7 @@ async function generateAndStoreTokens(
     email,
     client_id: clientId,
     role,
+    is_superadmin: is_superadmin || false,
   });
 
   return {

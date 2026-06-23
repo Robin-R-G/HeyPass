@@ -290,6 +290,7 @@ export interface JWTPayload {
   email: string;
   client_id: string | null;
   role: string | null;
+  is_superadmin?: boolean;
   iat?: number;
   exp?: number;
 }

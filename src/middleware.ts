@@ -16,6 +16,8 @@ const PUBLIC_PATHS = [
   '/auth/register',
   '/auth/forgot-password',
   '/auth/reset-password',
+  '/auth/select-client',
+  '/superadmin',
   '/verify',
   '/login',
   '/register',
@@ -97,7 +99,8 @@ async function handleMiddleware(request: NextRequest) {
       );
     }
 
-    if (!jwtPayload.client_id && !pathname.startsWith('/api/auth/')) {
+    // Superadmins bypass client context requirement
+    if (!jwtPayload.is_superadmin && !jwtPayload.client_id && !pathname.startsWith('/api/auth/')) {
       return NextResponse.json(
         { error: 'Forbidden', message: 'No client context. Select a client first.' },
         { status: 403 }

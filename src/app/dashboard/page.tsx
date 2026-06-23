@@ -28,6 +28,19 @@ export default function DashboardPage() {
       window.location.href = '/auth/login';
       return;
     }
+
+    // Redirect superadmins to superadmin dashboard
+    try {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.is_superadmin) {
+          window.location.href = '/superadmin';
+          return;
+        }
+      }
+    } catch {}
+
     authFetch('/api/events')
       .then(r => {
         if (r.status === 403) {

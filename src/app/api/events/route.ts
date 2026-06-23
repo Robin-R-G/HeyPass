@@ -13,8 +13,12 @@ export const GET = withAuth(async (req: NextRequest, auth) => {
   let query = supabase
     .from('events')
     .select('*')
-    .eq('client_id', auth.clientId)
     .order('start_date', { ascending: false });
+
+  // Superadmins see all events; regular users see only their client's events
+  if (auth.clientId && !auth.is_superadmin) {
+    query = query.eq('client_id', auth.clientId);
+  }
 
   if (!includeDeleted) {
     query = query.is('deleted_at', null);

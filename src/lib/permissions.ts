@@ -197,8 +197,11 @@ async function getRolePermissions(roleId: string): Promise<Set<string>> {
 export async function checkPermission(
   userId: string,
   clientId: string | null,
-  requiredPermission: PermissionName
+  requiredPermission: PermissionName,
+  is_superadmin?: boolean
 ): Promise<boolean> {
+  // Superadmins have all permissions
+  if (is_superadmin) return true;
   if (!clientId) return false;
 
   const cacheKey = `user_perm:${userId}:${clientId}`;
@@ -235,6 +238,7 @@ export interface AuthPayload {
   email: string;
   clientId: string | null;
   roleSlug: string | null;
+  is_superadmin?: boolean;
 }
 
 export function extractAuthPayload(req: NextRequest): AuthPayload | null {
@@ -249,6 +253,7 @@ export function extractAuthPayload(req: NextRequest): AuthPayload | null {
     email: payload.email,
     clientId: payload.client_id || null,
     roleSlug: payload.role || null,
+    is_superadmin: payload.is_superadmin || false,
   };
 }
 
@@ -273,7 +278,7 @@ export async function requirePermission(
     return { allowed: false, status: 403, error: 'No client context', auth };
   }
 
-  const hasPermission = await checkPermission(auth.userId, auth.clientId, requiredPermission);
+  const hasPermission = await checkPermission(auth.userId, auth.clientId, requiredPermission, auth.is_superadmin);
 
   if (!hasPermission) {
     if (options?.audit) {

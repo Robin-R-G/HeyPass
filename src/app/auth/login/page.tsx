@@ -36,6 +36,15 @@ function LoginForm() {
       if (tokens?.access_token) {
         localStorage.setItem('access_token', tokens.access_token);
         localStorage.setItem('refresh_token', tokens.refresh_token);
+
+        // Decode JWT to check superadmin status
+        try {
+          const payload = JSON.parse(atob(tokens.access_token.split('.')[1]));
+          if (payload.is_superadmin) {
+            router.push('/superadmin');
+            return;
+          }
+        } catch {}
       }
 
       // Auto-select client if user has exactly one
