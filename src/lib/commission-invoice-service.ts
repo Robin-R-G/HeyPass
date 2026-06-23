@@ -1,4 +1,4 @@
-﻿import { supabaseAdmin } from '@/lib/supabase/client';
+import { supabaseAdmin } from '@/lib/supabase/client';
 
 export interface Commission {
   id: string;
@@ -269,10 +269,21 @@ class CommissionInvoiceServiceImpl {
   }
 
   async generateInvoicePDF(invoiceId: string): Promise<Buffer> {
-    const invoice = await this.getInvoice('', invoiceId);
-    if (!invoice) throw new Error('Invoice not found');
+    const { data: invoice, error } = await supabaseAdmin
+      .from('invoices')
+      .select('*')
+      .eq('id', invoiceId)
+      .single();
 
-    const html = this.renderInvoiceHTML(invoice);
+    if (error || !invoice) throw new Error('Invoice not found');
+
+    const { data: items } = await supabaseAdmin
+      .from('invoice_items')
+      .select('*')
+      .eq('invoice_id', invoiceId);
+
+    const invoiceWithItems = { ...invoice, items: items || [] };
+    const html = this.renderInvoiceHTML(invoiceWithItems);
 
     const puppeteer = await import('puppeteer-core');
     const browser = await puppeteer.default.launch({

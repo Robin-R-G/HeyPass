@@ -175,19 +175,21 @@ async function recordSponsorScan(
 
   if (scanError) throw new Error(`Failed to record scan: ${scanError.message}`);
 
-  const { error: updateError } = await supabaseAdmin
+  // Get current scans count
+  const { data: branding } = await supabaseAdmin
     .from('sponsor_branding')
-    .update({
-      scans: supabaseAdmin.rpc ? undefined : undefined,
-      last_scanned_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', brandingId);
+    .select('scans')
+    .eq('id', brandingId)
+    .single();
 
-  // Increment scans via raw update
+  // Increment scans
   await supabaseAdmin
     .from('sponsor_branding')
-    .update({ last_scanned_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .update({
+      scans: ((branding?.scans as number) || 0) + 1,
+      last_scanned_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    })
     .eq('id', brandingId);
 
   return scan;

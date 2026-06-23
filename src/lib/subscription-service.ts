@@ -344,13 +344,6 @@ class SubscriptionServiceImpl {
   }
 
   async incrementEventRegistrations(clientId: string, eventId: string): Promise<void> {
-    await supabaseAdmin
-      .from('event_subscriptions')
-      .update({ registrations_used: supabaseAdmin.rpc ? 0 : 0 }) // placeholder
-      .eq('client_id', clientId)
-      .eq('event_id', eventId)
-      .eq('status', 'active');
-
     // Use raw increment
     const { data } = await supabaseAdmin
       .from('event_subscriptions')

@@ -27,6 +27,7 @@ export interface TemplateElement {
 
 export interface CertificateData {
   id: string;
+  client_id: string;
   certificate_number: string;
   access_token: string;
   token_expires_at: string | null;
@@ -112,7 +113,7 @@ class CertificateServiceImpl {
     const { data, error } = await supabaseAdmin
       .from('certificates')
       .select(`
-        id, certificate_number, access_token, token_expires_at,
+        id, client_id, certificate_number, access_token, token_expires_at,
         template_snapshot, content_hash,
         pdf_url, png_url, status, issued_at, metadata,
         events!inner(title),
@@ -128,6 +129,7 @@ class CertificateServiceImpl {
 
     return (data || []).map((cert: any) => ({
       id: cert.id,
+      client_id: cert.client_id,
       certificate_number: cert.certificate_number,
       access_token: cert.access_token,
       token_expires_at: cert.token_expires_at,
@@ -224,13 +226,14 @@ class CertificateServiceImpl {
         },
         status: 'generated',
       })
-      .select('id, certificate_number, access_token, token_expires_at, template_snapshot, content_hash, pdf_url, png_url, status, issued_at, metadata')
+      .select('id, client_id, certificate_number, access_token, token_expires_at, template_snapshot, content_hash, pdf_url, png_url, status, issued_at, metadata')
       .single();
 
     if (error) throw error;
 
     return {
       id: cert.id,
+      client_id: cert.client_id,
       certificate_number: cert.certificate_number,
       access_token: cert.access_token,
       token_expires_at: cert.token_expires_at,
@@ -272,7 +275,7 @@ class CertificateServiceImpl {
     const { data, error } = await supabaseAdmin
       .from('certificates')
       .select(`
-        id, certificate_number, access_token, token_expires_at,
+        id, client_id, certificate_number, access_token, token_expires_at,
         template_snapshot, content_hash,
         pdf_url, png_url, status, issued_at, metadata,
         events!inner(title),
@@ -287,6 +290,7 @@ class CertificateServiceImpl {
 
     return {
       id: data.id,
+      client_id: data.client_id,
       certificate_number: data.certificate_number,
       access_token: data.access_token,
       token_expires_at: data.token_expires_at,
@@ -308,7 +312,7 @@ class CertificateServiceImpl {
     const { data, error } = await supabaseAdmin
       .from('certificates')
       .select(`
-        id, certificate_number, access_token, token_expires_at,
+        id, client_id, certificate_number, access_token, token_expires_at,
         template_snapshot, content_hash,
         pdf_url, png_url, status, issued_at, metadata,
         events!inner(title),
@@ -328,6 +332,7 @@ class CertificateServiceImpl {
 
     return {
       id: data.id,
+      client_id: data.client_id,
       certificate_number: data.certificate_number,
       access_token: data.access_token,
       token_expires_at: data.token_expires_at,
@@ -362,7 +367,7 @@ class CertificateServiceImpl {
 
     // Log verification attempt
     await supabaseAdmin.from('certificate_verifications').insert({
-      client_id: cert.id, // need client_id from cert
+      client_id: cert.client_id,
       certificate_id: cert.id,
       ip_address: ip,
       method,

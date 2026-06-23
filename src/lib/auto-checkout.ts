@@ -119,23 +119,7 @@ export class AutoCheckoutService {
         .update({ status: 'checked_out', checked_out_at: now })
         .eq('id', checkin.registration_id);
 
-      // Update session attendance if applicable
-      const { data: checkinData } = await supabaseAdmin
-        .from('check_ins')
-        .select('session_id')
-        .eq('id', checkin.id)
-        .single();
 
-      if (checkinData?.session_id) {
-        await supabaseAdmin
-          .from('session_attendance')
-          .update({
-            total_checked_out: supabaseAdmin.rpc ? 1 : 0,
-            last_check_out_at: now,
-            updated_at: now,
-          })
-          .eq('session_id', checkinData.session_id);
-      }
 
       result.tickets_processed++;
       result.checkouts_created++;

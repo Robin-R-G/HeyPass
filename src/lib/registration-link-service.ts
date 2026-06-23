@@ -75,7 +75,7 @@ class RegistrationLinkServiceImpl {
   }
 
   async create(clientId: string, input: CreateLinkInput): Promise<RegistrationLink> {
-    let shortCode = input.custom_code || this.generateShortCode();
+    const shortCode = input.custom_code || this.generateShortCode();
 
     // Check if custom code already exists
     if (input.custom_code) {
@@ -149,26 +149,23 @@ class RegistrationLinkServiceImpl {
   async resolve(shortCode: string): Promise<{ event_id: string; client_id: string } | null> {
     const { data, error } = await supabaseAdmin
       .from('registration_links')
-      .select('event_id, client_id')
+      .select('event_id, client_id, click_count')
       .eq('short_code', shortCode)
       .eq('is_active', true)
       .single();
 
     if (error || !data) return null;
 
-    // Increment click count
-    await supabaseAdmin
-      .from('registration_links')
-      .update({ click_count: supabaseAdmin.rpc ? 0 : 0 }) // Will use raw SQL
-      .eq('short_code', shortCode);
-
     // Use increment
     await supabaseAdmin
       .from('registration_links')
-      .update({ click_count: (data as any).click_count + 1 })
+      .update({ click_count: data.click_count + 1 })
       .eq('short_code', shortCode);
 
-    return data;
+    return {
+      event_id: data.event_id,
+      client_id: data.client_id,
+    };
   }
 
   async trackRegistration(shortCode: string): Promise<void> {

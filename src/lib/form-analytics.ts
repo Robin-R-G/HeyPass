@@ -33,55 +33,59 @@ export interface FormAnalyticsSummary {
 export async function trackFormView(formId: string, eventId: string, clientId: string): Promise<void> {
   const today = new Date().toISOString().split('T')[0];
 
-  await supabaseAdmin
+  const { data: existing } = await supabaseAdmin
     .from('form_analytics')
-    .upsert(
-      {
+    .select('views')
+    .eq('form_id', formId)
+    .eq('date', today)
+    .single();
+
+  if (existing) {
+    await supabaseAdmin
+      .from('form_analytics')
+      .update({ views: (existing.views || 0) + 1, updated_at: new Date().toISOString() })
+      .eq('form_id', formId)
+      .eq('date', today);
+  } else {
+    await supabaseAdmin
+      .from('form_analytics')
+      .insert({
         form_id: formId,
         event_id: eventId,
         client_id: clientId,
         date: today,
         views: 1,
-      },
-      {
-        onConflict: 'form_id,date',
-        ignoreDuplicates: false,
-      }
-    );
-
-  // Increment views
-  await supabaseAdmin.rpc('increment_form_analytics', {
-    p_form_id: formId,
-    p_date: today,
-    p_field: 'views',
-  }).catch(() => {
-    // Fallback if RPC doesn't exist
-    supabaseAdmin
-      .from('form_analytics')
-      .update({ views: supabaseAdmin.rpc ? undefined : 1 })
-      .eq('form_id', formId)
-      .eq('date', today);
-  });
+      });
+  }
 }
 
 export async function trackFormStart(formId: string, eventId: string, clientId: string): Promise<void> {
   const today = new Date().toISOString().split('T')[0];
 
-  await supabaseAdmin
+  const { data: existing } = await supabaseAdmin
     .from('form_analytics')
-    .upsert(
-      {
+    .select('starts')
+    .eq('form_id', formId)
+    .eq('date', today)
+    .single();
+
+  if (existing) {
+    await supabaseAdmin
+      .from('form_analytics')
+      .update({ starts: (existing.starts || 0) + 1, updated_at: new Date().toISOString() })
+      .eq('form_id', formId)
+      .eq('date', today);
+  } else {
+    await supabaseAdmin
+      .from('form_analytics')
+      .insert({
         form_id: formId,
         event_id: eventId,
         client_id: clientId,
         date: today,
         starts: 1,
-      },
-      {
-        onConflict: 'form_id,date',
-        ignoreDuplicates: false,
-      }
-    );
+      });
+  }
 }
 
 export async function trackFormCompletion(
@@ -110,6 +114,7 @@ export async function trackFormCompletion(
       .update({
         completions: newCompletions,
         avg_time_seconds: newAvgTime,
+        updated_at: new Date().toISOString(),
       })
       .eq('form_id', formId)
       .eq('date', today);
@@ -130,21 +135,30 @@ export async function trackFormCompletion(
 export async function trackFormError(formId: string, eventId: string, clientId: string): Promise<void> {
   const today = new Date().toISOString().split('T')[0];
 
-  await supabaseAdmin
+  const { data: existing } = await supabaseAdmin
     .from('form_analytics')
-    .upsert(
-      {
+    .select('errors')
+    .eq('form_id', formId)
+    .eq('date', today)
+    .single();
+
+  if (existing) {
+    await supabaseAdmin
+      .from('form_analytics')
+      .update({ errors: (existing.errors || 0) + 1, updated_at: new Date().toISOString() })
+      .eq('form_id', formId)
+      .eq('date', today);
+  } else {
+    await supabaseAdmin
+      .from('form_analytics')
+      .insert({
         form_id: formId,
         event_id: eventId,
         client_id: clientId,
         date: today,
         errors: 1,
-      },
-      {
-        onConflict: 'form_id,date',
-        ignoreDuplicates: false,
-      }
-    );
+      });
+  }
 }
 
 export async function trackFieldView(
