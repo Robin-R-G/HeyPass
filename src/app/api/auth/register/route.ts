@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { registerUser } from '@/lib/auth-service';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
-import { checkRateLimit } from '@/lib/cache';
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,15 +9,6 @@ export async function POST(req: NextRequest) {
 
     if (!email || !password) {
       return createErrorResponse(400, 'Email and password are required');
-    }
-
-    // IP-based rate limit: 5 registrations per hour per IP
-    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
-    const ipRateLimitKey = `auth:register:ip:${ip}`;
-    const { allowed } = await checkRateLimit(ipRateLimitKey, 5, 3600);
-
-    if (!allowed) {
-      return createErrorResponse(429, 'Too many registration attempts from this IP. Please try again later.');
     }
 
     const result = await registerUser({

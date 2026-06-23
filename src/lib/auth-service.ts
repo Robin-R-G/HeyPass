@@ -345,13 +345,6 @@ export async function registerUser(params: RegisterParams): Promise<{
     throw new Error(passwordCheck.error!);
   }
 
-  // Rate limit: 3 registrations per hour per email
-  const emailRateLimitKey = `auth:register:${email}`;
-  const { allowed: emailAllowed } = await checkRateLimit(emailRateLimitKey, 3, 3600);
-  if (!emailAllowed) {
-    throw new Error('Too many registration attempts. Please try again later.');
-  }
-
   // Create Supabase auth user
   const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
     email,
