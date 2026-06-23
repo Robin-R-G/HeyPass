@@ -28,7 +28,7 @@ export interface CreatePaymentMethodInput {
 }
 
 export class PaymentMethodService {
-  private supabase = createClient();
+  private supabase = supabaseAdmin;
 
   async list(clientId: string): Promise<PaymentMethod[]> {
     const { data, error } = await this.supabase
