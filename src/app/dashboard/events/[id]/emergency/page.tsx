@@ -71,16 +71,16 @@ export default function EmergencyPage() {
   };
 
   const severityColor = (s: string) => {
-    switch (s) { case "critical": return "bg-red-100 text-red-800"; case "high": return "bg-orange-100 text-orange-800"; case "medium": return "bg-yellow-100 text-yellow-800"; default: return "bg-blue-100 text-blue-800"; }
+    switch (s) { case "critical": return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; case "high": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "medium": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; default: return "bg-[rgba(59,130,246,0.15)] text-[#3b82f6]"; }
   };
   const statusColor = (s: string) => {
-    switch (s) { case "resolved": return "bg-green-100 text-green-800"; case "in_progress": return "bg-yellow-100 text-yellow-800"; case "reported": return "bg-red-100 text-red-800"; default: return "bg-gray-100 text-gray-800"; }
+    switch (s) { case "resolved": return "bg-[rgba(16,185,129,0.15)] text-[#10b981]"; case "in_progress": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "reported": return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; default: return "bg-[rgba(167,235,242,0.08)] text-white"; }
   };
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
         <span style={{ color: '#5a7a8a' }}>/</span>
@@ -106,13 +106,13 @@ export default function EmergencyPage() {
         <TabsContent value="incidents" className="mt-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             {[
-              { label: "Total", value: incidents.length, color: "text-gray-900" },
+              { label: "Total", value: incidents.length, color: "text-white" },
               { label: "Open", value: incidents.filter(i => i.status === "reported" || i.status === "in_progress").length, color: "text-red-600" },
               { label: "Critical", value: incidents.filter(i => i.severity === "critical").length, color: "text-red-600" },
               { label: "Resolved", value: incidents.filter(i => i.status === "resolved").length, color: "text-green-600" },
             ].map(k => (
               <Card key={k.label}><CardContent className="p-4 text-center">
-                <p className={`text-2xl font-bold ${k.color}`}>{k.value}</p><p className="text-sm text-gray-500">{k.label}</p>
+                <p className={`text-2xl font-bold ${k.color}`}>{k.value}</p><p className="text-sm text-[#5a7a8a]">{k.label}</p>
               </CardContent></Card>
             ))}
           </div>
@@ -217,7 +217,7 @@ export default function EmergencyPage() {
                       <TableCell className="font-medium">{l.item_description}</TableCell>
                       <TableCell>{l.reported_by}</TableCell>
                       <TableCell>{l.location_found}</TableCell>
-                      <TableCell><Badge className={l.status === "returned" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>{l.status}</Badge></TableCell>
+                      <TableCell><Badge className={l.status === "returned" ? "bg-[rgba(16,185,129,0.15)] text-[#10b981]" : "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"}>{l.status}</Badge></TableCell>
                       <TableCell>{l.status !== "returned" && <Button size="sm" variant="outline" onClick={() => resolveLost(l.id)}>Mark Returned</Button>}</TableCell>
                     </TableRow>
                   ))}
@@ -231,7 +231,7 @@ export default function EmergencyPage() {
           <Card>
             <CardHeader><CardTitle>Incident Timeline</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-gray-500">Timeline view will show chronological incident history as events are reported.</p>
+              <p className="text-[#5a7a8a]">Timeline view will show chronological incident history as events are reported.</p>
             </CardContent>
           </Card>
         </TabsContent>

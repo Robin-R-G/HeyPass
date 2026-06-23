@@ -75,13 +75,13 @@ export default function VolunteerPage() {
   const filtered = volunteers.filter(v => `${v.first_name} ${v.last_name} ${v.email}`.toLowerCase().includes(search.toLowerCase()));
 
   const statusColor = (s: string) => {
-    switch (s) { case "approved": return "bg-green-100 text-green-800"; case "pending": return "bg-yellow-100 text-yellow-800"; case "checked_in": return "bg-blue-100 text-blue-800"; case "completed": return "bg-gray-100 text-gray-800"; default: return "bg-red-100 text-red-800"; }
+    switch (s) { case "approved": return "bg-[rgba(16,185,129,0.15)] text-[#10b981]"; case "pending": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "checked_in": return "bg-[rgba(59,130,246,0.15)] text-[#3b82f6]"; case "completed": return "bg-[rgba(167,235,242,0.08)] text-[#9cb8c4]"; default: return "bg-[rgba(239,68,68,0.15)] text-[#ef4444]"; }
   };
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
         <span style={{ color: '#5a7a8a' }}>/</span>
@@ -120,7 +120,7 @@ export default function VolunteerPage() {
             ].map(k => (
               <Card key={k.label}><CardContent className="p-4 text-center">
                 <p className="text-2xl font-bold">{k.value}</p>
-                <p className="text-sm text-gray-500">{k.label}</p>
+                <p className="text-sm text-[#5a7a8a]">{k.label}</p>
               </CardContent></Card>
             ))}
           </div>
@@ -205,20 +205,20 @@ export default function VolunteerPage() {
           <Card>
             <CardHeader><CardTitle>Schedule</CardTitle></CardHeader>
             <CardContent>
-              {tasks.length === 0 ? <p className="text-gray-500">No tasks scheduled</p> : (
+              {tasks.length === 0 ? <p className="text-[#5a7a8a]">No tasks scheduled</p> : (
                 <div className="space-y-4">
                   {tasks.sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime()).map(t => (
-                    <div key={t.id} className="border rounded-lg p-4">
+                    <div key={t.id} className="border-[rgba(167,235,242,0.12)] rounded-lg p-4">
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium">{t.title}</p>
-                          <p className="text-sm text-gray-500">{t.location || "No location"}</p>
+                          <p className="text-sm text-[#5a7a8a]">{t.location || "No location"}</p>
                         </div>
-                        <Badge className={t.slots_filled >= t.slots_total ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
+                        <Badge className={t.slots_filled >= t.slots_total ? "bg-[rgba(16,185,129,0.15)] text-[#10b981]" : "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"}>
                           {t.slots_filled}/{t.slots_total} slots
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-500 mt-2">{new Date(t.start_time).toLocaleString()} - {new Date(t.end_time).toLocaleString()}</p>
+                      <p className="text-sm text-[#5a7a8a] mt-2">{new Date(t.start_time).toLocaleString()} - {new Date(t.end_time).toLocaleString()}</p>
                     </div>
                   ))}
                 </div>
@@ -248,8 +248,8 @@ export default function VolunteerPage() {
                 {sending ? "Sending..." : "Send Message"}
               </Button>
               {sendResult && (
-                <div className={`border rounded-lg p-3 ${sendResult.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
-                  <p className={`font-medium text-sm ${sendResult.success ? "text-green-800" : "text-red-800"}`}>{sendResult.message}</p>
+                <div className={`border-[rgba(167,235,242,0.12)] rounded-lg p-3 ${sendResult.success ? "bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]" : "bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]"}`}>
+                  <p className={`font-medium text-sm ${sendResult.success ? "text-[#10b981]" : "text-[#ef4444]"}`}>{sendResult.message}</p>
                 </div>
               )}
             </CardContent>

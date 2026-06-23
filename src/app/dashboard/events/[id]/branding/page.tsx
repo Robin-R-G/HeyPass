@@ -128,13 +128,14 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
 
   return (
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
     <div className="max-w-4xl mx-auto p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
@@ -144,7 +145,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
         <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Branding</span>
       </nav>
       <h1 className="text-2xl font-bold mb-2">Event Branding</h1>
-      <p className="text-gray-500 mb-6">
+      <p className="text-[#5a7a8a] mb-6">
         Customize the look and feel of this event. Overrides client branding.
       </p>
 
@@ -152,8 +153,8 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
         <div
           className={`p-4 mb-6 rounded ${
             message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]'
+              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]'
           }`}
         >
           {message.text}
@@ -162,12 +163,12 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
 
       <div className="space-y-8">
         {/* Images */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Images</h2>
           <div className="grid grid-cols-2 gap-6">
             {/* Banner */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
                 Event Banner
               </label>
               {branding.banner_url && (
@@ -179,7 +180,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
                   />
                 </div>
               )}
-              <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+              <label className="cursor-pointer bg-[rgba(84,172,191,0.08)] text-[#A7EBF2] px-3 py-1 rounded text-sm hover:bg-[rgba(84,172,191,0.15)]">
                 {uploading === 'banner' ? 'Uploading...' : 'Upload Banner'}
                 <input
                   type="file"
@@ -196,7 +197,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
 
             {/* Logo */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
                 Event Logo
               </label>
               {branding.logo_url && (
@@ -208,7 +209,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
                   />
                 </div>
               )}
-              <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+              <label className="cursor-pointer bg-[rgba(84,172,191,0.08)] text-[#A7EBF2] px-3 py-1 rounded text-sm hover:bg-[rgba(84,172,191,0.15)]">
                 {uploading === 'logo' ? 'Uploading...' : 'Upload Logo'}
                 <input
                   type="file"
@@ -226,9 +227,9 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
         </section>
 
         {/* Color Overrides */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Color Overrides</h2>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-[#5a7a8a] mb-4">
             Leave empty to use client branding colors.
           </p>
           <div className="grid grid-cols-3 gap-4">
@@ -240,7 +241,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
               { key: 'text_color', label: 'Text' },
             ].map(({ key, label }) => (
               <div key={key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                   {label}
                 </label>
                 <div className="flex gap-2">
@@ -250,7 +251,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
                     onChange={(e) =>
                       setBranding((prev) => ({ ...prev, [key]: e.target.value }))
                     }
-                    className="h-10 w-10 rounded border cursor-pointer"
+                    className="h-10 w-10 rounded border-[rgba(167,235,242,0.12)] cursor-pointer"
                   />
                   <input
                     type="text"
@@ -262,12 +263,12 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
                       }))
                     }
                     placeholder="Inherit"
-                    className="flex-1 border rounded px-2 py-1 text-sm font-mono"
+                    className="flex-1 border-[rgba(167,235,242,0.12)] rounded px-2 py-1 text-sm font-mono"
                   />
                   {(branding as any)[key] && (
                     <button
                       onClick={() => handleResetColor(key)}
-                      className="text-gray-400 hover:text-gray-600 text-sm"
+                      className="text-[#5a7a8a] hover:text-[#9cb8c4] text-sm"
                     >
                       Reset
                     </button>
@@ -279,11 +280,11 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
         </section>
 
         {/* Custom Code */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Custom Code</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Custom CSS
               </label>
               <textarea
@@ -291,13 +292,13 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, custom_css: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2 font-mono text-sm"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2 font-mono text-sm"
                 rows={6}
                 placeholder="/* Add custom CSS here */"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Custom HTML (Head)
               </label>
               <textarea
@@ -308,7 +309,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
                     custom_head_html: e.target.value,
                   }))
                 }
-                className="w-full border rounded-md px-3 py-2 font-mono text-sm"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2 font-mono text-sm"
                 rows={4}
                 placeholder="<!-- Add tracking codes or meta tags -->"
               />
@@ -320,7 +321,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
         <div className="flex justify-end gap-4">
           <button
             onClick={() => fetchBranding()}
-            className="border px-4 py-2 rounded-md hover:bg-gray-50"
+            className="border-[rgba(167,235,242,0.12)] px-4 py-2 rounded-md hover:bg-[rgba(167,235,242,0.05)]"
           >
             Reset
           </button>
@@ -333,6 +334,7 @@ export default function EventBrandingPage({ params }: EventBrandingPageProps) {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

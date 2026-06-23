@@ -1,0 +1,27 @@
+'use client';
+
+import Link from 'next/link';
+
+export default function NotFound() {
+  return (
+    <div style={{ minHeight: '100vh', background: '#011C40', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div style={{ fontSize: '5rem', fontWeight: 800, color: '#26658C', lineHeight: 1, marginBottom: '1rem' }}>404</div>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>Page not found</h1>
+        <p style={{ color: '#9cb8c4', fontSize: '0.9rem', marginBottom: '2rem' }}>The page you&apos;re looking for doesn&apos;t exist or has been moved.</p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <Link href="/" style={{
+            background: 'linear-gradient(135deg, #54ACBF, #26658C)',
+            color: '#fff', padding: '0.7rem 1.5rem', borderRadius: '10px',
+            textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem',
+          }}>Go Home</Link>
+          <Link href="/dashboard" style={{
+            background: 'rgba(167,235,242,0.06)', border: '1px solid rgba(167,235,242,0.15)',
+            color: '#A7EBF2', padding: '0.7rem 1.5rem', borderRadius: '10px',
+            textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem',
+          }}>Dashboard</Link>
+        </div>
+      </div>
+    </div>
+  );
+}

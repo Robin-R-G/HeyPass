@@ -291,18 +291,18 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
 
   if (error && !formData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Registration Unavailable</h1>
-          <p className="text-gray-600">{error}</p>
+          <h1 className="text-2xl font-bold text-white mb-2">Registration Unavailable</h1>
+          <p className="text-[#9cb8c4]">{error}</p>
         </div>
       </div>
     );
@@ -310,20 +310,20 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
+        <div className="max-w-md w-full bg-[rgba(167,235,242,0.03)] rounded-lg shadow-md p-8 text-center">
+          <div className="w-16 h-16 bg-[rgba(16,185,129,0.15)] rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-[#10b981]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Registration Successful!</h1>
-          <p className="text-gray-600 mb-4">Thank you for registering.</p>
-          <div className="bg-gray-50 rounded p-4 mb-4">
-            <p className="text-sm text-gray-600">Your ticket number:</p>
+          <h1 className="text-2xl font-bold text-white mb-2">Registration Successful!</h1>
+          <p className="text-[#9cb8c4] mb-4">Thank you for registering.</p>
+          <div className="bg-transparent rounded p-4 mb-4">
+            <p className="text-sm text-[#9cb8c4]">Your ticket number:</p>
             <p className="text-lg font-mono font-bold">{success.ticket_number}</p>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-[#5a7a8a]">
             A confirmation email has been sent to your email address.
           </p>
         </div>
@@ -360,12 +360,12 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
     : visibleFields;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{event.name}</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-white mb-2">{event.name}</h1>
+          <p className="text-[#9cb8c4]">
             {new Date(event.start_date).toLocaleDateString()} - {new Date(event.end_date).toLocaleDateString()}
           </p>
         </div>
@@ -378,14 +378,14 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 <div
                   key={index}
                   className={`text-sm ${
-                    index <= currentStep ? 'text-blue-600 font-medium' : 'text-gray-400'
+                    index <= currentStep ? 'text-[#A7EBF2] font-medium' : 'text-[#5a7a8a]'
                   }`}
                 >
                   {step.title || `Step ${index + 1}`}
                 </div>
               ))}
             </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-[rgba(167,235,242,0.08)] rounded-full overflow-hidden">
               <div
                 className="h-full bg-blue-600 transition-all"
                 style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
@@ -395,9 +395,9 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
         )}
 
         {/* Form */}
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-[rgba(167,235,242,0.03)] rounded-lg shadow-md p-8">
           {error && (
-            <div className="bg-red-50 text-red-800 border border-red-200 rounded p-4 mb-6">
+            <div className="bg-[rgba(239,68,68,0.1)] text-[#ef4444] border border-[rgba(239,68,68,0.2)] rounded p-4 mb-6">
               {error}
             </div>
           )}
@@ -407,9 +407,9 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
             <div key={section.id} className="mb-8">
               {section.title && (
                 <div className="mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
+                  <h2 className="text-lg font-semibold text-white">{section.title}</h2>
                   {section.description && (
-                    <p className="text-sm text-gray-600 mt-1">{section.description}</p>
+                    <p className="text-sm text-[#9cb8c4] mt-1">{section.description}</p>
                   )}
                 </div>
               )}
@@ -432,7 +432,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               <button
                 type="button"
                 onClick={() => setCurrentStep(currentStep - 1)}
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="px-6 py-2 border border-[rgba(167,235,242,0.12)] rounded-md text-[#9cb8c4] hover:bg-transparent"
               >
                 Back
               </button>
@@ -471,26 +471,26 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
       case 'heading':
         return (
           <div key={field.id} className="pt-4">
-            <h3 className="text-lg font-medium text-gray-900">{field.label}</h3>
+            <h3 className="text-lg font-medium text-white">{field.label}</h3>
           </div>
         );
       case 'paragraph':
         return (
           <div key={field.id} className="pt-2">
-            <p className="text-gray-600">{field.label}</p>
+            <p className="text-[#9cb8c4]">{field.label}</p>
           </div>
         );
       case 'divider':
-        return <hr key={field.id} className="my-4 border-gray-200" />;
+        return <hr key={field.id} className="my-4 border-[rgba(167,235,242,0.08)]" />;
       case 'text':
       case 'email':
       case 'phone':
       case 'number':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <input
               type={field.field_type === 'number' ? 'number' : 'text'}
@@ -507,21 +507,21 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               }}
               placeholder={field.placeholder || ''}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             />
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'textarea':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <textarea
               value={String(value || '')}
@@ -538,21 +538,21 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               placeholder={field.placeholder || ''}
               rows={4}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             />
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'select':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <select
               value={String(value || '')}
@@ -567,7 +567,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 }
               }}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             >
               <option value="">{field.placeholder || 'Select...'}</option>
@@ -578,17 +578,17 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               ))}
             </select>
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'radio':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <div className="space-y-2">
               {field.options?.items?.map((opt) => (
@@ -615,17 +615,17 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               ))}
             </div>
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'checkbox':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <div className="space-y-2">
               {field.options?.items?.map((opt) => {
@@ -660,17 +660,17 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               })}
             </div>
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'date':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <input
               type="date"
@@ -686,21 +686,21 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 }
               }}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             />
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'file':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <input
               type="file"
@@ -712,26 +712,26 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               }}
               accept={field.validation?.allowed_types?.map((t) => `.${t}`).join(',')}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             />
             {field.validation?.max_size_mb && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[#5a7a8a] mt-1">
                 Max size: {field.validation.max_size_mb}MB
               </p>
             )}
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'country':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <select
               value={String(value || '')}
@@ -746,7 +746,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 }
               }}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             >
               <option value="">Select Country...</option>
@@ -762,17 +762,17 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               <option value="OTHER">Other</option>
             </select>
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       case 'state':
         return (
           <div key={field.id}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
               {field.label}
-              {isFieldRequired(field) && <span className="text-red-500 ml-1">*</span>}
+              {isFieldRequired(field) && <span className="text-[#ef4444] ml-1">*</span>}
             </label>
             <input
               type="text"
@@ -789,13 +789,13 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               }}
               placeholder={field.placeholder || 'Enter state/province'}
               className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? 'border-red-500' : 'border-[rgba(167,235,242,0.12)]'
               }`}
             />
             {field.help_text && (
-              <p className="text-sm text-gray-500 mt-1">{field.help_text}</p>
+              <p className="text-sm text-[#5a7a8a] mt-1">{field.help_text}</p>
             )}
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+            {error && <p className="text-sm text-[#ef4444] mt-1">{error}</p>}
           </div>
         );
       default:

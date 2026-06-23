@@ -43,13 +43,13 @@ export default function SponsorsPage() {
   };
 
   const tierColor = (t: string) => {
-    switch (t) { case "platinum": return "bg-gray-100 text-gray-800"; case "gold": return "bg-yellow-100 text-yellow-800"; case "silver": return "bg-slate-100 text-slate-800"; case "bronze": return "bg-orange-100 text-orange-800"; default: return "bg-blue-100 text-blue-800"; }
+    switch (t) { case "platinum": return "bg-[rgba(167,235,242,0.08)] text-white"; case "gold": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; case "silver": return "bg-[rgba(148,163,184,0.15)] text-white"; case "bronze": return "bg-[rgba(245,158,11,0.15)] text-[#f59e0b]"; default: return "bg-[rgba(59,130,246,0.15)] text-[#3b82f6]"; }
   };
 
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
         <span style={{ color: '#5a7a8a' }}>/</span>
@@ -121,7 +121,7 @@ export default function SponsorsPage() {
           <Card>
             <CardHeader><CardTitle>Branding Placements</CardTitle></CardHeader>
             <CardContent>
-              {branding.length === 0 ? <p className="text-gray-500">No branding placements configured</p> : (
+              {branding.length === 0 ? <p className="text-[#5a7a8a]">No branding placements configured</p> : (
                 <Table>
                   <TableHeader><TableRow><TableHead>Placement</TableHead><TableHead>Impressions</TableHead><TableHead>Unique Views</TableHead><TableHead>Scans</TableHead><TableHead>Clicks</TableHead></TableRow></TableHeader>
                   <TableBody>
@@ -150,14 +150,14 @@ export default function SponsorsPage() {
               { label: "Clicks", value: analytics?.total_clicks || 0 },
             ].map(k => (
               <Card key={k.label}><CardContent className="p-4 text-center">
-                <p className="text-2xl font-bold">{k.value.toLocaleString()}</p><p className="text-sm text-gray-500">{k.label}</p>
+                <p className="text-2xl font-bold">{k.value.toLocaleString()}</p><p className="text-sm text-[#5a7a8a]">{k.label}</p>
               </CardContent></Card>
             ))}
           </div>
           <Card>
             <CardHeader><CardTitle>ROI Summary</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-gray-500">Analytics will populate once sponsor scans and impressions are recorded.</p>
+              <p className="text-[#5a7a8a]">Analytics will populate once sponsor scans and impressions are recorded.</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -166,7 +166,7 @@ export default function SponsorsPage() {
           <Card>
             <CardHeader><CardTitle>Recent Scans</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-gray-500">Scan activity will appear here once sponsors are scanned at the event.</p>
+              <p className="text-[#5a7a8a]">Scan activity will appear here once sponsors are scanned at the event.</p>
             </CardContent>
           </Card>
         </TabsContent>

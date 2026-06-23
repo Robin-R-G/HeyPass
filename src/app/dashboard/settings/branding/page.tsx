@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface BrandingData {
   brand_name: string;
@@ -33,6 +35,7 @@ interface BrandingData {
 }
 
 export default function BrandingSettingsPage() {
+  const router = useRouter();
   const [branding, setBranding] = useState<BrandingData>({
     brand_name: '',
     tagline: '',
@@ -197,13 +200,25 @@ export default function BrandingSettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
 
   return (
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <nav style={{
+      display: 'flex', alignItems: 'center', gap: '0.5rem',
+      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(167,235,242,0.08)',
+      background: 'rgba(2,56,89,0.6)',
+    }}>
+      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+      <span style={{ color: '#5a7a8a' }}>/</span>
+      <Link href="/dashboard" style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Dashboard</Link>
+      <span style={{ color: '#5a7a8a' }}>/</span>
+      <span style={{ color: '#A7EBF2', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
+    </nav>
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Branding Settings</h1>
 
@@ -211,8 +226,8 @@ export default function BrandingSettingsPage() {
         <div
           className={`p-4 mb-6 rounded ${
             message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]'
+              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]'
           }`}
         >
           {message.text}
@@ -221,11 +236,11 @@ export default function BrandingSettingsPage() {
 
       <div className="space-y-8">
         {/* Identity */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Identity</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Brand Name
               </label>
               <input
@@ -234,12 +249,12 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, brand_name: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
                 placeholder="Your Brand Name"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Tagline
               </label>
               <input
@@ -248,7 +263,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, tagline: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
                 placeholder="Your tagline"
               />
             </div>
@@ -256,12 +271,12 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Logos */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Logos & Images</h2>
           <div className="grid grid-cols-2 gap-6">
             {/* Organization Logo */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
                 Organization Logo
               </label>
               {branding.logo_url && (
@@ -274,7 +289,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                <label className="cursor-pointer bg-[rgba(84,172,191,0.08)] text-[#A7EBF2] px-3 py-1 rounded text-sm hover:bg-[rgba(84,172,191,0.15)]">
                   {uploading === 'logo' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -290,7 +305,7 @@ export default function BrandingSettingsPage() {
                 {branding.logo_url && (
                   <button
                     onClick={() => handleDeleteAsset('logo')}
-                    className="text-red-600 text-sm hover:text-red-800"
+                    className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
                   </button>
@@ -300,7 +315,7 @@ export default function BrandingSettingsPage() {
 
             {/* College Logo */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
                 College Logo
               </label>
               {branding.college_logo_url && (
@@ -313,7 +328,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                <label className="cursor-pointer bg-[rgba(84,172,191,0.08)] text-[#A7EBF2] px-3 py-1 rounded text-sm hover:bg-[rgba(84,172,191,0.15)]">
                   {uploading === 'college-logo' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -329,7 +344,7 @@ export default function BrandingSettingsPage() {
                 {branding.college_logo_url && (
                   <button
                     onClick={() => handleDeleteAsset('college-logo')}
-                    className="text-red-600 text-sm hover:text-red-800"
+                    className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
                   </button>
@@ -339,7 +354,7 @@ export default function BrandingSettingsPage() {
 
             {/* Favicon */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
                 Favicon
               </label>
               {branding.favicon_url && (
@@ -352,7 +367,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                <label className="cursor-pointer bg-[rgba(84,172,191,0.08)] text-[#A7EBF2] px-3 py-1 rounded text-sm hover:bg-[rgba(84,172,191,0.15)]">
                   {uploading === 'favicon' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -368,7 +383,7 @@ export default function BrandingSettingsPage() {
                 {branding.favicon_url && (
                   <button
                     onClick={() => handleDeleteAsset('favicon')}
-                    className="text-red-600 text-sm hover:text-red-800"
+                    className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
                   </button>
@@ -378,7 +393,7 @@ export default function BrandingSettingsPage() {
 
             {/* Default Banner */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-2">
                 Default Banner
               </label>
               {branding.default_banner_url && (
@@ -391,7 +406,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-blue-50 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-100">
+                <label className="cursor-pointer bg-[rgba(84,172,191,0.08)] text-[#A7EBF2] px-3 py-1 rounded text-sm hover:bg-[rgba(84,172,191,0.15)]">
                   {uploading === 'banner' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -407,7 +422,7 @@ export default function BrandingSettingsPage() {
                 {branding.default_banner_url && (
                   <button
                     onClick={() => handleDeleteAsset('banner')}
-                    className="text-red-600 text-sm hover:text-red-800"
+                    className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
                   </button>
@@ -418,7 +433,7 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Colors */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Colors</h2>
           <div className="grid grid-cols-4 gap-4">
             {[
@@ -432,7 +447,7 @@ export default function BrandingSettingsPage() {
               { key: 'error_color', label: 'Error' },
             ].map(({ key, label }) => (
               <div key={key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                   {label}
                 </label>
                 <div className="flex gap-2">
@@ -442,7 +457,7 @@ export default function BrandingSettingsPage() {
                     onChange={(e) =>
                       setBranding((prev) => ({ ...prev, [key]: e.target.value }))
                     }
-                    className="h-10 w-10 rounded border cursor-pointer"
+                    className="h-10 w-10 rounded border-[rgba(167,235,242,0.12)] cursor-pointer"
                   />
                   <input
                     type="text"
@@ -450,7 +465,7 @@ export default function BrandingSettingsPage() {
                     onChange={(e) =>
                       setBranding((prev) => ({ ...prev, [key]: e.target.value }))
                     }
-                    className="flex-1 border rounded px-2 py-1 text-sm font-mono"
+                    className="flex-1 border-[rgba(167,235,242,0.12)] rounded px-2 py-1 text-sm font-mono"
                   />
                 </div>
               </div>
@@ -459,11 +474,11 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Typography & Shape */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Typography & Shape</h2>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Font Family
               </label>
               <input
@@ -472,11 +487,11 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, font_family: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Border Radius (px)
               </label>
               <input
@@ -490,7 +505,7 @@ export default function BrandingSettingsPage() {
                     border_radius: parseInt(e.target.value) || 0,
                   }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
             <div className="flex items-end">
@@ -506,18 +521,18 @@ export default function BrandingSettingsPage() {
                   }
                   className="rounded"
                 />
-                <span className="text-sm text-gray-700">White Label Mode</span>
+                <span className="text-sm text-[#9cb8c4]">White Label Mode</span>
               </label>
             </div>
           </div>
         </section>
 
         {/* Footer & Support */}
-        <section className="bg-white rounded-lg border p-6">
+        <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
           <h2 className="text-lg font-semibold mb-4">Footer & Support</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Footer Company Name
               </label>
               <input
@@ -529,11 +544,11 @@ export default function BrandingSettingsPage() {
                     footer_company_name: e.target.value,
                   }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Footer Website URL
               </label>
               <input
@@ -545,11 +560,11 @@ export default function BrandingSettingsPage() {
                     footer_website_url: e.target.value,
                   }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Footer Copyright
               </label>
               <input
@@ -561,11 +576,11 @@ export default function BrandingSettingsPage() {
                     footer_copyright: e.target.value,
                   }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Footer Text
               </label>
               <textarea
@@ -573,12 +588,12 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, footer_text: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
                 rows={3}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Support Email
               </label>
               <input
@@ -587,11 +602,11 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, support_email: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#9cb8c4] mb-1">
                 Support Phone
               </label>
               <input
@@ -600,7 +615,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, support_phone: e.target.value }))
                 }
-                className="w-full border rounded-md px-3 py-2"
+                className="w-full border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
               />
             </div>
           </div>
@@ -617,6 +632,7 @@ export default function BrandingSettingsPage() {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

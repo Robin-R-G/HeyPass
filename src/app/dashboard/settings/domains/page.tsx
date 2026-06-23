@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Domain {
   id: string;
@@ -18,6 +20,7 @@ interface DnsInstructions {
 }
 
 export default function DomainSettingsPage() {
+  const router = useRouter();
   const [domains, setDomains] = useState<Domain[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
@@ -136,13 +139,25 @@ export default function DomainSettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
 
   return (
+    <div style={{ minHeight: '100vh', background: '#011C40', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <nav style={{
+      display: 'flex', alignItems: 'center', gap: '0.5rem',
+      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(167,235,242,0.08)',
+      background: 'rgba(2,56,89,0.6)',
+    }}>
+      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#9cb8c4', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
+      <span style={{ color: '#5a7a8a' }}>/</span>
+      <Link href="/dashboard" style={{ color: '#9cb8c4', textDecoration: 'none', fontSize: '0.85rem' }}>Dashboard</Link>
+      <span style={{ color: '#5a7a8a' }}>/</span>
+      <span style={{ color: '#A7EBF2', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
+    </nav>
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Custom Domain Settings</h1>
 
@@ -150,8 +165,8 @@ export default function DomainSettingsPage() {
         <div
           className={`p-4 mb-6 rounded ${
             message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]'
+              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]'
           }`}
         >
           {message.text}
@@ -159,7 +174,7 @@ export default function DomainSettingsPage() {
       )}
 
       {/* Add Domain */}
-      <section className="bg-white rounded-lg border p-6 mb-6">
+      <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Add Custom Domain</h2>
         <div className="flex gap-4">
           <input
@@ -167,7 +182,7 @@ export default function DomainSettingsPage() {
             value={newDomain}
             onChange={(e) => setNewDomain(e.target.value)}
             placeholder="events.yourdomain.com"
-            className="flex-1 border rounded-md px-3 py-2"
+            className="flex-1 border-[rgba(167,235,242,0.12)] rounded-md px-3 py-2"
             onKeyPress={(e) => e.key === 'Enter' && handleAddDomain()}
           />
           <button
@@ -182,27 +197,27 @@ export default function DomainSettingsPage() {
 
       {/* DNS Instructions */}
       {dnsInstructions && (
-        <section className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+        <section className="bg-[rgba(245,158,11,0.1)] border-[rgba(245,158,11,0.2)] rounded-lg p-6 mb-6">
           <h3 className="font-semibold mb-2">DNS Configuration Required</h3>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-[#9cb8c4] mb-4">
             Add the following DNS records to your domain:
           </p>
           <div className="space-y-2">
             {dnsInstructions.records.map((record, index) => (
-              <div key={index} className="bg-white rounded p-3 border">
+              <div key={index} className="bg-[rgba(167,235,242,0.03)] rounded p-3 border-[rgba(167,235,242,0.12)]">
                 <div className="flex items-center gap-4">
                   <span className="font-mono text-sm font-bold">{record.type}</span>
                   <span className="font-mono text-sm">{record.name}</span>
-                  <span className="font-mono text-sm text-gray-500">→</span>
+                  <span className="font-mono text-sm text-[#5a7a8a]">→</span>
                   <span className="font-mono text-sm">{record.value}</span>
-                  <span className="text-xs text-gray-400">TTL: {record.ttl}</span>
+                  <span className="text-xs text-[#5a7a8a]">TTL: {record.ttl}</span>
                 </div>
               </div>
             ))}
           </div>
           <button
             onClick={() => setDnsInstructions(null)}
-            className="mt-4 text-sm text-gray-600 hover:text-gray-800"
+            className="mt-4 text-sm text-[#9cb8c4] hover:text-white"
           >
             Dismiss
           </button>
@@ -210,17 +225,17 @@ export default function DomainSettingsPage() {
       )}
 
       {/* Domain List */}
-      <section className="bg-white rounded-lg border p-6">
+      <section className="bg-[rgba(167,235,242,0.03)] rounded-lg border-[rgba(167,235,242,0.12)] p-6">
         <h2 className="text-lg font-semibold mb-4">Your Domains</h2>
 
         {domains.length === 0 ? (
-          <p className="text-gray-500">No custom domains configured yet.</p>
+          <p className="text-[#5a7a8a]">No custom domains configured yet.</p>
         ) : (
           <div className="space-y-4">
             {domains.map((domain) => (
               <div
                 key={domain.id}
-                className="flex items-center justify-between p-4 border rounded-lg"
+                className="flex items-center justify-between p-4 border-[rgba(167,235,242,0.12)] rounded-lg"
               >
                 <div>
                   <div className="flex items-center gap-2">
@@ -228,15 +243,15 @@ export default function DomainSettingsPage() {
                     <span
                       className={`px-2 py-0.5 rounded text-xs ${
                         domain.verified
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981]'
+                          : 'bg-[rgba(245,158,11,0.15)] text-[#f59e0b]'
                       }`}
                     >
                       {domain.verified ? 'Verified' : 'Pending'}
                     </span>
                   </div>
                   {domain.last_verified_at && (
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-[#5a7a8a] mt-1">
                       Last verified: {new Date(domain.last_verified_at).toLocaleString()}
                     </p>
                   )}
@@ -263,6 +278,7 @@ export default function DomainSettingsPage() {
           </div>
         )}
       </section>
+    </div>
     </div>
   );
 }

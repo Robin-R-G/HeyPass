@@ -77,7 +77,7 @@ export default function Home() {
         </Link>
 
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <Link href="/register/slug" style={{
+          <Link href="/auth/register" style={{
             color: '#9cb8c4',
             textDecoration: 'none',
             fontSize: '0.875rem',
