@@ -187,26 +187,7 @@ export async function authenticateWithClient(
   ip_address?: string,
   user_agent?: string
 ): Promise<{ tokens: AuthTokens; role: string }> {
-  // Verify user is member of client
-  const { data: membership, error } = await supabaseAdmin
-    .from('client_memberships')
-    .select(`
-      id,
-      role:roles(slug, name)
-    `)
-    .eq('user_id', userId)
-    .eq('client_id', clientId)
-    .eq('status', 'active')
-    .is('deleted_at', null)
-    .single();
-
-  if (error || !membership) {
-    throw new Error('Access denied: Not a member of this client');
-  }
-
-  const role = (membership.role as { slug: string }).slug;
-
-  // Fetch user email and superadmin status
+  // Fetch user email and superadmin status first
   const { data: user } = await supabaseAdmin
     .from('users')
     .select('email, is_superadmin')
@@ -216,6 +197,47 @@ export async function authenticateWithClient(
   if (!user) {
     throw new Error('User not found');
   }
+
+  let role = 'owner';
+
+  if (!user.is_superadmin) {
+    // Verify user is member of client
+    const { data: membership, error } = await supabaseAdmin
+      .from('client_memberships')
+      .select(`
+        id,
+        role:roles(slug, name)
+      `)
+      .eq('user_id', userId)
+      .eq('client_id', clientId)
+      .eq('status', 'active')
+      .is('deleted_at', null)
+      .single();
+
+    if (error || !membership) {
+      throw new Error('Access denied: Not a member of this client');
+    }
+
+    role = (membership.role as { slug: string }).slug;
+  } else {
+    // For superadmins, check if a membership exists anyway to get their actual role,
+    // otherwise default to 'owner'
+    const { data: membership } = await supabaseAdmin
+      .from('client_memberships')
+      .select(`
+        role:roles(slug)
+      `)
+      .eq('user_id', userId)
+      .eq('client_id', clientId)
+      .eq('status', 'active')
+      .is('deleted_at', null)
+      .single();
+
+    if (membership?.role) {
+      role = (membership.role as { slug: string }).slug;
+    }
+  }
+
 
   // Invalidate old refresh token and generate new one
   await invalidateRefreshToken(userId);
