@@ -24,10 +24,51 @@ export function authHeaders(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+export async function checkAndRefreshTokens(): Promise<string | null> {
+  if (typeof window === 'undefined') return null;
+  const token = localStorage.getItem('access_token');
+  const refreshToken = localStorage.getItem('refresh_token');
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    // Refresh if expired or expiring within 30 seconds
+    if (payload.exp && Date.now() + 30000 >= payload.exp * 1000) {
+      if (!refreshToken) {
+        clearTokens();
+        return null;
+      }
+      const res = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+      if (!res.ok) {
+        clearTokens();
+        return null;
+      }
+      const data = await res.json();
+      const newTokens = data.data?.session || data.session;
+      if (newTokens?.access_token) {
+        localStorage.setItem('access_token', newTokens.access_token);
+        localStorage.setItem('refresh_token', newTokens.refresh_token);
+        return newTokens.access_token;
+      }
+      clearTokens();
+      return null;
+    }
+    return token;
+  } catch {
+    clearTokens();
+    return null;
+  }
+}
+
 export async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const token = await checkAndRefreshTokens();
   const headers = {
     'Content-Type': 'application/json',
-    ...authHeaders(),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options.headers || {}),
   };
   const res = await fetch(url, { ...options, headers });
@@ -40,3 +81,4 @@ export async function authFetch(url: string, options: RequestInit = {}): Promise
 
   return res;
 }
+

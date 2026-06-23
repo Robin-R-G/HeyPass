@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { isAuthenticated, getAccessToken } from '@/lib/auth-client';
+import { isAuthenticated, getAccessToken, checkAndRefreshTokens } from '@/lib/auth-client';
 
 interface PlatformStats {
   total_clients: number;
@@ -37,48 +37,49 @@ export default function SuperAdminPage() {
 
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      window.location.href = '/auth/login';
-      return;
-    }
+    const init = async () => {
+      // Check and refresh token if expired
+      const token = await checkAndRefreshTokens();
+      if (!token) {
+        window.location.href = '/auth/login';
+        return;
+      }
 
-    // Check superadmin status from JWT
-    try {
-      const token = localStorage.getItem('access_token');
-      if (token) {
+      // Check superadmin status from JWT
+      try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (!payload.is_superadmin) {
           window.location.href = '/dashboard';
           return;
         }
+      } catch {
+        window.location.href = '/auth/login';
+        return;
       }
-    } catch {
-      window.location.href = '/auth/login';
-      return;
-    }
 
-    const token = getAccessToken();
-    const headers = { Authorization: `Bearer ${token}` };
+      const headers = { Authorization: `Bearer ${token}` };
 
-    Promise.all([
-      fetch('/api/superadmin/stats', { headers }).then(r => {
-        if (!r.ok) throw new Error(`Stats API ${r.status}`);
-        return r.json();
-      }),
-      fetch('/api/superadmin/clients', { headers }).then(r => {
-        if (!r.ok) throw new Error(`Clients API ${r.status}`);
-        return r.json();
-      }),
-    ])
-      .then(([statsData, clientsData]) => {
+      try {
+        const [statsData, clientsData] = await Promise.all([
+          fetch('/api/superadmin/stats', { headers }).then(r => {
+            if (!r.ok) throw new Error(`Stats API ${r.status}`);
+            return r.json();
+          }),
+          fetch('/api/superadmin/clients', { headers }).then(r => {
+            if (!r.ok) throw new Error(`Clients API ${r.status}`);
+            return r.json();
+          }),
+        ]);
         setStats(statsData.data || statsData);
         setClients(clientsData.data?.clients || clientsData.clients || []);
         setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err: any) {
         setError(`Failed to load platform data: ${err.message}`);
         setLoading(false);
-      });
+      }
+    };
+
+    init();
   }, []);
 
   const logout = () => {
