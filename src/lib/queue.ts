@@ -1,10 +1,9 @@
 import { Queue, Worker, Job } from 'bullmq';
-import { getRedisClient } from '@/lib/cache';
 
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
 const connection = {
-  connection: getRedisClient(),
+  connection: { url: REDIS_URL },
 };
 
 export const certificateQueue = new Queue('certificate-generation', connection);
