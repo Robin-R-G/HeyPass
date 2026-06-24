@@ -82,7 +82,18 @@ async function handleMiddleware(request: NextRequest) {
       );
     }
 
-    return response;
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-user-id', jwtPayload.sub);
+    requestHeaders.set('x-user-email', jwtPayload.email);
+    requestHeaders.set('x-client-id', jwtPayload.client_id || '');
+    requestHeaders.set('x-role-slug', jwtPayload.role || '');
+    requestHeaders.set('x-is-superadmin', jwtPayload.is_superadmin ? 'true' : 'false');
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   // Page routes — let client-side code handle auth via localStorage JWT tokens

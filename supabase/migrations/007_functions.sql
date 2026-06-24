@@ -250,7 +250,7 @@ SECURITY DEFINER
 AS $$
 BEGIN
   -- If this is the first member, assign Owner role
-  IF (SELECT COUNT(*) FROM client_memberships WHERE client_id = NEW.client_id AND deleted_at IS NULL) = 1 THEN
+  IF (SELECT COUNT(*) FROM client_memberships WHERE client_id = NEW.client_id AND deleted_at IS NULL) = 0 THEN
     SELECT id INTO NEW.role_id FROM roles WHERE client_id = NEW.client_id AND slug = 'owner' AND deleted_at IS NULL;
   END IF;
   RETURN NEW;

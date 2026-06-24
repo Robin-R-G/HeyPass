@@ -242,6 +242,17 @@ export interface AuthPayload {
 }
 
 export function extractAuthPayload(req: NextRequest): AuthPayload | null {
+  const headerUserId = req.headers.get('x-user-id');
+  if (headerUserId) {
+    return {
+      userId: headerUserId,
+      email: req.headers.get('x-user-email') || '',
+      clientId: req.headers.get('x-client-id') || null,
+      roleSlug: req.headers.get('x-role-slug') || null,
+      is_superadmin: req.headers.get('x-is-superadmin') === 'true',
+    };
+  }
+
   const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
   if (!token) return null;
 

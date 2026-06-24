@@ -84,6 +84,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
           { label: 'Gates', href: `/dashboard/events/${eventId}/gates` },
           { label: 'Staff', href: `/dashboard/events/${eventId}/staff` },
           { label: 'Volunteers', href: `/dashboard/events/${eventId}/volunteers` },
+          { label: 'CRM Portal', href: `/dashboard/events/${eventId}/crm` },
           { label: 'Forms', href: `/dashboard/events/${eventId}/forms` },
           { label: 'Branding', href: `/dashboard/events/${eventId}/branding` },
           { label: 'Analytics', href: `/dashboard/events/${eventId}/analytics` },

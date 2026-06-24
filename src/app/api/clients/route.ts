@@ -3,7 +3,6 @@ import { supabase, supabaseAdmin } from '@/lib/supabase/client';
 import { withAuth, successResponse } from '@/lib/route-guard';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
 import { createAuditLog } from '@/lib/audit';
-import { extractTokenFromHeader, verifyAccessToken } from '@/lib/auth';
 
 // GET /api/clients — List user's clients
 export const GET = withAuth(async (_req: NextRequest, auth) => {
@@ -37,18 +36,16 @@ export const GET = withAuth(async (_req: NextRequest, auth) => {
 });
 
 // POST /api/clients — Create a new client (available to all authenticated users)
-export async function POST(req: NextRequest) {
+export const POST = withAuth(async (req: NextRequest, auth) => {
   try {
-    const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
-    if (!token) return createErrorResponse(401, 'Unauthorized');
-    const payload = verifyAccessToken(token);
-    if (!payload) return createErrorResponse(401, 'Invalid token');
-
     const { name, slug } = await req.json();
 
     if (!name || !slug) {
       return createErrorResponse(400, 'Name and slug are required');
     }
+
+    console.log('[DEBUG] POST /api/clients - SUPABASE_SERVICE_ROLE_KEY length:', process.env.SUPABASE_SERVICE_ROLE_KEY ? process.env.SUPABASE_SERVICE_ROLE_KEY.length : 'undefined');
+    console.log('[DEBUG] POST /api/clients - NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
 
     const { data: client, error: clientError } = await supabaseAdmin
       .from('clients')
@@ -60,11 +57,20 @@ export async function POST(req: NextRequest) {
       return createErrorResponse(400, clientError.message);
     }
 
+    // Fetch the seeded owner role for this client
+    const { data: ownerRole } = await supabaseAdmin
+      .from('roles')
+      .select('id')
+      .eq('client_id', client.id)
+      .eq('slug', 'owner')
+      .single();
+
     const { error: memberError } = await supabaseAdmin
       .from('client_memberships')
       .insert({
         client_id: client.id,
-        user_id: payload.sub,
+        user_id: auth.userId,
+        role_id: ownerRole?.id || null,
         status: 'active',
         joined_at: new Date().toISOString(),
       });
@@ -75,7 +81,7 @@ export async function POST(req: NextRequest) {
     }
 
     await createAuditLog({
-      user_id: payload.sub,
+      user_id: auth.userId,
       client_id: client.id,
       action: 'auth.register',
       resource_type: 'client',
@@ -87,4 +93,4 @@ export async function POST(req: NextRequest) {
   } catch {
     return createErrorResponse(500, 'Internal server error');
   }
-}
+});

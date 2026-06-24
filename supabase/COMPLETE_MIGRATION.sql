@@ -1282,5 +1282,14 @@ INSERT INTO permissions (name, resource, action, description) VALUES
 ON CONFLICT (name) DO NOTHING;
 
 -- ================================================================
+-- Architectural Refactoring Indexes & Constraints
+-- ================================================================
+ALTER TABLE client_memberships ADD CONSTRAINT fk_client_memberships_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL;
+CREATE INDEX IF NOT EXISTS idx_client_memberships_role_id ON client_memberships(role_id);
+CREATE INDEX IF NOT EXISTS idx_events_client_id ON events(client_id);
+CREATE INDEX IF NOT EXISTS idx_registrations_event_id ON registrations(event_id);
+CREATE INDEX IF NOT EXISTS idx_check_ins_ticket_id ON check_ins(ticket_id);
+
+-- ================================================================
 -- DONE! All 21 migrations applied.
 -- ================================================================

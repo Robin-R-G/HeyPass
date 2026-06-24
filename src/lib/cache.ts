@@ -11,8 +11,13 @@ function getRedisClient(): Redis | null {
 function initRedis(): void {
   if (redis) return;
 
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return;
+  }
+
   const url = process.env.REDIS_URL;
   if (!url) {
+    // Only warn in dev/prod runtime, not build
     console.warn('[Redis] REDIS_URL not set. Running without cache/session store.');
     return;
   }

@@ -1,16 +1,13 @@
 import { NextRequest } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/client';
-import { extractTokenFromHeader, verifyAccessToken } from '@/lib/auth';
+import { withAuth } from '@/lib/route-guard';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
 
-export async function GET(req: NextRequest) {
+export const GET = withAuth(async (req: NextRequest, auth) => {
   try {
-    const token = extractTokenFromHeader(req.headers.get('authorization') ?? undefined);
-    if (!token) return createErrorResponse(401, 'Unauthorized');
-
-    const payload = verifyAccessToken(token);
-    if (!payload) return createErrorResponse(401, 'Invalid token');
-    if (!payload.is_superadmin) return createErrorResponse(403, 'Superadmin access required');
+    if (!auth.is_superadmin) {
+      return createErrorResponse(403, 'Superadmin access required');
+    }
 
     const [clients, users, events, registrations] = await Promise.all([
       supabaseAdmin.from('clients').select('id', { count: 'exact', head: true }).is('deleted_at', null),
@@ -28,4 +25,4 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return createErrorResponse(500, error instanceof Error ? error.message : 'Internal server error');
   }
-}
+});
