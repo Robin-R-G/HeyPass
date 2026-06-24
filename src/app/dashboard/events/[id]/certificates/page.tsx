@@ -138,7 +138,7 @@ export default function CertificatesPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{stats.generated}</div>
+            <div className="text-2xl font-bold text-[#FCA311]">{stats.generated}</div>
             <div className="text-sm text-muted-foreground">Generated</div>
           </CardContent>
         </Card>

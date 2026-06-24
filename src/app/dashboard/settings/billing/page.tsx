@@ -132,7 +132,7 @@ export default function BillingPage() {
         <TabsContent value="subscription" className="space-y-6">
           {/* Current Plan */}
           {subscription && subscription.plan && (
-            <Card className="border-indigo-500">
+            <Card className="border-[#FCA311]">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Current Plan: {subscription.plan.name}</span>
@@ -193,7 +193,7 @@ export default function BillingPage() {
               const isCurrent = subscription?.plan_id === plan.id;
 
               return (
-                <Card key={plan.id} className={isCurrent ? 'border-indigo-500' : ''}>
+                <Card key={plan.id} className={isCurrent ? 'border-[#FCA311]' : ''}>
                   <CardHeader>
                     <CardTitle className="text-lg">{plan.name}</CardTitle>
                     <div className="text-3xl font-bold">

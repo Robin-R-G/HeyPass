@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -15,10 +15,13 @@ export default function NewEventPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (title && !slug) {
+      setSlug(title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
+    }
+  }, [title, slug]);
+
   const autoSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  if (slug === '' && title) {
-    setSlug(autoSlug);
-  }
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +34,7 @@ export default function NewEventPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title, slug: slug || autoSlug, start_date: startDate, end_date: endDate,
-          venue, description, status: 'draft',
+          venue, description, status: 'draft', event_type: 'conference',
         }),
       });
       const data = await res.json();
@@ -42,7 +45,7 @@ export default function NewEventPage() {
         return;
       }
 
-      const eventId = data.event?.id || data.id;
+      const eventId = data.data?.event?.id || data.event?.id || data.id;
       router.push(`/dashboard/events/${eventId}/dashboard`);
     } catch {
       setError('Network error');

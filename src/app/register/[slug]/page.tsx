@@ -392,7 +392,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
             </div>
             <div className="h-2 bg-[rgba(229,229,229,0.08)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-blue-600 transition-all"
+                className="h-full bg-[#FCA311] transition-all"
                 style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
               />
             </div>
@@ -447,7 +447,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 <button
                   type="button"
                   onClick={() => setCurrentStep(currentStep + 1)}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="px-6 py-2 bg-[#FCA311] text-white rounded-md hover:bg-[#E09800]"
                 >
                   Next
                 </button>
@@ -456,7 +456,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  className="px-6 py-2 bg-[#FCA311] text-white rounded-md hover:bg-[#E09800] disabled:opacity-50"
                 >
                   {submitting ? 'Submitting...' : 'Submit Registration'}
                 </button>

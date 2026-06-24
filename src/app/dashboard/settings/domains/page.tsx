@@ -188,7 +188,7 @@ export default function DomainSettingsPage() {
           <button
             onClick={handleAddDomain}
             disabled={adding || !newDomain.trim()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="bg-[#FCA311] text-white px-4 py-2 rounded-md hover:bg-[#E09800] disabled:opacity-50"
           >
             {adding ? 'Adding...' : 'Add Domain'}
           </button>

@@ -141,7 +141,7 @@ export default function NotificationsPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{stats.today}</div>
+            <div className="text-2xl font-bold text-[#FCA311]">{stats.today}</div>
             <div className="text-sm text-muted-foreground">Today</div>
           </CardContent>
         </Card>

@@ -172,8 +172,8 @@ export async function checkRateLimit(
     return { allowed: true, remaining: maxAttempts - count - 1 };
   } catch (err) {
     console.error(`[Cache] Rate limit error for key ${key}:`, err);
-    // Fail open: allow request if Redis is down (better UX than blocking everyone)
-    return { allowed: true, remaining: maxAttempts, retryAfter: undefined };
+    // Fail closed for security: block request if Redis is down
+    return { allowed: false, remaining: 0, retryAfter: 60 };
   }
 }
 

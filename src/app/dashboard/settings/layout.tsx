@@ -70,11 +70,11 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
               style={{
                 display: 'block',
                 padding: '0.5rem 1.25rem',
-                color: isActive ? '#E5E5E5' : '#E5E5E5',
+                color: isActive ? '#FCA311' : '#E5E5E5',
                 textDecoration: 'none',
                 fontSize: '0.85rem',
                 background: isActive ? 'rgba(252,163,17,0.15)' : 'transparent',
-                borderLeft: isActive ? '2px solid #E5E5E5' : '2px solid transparent',
+                borderLeft: isActive ? '2px solid #FCA311' : '2px solid transparent',
                 transition: 'background 0.15s, color 0.15s',
               }}
             >

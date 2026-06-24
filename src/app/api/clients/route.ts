@@ -44,9 +44,6 @@ export const POST = withAuth(async (req: NextRequest, auth) => {
       return createErrorResponse(400, 'Name and slug are required');
     }
 
-    console.log('[DEBUG] POST /api/clients - SUPABASE_SERVICE_ROLE_KEY length:', process.env.SUPABASE_SERVICE_ROLE_KEY ? process.env.SUPABASE_SERVICE_ROLE_KEY.length : 'undefined');
-    console.log('[DEBUG] POST /api/clients - NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-
     const { data: client, error: clientError } = await supabaseAdmin
       .from('clients')
       .insert({ name, slug })

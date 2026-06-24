@@ -288,7 +288,7 @@ export default function AnalyticsPage() {
                     <CardTitle className="text-sm">Certificate Downloads</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold text-blue-600">
+                    <div className="text-3xl font-bold text-[#FCA311]">
                       {overview.total_certificates > 0
                         ? ((overview.certificates_downloaded / overview.total_certificates) * 100).toFixed(1)
                         : 0}%
@@ -522,7 +522,7 @@ export default function AnalyticsPage() {
                 </Card>
                 <Card>
                   <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-blue-600">{certificates.download_rate.rate.toFixed(1)}%</div>
+                    <div className="text-2xl font-bold text-[#FCA311]">{certificates.download_rate.rate.toFixed(1)}%</div>
                     <div className="text-sm text-muted-foreground">Download Rate</div>
                   </CardContent>
                 </Card>
@@ -590,7 +590,7 @@ export default function AnalyticsPage() {
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-3xl font-bold text-blue-600">{realtime.check_ins_last_30min}</div>
+                  <div className="text-3xl font-bold text-[#FCA311]">{realtime.check_ins_last_30min}</div>
                   <div className="text-sm text-muted-foreground">Check-ins (30 min)</div>
                 </CardContent>
               </Card>

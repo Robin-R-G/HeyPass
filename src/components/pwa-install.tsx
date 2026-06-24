@@ -113,7 +113,7 @@ export function PWAStatus() {
         {isOnline ? 'Online' : 'Offline'}
       </span>
       {isInstalled && (
-        <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
+        <span className="text-xs bg-[#FCA311]/15 text-[#FCA311] px-2 py-0.5 rounded-full">
           Installed
         </span>
       )}

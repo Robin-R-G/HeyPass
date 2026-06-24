@@ -122,7 +122,7 @@ export default function LinksPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{stats.total_clicks.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-[#FCA311]">{stats.total_clicks.toLocaleString()}</div>
             <div className="text-sm text-muted-foreground">Total Clicks</div>
           </CardContent>
         </Card>

@@ -178,7 +178,7 @@ export default function FormsPage({ params }: FormsPageProps) {
           </button>
           <button
             onClick={handleCreateBlankForm}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            className="bg-[#FCA311] text-black px-4 py-2 rounded-md font-semibold hover:bg-[#E09800]"
           >
             Create Blank Form
           </button>
@@ -244,7 +244,7 @@ export default function FormsPage({ params }: FormsPageProps) {
           <p className="text-[#888888] mb-4">No forms created yet</p>
           <button
             onClick={handleCreateBlankForm}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            className="bg-[#FCA311] text-black px-4 py-2 rounded-md font-semibold hover:bg-[#E09800]"
           >
             Create Your First Form
           </button>

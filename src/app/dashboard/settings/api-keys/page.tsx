@@ -151,7 +151,7 @@ export default function ApiKeysPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{keys.filter(k => k.scope === 'full').length}</div>
+            <div className="text-2xl font-bold text-[#FCA311]">{keys.filter(k => k.scope === 'full').length}</div>
             <div className="text-sm text-muted-foreground">Full Access</div>
           </CardContent>
         </Card>
