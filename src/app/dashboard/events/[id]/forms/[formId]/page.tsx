@@ -161,7 +161,7 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
                 fontSize: '0.8rem', fontWeight: 500,
               }}>+ Add Field</button>
             </DialogTrigger>
-            <DialogContent style={{ background: '#1a2a4a', border: '1px solid rgba(229,229,229,0.15)' }}>
+            <DialogContent>
               <DialogHeader><DialogTitle style={{ color: '#fff' }}>Add Field</DialogTitle></DialogHeader>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                 <div>

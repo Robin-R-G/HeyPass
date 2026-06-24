@@ -288,8 +288,8 @@ export default function SuperAdminPage() {
       </main>
 
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="bg-[#0a0a0a] border border-[#222] rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+          <div className="bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md p-6 shadow-2xl relative">
             <div className="flex justify-between items-center mb-6">
               <h3 id="modal-title" className="text-lg font-bold text-white">Create New Organization</h3>
               <button 

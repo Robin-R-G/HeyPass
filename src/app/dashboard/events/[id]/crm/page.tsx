@@ -432,7 +432,7 @@ export default function CRMDashboardPage() {
                   <DialogTrigger asChild>
                     <Button size="sm"><Plus className="w-4 h-4 mr-1.5" /> Log Feedback</Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-[#0a0a0a] border-[#222] text-white">
+                  <DialogContent className="max-w-lg">
                     <DialogHeader>
                       <DialogTitle>Mock Attendee Feedback Submission</DialogTitle>
                       <DialogDescription className="text-[#888]">Simulate attendee feedback to trigger CRM points recalculation.</DialogDescription>
