@@ -169,7 +169,7 @@ export default function SuperAdminPage() {
       <div className="hp-bg-gradient" />
 
       {/* Nav */}
-      <nav className="hp-nav flex justify-between items-center px-8 py-4">
+      <nav className="hp-nav flex justify-between items-center px-6 sm:px-8 py-4">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">
@@ -181,31 +181,33 @@ export default function SuperAdminPage() {
             Superadmin
           </span>
         </div>
-        <div className="flex gap-4 items-center">
-          <Link href="/superadmin" className="text-[#E5E5E5] hover:text-white no-underline text-xs tracking-wide transition-colors focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded-md px-2 py-1">
-            Overview
-          </Link>
+        <div className="flex items-center">
           <button 
             onClick={logout} 
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#ef4444] bg-[#ef4444]/15 hover:bg-[#ef4444]/25 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ef4444] focus:outline-none"
+            className="px-4 py-2 rounded-lg text-xs font-semibold text-[#ef4444] hover:bg-[#ef4444]/15 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ef4444] focus:outline-none"
           >
             Logout
           </button>
         </div>
       </nav>
 
-      <div className="max-w-[1100px] mx-auto px-8 py-10 relative z-10">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-10 relative z-10">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-1 text-white tracking-tight">Platform Overview</h1>
-          <p className="text-[#E5E5E5] text-sm">Manage all organizations and users across HeyPass</p>
+          <p className="text-[#888] text-sm">Manage all organizations and users across HeyPass</p>
         </div>
 
         {loading && (
-          <div className="text-center py-16 text-[#E5E5E5] animate-pulse">Loading platform data...</div>
+          <div className="text-center py-16">
+            <div className="inline-flex items-center gap-3 text-[#FCA311]">
+              <div className="w-5 h-5 border-2 border-[#FCA311] border-t-transparent rounded-full animate-spin" />
+              <span className="text-sm">Loading platform data...</span>
+            </div>
+          </div>
         )}
 
         {error && (
-          <div className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-6 text-center text-[#ef4444] mb-6">
+          <div className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-4 text-center text-[#ef4444] text-sm mb-6">
             {error}
           </div>
         )}
@@ -213,59 +215,65 @@ export default function SuperAdminPage() {
         {!loading && stats && (
           <>
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
               {[
                 { label: 'Organizations', value: stats.total_clients || 0, icon: '🏢' },
                 { label: 'Users', value: stats.total_users || 0, icon: '👥' },
                 { label: 'Events', value: stats.total_events || 0, icon: '📋' },
                 { label: 'Registrations', value: stats.total_registrations || 0, icon: '🎟️' },
               ].map(s => (
-                <div key={s.label} className="bg-[#14213D]/60 border border-white/5 rounded-xl p-5 hover:border-[#FCA311]/30 transition-all duration-300">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[#888] text-xs font-medium uppercase tracking-wider">{s.label}</span>
-                    <span className="text-lg" role="img" aria-label={s.label}>{s.icon}</span>
+                <div key={s.label} className="bg-[#0a0a0a] border border-[#222] rounded-xl p-4 sm:p-5 hover:border-[#FCA311]/30 transition-all duration-300">
+                  <div className="flex justify-between items-start mb-3">
+                    <span className="text-[#888] text-[10px] font-semibold uppercase tracking-wider">{s.label}</span>
+                    <span className="text-base opacity-60">{s.icon}</span>
                   </div>
-                  <div className="text-3xl font-extrabold text-[#FCA311]">{s.value}</div>
+                  <div className="text-2xl sm:text-3xl font-extrabold text-[#FCA311]">{s.value}</div>
                 </div>
               ))}
             </div>
 
             {/* Organizations */}
             <div>
-              <div className="flex justify-between items-center mb-5">
+              <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-white">Organizations</h2>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-transparent text-[#FCA311] border border-[#FCA311]/40 hover:border-[#FCA311] hover:bg-[#FCA311]/10 px-4 py-1.5 rounded-lg font-semibold cursor-pointer text-xs transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                  className="bg-[#FCA311] text-black hover:bg-[#E09800] px-4 py-2 rounded-lg font-semibold cursor-pointer text-xs transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
                 >
                   + Create Organization
                 </button>
               </div>
 
               {clients.length === 0 ? (
-                <div className="bg-white/[0.03] border border-white/5 rounded-xl py-12 text-center text-[#888]">
-                  No organizations yet
+                <div className="bg-[#0a0a0a] border border-[#222] rounded-xl py-16 text-center">
+                  <div className="text-[#888] text-sm mb-3">No organizations yet</div>
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="text-[#FCA311] hover:text-[#E09800] text-xs font-semibold cursor-pointer bg-transparent border-none transition-colors"
+                  >
+                    Create your first organization
+                  </button>
                 </div>
               ) : (
                 <div className="grid gap-3">
                   {clients.map(c => (
-                    <div key={c.id} className="bg-[#14213D]/60 border border-white/5 rounded-xl px-6 py-5 flex justify-between items-center hover:border-white/10 transition-colors">
+                    <div key={c.id} className="bg-[#0a0a0a] border border-[#222] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 hover:border-[#333] transition-colors">
                       <div>
-                        <div className="font-semibold text-base mb-0.5 text-white">{c.name}</div>
-                        <div className="text-[#888] text-xs">
+                        <div className="font-semibold text-sm sm:text-base text-white">{c.name}</div>
+                        <div className="text-[#888] text-xs mt-0.5">
                           {c.slug} · Created {new Date(c.created_at).toLocaleDateString()}
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <span className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${
-                          c.status === 'active' ? 'bg-[#10b981]/15 text-[#10b981]' : 'bg-white/10 text-[#E5E5E5]'
+                          c.status === 'active' ? 'bg-[#10b981]/15 text-[#10b981]' : 'bg-white/10 text-[#888]'
                         }`}>
                           {c.status}
                         </span>
                         <button
                           onClick={() => selectClient(c.id)}
                           disabled={selecting !== null}
-                          className="bg-gradient-to-r from-[#FCA311] to-[#E09800] text-black font-semibold px-4 py-1.5 rounded-lg cursor-pointer text-xs disabled:opacity-70 disabled:cursor-default hover:scale-105 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                          className="bg-[#FCA311] text-black font-semibold px-4 py-1.5 rounded-lg cursor-pointer text-xs disabled:opacity-50 disabled:cursor-default hover:bg-[#E09800] transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
                         >
                           {selecting === c.id ? 'Accessing...' : 'Manage'}
                         </button>
@@ -281,19 +289,19 @@ export default function SuperAdminPage() {
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="bg-[#14213D]/95 border border-[#FCA311]/30 rounded-2xl w-full max-w-md p-8 shadow-2xl relative">
+          <div className="bg-[#0a0a0a] border border-[#222] rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
             <div className="flex justify-between items-center mb-6">
-              <h3 id="modal-title" className="text-xl font-bold text-white">Create New Organization</h3>
+              <h3 id="modal-title" className="text-lg font-bold text-white">Create New Organization</h3>
               <button 
                 onClick={() => { setShowCreateModal(false); setCreateError(''); }} 
-                className="text-[#888] hover:text-white bg-transparent border-none text-2xl cursor-pointer focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded-md px-1"
+                className="text-[#888] hover:text-white bg-transparent border-none text-xl cursor-pointer focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded-md p-1"
                 aria-label="Close dialog"
               >
                 &times;
               </button>
             </div>
 
-            <form onSubmit={handleCreateClient} className="flex flex-col gap-5">
+            <form onSubmit={handleCreateClient} className="flex flex-col gap-4">
               <div>
                 <label className="block text-[#888] text-[10px] font-semibold mb-1.5 uppercase tracking-wider">Organization Name</label>
                 <input
@@ -304,7 +312,7 @@ export default function SuperAdminPage() {
                     setNewClientName(e.target.value);
                     setNewClientSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
                   }}
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FCA311] focus:ring-2 focus:ring-[#FCA311]/40 rounded-lg p-3 text-white text-sm outline-none transition-all focus:ring-2 focus:ring-[#FCA311]"
+                  className="w-full bg-[#111] border border-[#333] focus:border-[#FCA311] focus:ring-1 focus:ring-[#FCA311]/50 rounded-lg p-3 text-white text-sm outline-none transition-all"
                   required
                 />
               </div>
@@ -316,7 +324,7 @@ export default function SuperAdminPage() {
                   placeholder="e.g. ieee-student"
                   value={newClientSlug}
                   onChange={(e) => setNewClientSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, ''))}
-                  className="w-full bg-white/[0.03] border border-white/10 focus:border-[#FCA311] focus:ring-2 focus:ring-[#FCA311]/40 rounded-lg p-3 text-white text-sm outline-none transition-all focus:ring-2 focus:ring-[#FCA311]"
+                  className="w-full bg-[#111] border border-[#333] focus:border-[#FCA311] focus:ring-1 focus:ring-[#FCA311]/50 rounded-lg p-3 text-white text-sm outline-none transition-all"
                   required
                 />
               </div>
@@ -329,14 +337,14 @@ export default function SuperAdminPage() {
                 <button
                   type="button"
                   onClick={() => { setShowCreateModal(false); setCreateError(''); }}
-                  className="bg-transparent text-[#E5E5E5] border border-white/10 hover:bg-white/5 hover:text-white px-5 py-2 rounded-lg cursor-pointer text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-white focus:outline-none"
+                  className="bg-transparent text-[#888] border border-[#333] hover:bg-[#111] hover:text-white px-5 py-2 rounded-lg cursor-pointer text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-white focus:outline-none"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creatingClient}
-                  className="bg-gradient-to-r from-[#FCA311] to-[#E09800] text-black font-bold px-5 py-2 rounded-lg cursor-pointer text-xs disabled:opacity-70 disabled:cursor-default transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                  className="bg-[#FCA311] text-black font-bold px-5 py-2 rounded-lg cursor-pointer text-xs disabled:opacity-50 disabled:cursor-default hover:bg-[#E09800] transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
                 >
                   {creatingClient ? 'Creating...' : 'Create'}
                 </button>
