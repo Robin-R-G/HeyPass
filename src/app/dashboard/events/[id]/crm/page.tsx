@@ -947,7 +947,7 @@ export default function CRMDashboardPage() {
                           placeholder="Attendee typing..."
                           className="bg-slate-900 border-slate-800 text-xs h-8"
                         />
-                        <Button size="xs" onClick={triggerSimulatedInbound} className="bg-emerald-500 text-black hover:bg-emerald-600 text-xs w-full py-1 h-7">
+                        <Button size="sm" onClick={triggerSimulatedInbound} className="bg-emerald-500 text-black hover:bg-emerald-600 text-xs w-full py-1 h-7">
                           Inject Inbound Chat
                         </Button>
                       </div>
@@ -962,7 +962,7 @@ export default function CRMDashboardPage() {
                             <span className="truncate max-w-[80px] font-mono text-slate-400">{m.message_id}</span>
                             <div className="flex gap-1">
                               <Button
-                                size="xs"
+                                size="sm"
                                 className="bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 text-[9px] px-1.5 py-0 h-5"
                                 onClick={async () => {
                                   await fetch(`/api/events/${eventId}/crm/whatsapp/messages`, {
@@ -976,7 +976,7 @@ export default function CRMDashboardPage() {
                                 Deliv
                               </Button>
                               <Button
-                                size="xs"
+                                size="sm"
                                 className="bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/40 text-[9px] px-1.5 py-0 h-5"
                                 onClick={async () => {
                                   await fetch(`/api/events/${eventId}/crm/whatsapp/messages`, {
