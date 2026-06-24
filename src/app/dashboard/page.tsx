@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authFetch, isAuthenticated } from '@/lib/auth-client';
+import { Card } from '@/components/ui/card';
 
 interface Event {
   id: string;
@@ -121,7 +122,7 @@ export default function DashboardPage() {
             >
               Select Organization
             </button>
-          </div>
+          </Card>
         )}
 
         {!loading && !error && events.length === 0 && (
