@@ -581,7 +581,7 @@ export default function CRMDashboardPage() {
               <DialogTrigger asChild>
                 <Button className="bg-[#FCA311] text-black hover:bg-[#E09800]"><Plus className="w-4 h-4 mr-1.5" /> Add Contact</Button>
               </DialogTrigger>
-              <DialogContent className="bg-[#0a0a0a] border-[#222] text-white">
+              <DialogContent className="max-w-lg">
                 <DialogHeader>
                   <DialogTitle>Create New CRM Contact</DialogTitle>
                   <DialogDescription className="text-[#888]">Add personal details and tags directly inside the database.</DialogDescription>
@@ -1014,7 +1014,7 @@ export default function CRMDashboardPage() {
               <DialogTrigger asChild>
                 <Button className="bg-[#FCA311] text-black hover:bg-[#E09800]"><Plus className="w-4 h-4 mr-1.5" /> Build Journey</Button>
               </DialogTrigger>
-              <DialogContent className="bg-[#0a0a0a] border-[#222] text-white">
+              <DialogContent className="max-w-lg">
                 <DialogHeader>
                   <DialogTitle>Build Automated Workflow</DialogTitle>
                   <DialogDescription className="text-[#888]">Setup trigger conditions and action delay intervals.</DialogDescription>

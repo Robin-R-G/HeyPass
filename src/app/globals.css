@@ -540,3 +540,78 @@ body {
    ============================================================ */
 
 /* Already dark by default - no light mode override needed */
+
+/* ============================================================
+   GLASSMORPHIC MODAL ANIMATIONS
+   ============================================================ */
+
+@keyframes hp-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hp-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes hp-modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95) translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hp-modal-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95) translateY(10px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes hp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hp-toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+  }
+}
+
+@keyframes hp-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.hp-overlay-enter { animation: hp-overlay-in 0.2s ease-out forwards; }
+.hp-overlay-exit { animation: hp-overlay-out 0.15s ease-in forwards; }
+.hp-modal-enter { animation: hp-modal-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.hp-modal-exit { animation: hp-modal-out 0.15s ease-in forwards; }
+.hp-toast-enter { animation: hp-toast-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.hp-toast-exit { animation: hp-toast-out 0.2s ease-in forwards; }
