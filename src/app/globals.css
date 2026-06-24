@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 /* ============================================================
    HEYPASS - SPECIAL UI DESIGN THEME

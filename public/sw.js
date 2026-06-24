@@ -1,6 +1,6 @@
-const CACHE_NAME = 'heypass-v1';
-const STATIC_CACHE = 'heypass-static-v1';
-const DYNAMIC_CACHE = 'heypass-dynamic-v1';
+const CACHE_NAME = 'heypass-v2';
+const STATIC_CACHE = 'heypass-static-v2';
+const DYNAMIC_CACHE = 'heypass-dynamic-v2';
 
 const STATIC_ASSETS = [
   '/',
@@ -19,14 +19,17 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate - clean old caches
+// Activate - clean ALL old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
           .filter((name) => name !== STATIC_CACHE && name !== DYNAMIC_CACHE)
-          .map((name) => caches.delete(name))
+          .map((name) => {
+            console.log('[SW] Deleting old cache:', name);
+            return caches.delete(name);
+          })
       );
     })
   );
@@ -48,6 +51,28 @@ self.addEventListener('fetch', (event) => {
 
   // Skip external resources
   if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // For navigation requests (HTML pages), use network-first
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseToCache = networkResponse.clone();
+            caches.open(DYNAMIC_CACHE).then((cache) => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match(request).then((cachedResponse) => {
+            return cachedResponse || caches.match('/offline');
+          });
+        })
+    );
     return;
   }
 
