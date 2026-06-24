@@ -68,12 +68,16 @@ interface FormData {
 }
 
 interface PublicRegistrationPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default function PublicRegistrationPage({ params }: PublicRegistrationPageProps) {
   const router = useRouter();
-  const eventSlug = params.slug;
+  const [eventSlug, setEventSlug] = useState<string>('');
+
+  useEffect(() => {
+    params.then(({ slug }) => setEventSlug(slug));
+  }, [params]);
 
   const [formData, setFormData] = useState<FormData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -84,9 +88,10 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [currentStep, setCurrentStep] = useState(0);
 
-  const fetchForm = useCallback(async () => {
+  const fetchForm = useCallback(async (slug: string) => {
+    if (!slug) return;
     try {
-      const response = await fetch(`/api/public/forms/${eventSlug}`);
+      const response = await fetch(`/api/public/forms/${slug}`);
       const data = await response.json();
 
       if (response.ok && data.data) {
@@ -115,8 +120,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
   }, [eventSlug]);
 
   useEffect(() => {
-    fetchForm();
-  }, [fetchForm]);
+    if (eventSlug) fetchForm(eventSlug);
+  }, [eventSlug, fetchForm]);
 
   const evaluateCondition = (
     rules: Array<{ field_id: string; operator: string; value: string }>,

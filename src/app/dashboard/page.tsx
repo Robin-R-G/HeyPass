@@ -109,7 +109,7 @@ export default function DashboardPage() {
         )}
 
         {error === 'NO_CLIENT' && (
-                      <Card className="p-16 text-center hp-glass-card hp-animate-fade-in">>
+                      <Card className="p-16 text-center hp-glass-card hp-animate-fade-in">
             <div className="text-3xl mb-4" role="img" aria-label="Organization">🏢</div>
             <h3 className="text-lg font-semibold mb-2 text-white">No organization found</h3>
             <p className="text-[#E5E5E5] text-sm mb-6">
