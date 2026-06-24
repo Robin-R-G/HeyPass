@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -14,21 +14,26 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
+function getSupabaseAdmin(): SupabaseClient {
+  if (typeof window !== 'undefined') {
+    throw new Error('supabaseAdmin must not be used in client-side code');
+  }
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }
+  return _supabaseAdmin;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const supabaseAdmin: any = new Proxy({} as any, {
   get(_target, prop) {
-    if (typeof window !== 'undefined') {
-      throw new Error('supabaseAdmin must not be used in client-side code');
-    }
-    if (!_supabaseAdmin) {
-      _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-      });
-    }
-    const value = _supabaseAdmin[prop];
-    return typeof value === 'function' ? value.bind(_supabaseAdmin) : value;
+    const client = getSupabaseAdmin();
+    const value = (client as Record<string | symbol, unknown>)[prop];
+    return typeof value === 'function' ? value.bind(client) : value;
   },
 });

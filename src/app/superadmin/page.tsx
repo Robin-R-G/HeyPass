@@ -130,7 +130,7 @@ export default function SuperAdminPage() {
     setCreateError('');
     const token = localStorage.getItem('access_token');
     try {
-      const res = await fetch('/api/clients', {
+      const res = await fetch('/api/superadmin/clients', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ export default function SuperAdminPage() {
         fetch('/api/superadmin/clients', { headers }).then(r => r.json()),
       ]);
       setStats(statsData.data || statsData);
-      setClients(clientsData.data?.clients || clientsData.clients || []);
+      setClients(clientsData.data?.clients || clientsData.data || []);
 
       setShowCreateModal(false);
       setNewClientName('');
@@ -164,24 +164,23 @@ export default function SuperAdminPage() {
 
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans antialiased relative">
-      {/* Background decoration */}
+    <div className="min-h-screen bg-black text-white font-sans antialiased">
       <div className="hp-bg-gradient" />
 
       {/* Nav */}
-      <nav className="hp-nav flex justify-between items-center px-6 sm:px-8 py-4">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">
-              H
-            </div>
-            <span className="text-lg font-bold text-white">HeyPass</span>
-          </Link>
-          <span className="text-[10px] font-semibold text-[#FCA311] bg-[#FCA311]/10 px-2 py-0.5 rounded uppercase tracking-wider">
-            Superadmin
-          </span>
-        </div>
-        <div className="flex items-center">
+      <nav className="hp-nav" style={{ padding: '16px 24px' }}>
+        <div className="flex justify-between items-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">
+                H
+              </div>
+              <span className="text-lg font-bold text-white">HeyPass</span>
+            </Link>
+            <span className="text-[10px] font-semibold text-[#FCA311] bg-[#FCA311]/10 px-2 py-0.5 rounded uppercase tracking-wider">
+              Superadmin
+            </span>
+          </div>
           <button 
             onClick={logout} 
             className="px-4 py-2 rounded-lg text-xs font-semibold text-[#ef4444] hover:bg-[#ef4444]/15 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ef4444] focus:outline-none"
@@ -191,8 +190,9 @@ export default function SuperAdminPage() {
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-10 relative z-10">
-        <div className="mb-8">
+      {/* Content */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' }}>
+        <div style={{ marginBottom: '32px' }}>
           <h1 className="text-3xl font-bold mb-1 text-white tracking-tight">Platform Overview</h1>
           <p className="text-[#888] text-sm">Manage all organizations and users across HeyPass</p>
         </div>
@@ -285,7 +285,7 @@ export default function SuperAdminPage() {
             </div>
           </>
         )}
-      </div>
+      </main>
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
