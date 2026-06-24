@@ -81,13 +81,13 @@ export default function VolunteerPage() {
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Volunteers</span>
+    <div className="min-h-screen bg-black text-white font-sans p-6 hp-bg-gradient hp-animate-fade-in">
+             <nav className="hp-nav">
+        <button onClick={() => router.back()} className="hp-nav-item text-hp-text-secondary hover:text-hp-primary">← Back</button>
+        <span className="hp-nav-item text-hp-text-muted">/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hp-nav-item text-hp-text-secondary hover:text-hp-primary">Event</Link>
+        <span className="hp-nav-item text-hp-text-muted">/</span>
+        <span className="hp-nav-item text-hp-primary font-medium">Volunteers</span>
       </nav>
 
       <div className="flex items-center justify-between mb-6">
@@ -118,7 +118,7 @@ export default function VolunteerPage() {
               { label: "Tasks", value: stats?.tasks_total || 0 },
               { label: "Slots Filled", value: stats?.tasks_filled || 0 },
             ].map(k => (
-              <Card key={k.label}><CardContent className="p-4 text-center">
+              <Card key={k.label} className="hp-glass-card hp-animate-fade-in"><CardContent className="p-4 text-center">
                 <p className="text-2xl font-bold">{k.value}</p>
                 <p className="text-sm text-[#888888]">{k.label}</p>
               </CardContent></Card>
@@ -127,7 +127,7 @@ export default function VolunteerPage() {
         </TabsContent>
 
         <TabsContent value="volunteers" className="mt-6">
-          <Card>
+          <Card className="hp-glass-card hp-animate-fade-in">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Volunteers ({volunteers.length})</CardTitle>
               <Input placeholder="Search..." className="w-64" value={search} onChange={e => setSearch(e.target.value)} />
@@ -152,7 +152,7 @@ export default function VolunteerPage() {
         </TabsContent>
 
         <TabsContent value="tasks" className="mt-6">
-          <Card>
+          <Card className="hp-glass-card hp-animate-fade-in">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Tasks ({tasks.length})</CardTitle>
               <Dialog open={taskDialogOpen} onOpenChange={setTaskDialogOpen}>
@@ -202,7 +202,7 @@ export default function VolunteerPage() {
         </TabsContent>
 
         <TabsContent value="schedule" className="mt-6">
-          <Card>
+          <Card className="hp-glass-card hp-animate-fade-in">
             <CardHeader><CardTitle>Schedule</CardTitle></CardHeader>
             <CardContent>
               {tasks.length === 0 ? <p className="text-[#888888]">No tasks scheduled</p> : (
@@ -228,7 +228,7 @@ export default function VolunteerPage() {
         </TabsContent>
 
         <TabsContent value="communicate" className="mt-6">
-          <Card>
+          <Card className="hp-glass-card hp-animate-fade-in">
             <CardHeader><CardTitle>Bulk Communication</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div><Label>Recipient Group</Label>

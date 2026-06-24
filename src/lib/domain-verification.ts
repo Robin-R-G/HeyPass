@@ -1,12 +1,12 @@
 import { supabaseAdmin } from '@/lib/supabase/client';
-import { cacheGet, cacheSet, cacheDelete, checkRateLimit } from '@/lib/cache';
+import { cacheDelete, checkRateLimit } from '@/lib/cache';
 import { createAuditLog } from '@/lib/audit';
 import dns from 'dns';
 import { promisify } from 'util';
 
 const resolveTxt = promisify(dns.resolveTxt);
 const resolveCname = promisify(dns.resolveCname);
-const resolve4 = promisify(dns.resolve4);
+
 
 // ============================================================
 // TYPES
@@ -266,7 +266,7 @@ export async function verifyDomain(
         };
       }
     }
-  } catch (err) {
+  } catch {
     result = {
       verified: false,
       method: domain.verification_method || 'txt',

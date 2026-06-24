@@ -64,15 +64,15 @@ export default function DashboardPage() {
 
   const statusColor = (s: string) => {
     switch (s) {
-      case 'published': return 'bg-green-100 text-green-800';
-      case 'draft': return 'bg-gray-100 text-gray-800';
-      case 'ended': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-yellow-100 text-yellow-800';
+      case 'published': return 'bg-hp-success/15 text-hp-success';
+      case 'draft': return 'bg-hp-surface/10 text-hp-text-secondary';
+      case 'ended': return 'bg-hp-primary/15 text-hp-primary';
+      default: return 'bg-hp-warning/15 text-hp-warning';
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans antialiased relative">
+    <div className="min-h-screen bg-hp-bg text-hp-text font-sans antialiased hp-animate-fade-in relative">
       {/* Background decoration */}
       <div className="hp-bg-gradient" />
 
@@ -83,14 +83,14 @@ export default function DashboardPage() {
           <span className="text-lg font-bold text-white">HeyPass</span>
         </Link>
         <div className="flex gap-5 items-center">
-          <Link href="/dashboard" className="text-[#FCA311] hover:text-[#FCD34D] no-underline text-xs font-semibold tracking-wide transition-colors focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded px-1.5 py-0.5">Events</Link>
-          <Link href="/dashboard/settings/branding" className="text-[#888] hover:text-white no-underline text-xs transition-colors focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded px-1.5 py-0.5">Settings</Link>
+          <Link href="/dashboard" className="hp-nav-item hp-nav-item-active">Events</Link>
+          <Link href="/dashboard/settings/branding" className="hp-nav-item">Settings</Link>
           <button onClick={() => { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); router.push('/auth/login'); }}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#ef4444] bg-[#ef4444]/12 hover:bg-[#ef4444]/22 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ef4444] focus:outline-none">Sign Out</button>
+            className="hp-btn hp-btn-ghost text-sm">Sign Out</button>
         </div>
       </nav>
 
-      <div className="max-w-[1100px] mx-auto px-8 py-10 relative z-10">
+      <div className="max-w-[1100px] mx-auto px-8 py-10 relative z-10 hp-animate-fade-in">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-1 text-white tracking-tight">Your Events</h1>
@@ -109,7 +109,7 @@ export default function DashboardPage() {
         )}
 
         {error === 'NO_CLIENT' && (
-          <div className="bg-[#14213D]/60 border border-white/5 rounded-2xl p-16 text-center">
+                      <Card className="p-16 text-center hp-glass-card hp-animate-fade-in">>
             <div className="text-3xl mb-4" role="img" aria-label="Organization">🏢</div>
             <h3 className="text-lg font-semibold mb-2 text-white">No organization found</h3>
             <p className="text-[#E5E5E5] text-sm mb-6">
@@ -146,7 +146,7 @@ export default function DashboardPage() {
               <Link
                 key={event.id}
                 href={`/dashboard/events/${event.id}/dashboard`}
-                className="block bg-white/[0.03] border border-white/5 hover:border-[#FCA311]/30 hover:bg-white/[0.05] rounded-xl px-6 py-5 transition-all duration-200 group focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                className="block hp-card hp-glass-card hp-animate-fade-in hover:hp-card-highlighted"
               >
                 <div className="flex justify-between items-start">
                   <div>

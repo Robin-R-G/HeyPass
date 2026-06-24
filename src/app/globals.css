@@ -500,6 +500,30 @@ body {
   100% { background-position: -200% 0; }
 }
 
+/* Custom utility classes for premium design system */
+.bg-hp-bg { background: var(--hp-bg); }
+.text-hp-text { color: var(--hp-text); }
+.text-hp-text-secondary { color: var(--hp-text-secondary); }
+.text-hp-primary { color: var(--hp-primary); }
+.text-hp-primary:hover { color: var(--hp-primary-light); }
+
+/* Navigation item utility */
+.hp-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--hp-text-secondary);
+  border-radius: var(--hp-radius-md);
+  transition: all var(--hp-transition-fast);
+}
+
+.hp-nav-item:hover {
+  background: var(--hp-surface-hover);
+  color: var(--hp-text);
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
