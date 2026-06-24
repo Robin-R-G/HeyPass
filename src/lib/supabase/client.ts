@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -14,7 +14,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-function getSupabaseAdmin(): SupabaseClient {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getSupabaseAdmin(): any {
   if (typeof window !== 'undefined') {
     throw new Error('supabaseAdmin must not be used in client-side code');
   }
@@ -33,7 +34,8 @@ function getSupabaseAdmin(): SupabaseClient {
 export const supabaseAdmin: any = new Proxy({} as any, {
   get(_target, prop) {
     const client = getSupabaseAdmin();
-    const value = (client as Record<string | symbol, unknown>)[prop];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const value = (client as any)[prop];
     return typeof value === 'function' ? value.bind(client) : value;
   },
 });
