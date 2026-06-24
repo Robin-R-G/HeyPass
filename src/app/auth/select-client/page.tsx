@@ -54,10 +54,14 @@ export default function SelectClientPage() {
       const newTokens = data.data?.session;
       if (newTokens?.access_token) {
         localStorage.setItem('access_token', newTokens.access_token);
-        localStorage.setItem('refresh_token', newTokens.refresh_token);
+        if (newTokens.refresh_token) {
+          localStorage.setItem('refresh_token', newTokens.refresh_token);
+        }
       }
       router.push('/dashboard');
-    } catch {}
+    } catch {
+      setSelecting(null);
+    }
   };
 
   const selectClient = async (clientId: string) => {

@@ -183,7 +183,7 @@ export default function DomainSettingsPage() {
             onChange={(e) => setNewDomain(e.target.value)}
             placeholder="events.yourdomain.com"
             className="flex-1 border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
-            onKeyPress={(e) => e.key === 'Enter' && handleAddDomain()}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddDomain()}
           />
           <button
             onClick={handleAddDomain}

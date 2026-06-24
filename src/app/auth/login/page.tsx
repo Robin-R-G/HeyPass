@@ -35,7 +35,9 @@ function LoginForm() {
       const tokens = data.data?.tokens || data.data?.session;
       if (tokens?.access_token) {
         localStorage.setItem('access_token', tokens.access_token);
-        localStorage.setItem('refresh_token', tokens.refresh_token);
+        if (tokens.refresh_token) {
+          localStorage.setItem('refresh_token', tokens.refresh_token);
+        }
 
         // Decode JWT to check superadmin status
         try {
