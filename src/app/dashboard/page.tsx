@@ -91,11 +91,12 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <div className="max-w-[1100px] mx-auto px-8 py-10 relative z-10 hp-animate-fade-in">
+      {/* Content */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' }}>
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-1 text-white tracking-tight">Your Events</h1>
-            <p className="text-[#E5E5E5] text-sm">Manage and monitor all your events</p>
+            <p className="text-[#888] text-sm">Manage and monitor all your events</p>
           </div>
         </div>
 
@@ -178,7 +179,7 @@ export default function DashboardPage() {
             ))}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

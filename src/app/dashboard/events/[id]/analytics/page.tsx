@@ -596,7 +596,7 @@ export default function AnalyticsPage() {
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-3xl font-bold text-purple-600">{realtime.active_scanners}</div>
+                  <div className="text-3xl font-bold text-[#FCA311]">{realtime.active_scanners}</div>
                   <div className="text-sm text-muted-foreground">Active Scanners</div>
                 </CardContent>
               </Card>

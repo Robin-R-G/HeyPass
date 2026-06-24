@@ -723,7 +723,7 @@ export default function CRMDashboardPage() {
                     </div>
 
                     {/* AI Ready Placeholder */}
-                    <div className="bg-gradient-to-r from-purple-950/20 to-indigo-950/20 border border-indigo-900/40 p-3 rounded">
+                    <div className="bg-gradient-to-r from-[#FCA311]/10 to-[#E09800]/10 border border-[#FCA311]/20 p-3 rounded">
                       <div className="flex items-center gap-1 text-xs text-[#FCA311] font-semibold mb-1">
                         <Bot className="w-4 h-4" /> AI Ready Core Infrastructure
                       </div>

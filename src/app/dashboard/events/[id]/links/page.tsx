@@ -134,7 +134,7 @@ export default function LinksPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-purple-600">{stats.conversion_rate.toFixed(1)}%</div>
+            <div className="text-2xl font-bold text-[#FCA311]">{stats.conversion_rate.toFixed(1)}%</div>
             <div className="text-sm text-muted-foreground">Conversion Rate</div>
           </CardContent>
         </Card>

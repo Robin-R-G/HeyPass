@@ -626,7 +626,7 @@ export default function BrandingSettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="bg-[#FCA311] text-white px-6 py-2 rounded-md hover:bg-[#E09800] disabled:opacity-50"
+            className="bg-[#FCA311] text-black font-semibold px-6 py-2 rounded-md hover:bg-[#E09800] disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>

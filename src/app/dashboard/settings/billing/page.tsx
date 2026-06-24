@@ -122,10 +122,10 @@ export default function BillingPage() {
       <h1 className="text-3xl font-bold">Billing & Subscription</h1>
 
       <Tabs defaultValue="subscription">
-        <TabsList>
-          <TabsTrigger value="subscription">Subscription</TabsTrigger>
-          <TabsTrigger value="invoices">Invoices</TabsTrigger>
-          <TabsTrigger value="gateways">Payment Gateways</TabsTrigger>
+        <TabsList className="gap-1 bg-[#111] border border-[#222] p-1">
+          <TabsTrigger value="subscription" className="data-[state=active]:bg-[#FCA311] data-[state=active]:text-black">Subscription</TabsTrigger>
+          <TabsTrigger value="invoices" className="data-[state=active]:bg-[#FCA311] data-[state=active]:text-black">Invoices</TabsTrigger>
+          <TabsTrigger value="gateways" className="data-[state=active]:bg-[#FCA311] data-[state=active]:text-black">Payment Gateways</TabsTrigger>
         </TabsList>
 
         {/* Subscription Tab */}
