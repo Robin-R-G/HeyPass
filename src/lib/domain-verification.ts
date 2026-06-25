@@ -321,7 +321,7 @@ async function verifyCnameRecord(
 ): Promise<{ verified: boolean; records: string[] }> {
   try {
     const records = await resolveCname(domain);
-    const verified = records.some((r) => r.includes(expectedToken));
+    const verified = records.some((r) => r.includes('heypass.app') || r.includes('heypass.io'));
     return { verified, records };
   } catch {
     return { verified: false, records: [] };

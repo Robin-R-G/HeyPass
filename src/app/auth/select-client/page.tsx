@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
 interface Client {
   client_id: string;
@@ -75,39 +76,47 @@ export default function SelectClientPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-      <div style={{ width: '100%', maxWidth: '480px', padding: '1.5rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>Select Organization</h1>
-          <p style={{ color: '#E5E5E5', fontSize: '0.9rem' }}>Choose which organization to manage</p>
+    <div className="min-h-screen bg-transparent flex items-center justify-center font-sans antialiased">
+      <div className="w-full max-w-[480px] p-6">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">Select Organization</h1>
+          <p className="text-sm text-hp-text-secondary opacity-70">Choose which organization to manage</p>
         </div>
 
-        {loading ? (
-          <div style={{ textAlign: 'center', color: '#E5E5E5', padding: '2rem' }}>Loading...</div>
-        ) : clients.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '2rem', background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)', borderRadius: '16px' }}>
-            <p style={{ color: '#E5E5E5', marginBottom: '1rem' }}>No organizations found.</p>
-            <Link href="/dashboard" style={{ color: '#FCA311', textDecoration: 'none', fontWeight: 500 }}>Continue to App ?</Link>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {clients.map(c => (
-              <button key={c.client_id} onClick={() => selectClient(c.client_id)} disabled={selecting !== null} style={{
-                background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.1)',
-                borderRadius: '12px', padding: '1.25rem', textAlign: 'left', cursor: selecting ? 'default' : 'pointer',
-                opacity: selecting && selecting !== c.client_id ? 0.5 : 1,
-                transition: 'border-color 0.15s',
-              }}>
-                <div style={{ fontWeight: 600, color: '#fff', fontSize: '1rem' }}>
-                  {selecting === c.client_id ? 'Selecting...' : c.name}
-                </div>
-                <div style={{ color: '#888888', fontSize: '0.8rem', marginTop: '0.2rem' }}>
-                  {c.role} {'\u00B7'} {c.slug}
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="hp-glass-card bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/8 rounded-2xl p-8 shadow-2xl">
+          {loading ? (
+            <div className="flex flex-col items-center gap-3 py-8">
+              <Loader2 className="w-8 h-8 text-[#FCA311] animate-spin" />
+              <span className="text-hp-text-secondary opacity-70 text-sm">Loading organizations...</span>
+            </div>
+          ) : clients.length === 0 ? (
+            <div className="text-center py-6">
+              <p className="text-hp-text-secondary opacity-70 text-sm mb-4">No organizations found.</p>
+              <Link href="/dashboard" className="text-[#FCA311] font-semibold text-sm no-underline hover:underline">
+                Continue to App →
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {clients.map(c => (
+                <button
+                  key={c.client_id}
+                  onClick={() => selectClient(c.client_id)}
+                  disabled={selecting !== null}
+                  className="hp-glass-card w-full p-5 text-left transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border border-white/8 hover:border-[#FCA311]/30 hover:shadow-glow"
+                >
+                  <div className="font-semibold text-white text-base flex justify-between items-center">
+                    <span>{c.name}</span>
+                    {selecting === c.client_id && <Loader2 className="w-4 h-4 text-[#FCA311] animate-spin" />}
+                  </div>
+                  <div className="text-hp-text-secondary/60 text-xs mt-1.5 capitalize">
+                    {c.role} · {c.slug}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

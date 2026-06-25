@@ -73,42 +73,27 @@ export default function RegisterPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-hp-text-secondary text-xs font-semibold mb-2">First Name</label>
-                <Input
-                  type="text" value={firstName} onChange={e => setFirstName(e.target.value)}
-                  placeholder="John"
-                />
+                <Input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} placeholder="John" />
               </div>
               <div>
                 <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Last Name</label>
-                <Input
-                  type="text" value={lastName} onChange={e => setLastName(e.target.value)}
-                  placeholder="Doe"
-                />
+                <Input type="text" value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Doe" />
               </div>
             </div>
 
             <div>
               <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Email</label>
-              <Input
-                type="email" value={email} onChange={e => setEmail(e.target.value)} required
-                placeholder="you@example.com"
-              />
+              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
             </div>
 
             <div>
               <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Password</label>
-              <Input
-                type="password" value={password} onChange={e => setPassword(e.target.value)} required
-                placeholder="Min 8 chars, uppercase..."
-              />
+              <Input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Min 8 chars, uppercase..." />
             </div>
 
             <div>
               <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Confirm Password</label>
-              <Input
-                type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required
-                placeholder="Repeat your password"
-              />
+              <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required placeholder="Repeat your password" />
             </div>
 
             {error && (
@@ -117,10 +102,7 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <Button
-              type="submit" disabled={loading || !email || !password || !confirmPassword}
-              className="w-full h-11 font-bold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
-            >
+            <Button type="submit" disabled={loading || !email || !password || !confirmPassword} className="w-full h-11 font-bold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2">
               {loading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
@@ -131,5 +113,6 @@ export default function RegisterPage() {
           <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">Sign in</Link>
         </p>
       </div>
+    </div>
   );
 }

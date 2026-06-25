@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -34,63 +36,57 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, system-ui, sans-serif' }}>
-      <div style={{ width: '100%', maxWidth: '400px', padding: '1.5rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, #FCA311, #E09800)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.1rem', color: '#000' }}>H</div>
-              <span style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fff' }}>HeyPass</span>
+    <div className="min-h-screen bg-transparent flex items-center justify-center font-sans antialiased">
+      <div className="w-full max-w-[400px] p-6">
+        <div className="text-center mb-8">
+          <Link href="/" className="no-underline">
+            <div className="inline-flex items-center gap-2 mb-4">
+               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black">H</div>
+              <span className="text-xl font-bold text-white">HeyPass</span>
             </div>
           </Link>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>Reset your password</h1>
-          <p style={{ color: '#E5E5E5', fontSize: '0.9rem' }}>Enter your email and we&apos;ll send you a reset link</p>
+          <h1 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">Reset your password</h1>
+          <p className="text-sm text-hp-text-secondary opacity-70">Enter your email and we&apos;ll send you a reset link</p>
         </div>
 
-        <div style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)', borderRadius: '16px', padding: '2rem' }}>
+        <div className="hp-glass-card bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/8 rounded-2xl p-8 shadow-2xl">
           {sent ? (
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📧</div>
-              <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>Check your email</h2>
-              <p style={{ color: '#E5E5E5', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                We&apos;ve sent a password reset link to <strong style={{ color: '#E5E5E5' }}>{email}</strong>.<br />
+            <div className="text-center py-4">
+              <div className="text-3xl mb-4">📧</div>
+              <h2 className="text-base font-bold text-white mb-2">Check your email</h2>
+              <p className="text-xs text-hp-text-secondary opacity-70 leading-relaxed">
+                We&apos;ve sent a password reset link to <strong className="text-white">{email}</strong>.<br />
                 The link will expire in 1 hour.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit}>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', color: '#E5E5E5', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>Email</label>
-                <input
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Email</label>
+                <Input
                   type="email" value={email} onChange={e => setEmail(e.target.value)} required
                   placeholder="you@example.com"
-                  style={{ width: '100%', padding: '0.7rem 1rem', borderRadius: '8px', border: '1px solid rgba(229,229,229,0.12)', background: 'rgba(229,229,229,0.05)', color: '#fff', fontSize: '0.9rem', outline: 'none' }}
                 />
               </div>
 
               {error && (
-                <div style={{ marginBottom: '1rem', padding: '0.7rem', borderRadius: '8px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#ef4444', fontSize: '0.85rem', textAlign: 'center' }}>
+                <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs text-center">
                   {error}
                 </div>
               )}
 
-              <button
+              <Button
                 type="submit" disabled={loading || !email}
-                style={{
-                  width: '100%', padding: '0.75rem', borderRadius: '10px', border: 'none',
-                  background: 'linear-gradient(135deg, #FCA311, #E09800)',
-                  color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
-                  opacity: loading || !email ? 0.5 : 1,
-                }}
+                className="w-full h-11 font-bold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Sending...' : 'Send Reset Link'}
-              </button>
+              </Button>
             </form>
           )}
         </div>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: '#888888', fontSize: '0.85rem' }}>
-          <Link href="/auth/login" style={{ color: '#E5E5E5', textDecoration: 'none', fontWeight: 500 }}>← Back to sign in</Link>
+        <p className="text-center mt-6 text-xs text-hp-text-secondary/60">
+          <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">← Back to sign in</Link>
         </p>
       </div>
     </div>

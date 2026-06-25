@@ -77,9 +77,9 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Event Navigation */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+      <div className="flex gap-2 mb-6 flex-wrap">
         {[
-          { label: 'Dashboard', href: `/dashboard/events/${eventId}/dashboard` },
+          { label: 'Dashboard', href: `/dashboard/events/${eventId}/dashboard`, active: true },
           { label: 'Tickets', href: `/dashboard/events/${eventId}/tickets` },
           { label: 'Gates', href: `/dashboard/events/${eventId}/gates` },
           { label: 'Staff', href: `/dashboard/events/${eventId}/staff` },
@@ -93,12 +93,11 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
           <a
             key={nav.href}
             href={nav.href}
-            style={{
-              padding: '0.35rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.8rem',
-              background: 'rgba(252,163,17,0.1)', color: '#E5E5E5',
-              textDecoration: 'none', whiteSpace: 'nowrap',
-              border: '1px solid rgba(252,163,17,0.2)',
-            }}
+            className={`hp-nav-item whitespace-nowrap text-xs border border-white/5 ${
+              nav.active
+                ? 'hp-nav-item-active font-semibold'
+                : 'text-hp-text-secondary/80 hover:text-white'
+            }`}
           >
             {nav.label}
           </a>

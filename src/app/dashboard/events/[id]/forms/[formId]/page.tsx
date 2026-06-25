@@ -117,28 +117,17 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
   if (!form) return <div style={{ padding: '4rem', textAlign: 'center', color: '#ef4444' }}>Form not found</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-      <nav style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <button onClick={() => router.back()} style={{
-            background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer',
-            fontSize: '0.85rem', padding: '0.4rem 0.6rem', borderRadius: '6px',
-          }}>← Back</button>
-          <span style={{ color: '#888888' }}>/</span>
-          <Link href={`/dashboard/events/${eventId}/forms`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Forms</Link>
-          <span style={{ color: '#888888' }}>/</span>
-          <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>{form.title}</span>
+    <div className="min-h-screen bg-transparent text-white font-sans antialiased relative">
+      <nav className="hp-nav flex justify-between items-center px-8 h-16">
+        <div className="flex items-center gap-2 text-xs text-hp-text-secondary/60">
+          <button onClick={() => router.back()} className="bg-transparent border-none text-hp-text-secondary hover:text-white cursor-pointer text-[11px] transition-all duration-150">← Back</button>
+          <span>/</span>
+          <Link href={`/dashboard/events/${eventId}/forms`} className="text-hp-text-secondary hover:text-white no-underline transition-all duration-150">Forms</Link>
+          <span>/</span>
+          <span className="text-white font-medium">{form.title}</span>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button onClick={updateForm} disabled={saving} style={{
-            background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
-            padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', fontWeight: 600,
-            fontSize: '0.8rem', cursor: 'pointer', opacity: saving ? 0.6 : 1,
-          }}>{saving ? 'Saving...' : 'Save Form'}</button>
+        <div className="flex gap-2">
+          <button onClick={updateForm} disabled={saving} className={`hp-btn hp-btn-primary text-xs font-semibold rounded-lg px-4 py-2 ${saving ? 'opacity-60 wait' : 'cursor-pointer'}`}>{saving ? 'Saving...' : 'Save Form'}</button>
         </div>
       </nav>
 

@@ -86,13 +86,13 @@ export default function FoodTokensPage() {
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Food Tokens</span>
+    <div className="min-h-screen bg-transparent text-white font-sans antialiased relative p-6">
+      <nav className="flex items-center gap-2 mb-6 text-xs text-hp-text-secondary/60">
+        <button onClick={() => router.back()} className="bg-transparent border-none text-hp-text-secondary hover:text-white cursor-pointer text-[11px] transition-all duration-150">← Back</button>
+        <span>/</span>
+        <Link href={`/dashboard/events/${eventId}/dashboard`} className="text-hp-text-secondary hover:text-white no-underline transition-all duration-150">Event</Link>
+        <span>/</span>
+        <span className="text-white font-medium">Food Tokens</span>
       </nav>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Food Tokens</h1>

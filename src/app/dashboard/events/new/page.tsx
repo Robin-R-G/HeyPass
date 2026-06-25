@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -54,20 +54,16 @@ export default function NewEventPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-      <nav style={{
-        display: 'flex', alignItems: 'center', gap: '0.5rem',
-        padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
-      }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Events</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>New Event</span>
+    <div className="min-h-screen bg-transparent text-white font-sans antialiased relative">
+      <nav className="hp-nav flex items-center gap-2 px-8 h-16">
+        <button onClick={() => router.back()} className="bg-transparent border-none text-hp-text-secondary hover:text-white cursor-pointer text-sm transition-all duration-150">← Back</button>
+        <span className="text-white/30">/</span>
+        <Link href="/dashboard" className="text-hp-text-secondary hover:text-white no-underline text-sm transition-all duration-150">Events</Link>
+        <span className="text-white/30">/</span>
+        <span className="text-white font-medium text-sm">New Event</span>
       </nav>
 
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+      <div className="max-w-[600px] mx-auto px-6 py-10">
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>Create New Event</h1>
         <p style={{ color: '#E5E5E5', fontSize: '0.9rem', marginBottom: '2rem' }}>Set up your event details below</p>
 
