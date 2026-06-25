@@ -28,17 +28,20 @@ export interface WhatsAppTemplate {
 }
 
 class WhatsAppService {
-  private getMetaConfig() {
+  private async getMetaConfig(clientId: string) {
+    const { data } = await supabaseAdmin
+      .from('whatsapp_credentials')
+      .select('api_token, phone_number_id, waba_id')
+      .eq('client_id', clientId)
+      .single();
+
     return {
-      apiToken: process.env.WHATSAPP_API_TOKEN || null,
-      phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || null,
-      wabaId: process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || null,
+      apiToken: data?.api_token || null,
+      phoneNumberId: data?.phone_number_id || null,
+      wabaId: data?.waba_id || null,
     };
   }
 
-  /**
-   * Send WhatsApp Template Message
-   */
   async sendTemplateMessage(params: {
     clientId: string;
     contactId: string;
@@ -46,11 +49,10 @@ class WhatsAppService {
     campaignId?: string;
     templateName: string;
     language?: string;
-    variables?: string[]; // Template variables (e.g. ['John', 'TechConf'])
+    variables?: string[];
   }): Promise<WhatsAppMessage> {
     const { clientId, contactId, eventId, campaignId, templateName, language = 'en', variables = [] } = params;
 
-    // 1. Fetch Contact Details
     const { data: contact, error: contactError } = await supabaseAdmin
       .from('crm_contacts')
       .select('phone, name')
@@ -62,7 +64,6 @@ class WhatsAppService {
       throw new Error(`Contact not found or does not have a phone number: ${contactError?.message}`);
     }
 
-    // 2. Fetch Template Definition to store/log body
     const { data: template } = await supabaseAdmin
       .from('whatsapp_templates')
       .select('id, body_text')
@@ -78,26 +79,25 @@ class WhatsAppService {
     const messageId = `wamid.HBgL${Math.random().toString(36).substring(2, 15).toUpperCase()}`;
     const now = new Date().toISOString();
 
-    const config = this.getMetaConfig();
+    const config = await this.getMetaConfig(clientId);
 
     if (config.apiToken && config.phoneNumberId) {
-      // Execute actual Meta Graph API Call
       try {
-        const payload = {
+        const payload: any = {
           messaging_product: 'whatsapp',
-          to: contact.phone.replace(/[^0-9]/g, ''), // E.164 format
+          to: contact.phone.replace(/[^0-9]/g, ''),
           type: 'template',
           template: {
             name: templateName,
             language: { code: language },
-            components: variables.length > 0 ? [
-              {
-                type: 'body',
-                parameters: variables.map(v => ({ type: 'text', text: v })),
-              }
-            ] : undefined,
           },
         };
+        if (variables.length > 0) {
+          payload.template.components = [{
+            type: 'body',
+            parameters: variables.map(v => ({ type: 'text', text: v })),
+          }];
+        }
 
         const res = await fetch(`https://graph.facebook.com/v20.0/${config.phoneNumberId}/messages`, {
           method: 'POST',
@@ -113,7 +113,6 @@ class WhatsAppService {
           throw new Error(data.error?.message || 'Meta API error');
         }
       } catch (err) {
-        // Log message as failed in database
         const failedMsg: WhatsAppMessage = {
           message_id: messageId,
           client_id: clientId,
@@ -136,7 +135,6 @@ class WhatsAppService {
       console.log(`[WhatsApp Sandbox] Sending Template "${templateName}" to ${contact.name} (${contact.phone}): "${bodyText}"`);
     }
 
-    // Save successful message log
     const waMsg: WhatsAppMessage = {
       message_id: messageId,
       client_id: clientId,
@@ -159,9 +157,6 @@ class WhatsAppService {
     return waMsg;
   }
 
-  /**
-   * Send Free Text Manual Message
-   */
   async sendTextMessage(params: {
     clientId: string;
     contactId: string;
@@ -184,7 +179,7 @@ class WhatsAppService {
     const messageId = `wamid.HBgL${Math.random().toString(36).substring(2, 15).toUpperCase()}`;
     const now = new Date().toISOString();
 
-    const config = this.getMetaConfig();
+    const config = await this.getMetaConfig(clientId);
 
     if (config.apiToken && config.phoneNumberId) {
       try {
@@ -253,9 +248,6 @@ class WhatsAppService {
     return waMsg;
   }
 
-  /**
-   * Handle Inbound Webhooks (Status Receipts & Inbound Chats)
-   */
   async handleWebhook(payload: any): Promise<void> {
     const entry = payload.entry?.[0];
     const changes = entry?.changes?.[0];
@@ -263,7 +255,6 @@ class WhatsAppService {
 
     if (!value) return;
 
-    // A. Handle Status Updates (sent, delivered, read, failed)
     if (value.statuses?.[0]) {
       const statusObj = value.statuses[0];
       const messageId = statusObj.id;
@@ -281,7 +272,6 @@ class WhatsAppService {
         .update(updateData)
         .eq('message_id', messageId);
 
-      // Trigger campaign counts aggregation if linked to campaign
       const { data: msg } = await supabaseAdmin
         .from('whatsapp_messages')
         .select('campaign_id, client_id')
@@ -293,7 +283,6 @@ class WhatsAppService {
       }
     }
 
-    // B. Handle Inbound Messages
     if (value.messages?.[0]) {
       const msgObj = value.messages[0];
       const messageId = msgObj.id;
@@ -301,32 +290,28 @@ class WhatsAppService {
       const text = msgObj.text?.body || msgObj.button?.text || 'Media Message';
       const timestamp = new Date(parseInt(msgObj.timestamp) * 1000).toISOString();
 
-      // Find tenant ID based on WABA ID
       const wabaId = entry.id;
-      // Fetch client settings or configurations that match this wabaId. 
-      // For sandbox / fallbacks, we lookup active clients.
-      const { data: client } = await supabaseAdmin
-        .from('clients')
-        .select('id')
-        .limit(1)
+      const { data: creds } = await supabaseAdmin
+        .from('whatsapp_credentials')
+        .select('client_id')
+        .eq('waba_id', wabaId)
         .single();
 
-      if (!client) return;
+      const clientId = creds?.client_id;
+      if (!clientId) return;
 
-      // Find contact by phone number
       let { data: contact } = await supabaseAdmin
         .from('crm_contacts')
         .select('id')
-        .eq('tenant_id', client.id)
+        .eq('tenant_id', clientId)
         .eq('phone', phone)
         .single();
 
-      // Auto-create contact if it is a new conversation string
       if (!contact) {
         const { data: newContact } = await supabaseAdmin
           .from('crm_contacts')
           .insert({
-            tenant_id: client.id,
+            tenant_id: clientId,
             name: value.contacts?.[0]?.profile?.name || 'WhatsApp Contact',
             phone: phone,
             source: 'whatsapp_inbound',
@@ -340,10 +325,10 @@ class WhatsAppService {
       if (contact) {
         await supabaseAdmin.from('whatsapp_messages').insert({
           message_id: messageId,
-          client_id: client.id,
+          client_id: clientId,
           contact_id: contact.id,
           message_text: text,
-          status: 'read', // Inbound messages are received in read state
+          status: 'read',
           direction: 'inbound',
           sent_at: timestamp,
           read_at: timestamp,
@@ -352,9 +337,6 @@ class WhatsAppService {
     }
   }
 
-  /**
-   * Aggregate stats for campaigns
-   */
   async aggregateCampaignStats(clientId: string, campaignId: string): Promise<void> {
     const { data: counts } = await supabaseAdmin
       .from('whatsapp_messages')
@@ -382,9 +364,6 @@ class WhatsAppService {
       .eq('id', campaignId);
   }
 
-  /**
-   * Get Shared Inbox conversations list
-   */
   async getConversations(clientId: string, filters?: {
     eventId?: string;
     tag?: string;
@@ -392,23 +371,22 @@ class WhatsAppService {
     contactType?: string;
     search?: string;
   }) {
-    // Queries contacts who have whatsapp messages, showing their last message.
     let query = supabaseAdmin
       .from('crm_contacts')
       .select(`
         id, name, phone, email, organization, designation, tags, notes, status, engagement_score, source,
+        assigned_to, chat_status, internal_note,
         whatsapp_messages!inner(message_text, status, direction, sent_at)
       `)
       .eq('tenant_id', clientId);
 
     if (filters?.eventId) {
-      // Lookup contacts registered for this event
       const { data: regs } = await supabaseAdmin
         .from('registrations')
         .select('contact_id')
         .eq('client_id', clientId)
         .eq('event_id', filters.eventId);
-      
+
       const contactIds = (regs || []).map(r => r.contact_id).filter(Boolean);
       query = query.in('id', contactIds);
     }
@@ -424,14 +402,11 @@ class WhatsAppService {
     const { data, error } = await query;
     if (error) throw error;
 
-    // Format conversations with their last message
     const conversations = (data || []).map((contact: any) => {
       const messages = contact.whatsapp_messages || [];
-      // Sort messages descending to get the latest
       messages.sort((a: any, b: any) => new Date(b.sent_at).getTime() - new Date(a.sent_at).getTime());
       const lastMessage = messages[0] || null;
 
-      // Filter by type or tags check if needed
       if (filters?.tag && !contact.tags?.includes(filters.tag)) {
         return null;
       }
@@ -449,6 +424,9 @@ class WhatsAppService {
           designation: contact.designation,
           source: contact.source,
           notes: contact.notes,
+          assigned_to: contact.assigned_to,
+          chat_status: contact.chat_status,
+          internal_note: contact.internal_note,
         },
         lastMessage: lastMessage ? {
           text: lastMessage.message_text,
@@ -459,7 +437,6 @@ class WhatsAppService {
       };
     }).filter(Boolean);
 
-    // Sort by latest message timestamp
     conversations.sort((a: any, b: any) => {
       const timeA = a.lastMessage ? new Date(a.lastMessage.sent_at).getTime() : 0;
       const timeB = b.lastMessage ? new Date(b.lastMessage.sent_at).getTime() : 0;
@@ -469,9 +446,6 @@ class WhatsAppService {
     return conversations;
   }
 
-  /**
-   * Get message history for a contact
-   */
   async getConversationHistory(clientId: string, contactId: string): Promise<WhatsAppMessage[]> {
     const { data, error } = await supabaseAdmin
       .from('whatsapp_messages')

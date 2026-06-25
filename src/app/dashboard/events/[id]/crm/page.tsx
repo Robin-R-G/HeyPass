@@ -62,11 +62,51 @@ export default function CRMDashboardPage() {
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [replyText, setReplyText] = useState('');
   const [internalNote, setInternalNote] = useState(false);
+  const [internalNoteText, setInternalNoteText] = useState('');
   const [chatAssignee, setChatAssignee] = useState('unassigned');
   const [chatStatus, setChatStatus] = useState('active');
 
   // Simulator helper inputs
   const [simText, setSimText] = useState('');
+
+  // Volunteers & sponsors data
+  const [volunteers, setVolunteers] = useState<any[]>([]);
+  const [sponsors, setSponsors] = useState<any[]>([]);
+
+  const fetchVolunteers = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/events/${eventId}/volunteers`);
+      const json = await res.json();
+      if (json.volunteers) setVolunteers(json.volunteers);
+    } catch (e) {
+      console.error('Failed to load volunteers', e);
+    }
+  }, [eventId]);
+
+  const fetchSponsors = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/events/${eventId}/sponsors`);
+      const json = await res.json();
+      if (json.sponsors) setSponsors(json.sponsors);
+    } catch (e) {
+      console.error('Failed to load sponsors', e);
+    }
+  }, [eventId]);
+
+  // Persist inbox contact settings (assignee, status, notes)
+  const persistContactInboxSettings = async (contactId: string, updates: any) => {
+    try {
+      await fetch(`/api/events/${eventId}/crm/contacts/${contactId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      fetchContacts();
+      fetchConversations();
+    } catch (e) {
+      console.error('Failed to persist inbox settings', e);
+    }
+  };
 
   // Fetching triggers
   const fetchContacts = useCallback(async () => {
@@ -132,7 +172,9 @@ export default function CRMDashboardPage() {
     fetchWorkflows();
     fetchCampaigns();
     fetchFeedbacks();
-  }, [fetchContacts, fetchConversations, fetchWorkflows, fetchCampaigns, fetchFeedbacks]);
+    fetchVolunteers();
+    fetchSponsors();
+  }, [fetchContacts, fetchConversations, fetchWorkflows, fetchCampaigns, fetchFeedbacks, fetchVolunteers, fetchSponsors]);
 
   // Contact details fetcher
   const openContactProfile = async (contactId: string) => {
@@ -155,10 +197,19 @@ export default function CRMDashboardPage() {
   const openChatThread = async (contactId: string) => {
     setActiveChatContactId(contactId);
     try {
-      const res = await fetch(`/api/events/${eventId}/crm/whatsapp/messages?contactId=${contactId}`);
-      const json = await res.json();
-      if (json.data?.history) {
-        setChatMessages(json.data.history);
+      const [msgRes, contactRes] = await Promise.all([
+        fetch(`/api/events/${eventId}/crm/whatsapp/messages?contactId=${contactId}`),
+        fetch(`/api/events/${eventId}/crm/contacts/${contactId}`),
+      ]);
+      const msgJson = await msgRes.json();
+      const contactJson = await contactRes.json();
+      if (msgJson.data?.history) {
+        setChatMessages(msgJson.data.history);
+      }
+      if (contactJson.data?.profile) {
+        setChatAssignee(contactJson.data.profile.assigned_to || 'unassigned');
+        setChatStatus(contactJson.data.profile.chat_status || 'active');
+        setInternalNoteText(contactJson.data.profile.internal_note || '');
       }
     } catch (e) {
       console.error('Failed to fetch chat logs', e);
@@ -168,6 +219,14 @@ export default function CRMDashboardPage() {
   // Submit manual outbound WhatsApp message
   const sendOutboundReply = async () => {
     if (!activeChatContactId || !replyText.trim()) return;
+
+    if (internalNote) {
+      await persistContactInboxSettings(activeChatContactId, { internal_note: replyText });
+      setInternalNoteText(replyText);
+      setReplyText('');
+      setInternalNote(false);
+      return;
+    }
 
     try {
       const res = await fetch(`/api/events/${eventId}/crm/whatsapp/messages`, {
@@ -853,7 +912,7 @@ export default function CRMDashboardPage() {
                 </div>
                 {activeChatContactId && (
                   <div className="flex gap-2">
-                    <Select value={chatAssignee} onValueChange={setChatAssignee}>
+                    <Select value={chatAssignee} onValueChange={v => { setChatAssignee(v); persistContactInboxSettings(activeChatContactId, { assigned_to: v }); }}>
                       <SelectTrigger className="bg-[#111] border-[#222] text-xs h-7 py-0"><SelectValue placeholder="Assign" /></SelectTrigger>
                       <SelectContent className="bg-[#111] border-[#222] text-white">
                         <SelectItem value="unassigned">Unassigned</SelectItem>
@@ -861,7 +920,7 @@ export default function CRMDashboardPage() {
                         <SelectItem value="manager">Assigned to Manager</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Select value={chatStatus} onValueChange={v => { setChatStatus(v); }}>
+                    <Select value={chatStatus} onValueChange={v => { setChatStatus(v); persistContactInboxSettings(activeChatContactId, { chat_status: v }); }}>
                       <SelectTrigger className="bg-[#111] border-[#222] text-xs h-7 py-0"><SelectValue /></SelectTrigger>
                       <SelectContent className="bg-[#111] border-[#222] text-white">
                         <SelectItem value="active">Active</SelectItem>
@@ -1240,61 +1299,40 @@ export default function CRMDashboardPage() {
                   Volunteers automatically link to CRM contact profiles. Manage their tasks, training status, and reporting alerts.
                 </p>
                 <div className="space-y-2">
-                  {[
-                    { name: 'Alice Smith', task: 'Registration Desk Morning Shift', status: 'Checked In', phone: '+919911223344', training: 'Completed' },
-                    { name: 'Bob Johnson', task: 'Hall A Speaker Usher', status: 'Assigned', phone: '+919922334455', training: 'Pending' },
-                  ].map((v, idx) => (
-                    <div key={idx} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
-                      <div>
-                        <div className="font-bold text-white">{v.name}</div>
-                        <div className="text-[#888] mt-1">Task: {v.task}</div>
-                        <div className="text-white0 mt-0.5">Training: {v.training}</div>
+                  {volunteers.length === 0 ? (
+                    <p className="text-xs text-[#888] text-center py-6">No volunteers registered yet.</p>
+                  ) : (
+                    volunteers.slice(0, 10).map((v: any) => (
+                      <div key={v.id} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
+                        <div>
+                          <div className="font-bold text-white">{v.first_name} {v.last_name}</div>
+                          <div className="text-[#888] mt-1">{v.email || v.phone || 'No contact'}</div>
+                        </div>
+                        <div className="text-right">
+                          <Badge variant="outline" className={v.status === 'approved' || v.checked_in_at ? 'border-emerald-500/40 text-emerald-400 bg-emerald-500/5' : 'border-[#222] text-[#888] bg-[#111]'}>
+                            {v.checked_in_at ? 'Checked In' : v.status}
+                          </Badge>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <Badge variant="outline" className={v.status === 'Checked In' ? 'border-emerald-500/40 text-emerald-400 bg-emerald-500/5' : 'border-[#222] text-[#888] bg-[#111]'}>
-                          {v.status}
-                        </Badge>
-                        <div className="text-[10px] text-white0 mt-1">{v.phone}</div>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Staff Tasks CRM coordinator */}
+            {/* Tasks overview */}
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-[#FCA311]" /> Staff Coordinator Dashboard
+                  <ShieldCheck className="w-5 h-5 text-[#FCA311]" /> Volunteer Tasks
                 </CardTitle>
-                <CardDescription>Track assigned tasks, escalations, and automated WhatsApp updates.</CardDescription>
+                <CardDescription>Manage shifts and assignments.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  {[
-                    { task: 'Prepare certificate templates', staff: 'David Miller', status: 'Ongoing', deadline: 'Today 18:00', escalation: 'None' },
-                    { task: 'Verify payment gateway creds', staff: 'Sarah Connor', status: 'Completed', deadline: 'Yesterday', escalation: 'None' },
-                    { task: 'Setup main entrance gate wifi', staff: 'Kyle Reese', status: 'Escalated', deadline: 'Overdue 2h', escalation: 'Needs backup wifi router' },
-                  ].map((s, idx) => (
-                    <div key={idx} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-start">
-                      <div>
-                        <div className="font-bold text-white">{s.task}</div>
-                        <div className="text-[#888] mt-1">Staff: {s.staff}</div>
-                        {s.escalation !== 'None' && (
-                          <div className="text-red-400 flex items-center gap-1 mt-1 font-semibold">
-                            <AlertTriangle className="w-3.5 h-3.5" /> Escalation: {s.escalation}
-                          </div>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <Badge variant="outline" className={s.status === 'Completed' ? 'border-emerald-500/40 text-emerald-400 bg-emerald-500/5' : s.status === 'Escalated' ? 'border-red-500/40 text-red-400 bg-red-500/5 animate-pulse' : 'border-[#222] text-[#888] bg-[#111]'}>
-                          {s.status}
-                        </Badge>
-                        <div className="text-[10px] text-white0 mt-1">{s.deadline}</div>
-                      </div>
-                    </div>
-                  ))}
+                <div className="text-xs text-[#888] mb-2">
+                  <Link href={`/dashboard/events/${eventId}/volunteers`} className="text-[#FCA311] hover:underline">
+                    Manage volunteers →
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -1311,61 +1349,49 @@ export default function CRMDashboardPage() {
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5 text-[#FCA311]" /> Speakers Dossiers
+                  <User className="w-5 h-5 text-[#FCA311]" /> Sponsors Directory
                 </CardTitle>
-                <CardDescription>Manage speakers bio details, travel logs, and ratings.</CardDescription>
+                <CardDescription>Track sponsor tiers, booth allocations, and payments.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  {[
-                    { name: 'Dr. Jane Foster', topic: 'Keynote: Astro-Physics in 2026', travel: 'Flights booked, hotel check-in done', rating: '4.8' },
-                    { name: 'Bruce Banner', topic: 'Workshop: Gamma Rays & Safety', travel: 'Self-driving, no hotel needed', rating: '4.9' },
-                  ].map((sp, idx) => (
-                    <div key={idx} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
-                      <div>
-                        <div className="font-bold text-white">{sp.name}</div>
-                        <div className="text-[#888] mt-1">Topic: {sp.topic}</div>
-                        <div className="text-white0 mt-0.5">Travel: {sp.travel}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-[#FCA311] flex items-center gap-1 font-bold">
-                          <Star className="w-3.5 h-3.5 fill-[#FCA311]" /> {sp.rating}
+                  {sponsors.length === 0 ? (
+                    <p className="text-xs text-[#888] text-center py-6">No sponsors added yet.</p>
+                  ) : (
+                    sponsors.slice(0, 10).map((s: any) => (
+                      <div key={s.id} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
+                        <div>
+                          <div className="font-bold text-white">{s.name}</div>
+                          {s.booth_location && <div className="text-[#888] mt-1">Booth: {s.booth_location}</div>}
                         </div>
-                        <span className="text-[10px] text-white0">Rating</span>
+                        <div className="text-right">
+                          <div className="text-white font-bold">₹{(s.amount_paid || 0).toLocaleString()}</div>
+                          <Badge className="bg-[#111] text-[#888] border-[#222] mt-1">{s.tier || 'N/A'}</Badge>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
+                </div>
+                <div className="text-xs">
+                  <Link href={`/dashboard/events/${eventId}/sponsors`} className="text-[#FCA311] hover:underline">
+                    Manage sponsors →
+                  </Link>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Sponsor details */}
+            {/* Quick actions */}
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-[#FCA311]" /> Sponsors Tracker
+                  <Star className="w-5 h-5 text-[#FCA311]" /> Speakers & Partners
                 </CardTitle>
-                <CardDescription>Track booth allocations, brand assets, and ROI interactions.</CardDescription>
+                <CardDescription>Speaker engagement and partner tracking.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  {[
-                    { name: 'Stark Industries', tier: 'Platinum', booth: 'A1 Main Hall', asset: 'Assets verified', paid: '₹2,50,000' },
-                    { name: 'Oscorp Corp', tier: 'Gold', booth: 'B3 Entrance', asset: 'Pending banner upload', paid: '₹1,50,000' },
-                  ].map((s, idx) => (
-                    <div key={idx} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
-                      <div>
-                        <div className="font-bold text-white">{s.name}</div>
-                        <div className="text-[#888] mt-1">Booth: {s.booth}</div>
-                        <div className="text-white0 mt-0.5">Assets: {s.asset}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-white font-bold">{s.paid}</div>
-                        <Badge className="bg-[#111] text-[#888] border-[#222] mt-1">{s.tier}</Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <p className="text-xs text-[#888]">
+                  Manage speaker profiles, session scheduling, and partner communications from the dedicated sponsors page.
+                </p>
               </CardContent>
             </Card>
           </div>

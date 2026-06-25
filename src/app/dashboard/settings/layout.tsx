@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { label: 'Domains', href: '/dashboard/settings/domains' },
   { label: 'API Keys', href: '/dashboard/settings/api-keys' },
   { label: 'Webhooks', href: '/dashboard/settings/webhooks' },
+  { label: 'WhatsApp', href: '/dashboard/settings/whatsapp' },
 ];
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {

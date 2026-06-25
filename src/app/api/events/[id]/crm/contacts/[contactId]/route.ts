@@ -145,22 +145,19 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (!guard.allowed) return errorResponse('Forbidden', 403);
 
     const body = await req.json();
-    const { name, email, phone, organization, designation, tags, notes, status, interests } = body;
+    const { name, email, phone, organization, designation, tags, notes, status, interests, assigned_to, chat_status, internal_note } = body;
+
+    const updateData: any = {
+      name, email, phone, organization, designation, tags, notes, status, interests,
+      updated_at: new Date().toISOString(),
+    };
+    if (assigned_to !== undefined) updateData.assigned_to = assigned_to;
+    if (chat_status !== undefined) updateData.chat_status = chat_status;
+    if (internal_note !== undefined) updateData.internal_note = internal_note;
 
     const { data: contact, error } = await supabaseAdmin
       .from('crm_contacts')
-      .update({
-        name,
-        email,
-        phone,
-        organization,
-        designation,
-        tags,
-        notes,
-        status,
-        interests,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq('tenant_id', auth.clientId)
       .eq('id', contactId)
       .select('*')
