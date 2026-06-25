@@ -88,13 +88,14 @@ export default function RootLayout({
             if (!('serviceWorker' in navigator)) return;
             var v = localStorage.getItem('sw_version');
             if (v !== '3') {
+              localStorage.setItem('sw_version', '3');
               navigator.serviceWorker.getRegistrations().then(function(regs) {
                 regs.forEach(function(r) { r.unregister(); });
-                caches.keys().then(function(names) {
-                  names.forEach(function(n) { caches.delete(n); });
-                });
-              });
-              localStorage.setItem('sw_version', '3');
+                return caches.keys();
+              }).then(function(names) {
+                if (names) names.forEach(function(n) { caches.delete(n); });
+                window.location.reload();
+              }).catch(function() { window.location.reload(); });
             }
           })();
         `}} />
