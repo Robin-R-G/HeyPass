@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { ToastProvider } from "@/components/toast";
 import { PWAInstallPrompt } from "@/components/pwa-install";
 import { AuthInterceptor } from "@/components/auth-interceptor";
 import "./globals.css";
@@ -86,12 +87,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <AuthInterceptor />
-          <div className="hp-bg-gradient" />
-          <div className="min-h-screen">{children}</div>
-          <PWAInstallPrompt />
-          <PWARegister />
-          <Analytics />
+          <ToastProvider>
+            <AuthInterceptor />
+            <div className="hp-bg-gradient" />
+            <div className="min-h-screen">{children}</div>
+            <PWAInstallPrompt />
+            <PWARegister />
+            <Analytics />
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

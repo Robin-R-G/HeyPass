@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface Template {
   id: string;
@@ -27,6 +28,7 @@ interface Template {
 export default function TemplatesPage() {
   const params = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const eventId = params.id as string;
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +60,7 @@ export default function TemplatesPage() {
 
   async function handleCreate() {
     if (!form.name || !form.subject || !form.body) {
-      alert('Please fill in all fields');
+      toast('Please fill in all fields', 'error');
       return;
     }
 

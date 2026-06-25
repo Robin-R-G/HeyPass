@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface Certificate {
   id: string;
@@ -33,6 +34,7 @@ export default function CertificatesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchCertificates();
@@ -92,7 +94,7 @@ export default function CertificatesPage() {
       const data = await res.json();
       if (data.share_link?.url) {
         navigator.clipboard.writeText(data.share_link.url);
-        alert('Share link copied to clipboard!');
+        toast('Share link copied to clipboard!', 'success');
       }
     } catch (err) {
       console.error('Share link failed:', err);
@@ -123,7 +125,7 @@ export default function CertificatesPage() {
       </nav>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Certificates</h1>
-        <Button onClick={() => window.location.href = `/dashboard/events/${eventId}/certificates/generate`}>
+        <Button onClick={() => router.push(`/dashboard/events/${eventId}/certificates/generate`)}>
           Generate Certificate
         </Button>
       </div>

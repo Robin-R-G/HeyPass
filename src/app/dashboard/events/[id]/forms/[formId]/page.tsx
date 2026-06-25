@@ -81,8 +81,8 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
       }
       setAddFieldOpen(false);
       setNewField({ field_name: '', field_type: 'text', label: '', placeholder: '', required: false, options: '' });
-    } catch {
-      setFields([...fields, { ...field, id: crypto.randomUUID() }]);
+    } catch (err) {
+      console.error('Failed to add field:', err);
       setAddFieldOpen(false);
     }
   };
@@ -90,19 +90,26 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
   const removeField = async (fieldId: string) => {
     try {
       await fetch(`/api/events/${eventId}/forms/${formId}/fields/${fieldId}`, { method: 'DELETE' });
-    } catch {}
+    } catch (err) {
+      console.error('Failed to remove field:', err);
+    }
     setFields(fields.filter(f => f.id !== fieldId));
   };
 
   const updateForm = async () => {
     setSaving(true);
     try {
-      await fetch(`/api/events/${eventId}/forms/${formId}`, {
+      const res = await fetch(`/api/events/${eventId}/forms/${formId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: form?.title, description: form?.description, is_active: form?.is_active }),
       });
-    } catch {}
+      if (!res.ok) {
+        console.error('Failed to save form');
+      }
+    } catch (err) {
+      console.error('Failed to save form:', err);
+    }
     setSaving(false);
   };
 
@@ -228,7 +235,7 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {fields.sort((a, b) => a.sort_order - b.sort_order).map((field, idx) => (
+            {[...fields].sort((a, b) => a.sort_order - b.sort_order).map((field, idx) => (
               <div key={field.id} style={{
                 background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)',
                 borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '1rem',

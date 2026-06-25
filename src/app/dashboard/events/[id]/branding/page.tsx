@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface EventBrandingData {
   banner_url: string | null;
@@ -16,12 +17,8 @@ interface EventBrandingData {
   custom_head_html: string;
 }
 
-interface EventBrandingPageProps {
-  params: { id: string };
-}
-
-export default function EventBrandingPage({ params }: EventBrandingPageProps) {
-  const eventId = params.id;
+export default function EventBrandingPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: eventId } = use(params);
   const router = useRouter();
 
   const [branding, setBranding] = useState<EventBrandingData>({

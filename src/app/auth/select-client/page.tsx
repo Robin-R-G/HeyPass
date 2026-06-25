@@ -20,7 +20,7 @@ export default function SelectClientPage() {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (!token) {
-      window.location.href = '/auth/login';
+      router.push('/auth/login');
       return;
     }
 
@@ -68,7 +68,7 @@ export default function SelectClientPage() {
     setSelecting(clientId);
     const token = localStorage.getItem('access_token');
     if (!token) {
-      window.location.href = '/auth/login';
+      router.push('/auth/login');
       return;
     }
     await autoSelect(clientId, token);

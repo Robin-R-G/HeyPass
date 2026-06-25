@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/toast';
 
 interface Template {
   id: string;
@@ -31,6 +32,7 @@ export default function GenerateCertificatePage() {
   const [types, setTypes] = useState<CertificateType[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const { toast } = useToast();
 
   const [form, setForm] = useState({
     template_id: '',
@@ -67,7 +69,7 @@ export default function GenerateCertificatePage() {
 
   async function handleGenerate() {
     if (!form.template_id || !form.type_id || !form.name) {
-      alert('Please fill in all required fields');
+      toast('Please fill in all required fields', 'error');
       return;
     }
 
@@ -84,12 +86,12 @@ export default function GenerateCertificatePage() {
 
       const data = await res.json();
       if (data.certificate) {
-        alert('Certificate generated successfully!');
+        toast('Certificate generated successfully!', 'success');
         router.push(`/dashboard/events/${eventId}/certificates`);
       }
     } catch (err) {
       console.error('Generation failed:', err);
-      alert('Failed to generate certificate');
+      toast('Failed to generate certificate', 'error');
     } finally {
       setGenerating(false);
     }

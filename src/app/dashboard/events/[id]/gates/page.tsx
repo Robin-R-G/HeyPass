@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/components/toast';
 
 interface Gate {
   id: string;
@@ -31,6 +32,7 @@ const GATE_TYPES = [
 export default function GatesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
   const router = useRouter();
+  const { toast } = useToast();
   const [gates, setGates] = useState<Gate[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
@@ -73,7 +75,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
         setForm({ name: '', location: '', gate_type: 'main_entrance', max_scans_per_min: '60' });
       }
     } catch (e) {
-      alert('Failed to create gate');
+      toast('Failed to create gate', 'error');
     } finally {
       setSaving(false);
     }
@@ -91,7 +93,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
         setGates(gates.map(g => g.id === gateId ? { ...g, is_active: !g.is_active } : g));
       }
     } catch (e) {
-      alert('Failed to toggle gate');
+      toast('Failed to toggle gate', 'error');
     }
   };
 
@@ -102,7 +104,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
       const data = await res.json();
       if (data.success) setGates(gates.filter(g => g.id !== gateId));
     } catch (e) {
-      alert('Failed to delete gate');
+      toast('Failed to delete gate', 'error');
     }
   };
 

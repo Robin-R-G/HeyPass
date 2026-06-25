@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface Link {
   id: string;
@@ -27,6 +28,7 @@ interface Link {
 export default function LinksPage() {
   const params = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const eventId = params.id as string;
   const [links, setLinks] = useState<Link[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +97,7 @@ export default function LinksPage() {
 
   function copyLink(url: string) {
     navigator.clipboard.writeText(url);
-    alert('Link copied!');
+    toast('Link copied!', 'success');
   }
 
   return (

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/toast';
 
 interface Form {
   id: string;
@@ -21,12 +23,8 @@ interface Template {
   is_system: boolean;
 }
 
-interface FormsPageProps {
-  params: { id: string };
-}
-
-export default function FormsPage({ params }: FormsPageProps) {
-  const eventId = params.id;
+export default function FormsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: eventId } = use(params);
   const router = useRouter();
 
   const [forms, setForms] = useState<Form[]>([]);
@@ -34,6 +32,8 @@ export default function FormsPage({ params }: FormsPageProps) {
   const [loading, setLoading] = useState(true);
   const [showTemplates, setShowTemplates] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const { toast } = useToast();
 
   const fetchForms = useCallback(async () => {
     try {

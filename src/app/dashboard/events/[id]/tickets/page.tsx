@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import CloneEventButton from '@/components/clone-event-button';
+import { useToast } from '@/components/toast';
 
 interface Ticket {
   id: string;
@@ -34,6 +35,7 @@ interface QRData {
 export default function EventTicketsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
   const router = useRouter();
+  const { toast } = useToast();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, active: 0, used: 0, cancelled: 0, fraud: 0 });
@@ -86,7 +88,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
       const data = await res.json();
       if (data.success) setQrData(data.data);
     } catch (e) {
-      alert('Failed to load QR code');
+      toast('Failed to load QR code', 'error');
     } finally {
       setQrLoading(false);
     }
@@ -107,7 +109,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
         } : t));
       }
     } catch (e) {
-      alert('Failed to rotate QR');
+      toast('Failed to rotate QR', 'error');
     }
   };
 

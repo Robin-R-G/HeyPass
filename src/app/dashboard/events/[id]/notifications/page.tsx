@@ -116,10 +116,10 @@ export default function NotificationsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Notifications</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => window.location.href = `/dashboard/events/${eventId}/notifications/send`}>
+          <Button variant="outline" onClick={() => router.push(`/dashboard/events/${eventId}/notifications/send`)}>
             Send Notification
           </Button>
-          <Button variant="outline" onClick={() => window.location.href = `/dashboard/events/${eventId}/notifications/templates`}>
+          <Button variant="outline" onClick={() => router.push(`/dashboard/events/${eventId}/notifications/templates`)}>
             Templates
           </Button>
         </div>

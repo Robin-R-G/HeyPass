@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/components/toast';
 
 interface BrandingData {
   brand_name: string;
@@ -70,6 +71,8 @@ export default function BrandingSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const { toast } = useToast();
 
   const fetchBranding = useCallback(async () => {
     try {

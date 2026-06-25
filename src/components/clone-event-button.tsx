@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/toast';
 
 interface CloneEventButtonProps {
   eventId: string;
@@ -8,6 +10,8 @@ interface CloneEventButtonProps {
 }
 
 export default function CloneEventButton({ eventId, onCloned }: CloneEventButtonProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   const [cloning, setCloning] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -22,12 +26,12 @@ export default function CloneEventButton({ eventId, onCloned }: CloneEventButton
       const json = await res.json();
       if (res.ok && json.data) {
         onCloned?.(json.data.event.id);
-        window.location.href = `/dashboard/events/${json.data.event.id}/dashboard`;
+        router.push(`/dashboard/events/${json.data.event.id}/dashboard`);
       } else {
-        alert(json.error || 'Failed to clone event');
+        toast(json.error || 'Failed to clone event', 'error');
       }
     } catch {
-      alert('Failed to clone event');
+      toast('Failed to clone event', 'error');
     } finally {
       setCloning(false);
       setShowConfirm(false);

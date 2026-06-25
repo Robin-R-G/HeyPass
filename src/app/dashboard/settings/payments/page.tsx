@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useEffect } from 'react';
+import { useToast } from '@/components/toast';
 
 interface PaymentMethod {
   id: string;
@@ -16,6 +17,7 @@ interface PaymentMethod {
 }
 
 export default function PaymentMethodsPage() {
+  const { toast } = useToast();
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
@@ -70,10 +72,10 @@ export default function PaymentMethodsPage() {
         setShowAdd(false);
         setForm({ account_holder_name: '', bank_name: '', account_number: '', ifsc_code: '', branch_name: '', upi_id: '' });
       } else {
-        alert(data.error || 'Failed to add payment method');
+        toast(data.error || 'Failed to add payment method', 'error');
       }
     } catch (e) {
-      alert('Failed to add payment method');
+      toast('Failed to add payment method', 'error');
     } finally {
       setSaving(false);
     }
@@ -88,7 +90,7 @@ export default function PaymentMethodsPage() {
         setMethods(methods.filter(m => m.id !== id));
       }
     } catch (e) {
-      alert('Failed to delete');
+      toast('Failed to delete', 'error');
     }
   };
 
@@ -100,7 +102,7 @@ export default function PaymentMethodsPage() {
         setMethods(methods.map(m => m.id === id ? { ...m, is_active: !m.is_active } : m));
       }
     } catch (e) {
-      alert('Failed to toggle');
+      toast('Failed to toggle', 'error');
     }
   };
 
@@ -126,7 +128,7 @@ export default function PaymentMethodsPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (e) {
-      alert('Failed to export payments');
+      toast('Failed to export payments', 'error');
     } finally {
       setExporting(false);
     }

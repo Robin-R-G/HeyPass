@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface ApiKey {
   id: string;
@@ -26,6 +27,7 @@ interface ApiKey {
 
 export default function ApiKeysPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -51,7 +53,7 @@ export default function ApiKeysPage() {
   }
 
   async function handleCreate() {
-    if (!form.name) { alert('Name is required'); return; }
+    if (!form.name) { toast('Name is required', 'error'); return; }
 
     try {
       const res = await fetch('/api/api-keys', {
@@ -93,7 +95,7 @@ export default function ApiKeysPage() {
   function copyKey() {
     if (newKey) {
       navigator.clipboard.writeText(newKey);
-      alert('API key copied to clipboard');
+      toast('API key copied to clipboard', 'success');
     }
   }
 

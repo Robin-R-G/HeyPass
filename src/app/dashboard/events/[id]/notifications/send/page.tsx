@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/components/toast';
 
 interface Template {
   id: string;
@@ -20,6 +21,7 @@ interface Template {
 export default function SendNotificationPage() {
   const params = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const eventId = params.id as string;
 
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -66,7 +68,7 @@ export default function SendNotificationPage() {
 
   async function handleSend() {
     if (!form.recipient_email || !form.subject || !form.body) {
-      alert('Please fill in all required fields');
+      toast('Please fill in all required fields', 'error');
       return;
     }
 
@@ -87,14 +89,14 @@ export default function SendNotificationPage() {
       });
 
       if (res.ok) {
-        alert('Notification sent successfully!');
+        toast('Notification sent successfully!', 'success');
         router.push(`/dashboard/events/${eventId}/notifications`);
       } else {
         const data = await res.json();
-        alert(`Failed to send: ${data.error}`);
+        toast(`Failed to send: ${data.error}`, 'error');
       }
     } catch (err) {
-      alert('Failed to send notification');
+      toast('Failed to send notification', 'error');
     } finally {
       setSending(false);
     }

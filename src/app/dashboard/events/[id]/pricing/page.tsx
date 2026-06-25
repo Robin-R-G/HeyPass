@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/components/toast';
 
 interface PaymentMethod {
   id: string;
@@ -33,6 +34,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchPricing();
@@ -87,7 +89,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
         setTimeout(() => setSaved(false), 2000);
       }
     } catch (e) {
-      alert('Failed to save pricing');
+      toast('Failed to save pricing', 'error');
     } finally {
       setSaving(false);
     }

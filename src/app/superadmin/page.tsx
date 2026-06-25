@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { checkAndRefreshTokens } from '@/lib/auth-client';
+import { useToast } from '@/components/toast';
 
 interface PlatformStats {
   total_clients: number;
@@ -34,6 +35,7 @@ export default function SuperAdminPage() {
   const [newClientSlug, setNewClientSlug] = useState('');
   const [creatingClient, setCreatingClient] = useState(false);
   const [createError, setCreateError] = useState('');
+  const { toast } = useToast();
 
 
   useEffect(() => {
@@ -115,7 +117,7 @@ export default function SuperAdminPage() {
       }
       router.push('/dashboard');
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to select organization');
+      toast(err instanceof Error ? err.message : 'Failed to select organization', 'error');
       setSelecting(null);
     }
   };

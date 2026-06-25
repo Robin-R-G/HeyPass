@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface WebhookEndpoint {
   id: string;
@@ -48,6 +49,7 @@ const AVAILABLE_EVENTS = [
 
 export default function WebhooksPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [endpoints, setEndpoints] = useState<WebhookEndpoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -82,7 +84,7 @@ export default function WebhooksPage() {
 
   async function handleCreate() {
     if (!form.url || form.events.length === 0) {
-      alert('URL and at least one event are required');
+      toast('URL and at least one event are required', 'error');
       return;
     }
 
@@ -104,9 +106,9 @@ export default function WebhooksPage() {
     try {
       const res = await fetch(`/api/webhooks/${endpointId}/test`, { method: 'POST' });
       const data = await res.json();
-      alert(data.success ? `Success: ${data.message}` : `Failed: ${data.message}`);
+      toast(data.success ? `Success: ${data.message}` : `Failed: ${data.message}`, data.success ? 'success' : 'error');
     } catch (err) {
-      alert('Test failed');
+      toast('Test failed', 'error');
     }
   }
 

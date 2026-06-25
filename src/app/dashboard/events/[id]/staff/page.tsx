@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/components/toast';
 
 interface Gate {
   id: string;
@@ -43,6 +44,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
   const [showAssign, setShowAssign] = useState(false);
   const [assignForm, setAssignForm] = useState({ gate_id: '', staff_id: '', role: 'scanner' });
   const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
 
   const fetchData = useCallback(async () => {
     try {
@@ -86,10 +88,10 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
         setShowAssign(false);
         fetchData();
       } else {
-        alert(data.error || 'Failed to assign staff');
+        toast(data.error || 'Failed to assign staff', 'error');
       }
     } catch (e) {
-      alert('Failed to assign staff');
+      toast('Failed to assign staff', 'error');
     } finally {
       setSaving(false);
     }
@@ -105,7 +107,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
       });
       fetchData();
     } catch (e) {
-      alert('Failed to remove staff');
+      toast('Failed to remove staff', 'error');
     }
   };
 

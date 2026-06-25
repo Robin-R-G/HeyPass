@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/components/toast';
 
 interface Session {
   id: string;
@@ -45,6 +46,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
     currency: 'INR',
   });
   const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
 
   const fetchSessions = useCallback(async () => {
     try {
@@ -117,10 +119,10 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
         setShowAdd(false);
         resetForm();
       } else {
-        alert(data.error || 'Failed to add session');
+        toast(data.error || 'Failed to add session', 'error');
       }
     } catch (e) {
-      alert('Failed to add session');
+      toast('Failed to add session', 'error');
     } finally {
       setSaving(false);
     }
@@ -145,7 +147,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
         resetForm();
       }
     } catch (e) {
-      alert('Failed to update session');
+      toast('Failed to update session', 'error');
     } finally {
       setSaving(false);
     }
@@ -159,10 +161,10 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
       if (data.success) {
         setSessions(sessions.filter(s => s.id !== sessionId));
       } else {
-        alert(data.error || 'Cannot delete session with registrations');
+        toast(data.error || 'Cannot delete session with registrations', 'error');
       }
     } catch (e) {
-      alert('Failed to delete');
+      toast('Failed to delete', 'error');
     }
   };
 

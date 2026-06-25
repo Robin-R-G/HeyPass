@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/components/toast';
 
 interface ManualCert {
   id: string;
@@ -30,6 +31,7 @@ interface CertType {
 export default function EventCertsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: eventId } = use(params);
   const router = useRouter();
+  const { toast } = useToast();
   const [certs, setCerts] = useState<ManualCert[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [certTypes, setCertTypes] = useState<CertType[]>([]);
@@ -89,10 +91,10 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
         setForm({ name: '', email: '', template_id: '', type_id: '', event_title: '', event_date: '' });
         setStats(s => ({ ...s, total: s.total + 1, generated: s.generated + 1 }));
       } else {
-        alert(data.error || 'Failed to create certificate');
+        toast(data.error || 'Failed to create certificate', 'error');
       }
     } catch (e) {
-      alert('Failed to create certificate');
+      toast('Failed to create certificate', 'error');
     } finally {
       setSaving(false);
     }
@@ -113,7 +115,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
         setStats(s => ({ ...s, revoked: s.revoked + 1, generated: s.generated - 1 }));
       }
     } catch (e) {
-      alert('Failed to revoke');
+      toast('Failed to revoke', 'error');
     }
   };
 
@@ -223,7 +225,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
                 onClick={() => {
                   const url = `${window.location.origin}/verify?token=${showPreview.access_token}`;
                   navigator.clipboard.writeText(url).then(() => {
-                    alert('Share link copied to clipboard!');
+                    toast('Share link copied to clipboard!', 'success');
                   }).catch(() => {
                     prompt('Copy this link:', url);
                   });

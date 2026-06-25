@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface SubscriptionPlan {
   id: string;
@@ -47,6 +49,8 @@ interface Gateway {
 }
 
 export default function BillingPage() {
+  const { toast } = useToast();
+  const router = useRouter();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -88,11 +92,11 @@ export default function BillingPage() {
       });
       const data = await res.json();
       if (data.subscription) {
-        alert('Subscription updated!');
+        toast('Subscription updated!', 'success');
         fetchData();
       }
     } catch (err) {
-      alert('Failed to update subscription');
+      toast('Failed to update subscription', 'error');
     }
   }
 
@@ -285,7 +289,7 @@ export default function BillingPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Payment Gateways</CardTitle>
-              <Button onClick={() => window.location.href = '/dashboard/settings/billing/gateways'}>
+              <Button onClick={() => router.push('/dashboard/settings/billing/gateways')}>
                 Configure
               </Button>
             </CardHeader>

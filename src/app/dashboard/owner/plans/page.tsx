@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/components/toast';
 
 interface Plan {
   id: string;
@@ -33,6 +34,8 @@ export default function OwnerPlansPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
+
+  const { toast } = useToast();
 
   const [form, setForm] = useState({
     name: '',
@@ -104,7 +107,7 @@ export default function OwnerPlansPage() {
 
   async function handleCreate() {
     if (!form.name || !form.slug) {
-      alert('Name and slug are required');
+      toast('Name and slug are required', 'error');
       return;
     }
 
@@ -123,10 +126,10 @@ export default function OwnerPlansPage() {
         fetchPlans();
       } else {
         const data = await res.json();
-        alert(data.error || 'Failed to create plan');
+        toast(data.error || 'Failed to create plan', 'error');
       }
     } catch (err) {
-      alert('Failed to create plan');
+      toast('Failed to create plan', 'error');
     }
   }
 
@@ -148,10 +151,10 @@ export default function OwnerPlansPage() {
         fetchPlans();
       } else {
         const data = await res.json();
-        alert(data.error || 'Failed to update plan');
+        toast(data.error || 'Failed to update plan', 'error');
       }
     } catch (err) {
-      alert('Failed to update plan');
+      toast('Failed to update plan', 'error');
     }
   }
 
@@ -162,7 +165,7 @@ export default function OwnerPlansPage() {
       await fetch(`/api/owner/plans/${planId}`, { method: 'DELETE' });
       fetchPlans();
     } catch (err) {
-      alert('Failed to delete plan');
+      toast('Failed to delete plan', 'error');
     }
   }
 
@@ -175,7 +178,7 @@ export default function OwnerPlansPage() {
       });
       fetchPlans();
     } catch (err) {
-      alert('Failed to toggle plan');
+      toast('Failed to toggle plan', 'error');
     }
   }
 
