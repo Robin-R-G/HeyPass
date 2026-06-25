@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Session {
   id: string;
@@ -46,6 +47,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
     currency: 'INR',
   });
   const [saving, setSaving] = useState(false);
+  const [confirmDeleteSession, setConfirmDeleteSession] = useState<string | null>(null);
   const { toast } = useToast();
 
   const fetchSessions = useCallback(async () => {
@@ -153,8 +155,10 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
     }
   };
 
-  const handleDelete = async (sessionId: string) => {
-    if (!confirm('Remove this sub-event?')) return;
+  const executeDeleteSession = async () => {
+    const sessionId = confirmDeleteSession;
+    if (!sessionId) return;
+    setConfirmDeleteSession(null);
     try {
       const res = await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' });
       const data = await res.json();
@@ -294,7 +298,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(s.id)}
+                      onClick={() => setConfirmDeleteSession(s.id)}
                       className="hp-btn hp-btn-ghost"
                       style={{ fontSize: '0.8rem', color: '#ef4444' }}
                     >
@@ -408,6 +412,16 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={confirmDeleteSession !== null}
+        title="Remove Sub-Event"
+        message="Remove this sub-event? This action cannot be undone."
+        confirmLabel="Remove"
+        variant="danger"
+        onConfirm={executeDeleteSession}
+        onCancel={() => setConfirmDeleteSession(null)}
+      />
     </div>
   );
 }

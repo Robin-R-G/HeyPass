@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Gate {
   id: string;
@@ -44,6 +45,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
   const [showAssign, setShowAssign] = useState(false);
   const [assignForm, setAssignForm] = useState({ gate_id: '', staff_id: '', role: 'scanner' });
   const [saving, setSaving] = useState(false);
+  const [confirmRemoveStaff, setConfirmRemoveStaff] = useState<{gateId: string; staffId: string} | null>(null);
   const { toast } = useToast();
 
   const fetchData = useCallback(async () => {
@@ -97,8 +99,10 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
     }
   };
 
-  const handleRemove = async (gateId: string, staffId: string) => {
-    if (!confirm('Remove staff from this gate?')) return;
+  const executeRemoveStaff = async () => {
+    if (!confirmRemoveStaff) return;
+    const { gateId, staffId } = confirmRemoveStaff;
+    setConfirmRemoveStaff(null);
     try {
       await fetch(`/api/gates/${gateId}/staff`, {
         method: 'DELETE',
@@ -175,7 +179,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
                             {s.is_active ? 'Active' : 'Off Duty'}
                           </span>
                           <button
-                            onClick={() => handleRemove(s.gate_id, s.staff_id)}
+                            onClick={() => setConfirmRemoveStaff({gateId: s.gate_id, staffId: s.staff_id})}
                             className="hp-btn hp-btn-ghost"
                             style={{ fontSize: '0.75rem', color: '#ef4444' }}
                           >
@@ -281,6 +285,16 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={confirmRemoveStaff !== null}
+        title="Remove Staff"
+        message="Remove staff from this gate?"
+        confirmLabel="Remove"
+        variant="danger"
+        onConfirm={executeRemoveStaff}
+        onCancel={() => setConfirmRemoveStaff(null)}
+      />
     </div>
   );
 }

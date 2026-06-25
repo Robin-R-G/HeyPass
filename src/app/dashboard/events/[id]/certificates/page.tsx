@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
+import { PromptModal } from '@/components/confirm-modal';
 
 interface Certificate {
   id: string;
@@ -34,6 +35,7 @@ export default function CertificatesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const [promptRevokeCert, setPromptRevokeCert] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -68,10 +70,7 @@ export default function CertificatesPage() {
     }
   }
 
-  async function handleRevoke(certId: string) {
-    const reason = prompt('Enter revocation reason:');
-    if (!reason) return;
-
+  async function handleRevoke(certId: string, reason: string) {
     try {
       await fetch(`/api/certificates/${certId}/revoke`, {
         method: 'POST',
@@ -230,7 +229,7 @@ export default function CertificatesPage() {
                           Share
                         </Button>
                         {cert.status !== 'revoked' && (
-                          <Button size="sm" variant="destructive" onClick={() => handleRevoke(cert.id)}>
+                          <Button size="sm" variant="destructive" onClick={() => setPromptRevokeCert(cert.id)}>
                             Revoke
                           </Button>
                         )}
@@ -243,6 +242,16 @@ export default function CertificatesPage() {
           )}
         </CardContent>
       </Card>
+
+      <PromptModal
+        open={!!promptRevokeCert}
+        title="Revoke Certificate"
+        message="Enter a reason for revoking this certificate."
+        placeholder="e.g. Issued in error"
+        confirmLabel="Revoke"
+        onConfirm={(reason) => { if (promptRevokeCert) handleRevoke(promptRevokeCert, reason); setPromptRevokeCert(null); }}
+        onCancel={() => setPromptRevokeCert(null)}
+      />
     </div>
   );
 }

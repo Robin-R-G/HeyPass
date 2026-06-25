@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Gate {
   id: string;
@@ -38,6 +39,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ name: '', location: '', gate_type: 'main_entrance', max_scans_per_min: '60' });
   const [saving, setSaving] = useState(false);
+  const [confirmDeleteGate, setConfirmDeleteGate] = useState<string | null>(null);
 
   const fetchGates = useCallback(async () => {
     try {
@@ -97,8 +99,8 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
     }
   };
 
-  const handleDelete = async (gateId: string) => {
-    if (!confirm('Delete this gate?')) return;
+  const executeDelete = async (gateId: string) => {
+    setConfirmDeleteGate(null);
     try {
       const res = await fetch(`/api/gates/${gateId}`, { method: 'DELETE' });
       const data = await res.json();
@@ -204,7 +206,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
                     <a href={`/dashboard/events/${eventId}/scanner?gate=${gate.id}`} className="hp-btn hp-btn-secondary" style={{ fontSize: '0.8rem', textDecoration: 'none' }}>
                       Open Scanner
                     </a>
-                    <button onClick={() => handleDelete(gate.id)} className="hp-btn hp-btn-ghost" style={{ fontSize: '0.8rem', color: '#ef4444' }}>
+                    <button onClick={() => setConfirmDeleteGate(gate.id)} className="hp-btn hp-btn-ghost" style={{ fontSize: '0.8rem', color: '#ef4444' }}>
                       Delete
                     </button>
                   </div>
@@ -262,6 +264,16 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={confirmDeleteGate !== null}
+        title="Delete Gate"
+        message="Are you sure you want to delete this gate? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => confirmDeleteGate && executeDelete(confirmDeleteGate)}
+        onCancel={() => setConfirmDeleteGate(null)}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface PaymentMethod {
   id: string;
@@ -31,6 +32,7 @@ export default function PaymentMethodsPage() {
     upi_id: '',
   });
   const [saving, setSaving] = useState(false);
+  const [confirmDeletePayment, setConfirmDeletePayment] = useState<string | null>(null);
 
   // CSV Export state
   const [exportFrom, setExportFrom] = useState('');
@@ -81,8 +83,10 @@ export default function PaymentMethodsPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this payment method?')) return;
+  const executeDeletePayment = async () => {
+    const id = confirmDeletePayment;
+    if (!id) return;
+    setConfirmDeletePayment(null);
     try {
       const res = await fetch(`/api/payment-methods/${id}`, { method: 'DELETE' });
       const data = await res.json();
@@ -209,7 +213,7 @@ export default function PaymentMethodsPage() {
                     {m.is_active ? 'Disable' : 'Enable'}
                   </button>
                   <button
-                    onClick={() => handleDelete(m.id)}
+                    onClick={() => setConfirmDeletePayment(m.id)}
                     className="hp-btn hp-btn-ghost"
                     style={{ padding: '0.5rem', fontSize: '0.8rem', color: '#ef4444' }}
                   >
@@ -432,6 +436,16 @@ export default function PaymentMethodsPage() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={confirmDeletePayment !== null}
+        title="Delete Payment Method"
+        message="Delete this payment method? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={executeDeletePayment}
+        onCancel={() => setConfirmDeletePayment(null)}
+      />
     </div>
   );
 }

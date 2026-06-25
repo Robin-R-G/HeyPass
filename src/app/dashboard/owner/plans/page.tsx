@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Plan {
   id: string;
@@ -36,6 +37,7 @@ export default function OwnerPlansPage() {
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
 
   const { toast } = useToast();
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -159,8 +161,6 @@ export default function OwnerPlansPage() {
   }
 
   async function handleDelete(planId: string) {
-    if (!confirm('Deactivate this plan?')) return;
-
     try {
       await fetch(`/api/owner/plans/${planId}`, { method: 'DELETE' });
       fetchPlans();
@@ -235,6 +235,9 @@ export default function OwnerPlansPage() {
                         <Button size="sm" variant="outline" onClick={() => toggleActive(plan)}>
                           {plan.is_active ? 'Deactivate' : 'Activate'}
                         </Button>
+                        <Button size="sm" variant="destructive" onClick={() => setConfirmDelete(plan.id)}>
+                          Delete
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -264,6 +267,16 @@ export default function OwnerPlansPage() {
           <PlanForm form={form} setForm={setForm} onSubmit={handleUpdate} isEdit />
         </DialogContent>
       </Dialog>
+
+      <ConfirmModal
+        open={!!confirmDelete}
+        title="Deactivate Plan"
+        message="Are you sure you want to deactivate this plan? This can be reversed later."
+        confirmLabel="Deactivate"
+        variant="warning"
+        onConfirm={() => { if (confirmDelete) handleDelete(confirmDelete); setConfirmDelete(null); }}
+        onCancel={() => setConfirmDelete(null)}
+      />
     </div>
   );
 }

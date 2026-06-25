@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Link {
   id: string;
@@ -35,6 +36,7 @@ export default function LinksPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({ custom_code: '', utm_source: '', utm_medium: '', utm_campaign: '' });
   const [stats, setStats] = useState({ total_links: 0, total_clicks: 0, total_registrations: 0, conversion_rate: 0 });
+  const [confirmDeleteLink, setConfirmDeleteLink] = useState<string | null>(null);
 
   useEffect(() => { fetchLinks(); }, [eventId]);
 
@@ -85,8 +87,8 @@ export default function LinksPage() {
     }
   }
 
-  async function handleDelete(linkId: string) {
-    if (!confirm('Delete this link?')) return;
+  async function executeDelete(linkId: string) {
+    setConfirmDeleteLink(null);
     try {
       await fetch(`/api/links/${linkId}`, { method: 'DELETE' });
       fetchLinks();
@@ -180,7 +182,7 @@ export default function LinksPage() {
                         <Button size="sm" variant="outline" onClick={() => copyLink(link.full_url)}>
                           Copy
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(link.id)}>
+                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteLink(link.id)}>
                           Delete
                         </Button>
                       </div>
@@ -237,6 +239,16 @@ export default function LinksPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ConfirmModal
+        open={confirmDeleteLink !== null}
+        title="Delete Link"
+        message="Are you sure you want to delete this link? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => confirmDeleteLink && executeDelete(confirmDeleteLink)}
+        onCancel={() => setConfirmDeleteLink(null)}
+      />
     </div>
   );
 }

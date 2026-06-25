@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface BrandingData {
   brand_name: string;
@@ -70,6 +71,7 @@ export default function BrandingSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
+  const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const { toast } = useToast();
@@ -167,8 +169,10 @@ export default function BrandingSettingsPage() {
     }
   };
 
-  const handleDeleteAsset = async (type: string) => {
-    if (!confirm(`Are you sure you want to delete the ${type}?`)) return;
+  const executeDeleteAsset = async () => {
+    const type = confirmDeleteAsset;
+    if (!type) return;
+    setConfirmDeleteAsset(null);
 
     setMessage(null);
 
@@ -307,7 +311,7 @@ export default function BrandingSettingsPage() {
                 </label>
                 {branding.logo_url && (
                   <button
-                    onClick={() => handleDeleteAsset('logo')}
+                    onClick={() => setConfirmDeleteAsset('logo')}
                     className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
@@ -346,7 +350,7 @@ export default function BrandingSettingsPage() {
                 </label>
                 {branding.college_logo_url && (
                   <button
-                    onClick={() => handleDeleteAsset('college-logo')}
+                    onClick={() => setConfirmDeleteAsset('college-logo')}
                     className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
@@ -385,7 +389,7 @@ export default function BrandingSettingsPage() {
                 </label>
                 {branding.favicon_url && (
                   <button
-                    onClick={() => handleDeleteAsset('favicon')}
+                    onClick={() => setConfirmDeleteAsset('favicon')}
                     className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
@@ -424,7 +428,7 @@ export default function BrandingSettingsPage() {
                 </label>
                 {branding.default_banner_url && (
                   <button
-                    onClick={() => handleDeleteAsset('banner')}
+                    onClick={() => setConfirmDeleteAsset('banner')}
                     className="text-[#ef4444] text-sm hover:text-white"
                   >
                     Delete
@@ -635,7 +639,16 @@ export default function BrandingSettingsPage() {
           </button>
         </div>
       </div>
-    </div>
+
+      <ConfirmModal
+        open={confirmDeleteAsset !== null}
+        title="Delete Asset"
+        message={`Are you sure you want to delete the ${confirmDeleteAsset}? This action cannot be undone.`}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={executeDeleteAsset}
+        onCancel={() => setConfirmDeleteAsset(null)}
+      />
     </div>
   );
 }

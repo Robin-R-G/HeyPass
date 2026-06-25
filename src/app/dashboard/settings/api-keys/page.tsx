@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface ApiKey {
   id: string;
@@ -37,6 +38,8 @@ export default function ApiKeysPage() {
     scope: 'full',
     rate_limit: 1000,
   });
+  const [confirmDeleteKey, setConfirmDeleteKey] = useState<string | null>(null);
+  const [confirmRegenKey, setConfirmRegenKey] = useState<string | null>(null);
 
   useEffect(() => { fetchKeys(); }, []);
 
@@ -70,8 +73,10 @@ export default function ApiKeysPage() {
     }
   }
 
-  async function handleDelete(keyId: string) {
-    if (!confirm('Delete this API key?')) return;
+  async function executeDeleteKey() {
+    const keyId = confirmDeleteKey;
+    if (!keyId) return;
+    setConfirmDeleteKey(null);
     try {
       await fetch(`/api/api-keys/${keyId}`, { method: 'DELETE' });
       fetchKeys();
@@ -80,8 +85,10 @@ export default function ApiKeysPage() {
     }
   }
 
-  async function handleRegenerate(keyId: string) {
-    if (!confirm('Regenerate this key? The old key will stop working immediately.')) return;
+  async function executeRegenKey() {
+    const keyId = confirmRegenKey;
+    if (!keyId) return;
+    setConfirmRegenKey(null);
     try {
       const res = await fetch(`/api/api-keys/${keyId}/regenerate`, { method: 'POST' });
       const data = await res.json();
@@ -202,10 +209,10 @@ export default function ApiKeysPage() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => handleRegenerate(key.id)}>
+                        <Button size="sm" variant="outline" onClick={() => setConfirmRegenKey(key.id)}>
                           Regenerate
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(key.id)}>
+                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteKey(key.id)}>
                           Delete
                         </Button>
                       </div>
@@ -260,6 +267,27 @@ export default function ApiKeysPage() {
         </DialogContent>
       </Dialog>
     </div>
+    </div>
+
+      <ConfirmModal
+        open={confirmDeleteKey !== null}
+        title="Delete API Key"
+        message="Delete this API key? This action cannot be undone and the key will stop working immediately."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={executeDeleteKey}
+        onCancel={() => setConfirmDeleteKey(null)}
+      />
+
+      <ConfirmModal
+        open={confirmRegenKey !== null}
+        title="Regenerate API Key"
+        message="Regenerate this key? The old key will stop working immediately."
+        confirmLabel="Regenerate"
+        variant="danger"
+        onConfirm={executeRegenKey}
+        onCancel={() => setConfirmRegenKey(null)}
+      />
     </div>
   );
 }

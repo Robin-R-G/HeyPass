@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import CloneEventButton from '@/components/clone-event-button';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Ticket {
   id: string;
@@ -43,6 +44,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
   const [qrData, setQrData] = useState<QRData | null>(null);
   const [qrLoading, setQrLoading] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [confirmRotateQR, setConfirmRotateQR] = useState<string | null>(null);
 
   const fetchTickets = useCallback(async () => {
     try {
@@ -94,8 +96,8 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
     }
   };
 
-  const rotateQR = async (ticketId: string) => {
-    if (!confirm('Rotate QR? The old QR code will stop working.')) return;
+  const executeRotateQR = async (ticketId: string) => {
+    setConfirmRotateQR(null);
     try {
       const res = await fetch(`/api/tickets/${ticketId}/rotate`, { method: 'POST' });
       const data = await res.json();
@@ -260,7 +262,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
             {/* Actions */}
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
               <button
-                onClick={() => selectedTicket && rotateQR(selectedTicket.id)}
+                onClick={() => setConfirmRotateQR(selectedTicket?.id || null)}
                 className="hp-btn hp-btn-secondary"
                 style={{ flex: 1 }}
                 disabled={!selectedTicket}
@@ -365,6 +367,16 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        open={confirmRotateQR !== null}
+        title="Rotate QR Code"
+        message="Rotate QR? The old QR code will stop working."
+        confirmLabel="Rotate"
+        variant="warning"
+        onConfirm={() => confirmRotateQR && executeRotateQR(confirmRotateQR)}
+        onCancel={() => setConfirmRotateQR(null)}
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Domain {
   id: string;
@@ -27,6 +28,7 @@ export default function DomainSettingsPage() {
   const [newDomain, setNewDomain] = useState('');
   const [verifying, setVerifying] = useState<string | null>(null);
   const [dnsInstructions, setDnsInstructions] = useState<DnsInstructions | null>(null);
+  const [confirmDeleteDomain, setConfirmDeleteDomain] = useState<{id: string; domain: string} | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const fetchDomains = useCallback(async () => {
@@ -113,8 +115,10 @@ export default function DomainSettingsPage() {
     }
   };
 
-  const handleDeleteDomain = async (domainId: string, domain: string) => {
-    if (!confirm(`Are you sure you want to remove ${domain}?`)) return;
+  const executeDeleteDomain = async () => {
+    if (!confirmDeleteDomain) return;
+    const { id: domainId } = confirmDeleteDomain;
+    setConfirmDeleteDomain(null);
 
     setMessage(null);
 
@@ -267,7 +271,7 @@ export default function DomainSettingsPage() {
                     </button>
                   )}
                   <button
-                    onClick={() => handleDeleteDomain(domain.id, domain.domain)}
+                    onClick={() => setConfirmDeleteDomain({id: domain.id, domain: domain.domain})}
                     className="text-red-600 hover:text-red-800 text-sm"
                   >
                     Remove
@@ -278,7 +282,16 @@ export default function DomainSettingsPage() {
           </div>
         )}
       </section>
-    </div>
+
+      <ConfirmModal
+        open={confirmDeleteDomain !== null}
+        title="Remove Domain"
+        message={`Are you sure you want to remove ${confirmDeleteDomain?.domain}?`}
+        confirmLabel="Remove"
+        variant="danger"
+        onConfirm={executeDeleteDomain}
+        onCancel={() => setConfirmDeleteDomain(null)}
+      />
     </div>
   );
 }

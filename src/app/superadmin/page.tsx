@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { checkAndRefreshTokens } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
+import { Building2, Users, Calendar, Ticket, Plus, LogOut, ArrowRight, X, Loader2 } from 'lucide-react';
 
 interface PlatformStats {
   total_clients: number;
@@ -28,7 +29,6 @@ export default function SuperAdminPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
   const [selecting, setSelecting] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newClientName, setNewClientName] = useState('');
@@ -37,17 +37,13 @@ export default function SuperAdminPage() {
   const [createError, setCreateError] = useState('');
   const { toast } = useToast();
 
-
   useEffect(() => {
     const init = async () => {
-      // Check and refresh token if expired
       const token = await checkAndRefreshTokens();
       if (!token) {
         router.push('/auth/login');
         return;
       }
-
-      // Check superadmin status from JWT
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (!payload.is_superadmin) {
@@ -58,9 +54,7 @@ export default function SuperAdminPage() {
         router.push('/auth/login');
         return;
       }
-
       const headers = { Authorization: `Bearer ${token}` };
-
       try {
         const [statsData, clientsData] = await Promise.all([
           fetch('/api/superadmin/stats', { headers }).then(r => {
@@ -80,7 +74,6 @@ export default function SuperAdminPage() {
         setLoading(false);
       }
     };
-
     init();
   }, [router]);
 
@@ -144,8 +137,6 @@ export default function SuperAdminPage() {
       if (!res.ok) {
         throw new Error(data.error || data.message || 'Failed to create organization');
       }
-
-      // Refresh list
       const headers = { Authorization: `Bearer ${token}` };
       const [statsData, clientsData] = await Promise.all([
         fetch('/api/superadmin/stats', { headers }).then(r => r.json()),
@@ -153,10 +144,10 @@ export default function SuperAdminPage() {
       ]);
       setStats(statsData.data || statsData);
       setClients(clientsData.data?.clients || clientsData.data || []);
-
       setShowCreateModal(false);
       setNewClientName('');
       setNewClientSlug('');
+      toast('Organization created successfully', 'success');
     } catch (err) {
       setCreateError(err instanceof Error ? err.message : 'Failed to create organization');
     } finally {
@@ -164,120 +155,217 @@ export default function SuperAdminPage() {
     }
   };
 
+  const statCards = stats ? [
+    { label: 'Organizations', value: stats.total_clients || 0, icon: Building2, gradient: 'from-[#FCA311]/20 to-[#FCA311]/5' },
+    { label: 'Users', value: stats.total_users || 0, icon: Users, gradient: 'from-blue-500/20 to-blue-500/5' },
+    { label: 'Events', value: stats.total_events || 0, icon: Calendar, gradient: 'from-emerald-500/20 to-emerald-500/5' },
+    { label: 'Registrations', value: stats.total_registrations || 0, icon: Ticket, gradient: 'from-purple-500/20 to-purple-500/5' },
+  ] : [];
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans antialiased">
-      <div className="hp-bg-gradient" />
-
+    <div style={{ minHeight: '100vh', background: '#000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
       {/* Nav */}
-      <nav className="hp-nav" style={{ padding: '16px 24px' }}>
-        <div className="flex justify-between items-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">
-                H
-              </div>
-              <span className="text-lg font-bold text-white">HeyPass</span>
-            </Link>
-            <span className="text-[10px] font-semibold text-[#FCA311] bg-[#FCA311]/10 px-2 py-0.5 rounded uppercase tracking-wider">
-              Superadmin
-            </span>
-          </div>
-          <button 
-            onClick={logout} 
-            className="px-4 py-2 rounded-lg text-xs font-semibold text-[#ef4444] hover:bg-[#ef4444]/15 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#ef4444] focus:outline-none"
+      <nav style={{
+        position: 'sticky', top: 0, zIndex: 40,
+        background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+            <div style={{
+              width: '36px', height: '36px', borderRadius: '10px',
+              background: 'linear-gradient(135deg, #FCA311, #E09800)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 800, fontSize: '15px', color: '#000',
+            }}>H</div>
+            <span style={{ fontSize: '18px', fontWeight: 700, color: '#fff' }}>HeyPass</span>
+            <span style={{
+              fontSize: '10px', fontWeight: 700, color: '#FCA311',
+              background: 'rgba(252,163,17,0.1)', border: '1px solid rgba(252,163,17,0.2)',
+              padding: '3px 8px', borderRadius: '6px', letterSpacing: '0.05em', textTransform: 'uppercase',
+            }}>Superadmin</span>
+          </Link>
+          <button onClick={logout} style={{
+            display: 'flex', alignItems: 'center', gap: '6px',
+            background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
+            color: '#888', padding: '8px 16px', borderRadius: '8px',
+            cursor: 'pointer', fontSize: '13px', fontWeight: 500,
+            transition: 'all 0.2s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.3)'; e.currentTarget.style.color = '#ef4444'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#888'; }}
           >
-            Logout
+            <LogOut size={14} /> Logout
           </button>
         </div>
       </nav>
 
       {/* Content */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' }}>
-        <div style={{ marginBottom: '32px' }}>
-          <h1 className="text-3xl font-bold mb-1 text-white tracking-tight">Platform Overview</h1>
-          <p className="text-[#888] text-sm">Manage all organizations and users across HeyPass</p>
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 24px' }}>
+        {/* Header */}
+        <div style={{ marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+            Platform Overview
+          </h1>
+          <p style={{ fontSize: '14px', color: '#666' }}>Manage all organizations and users across HeyPass</p>
         </div>
 
+        {/* Loading */}
         {loading && (
-          <div className="text-center py-16">
-            <div className="inline-flex items-center gap-3 text-[#FCA311]">
-              <div className="w-5 h-5 border-2 border-[#FCA311] border-t-transparent rounded-full animate-spin" />
-              <span className="text-sm">Loading platform data...</span>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '80px 0' }}>
+            <Loader2 size={20} style={{ color: '#FCA311', animation: 'spin 1s linear infinite' }} />
+            <span style={{ color: '#888', fontSize: '14px' }}>Loading platform data...</span>
           </div>
         )}
 
+        {/* Error */}
         {error && (
-          <div className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-4 text-center text-[#ef4444] text-sm mb-6">
-            {error}
-          </div>
+          <div style={{
+            background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)',
+            borderRadius: '12px', padding: '16px', marginBottom: '32px',
+            color: '#ef4444', fontSize: '13px', textAlign: 'center',
+          }}>{error}</div>
         )}
 
         {!loading && stats && (
           <>
-            {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-              {[
-                { label: 'Organizations', value: stats.total_clients || 0, icon: '🏢' },
-                { label: 'Users', value: stats.total_users || 0, icon: '👥' },
-                { label: 'Events', value: stats.total_events || 0, icon: '📋' },
-                { label: 'Registrations', value: stats.total_registrations || 0, icon: '🎟️' },
-              ].map(s => (
-                <div key={s.label} className="bg-[#0a0a0a] border border-[#222] rounded-xl p-4 sm:p-5 hover:border-[#FCA311]/30 transition-all duration-300">
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="text-[#888] text-[10px] font-semibold uppercase tracking-wider">{s.label}</span>
-                    <span className="text-base opacity-60">{s.icon}</span>
+            {/* Stats Grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '16px',
+              marginBottom: '48px',
+            }}>
+              {statCards.map(s => {
+                const Icon = s.icon;
+                return (
+                  <div key={s.label} style={{
+                    background: '#0a0a0a',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: '16px',
+                    padding: '24px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    transition: 'all 0.3s',
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(252,163,17,0.2)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                  >
+                    <div style={{
+                      position: 'absolute', top: 0, right: 0, width: '120px', height: '120px',
+                      background: `radial-gradient(circle, rgba(252,163,17,0.06) 0%, transparent 70%)`,
+                      transform: 'translate(30%, -30%)',
+                    }} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 600, color: '#555', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{s.label}</span>
+                      <div style={{
+                        width: '32px', height: '32px', borderRadius: '8px',
+                        background: 'rgba(252,163,17,0.08)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <Icon size={16} style={{ color: '#FCA311' }} />
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '36px', fontWeight: 800, color: '#FCA311', lineHeight: 1 }}>{s.value}</div>
                   </div>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[#FCA311]">{s.value}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Organizations */}
+            {/* Organizations Section */}
             <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-white">Organizations</h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#fff' }}>Organizations</h2>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="bg-[#FCA311] text-black hover:bg-[#E09800] px-4 py-2 rounded-lg font-semibold cursor-pointer text-xs transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    background: 'linear-gradient(135deg, #FCA311, #E09800)',
+                    color: '#000', border: 'none',
+                    padding: '10px 20px', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700,
+                    cursor: 'pointer', transition: 'all 0.2s',
+                    boxShadow: '0 4px 12px rgba(252,163,17,0.25)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(252,163,17,0.35)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(252,163,17,0.25)'; }}
                 >
-                  + Create Organization
+                  <Plus size={14} strokeWidth={3} /> Create Organization
                 </button>
               </div>
 
               {clients.length === 0 ? (
-                <div className="bg-[#0a0a0a] border border-[#222] rounded-xl py-16 text-center">
-                  <div className="text-[#888] text-sm mb-3">No organizations yet</div>
+                <div style={{
+                  background: '#0a0a0a', border: '1px dashed rgba(255,255,255,0.1)',
+                  borderRadius: '16px', padding: '64px 24px', textAlign: 'center',
+                }}>
+                  <Building2 size={40} style={{ color: '#333', margin: '0 auto 16px' }} />
+                  <p style={{ color: '#555', fontSize: '14px', marginBottom: '12px' }}>No organizations yet</p>
                   <button
                     onClick={() => setShowCreateModal(true)}
-                    className="text-[#FCA311] hover:text-[#E09800] text-xs font-semibold cursor-pointer bg-transparent border-none transition-colors"
-                  >
-                    Create your first organization
-                  </button>
+                    style={{
+                      background: 'transparent', border: 'none', color: '#FCA311',
+                      fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+                    }}
+                  >Create your first organization</button>
                 </div>
               ) : (
-                <div className="grid gap-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {clients.map(c => (
-                    <div key={c.id} className="bg-[#0a0a0a] border border-[#222] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 hover:border-[#333] transition-colors">
-                      <div>
-                        <div className="font-semibold text-sm sm:text-base text-white">{c.name}</div>
-                        <div className="text-[#888] text-xs mt-0.5">
-                          {c.slug} · Created {new Date(c.created_at).toLocaleDateString()}
+                    <div key={c.id} style={{
+                      background: '#0a0a0a',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                      borderRadius: '14px',
+                      padding: '20px 24px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      transition: 'all 0.2s',
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(252,163,17,0.15)'; e.currentTarget.style.background = '#0f0f0f'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.background = '#0a0a0a'; }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{
+                          width: '44px', height: '44px', borderRadius: '12px',
+                          background: 'linear-gradient(135deg, rgba(252,163,17,0.15), rgba(252,163,17,0.05))',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: '18px', fontWeight: 800, color: '#FCA311',
+                        }}>
+                          {c.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '15px', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{c.name}</div>
+                          <div style={{ fontSize: '12px', color: '#555' }}>
+                            {c.slug} · Created {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${
-                          c.status === 'active' ? 'bg-[#10b981]/15 text-[#10b981]' : 'bg-white/10 text-[#888]'
-                        }`}>
-                          {c.status}
-                        </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{
+                          fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
+                          padding: '4px 10px', borderRadius: '6px',
+                          background: c.status === 'active' ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.06)',
+                          color: c.status === 'active' ? '#10b981' : '#888',
+                        }}>{c.status}</span>
                         <button
                           onClick={() => selectClient(c.id)}
                           disabled={selecting !== null}
-                          className="bg-[#FCA311] text-black font-semibold px-4 py-1.5 rounded-lg cursor-pointer text-xs disabled:opacity-50 disabled:cursor-default hover:bg-[#E09800] transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                            background: selecting === c.id ? 'rgba(252,163,17,0.3)' : 'linear-gradient(135deg, #FCA311, #E09800)',
+                            color: '#000', border: 'none',
+                            padding: '8px 18px', borderRadius: '8px',
+                            fontSize: '12px', fontWeight: 700,
+                            cursor: selecting !== null ? 'wait' : 'pointer',
+                            opacity: selecting !== null && selecting !== c.id ? 0.4 : 1,
+                            transition: 'all 0.2s',
+                            boxShadow: selecting === c.id ? 'none' : '0 2px 8px rgba(252,163,17,0.2)',
+                          }}
                         >
-                          {selecting === c.id ? 'Accessing...' : 'Manage'}
+                          {selecting === c.id ? (
+                            <><Loader2 size={12} style={{ animation: 'spin 1s linear infinite' }} /> Accessing...</>
+                          ) : (
+                            <><span>Manage</span> <ArrowRight size={12} /></>
+                          )}
                         </button>
                       </div>
                     </div>
@@ -289,23 +377,39 @@ export default function SuperAdminPage() {
         )}
       </main>
 
+      {/* Create Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-xl w-full max-w-md p-6 shadow-2xl relative">
-            <div className="flex justify-between items-center mb-6">
-              <h3 id="modal-title" className="text-lg font-bold text-white">Create New Organization</h3>
-              <button 
-                onClick={() => { setShowCreateModal(false); setCreateError(''); }} 
-                className="text-[#888] hover:text-white bg-transparent border-none text-xl cursor-pointer focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded-md p-1"
-                aria-label="Close dialog"
-              >
-                &times;
-              </button>
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 50,
+          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '24px',
+        }} onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
+          <div style={{
+            background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '20px', width: '100%', maxWidth: '440px',
+            padding: '32px', boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>New Organization</h3>
+              <button
+                onClick={() => { setShowCreateModal(false); setCreateError(''); }}
+                style={{
+                  background: 'rgba(255,255,255,0.05)', border: 'none',
+                  color: '#666', width: '32px', height: '32px', borderRadius: '8px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.15s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#666'; }}
+              ><X size={16} /></button>
             </div>
 
-            <form onSubmit={handleCreateClient} className="flex flex-col gap-4">
+            <form onSubmit={handleCreateClient} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label className="block text-[#888] text-[10px] font-semibold mb-1.5 uppercase tracking-wider">Organization Name</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  Organization Name
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. IEEE Student Branch"
@@ -314,48 +418,87 @@ export default function SuperAdminPage() {
                     setNewClientName(e.target.value);
                     setNewClientSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
                   }}
-                  className="w-full bg-[#111] border border-[#333] focus:border-[#FCA311] focus:ring-1 focus:ring-[#FCA311]/50 rounded-lg p-3 text-white text-sm outline-none transition-all"
+                  style={{
+                    width: '100%', background: '#111',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '10px', padding: '12px 16px',
+                    color: '#fff', fontSize: '14px', outline: 'none',
+                    transition: 'border-color 0.2s',
+                  }}
+                  onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
+                  onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[#888] text-[10px] font-semibold mb-1.5 uppercase tracking-wider">Subdomain / URL Slug</label>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  Subdomain / URL Slug
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. ieee-student"
                   value={newClientSlug}
                   onChange={(e) => setNewClientSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, ''))}
-                  className="w-full bg-[#111] border border-[#333] focus:border-[#FCA311] focus:ring-1 focus:ring-[#FCA311]/50 rounded-lg p-3 text-white text-sm outline-none transition-all"
+                  style={{
+                    width: '100%', background: '#111',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '10px', padding: '12px 16px',
+                    color: '#fff', fontSize: '14px', outline: 'none',
+                    transition: 'border-color 0.2s',
+                  }}
+                  onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
+                  onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
                   required
                 />
               </div>
 
               {createError && (
-                <div className="text-[#ef4444] text-xs font-medium">{createError}</div>
+                <div style={{
+                  background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)',
+                  borderRadius: '8px', padding: '10px 14px',
+                  color: '#ef4444', fontSize: '13px',
+                }}>{createError}</div>
               )}
 
-              <div className="flex justify-end gap-3 mt-2">
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
                 <button
                   type="button"
                   onClick={() => { setShowCreateModal(false); setCreateError(''); }}
-                  className="bg-transparent text-[#888] border border-[#333] hover:bg-[#111] hover:text-white px-5 py-2 rounded-lg cursor-pointer text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-white focus:outline-none"
-                >
-                  Cancel
-                </button>
+                  style={{
+                    background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
+                    color: '#888', padding: '10px 20px', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+                    transition: 'all 0.15s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#888'; }}
+                >Cancel</button>
                 <button
                   type="submit"
                   disabled={creatingClient}
-                  className="bg-[#FCA311] text-black font-bold px-5 py-2 rounded-lg cursor-pointer text-xs disabled:opacity-50 disabled:cursor-default hover:bg-[#E09800] transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    background: creatingClient ? 'rgba(252,163,17,0.3)' : 'linear-gradient(135deg, #FCA311, #E09800)',
+                    color: '#000', border: 'none',
+                    padding: '10px 24px', borderRadius: '10px',
+                    fontSize: '13px', fontWeight: 700,
+                    cursor: creatingClient ? 'wait' : 'pointer',
+                    boxShadow: creatingClient ? 'none' : '0 4px 12px rgba(252,163,17,0.25)',
+                    transition: 'all 0.2s',
+                  }}
                 >
-                  {creatingClient ? 'Creating...' : 'Create'}
+                  {creatingClient ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Creating...</> : 'Create Organization'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      <style jsx global>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }
-

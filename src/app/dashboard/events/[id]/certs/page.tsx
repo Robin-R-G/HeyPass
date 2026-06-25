@@ -4,6 +4,7 @@ import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
+import { PromptModal } from '@/components/confirm-modal';
 
 interface ManualCert {
   id: string;
@@ -48,6 +49,8 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
   });
   const [saving, setSaving] = useState(false);
   const [stats, setStats] = useState({ total: 0, generated: 0, delivered: 0, downloaded: 0, revoked: 0 });
+  const [promptRevoke, setPromptRevoke] = useState<string | null>(null);
+  const [revokeReason, setRevokeReason] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -100,8 +103,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
     }
   };
 
-  const handleRevoke = async (certId: string) => {
-    const reason = prompt('Reason for revocation:');
+  const handleRevoke = async (certId: string, reason: string) => {
     if (!reason) return;
     try {
       const res = await fetch(`/api/events/${eventId}/certificates/${certId}`, {
@@ -227,7 +229,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
                   navigator.clipboard.writeText(url).then(() => {
                     toast('Share link copied to clipboard!', 'success');
                   }).catch(() => {
-                    prompt('Copy this link:', url);
+                    toast('Failed to copy link', 'error');
                   });
                 }}
               >Share Link</button>
@@ -361,7 +363,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
                   </button>
                   {c.status !== 'revoked' && (
                     <button
-                      onClick={() => handleRevoke(c.id)}
+                      onClick={() => setPromptRevoke(c.id)}
                       className="hp-btn hp-btn-ghost"
                       style={{ fontSize: '0.8rem', color: '#ef4444' }}
                     >
@@ -374,6 +376,22 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
           ))}
         </div>
       )}
+
+      <PromptModal
+        open={promptRevoke !== null}
+        title="Revoke Certificate"
+        message="Please provide a reason for revocation:"
+        placeholder="Reason for revocation"
+        confirmLabel="Revoke"
+        onConfirm={(value) => {
+          if (promptRevoke && value) {
+            handleRevoke(promptRevoke, value);
+            setPromptRevoke(null);
+            setRevokeReason('');
+          }
+        }}
+        onCancel={() => { setPromptRevoke(null); setRevokeReason(''); }}
+      />
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Template {
   id: string;
@@ -41,6 +42,7 @@ export default function TemplatesPage() {
     subject: '',
     body: '',
   });
+  const [confirmDeleteTemplate, setConfirmDeleteTemplate] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTemplates();
@@ -104,9 +106,7 @@ export default function TemplatesPage() {
     }
   }
 
-  async function handleDelete(templateId: string) {
-    if (!confirm('Delete this template?')) return;
-
+  async function executeDeleteTemplate(templateId: string) {
     try {
       await fetch(`/api/notifications/templates/${templateId}`, { method: 'DELETE' });
       fetchTemplates();
@@ -175,7 +175,7 @@ export default function TemplatesPage() {
                         <Button size="sm" variant="outline" onClick={() => openEdit(t)}>
                           Edit
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(t.id)}>
+                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteTemplate(t.id)}>
                           Delete
                         </Button>
                       </div>
@@ -293,6 +293,19 @@ export default function TemplatesPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ConfirmModal
+        open={!!confirmDeleteTemplate}
+        title="Delete Template"
+        message="Are you sure you want to delete this template?"
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => {
+          if (confirmDeleteTemplate) executeDeleteTemplate(confirmDeleteTemplate);
+          setConfirmDeleteTemplate(null);
+        }}
+        onCancel={() => setConfirmDeleteTemplate(null)}
+      />
     </div>
   );
 }

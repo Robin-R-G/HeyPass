@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Form {
   id: string;
@@ -32,6 +33,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
   const [loading, setLoading] = useState(true);
   const [showTemplates, setShowTemplates] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [confirmDeleteForm, setConfirmDeleteForm] = useState<{id: string; name: string} | null>(null);
 
   const { toast } = useToast();
 
@@ -106,8 +108,8 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
     }
   };
 
-  const handleDeleteForm = async (formId: string, formName: string) => {
-    if (!confirm(`Are you sure you want to delete "${formName}"?`)) return;
+  const executeDeleteForm = async (formId: string, formName: string) => {
+    setConfirmDeleteForm(null);
 
     try {
       const response = await fetch(`/api/forms/${formId}`, {
@@ -296,7 +298,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
                   Duplicate
                 </button>
                 <button
-                  onClick={() => handleDeleteForm(form.id, form.name)}
+                  onClick={() => setConfirmDeleteForm({id: form.id, name: form.name})}
                   className="text-[#ef4444] hover:text-white text-sm"
                 >
                   Delete
@@ -307,6 +309,16 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
         </div>
       )}
     </div>
+
+      <ConfirmModal
+        open={confirmDeleteForm !== null}
+        title="Delete Form"
+        message={`Are you sure you want to delete "${confirmDeleteForm?.name}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => confirmDeleteForm && executeDeleteForm(confirmDeleteForm.id, confirmDeleteForm.name)}
+        onCancel={() => setConfirmDeleteForm(null)}
+      />
     </div>
   );
 }

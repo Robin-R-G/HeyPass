@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
+import { ConfirmModal } from '@/components/confirm-modal';
 
 interface WebhookEndpoint {
   id: string;
@@ -56,6 +57,7 @@ export default function WebhooksPage() {
   const [selectedEndpoint, setSelectedEndpoint] = useState<string | null>(null);
   const [deliveries, setDeliveries] = useState<WebhookDelivery[]>([]);
   const [form, setForm] = useState({ url: '', description: '', events: [] as string[] });
+  const [confirmDeleteWebhook, setConfirmDeleteWebhook] = useState<string | null>(null);
 
   useEffect(() => { fetchEndpoints(); }, []);
 
@@ -112,8 +114,7 @@ export default function WebhooksPage() {
     }
   }
 
-  async function handleDelete(endpointId: string) {
-    if (!confirm('Delete this webhook endpoint?')) return;
+  async function executeDeleteWebhook(endpointId: string) {
     try {
       await fetch(`/api/webhooks/${endpointId}`, { method: 'DELETE' });
       fetchEndpoints();
@@ -205,7 +206,7 @@ export default function WebhooksPage() {
                         <Button size="sm" variant="outline" onClick={() => handleTest(ep.id)}>
                           Test
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(ep.id)}>
+                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteWebhook(ep.id)}>
                           Delete
                         </Button>
                       </div>
@@ -303,6 +304,19 @@ export default function WebhooksPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ConfirmModal
+        open={!!confirmDeleteWebhook}
+        title="Delete Webhook"
+        message="Delete this webhook endpoint? This cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => {
+          if (confirmDeleteWebhook) executeDeleteWebhook(confirmDeleteWebhook);
+          setConfirmDeleteWebhook(null);
+        }}
+        onCancel={() => setConfirmDeleteWebhook(null)}
+      />
     </div>
     </div>
   );
