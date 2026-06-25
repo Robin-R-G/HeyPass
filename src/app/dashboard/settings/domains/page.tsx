@@ -166,7 +166,7 @@ export default function DomainSettingsPage() {
       <h1 className="text-2xl font-bold mb-6">Custom Domain Settings</h1>
 
       {message && (
-        <div className={'p-4 mb-6 rounded ' + (message.type === 'success' ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]' : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]')}>
+        <div className={'p-4 mb-6 rounded ' + (message.type === 'success' ? 'bg-green-900/20 text-green-400 border-green-900/30' : 'bg-red-900/20 text-red-400 border-red-900/30')}>
           {message.text}
         </div>
       )}
@@ -239,7 +239,7 @@ export default function DomainSettingsPage() {
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{domain.domain}</span>
                     <span
-                      className={'px-2 py-0.5 rounded text-xs ' + (domain.verified ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981]' : 'bg-[rgba(245,158,11,0.15)] text-[#f59e0b]')}
+                      className={'px-2 py-0.5 rounded text-xs ' + (domain.verified ? 'bg-green-900/20 text-green-400' : 'bg-yellow-900/20 text-yellow-400')}
                     >
                       {domain.verified ? 'Verified' : 'Pending'}
                     </span>
@@ -276,7 +276,7 @@ export default function DomainSettingsPage() {
       <ConfirmModal
         open={confirmDeleteDomain !== null}
         title="Remove Domain"
-        message={'Are you sure you want to remove ' + (confirmDeleteDomain?.domain || 'this domain') + '?'}
+        message={'Are you sure you want to remove this domain?'}
         confirmLabel="Remove"
         variant="danger"
         onConfirm={executeDeleteDomain}
