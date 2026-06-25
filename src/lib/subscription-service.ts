@@ -206,7 +206,7 @@ class SubscriptionServiceImpl {
         .eq('client_id', clientId)
         .is('deleted_at', null),
       supabaseAdmin
-        .from('memberships')
+        .from('client_memberships')
         .select('id', { count: 'exact', head: true })
         .eq('client_id', clientId),
     ]);

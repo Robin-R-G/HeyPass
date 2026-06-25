@@ -61,7 +61,7 @@ export default function SponsorsPage() {
         <h1 className="text-2xl font-bold">Sponsor Management</h1>
         <div className="flex gap-2">
           <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm">Event</Button></Link>
-          <Link href={`/dashboard/events/[id]/crm`} as={`/dashboard/events/${eventId}/crm`}><Button variant="outline" size="sm">CRM Portal</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/crm`}><Button variant="outline" size="sm">CRM Portal</Button></Link>
           <Link href={`/dashboard/events/${eventId}/sponsors`}><Button size="sm">Sponsors</Button></Link>
         </div>
       </div>

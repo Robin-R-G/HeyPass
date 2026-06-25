@@ -24,7 +24,7 @@ export async function GET(
       return NextResponse.json({
         certificate,
         share_link: shareLink ? {
-          url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app'}/cert/${shareLink.token}`,
+          url: `${process.env.NEXT_PUBLIC_APP_URL || ''}/cert/${shareLink.token}`,
           expires_at: shareLink.expires_at,
           access_count: shareLink.access_count,
           max_access: shareLink.max_access,

@@ -18,13 +18,13 @@ const updateSchema = z.object({
 
 async function checkOwner(userId: string, clientId: string) {
   const { data } = await supabaseAdmin
-    .from('memberships')
-    .select('role_slug')
+    .from('client_memberships')
+    .select('role:roles(slug)')
     .eq('user_id', userId)
     .eq('client_id', clientId)
     .single();
 
-  return data?.role_slug === 'owner';
+  return (data?.role as any)?.slug === 'owner';
 }
 
 export async function GET(

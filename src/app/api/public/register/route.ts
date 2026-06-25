@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
               field_id: fieldId,
               value: String(value),
             })
-            .catch(() => {}); // Ignore errors for responses
+            .catch((err) => console.error('Failed to save registration response:', err));
         }
       }
     }
@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
     if (ticket_type_id) {
       await supabaseAdmin.rpc('increment_ticket_type_sold', {
         p_ticket_type_id: ticket_type_id,
-      }).catch(() => {});
+      }).catch((err) => console.error('Failed to increment ticket type sold count:', err));
     }
 
     // Audit log

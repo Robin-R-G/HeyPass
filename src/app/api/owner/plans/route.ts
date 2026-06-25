@@ -22,13 +22,13 @@ export async function GET(request: NextRequest) {
     try {
       // Owner check via JWT membership
       const { data: membership } = await supabaseAdmin
-        .from('memberships')
-        .select('role_slug')
+        .from('client_memberships')
+        .select('role:roles(slug)')
         .eq('user_id', userId)
         .eq('client_id', clientId)
         .single();
 
-      if (membership?.role_slug !== 'owner') {
+      if ((membership?.role as any)?.slug !== 'owner') {
         return NextResponse.json({ error: 'Only owners can view plans' }, { status: 403 });
       }
 
@@ -49,13 +49,13 @@ export async function POST(request: NextRequest) {
   return withAuth(request, async (req, userId, clientId) => {
     try {
       const { data: membership } = await supabaseAdmin
-        .from('memberships')
-        .select('role_slug')
+        .from('client_memberships')
+        .select('role:roles(slug)')
         .eq('user_id', userId)
         .eq('client_id', clientId)
         .single();
 
-      if (membership?.role_slug !== 'owner') {
+      if ((membership?.role as any)?.slug !== 'owner') {
         return NextResponse.json({ error: 'Only owners can create plans' }, { status: 403 });
       }
 
