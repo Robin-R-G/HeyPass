@@ -82,6 +82,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            if (!('serviceWorker' in navigator)) return;
+            var v = localStorage.getItem('sw_version');
+            if (v !== '3') {
+              navigator.serviceWorker.getRegistrations().then(function(regs) {
+                regs.forEach(function(r) { r.unregister(); });
+                caches.keys().then(function(names) {
+                  names.forEach(function(n) { caches.delete(n); });
+                });
+              });
+              localStorage.setItem('sw_version', '3');
+            }
+          })();
+        `}} />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-hp-bg text-hp-text font-sans hp-animate-fade-in`}
         suppressHydrationWarning
