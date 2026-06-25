@@ -313,7 +313,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
       <ConfirmModal
         open={confirmDeleteForm !== null}
         title="Delete Form"
-        message={`Are you sure you want to delete "${confirmDeleteForm?.name}"? This action cannot be undone.`}
+        message={'Are you sure you want to delete "' + (confirmDeleteForm?.name || 'this form') + '"? This action cannot be undone.'}
         confirmLabel="Delete"
         variant="danger"
         onConfirm={() => confirmDeleteForm && executeDeleteForm(confirmDeleteForm.id, confirmDeleteForm.name)}

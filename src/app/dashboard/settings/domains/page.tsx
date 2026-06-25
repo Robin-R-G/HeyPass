@@ -286,7 +286,7 @@ export default function DomainSettingsPage() {
       <ConfirmModal
         open={confirmDeleteDomain !== null}
         title="Remove Domain"
-        message={`Are you sure you want to remove ${confirmDeleteDomain?.domain}?`}
+        message={'Are you sure you want to remove ' + (confirmDeleteDomain?.domain || 'this domain') + '?'}
         confirmLabel="Remove"
         variant="danger"
         onConfirm={executeDeleteDomain}

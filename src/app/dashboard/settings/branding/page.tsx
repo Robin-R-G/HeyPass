@@ -643,7 +643,7 @@ export default function BrandingSettingsPage() {
       <ConfirmModal
         open={confirmDeleteAsset !== null}
         title="Delete Asset"
-        message={`Are you sure you want to delete the ${confirmDeleteAsset}? This action cannot be undone.`}
+        message={'Are you sure you want to delete the ' + confirmDeleteAsset + '? This action cannot be undone.'}
         confirmLabel="Delete"
         variant="danger"
         onConfirm={executeDeleteAsset}

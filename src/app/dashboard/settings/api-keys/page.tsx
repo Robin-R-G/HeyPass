@@ -267,8 +267,6 @@ export default function ApiKeysPage() {
         </DialogContent>
       </Dialog>
     </div>
-    </div>
-
       <ConfirmModal
         open={confirmDeleteKey !== null}
         title="Delete API Key"
@@ -278,7 +276,6 @@ export default function ApiKeysPage() {
         onConfirm={executeDeleteKey}
         onCancel={() => setConfirmDeleteKey(null)}
       />
-
       <ConfirmModal
         open={confirmRegenKey !== null}
         title="Regenerate API Key"
