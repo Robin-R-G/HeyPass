@@ -166,13 +166,7 @@ export default function DomainSettingsPage() {
       <h1 className="text-2xl font-bold mb-6">Custom Domain Settings</h1>
 
       {message && (
-        <div
-          className={`p-4 mb-6 rounded ${
-            message.type === 'success'
-              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]'
-              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]'
-          }`}
-        >
+        <div className={'p-4 mb-6 rounded ' + (message.type === 'success' ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]' : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]')}>
           {message.text}
         </div>
       )}
@@ -245,11 +239,7 @@ export default function DomainSettingsPage() {
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{domain.domain}</span>
                     <span
-                      className={`px-2 py-0.5 rounded text-xs ${
-                        domain.verified
-                          ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981]'
-                          : 'bg-[rgba(245,158,11,0.15)] text-[#f59e0b]'
-                      }`}
+                      className={'px-2 py-0.5 rounded text-xs ' + (domain.verified ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981]' : 'bg-[rgba(245,158,11,0.15)] text-[#f59e0b]')}
                     >
                       {domain.verified ? 'Verified' : 'Pending'}
                     </span>

@@ -230,13 +230,7 @@ export default function BrandingSettingsPage() {
       <h1 className="text-2xl font-bold mb-6">Branding Settings</h1>
 
       {message && (
-        <div
-          className={`p-4 mb-6 rounded ${
-            message.type === 'success'
-              ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]'
-              : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]'
-          }`}
-        >
+        <div className={'p-4 mb-6 rounded ' + (message.type === 'success' ? 'bg-[rgba(16,185,129,0.1)] text-[#10b981] border-[rgba(16,185,129,0.2)]' : 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.2)]')}>
           {message.text}
         </div>
       )}
