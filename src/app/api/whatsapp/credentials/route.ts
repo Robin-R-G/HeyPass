@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest) {
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
-    const guard = await requirePermission(req, PERMISSIONS.ADMIN_ACCESS);
+    const guard = await requirePermission(req, PERMISSIONS.SETTINGS_EDIT);
     if (!guard.allowed) return errorResponse('Forbidden', 403);
 
     const body = await req.json();
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     const { PERMISSIONS } = await import('@/lib/permissions');
     const auth = extractAuthPayload(req);
     if (!auth || !auth.clientId) return errorResponse('Forbidden', 403);
-    const guard = await requirePermission(req, PERMISSIONS.ADMIN_ACCESS);
+    const guard = await requirePermission(req, PERMISSIONS.SETTINGS_EDIT);
     if (!guard.allowed) return errorResponse('Forbidden', 403);
 
     const body = await req.json();

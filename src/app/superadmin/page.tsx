@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { checkAndRefreshTokens } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
 import { Building2, Users, Calendar, Ticket, Plus, LogOut, ArrowRight, X, Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 interface PlatformStats {
   total_clients: number;
@@ -156,117 +157,69 @@ export default function SuperAdminPage() {
   };
 
   const statCards = stats ? [
-    { label: 'Organizations', value: stats.total_clients || 0, icon: Building2, gradient: 'from-[#FCA311]/20 to-[#FCA311]/5' },
-    { label: 'Users', value: stats.total_users || 0, icon: Users, gradient: 'from-blue-500/20 to-blue-500/5' },
-    { label: 'Events', value: stats.total_events || 0, icon: Calendar, gradient: 'from-emerald-500/20 to-emerald-500/5' },
-    { label: 'Registrations', value: stats.total_registrations || 0, icon: Ticket, gradient: 'from-purple-500/20 to-purple-500/5' },
+    { label: 'Organizations', value: stats.total_clients || 0, icon: Building2 },
+    { label: 'Users', value: stats.total_users || 0, icon: Users },
+    { label: 'Events', value: stats.total_events || 0, icon: Calendar },
+    { label: 'Registrations', value: stats.total_registrations || 0, icon: Ticket },
   ] : [];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div className="min-h-screen bg-transparent text-hp-text font-sans antialiased hp-animate-fade-in relative">
       {/* Nav */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 40,
-        background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '10px',
-              background: 'linear-gradient(135deg, #FCA311, #E09800)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 800, fontSize: '15px', color: '#000',
-            }}>H</div>
-            <span style={{ fontSize: '18px', fontWeight: 700, color: '#fff' }}>HeyPass</span>
-            <span style={{
-              fontSize: '10px', fontWeight: 700, color: '#FCA311',
-              background: 'rgba(252,163,17,0.1)', border: '1px solid rgba(252,163,17,0.2)',
-              padding: '3px 8px', borderRadius: '6px', letterSpacing: '0.05em', textTransform: 'uppercase',
-            }}>Superadmin</span>
+      <nav className="hp-nav sticky top-0 z-40">
+        <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center h-16">
+          <Link href="/" className="flex items-center gap-2.5 no-underline">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
+            <span className="text-lg font-bold text-white">HeyPass</span>
+            <span className="text-[10px] font-bold text-[#FCA311] bg-[#FCA311]/10 border border-[#FCA311]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
-          <button onClick={logout} style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
-            color: '#888', padding: '8px 16px', borderRadius: '8px',
-            cursor: 'pointer', fontSize: '13px', fontWeight: 500,
-            transition: 'all 0.2s',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.3)'; e.currentTarget.style.color = '#ef4444'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#888'; }}
-          >
+          <button onClick={logout} className="hp-btn hp-btn-ghost text-xs flex items-center gap-1.5 border border-white/8 text-hp-text-secondary hover:border-red-500/30 hover:text-red-500 transition-all duration-200 cursor-pointer">
             <LogOut size={14} /> Logout
           </button>
         </div>
       </nav>
 
       {/* Content */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 24px' }}>
+      <main className="max-w-[1200px] mx-auto px-6 py-12">
         {/* Header */}
-        <div style={{ marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+        <div className="mb-10">
+          <h1 className="text-3xl font-extrabold text-white mb-1.5 tracking-tight">
             Platform Overview
           </h1>
-          <p style={{ fontSize: '14px', color: '#666' }}>Manage all organizations and users across HeyPass</p>
+          <p className="text-sm text-hp-text-secondary opacity-70">Manage all organizations and users across HeyPass</p>
         </div>
 
         {/* Loading */}
         {loading && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '80px 0' }}>
-            <Loader2 size={20} style={{ color: '#FCA311', animation: 'spin 1s linear infinite' }} />
-            <span style={{ color: '#888', fontSize: '14px' }}>Loading platform data...</span>
+          <div className="flex items-center justify-center gap-3 py-20">
+            <Loader2 size={20} className="text-[#FCA311] animate-spin" />
+            <span className="text-hp-text-secondary opacity-70 text-sm">Loading platform data...</span>
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div style={{
-            background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)',
-            borderRadius: '12px', padding: '16px', marginBottom: '32px',
-            color: '#ef4444', fontSize: '13px', textAlign: 'center',
-          }}>{error}</div>
+          <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-xl p-4 mb-8 text-[#ef4444] text-sm text-center">
+            {error}
+          </div>
         )}
 
         {!loading && stats && (
           <>
             {/* Stats Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '16px',
-              marginBottom: '48px',
-            }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
               {statCards.map(s => {
                 const Icon = s.icon;
                 return (
-                  <div key={s.label} style={{
-                    background: '#0a0a0a',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    borderRadius: '16px',
-                    padding: '24px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s',
-                  }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(252,163,17,0.2)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'translateY(0)'; }}
-                  >
-                    <div style={{
-                      position: 'absolute', top: 0, right: 0, width: '120px', height: '120px',
-                      background: `radial-gradient(circle, rgba(252,163,17,0.06) 0%, transparent 70%)`,
-                      transform: 'translate(30%, -30%)',
-                    }} />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 600, color: '#555', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{s.label}</span>
-                      <div style={{
-                        width: '32px', height: '32px', borderRadius: '8px',
-                        background: 'rgba(252,163,17,0.08)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                        <Icon size={16} style={{ color: '#FCA311' }} />
+                  <div key={s.label} className="hp-glass-card p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-radial from-[#FCA311]/5 to-transparent translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+                    <div className="flex justify-between items-start mb-4">
+                      <span className="text-[10px] font-semibold text-hp-text-secondary/60 uppercase tracking-wider">{s.label}</span>
+                      <div className="w-8 h-8 rounded-lg bg-[#FCA311]/8 flex items-center justify-center">
+                        <Icon size={16} className="text-[#FCA311]" />
                       </div>
                     </div>
-                    <div style={{ fontSize: '36px', fontWeight: 800, color: '#FCA311', lineHeight: 1 }}>{s.value}</div>
+                    <div className="text-3xl font-extrabold text-[#FCA311] leading-none">{s.value}</div>
                   </div>
                 );
               })}
@@ -274,95 +227,53 @@ export default function SuperAdminPage() {
 
             {/* Organizations Section */}
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#fff' }}>Organizations</h2>
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="text-lg font-bold text-white">Organizations</h2>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    background: 'linear-gradient(135deg, #FCA311, #E09800)',
-                    color: '#000', border: 'none',
-                    padding: '10px 20px', borderRadius: '10px',
-                    fontSize: '13px', fontWeight: 700,
-                    cursor: 'pointer', transition: 'all 0.2s',
-                    boxShadow: '0 4px 12px rgba(252,163,17,0.25)',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(252,163,17,0.35)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(252,163,17,0.25)'; }}
+                  className="hp-btn hp-btn-primary text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-1.5 rounded-xl cursor-pointer"
                 >
                   <Plus size={14} strokeWidth={3} /> Create Organization
                 </button>
               </div>
 
               {clients.length === 0 ? (
-                <div style={{
-                  background: '#0a0a0a', border: '1px dashed rgba(255,255,255,0.1)',
-                  borderRadius: '16px', padding: '64px 24px', textAlign: 'center',
-                }}>
-                  <Building2 size={40} style={{ color: '#333', margin: '0 auto 16px' }} />
-                  <p style={{ color: '#555', fontSize: '14px', marginBottom: '12px' }}>No organizations yet</p>
+                <div className="hp-glass-card border-dashed border-white/10 p-16 text-center">
+                  <Building2 size={40} className="text-white/20 mx-auto mb-4" />
+                  <p className="text-hp-text-secondary opacity-60 text-sm mb-3">No organizations yet</p>
                   <button
                     onClick={() => setShowCreateModal(true)}
-                    style={{
-                      background: 'transparent', border: 'none', color: '#FCA311',
-                      fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-                    }}
+                    className="bg-transparent border-none text-[#FCA311] text-sm font-semibold cursor-pointer hover:underline"
                   >Create your first organization</button>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div className="flex flex-col gap-3">
                   {clients.map(c => (
-                    <div key={c.id} style={{
-                      background: '#0a0a0a',
-                      border: '1px solid rgba(255,255,255,0.06)',
-                      borderRadius: '14px',
-                      padding: '20px 24px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      transition: 'all 0.2s',
-                    }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(252,163,17,0.15)'; e.currentTarget.style.background = '#0f0f0f'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.background = '#0a0a0a'; }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{
-                          width: '44px', height: '44px', borderRadius: '12px',
-                          background: 'linear-gradient(135deg, rgba(252,163,17,0.15), rgba(252,163,17,0.05))',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '18px', fontWeight: 800, color: '#FCA311',
-                        }}>
+                    <div key={c.id} className="hp-glass-card px-6 py-5 flex items-center justify-between transition-all duration-200">
+                      <div className="flex items-center gap-4">
+                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311]/15 to-[#FCA311]/5 flex items-center justify-center text-lg font-extrabold text-[#FCA311]">
                           {c.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <div style={{ fontSize: '15px', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{c.name}</div>
-                          <div style={{ fontSize: '12px', color: '#555' }}>
+                          <div className="text-sm font-semibold text-white mb-0.5">{c.name}</div>
+                          <div className="text-xs text-hp-text-secondary/60">
                             {c.slug} · Created {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </div>
                         </div>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <span style={{
-                          fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
-                          padding: '4px 10px', borderRadius: '6px',
-                          background: c.status === 'active' ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.06)',
-                          color: c.status === 'active' ? '#10b981' : '#888',
-                        }}>{c.status}</span>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${
+                          c.status === 'active' ? 'bg-[#10b981]/12 text-[#10b981]' : 'bg-white/6 text-hp-text-secondary/60'
+                        }`}>{c.status}</span>
                         <button
                           onClick={() => selectClient(c.id)}
                           disabled={selecting !== null}
-                          style={{
-                            display: 'flex', alignItems: 'center', gap: '6px',
-                            background: selecting === c.id ? 'rgba(252,163,17,0.3)' : 'linear-gradient(135deg, #FCA311, #E09800)',
-                            color: '#000', border: 'none',
-                            padding: '8px 18px', borderRadius: '8px',
-                            fontSize: '12px', fontWeight: 700,
-                            cursor: selecting !== null ? 'wait' : 'pointer',
-                            opacity: selecting !== null && selecting !== c.id ? 0.4 : 1,
-                            transition: 'all 0.2s',
-                            boxShadow: selecting === c.id ? 'none' : '0 2px 8px rgba(252,163,17,0.2)',
-                          }}
+                          className={`hp-btn hp-btn-primary text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-lg cursor-pointer ${
+                            selecting !== null ? 'opacity-40 wait' : ''
+                          }`}
                         >
                           {selecting === c.id ? (
-                            <><Loader2 size={12} style={{ animation: 'spin 1s linear infinite' }} /> Accessing...</>
+                            <><Loader2 size={12} className="animate-spin" /> Accessing...</>
                           ) : (
                             <><span>Manage</span> <ArrowRight size={12} /></>
                           )}
@@ -379,38 +290,24 @@ export default function SuperAdminPage() {
 
       {/* Create Modal */}
       {showCreateModal && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 50,
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '24px',
-        }} onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
-          <div style={{
-            background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '20px', width: '100%', maxWidth: '440px',
-            padding: '32px', boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
-          }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#fff' }}>New Organization</h3>
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-6" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
+          <div className="hp-glass-card bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/8 rounded-2xl w-full max-w-[440px] p-8 shadow-2xl hp-animate-scale-in" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold text-white">New Organization</h3>
               <button
                 onClick={() => { setShowCreateModal(false); setCreateError(''); }}
-                style={{
-                  background: 'rgba(255,255,255,0.05)', border: 'none',
-                  color: '#666', width: '32px', height: '32px', borderRadius: '8px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', transition: 'all 0.15s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#666'; }}
-              ><X size={16} /></button>
+                className="bg-white/5 hover:bg-white/10 text-hp-text-secondary hover:text-white w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-150"
+              >
+                <X size={16} />
+              </button>
             </div>
 
-            <form onSubmit={handleCreateClient} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <form onSubmit={handleCreateClient} className="flex flex-col gap-5">
               <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
                   Organization Name
                 </label>
-                <input
+                <Input
                   type="text"
                   placeholder="e.g. IEEE Student Branch"
                   value={newClientName}
@@ -418,87 +315,49 @@ export default function SuperAdminPage() {
                     setNewClientName(e.target.value);
                     setNewClientSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
                   }}
-                  style={{
-                    width: '100%', background: '#111',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px', padding: '12px 16px',
-                    color: '#fff', fontSize: '14px', outline: 'none',
-                    transition: 'border-color 0.2s',
-                  }}
-                  onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
-                  onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
                   required
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
                   Subdomain / URL Slug
                 </label>
-                <input
+                <Input
                   type="text"
                   placeholder="e.g. ieee-student"
                   value={newClientSlug}
                   onChange={(e) => setNewClientSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, ''))}
-                  style={{
-                    width: '100%', background: '#111',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '10px', padding: '12px 16px',
-                    color: '#fff', fontSize: '14px', outline: 'none',
-                    transition: 'border-color 0.2s',
-                  }}
-                  onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
-                  onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
                   required
                 />
               </div>
 
               {createError && (
-                <div style={{
-                  background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)',
-                  borderRadius: '8px', padding: '10px 14px',
-                  color: '#ef4444', fontSize: '13px',
-                }}>{createError}</div>
+                <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs">
+                  {createError}
+                </div>
               )}
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
+              <div className="flex justify-end gap-3.5 mt-2">
                 <button
                   type="button"
                   onClick={() => { setShowCreateModal(false); setCreateError(''); }}
-                  style={{
-                    background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
-                    color: '#888', padding: '10px 20px', borderRadius: '10px',
-                    fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-                    transition: 'all 0.15s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#fff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#888'; }}
+                  className="hp-btn hp-btn-secondary text-xs rounded-lg cursor-pointer"
                 >Cancel</button>
                 <button
                   type="submit"
                   disabled={creatingClient}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    background: creatingClient ? 'rgba(252,163,17,0.3)' : 'linear-gradient(135deg, #FCA311, #E09800)',
-                    color: '#000', border: 'none',
-                    padding: '10px 24px', borderRadius: '10px',
-                    fontSize: '13px', fontWeight: 700,
-                    cursor: creatingClient ? 'wait' : 'pointer',
-                    boxShadow: creatingClient ? 'none' : '0 4px 12px rgba(252,163,17,0.25)',
-                    transition: 'all 0.2s',
-                  }}
+                  className={`hp-btn hp-btn-primary text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-1.5 px-5 py-2.5 rounded-lg cursor-pointer ${
+                    creatingClient ? 'opacity-40 wait' : ''
+                  }`}
                 >
-                  {creatingClient ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Creating...</> : 'Create Organization'}
+                  {creatingClient ? <><Loader2 size={12} className="animate-spin" /> Creating...</> : 'Create Organization'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
-      <style jsx global>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 }

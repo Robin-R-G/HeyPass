@@ -283,6 +283,5 @@ export default function DomainSettingsPage() {
         onCancel={() => setConfirmDeleteDomain(null)}
       />
     </div>
-    </div>
   );
 }
