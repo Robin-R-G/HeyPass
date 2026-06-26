@@ -3,6 +3,7 @@ import { successResponse, errorResponse } from '@/lib/route-guard';
 import { supabaseAdmin } from '@/lib/supabase/client';
 import { createAuditLog } from '@/lib/audit';
 import { checkRateLimit } from '@/lib/cache';
+import { extractClientIP } from '@/lib/auth-service';
 import { v4 as uuidv4 } from 'uuid';
 
 // POST /api/public/register — Submit registration
@@ -100,7 +101,7 @@ export async function POST(req: NextRequest) {
         job_title: job_title || null,
         custom_fields: custom_fields || {},
         source: 'public_form',
-        ip_address: req.headers.get('x-forwarded-for') || null,
+        ip_address: extractClientIP(req.headers.get('x-forwarded-for')),
         user_agent: req.headers.get('user-agent')?.slice(0, 200) || null,
       })
       .select()
@@ -159,7 +160,7 @@ export async function POST(req: NextRequest) {
       resource_type: 'registration',
       resource_id: registrationId,
       new_value: { email, first_name, last_name, event_id: event.id },
-      ip_address: req.headers.get('x-forwarded-for') || undefined,
+      ip_address: extractClientIP(req.headers.get('x-forwarded-for')),
       user_agent: req.headers.get('user-agent')?.slice(0, 200) || undefined,
     });
 

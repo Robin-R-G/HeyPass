@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -36,57 +37,72 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent flex items-center justify-center font-sans antialiased">
-      <div className="w-full max-w-[400px] p-6">
-        <div className="text-center mb-8">
-          <Link href="/" className="no-underline">
-            <div className="inline-flex items-center gap-2 mb-4">
-               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black">H</div>
-              <span className="text-xl font-bold text-white">HeyPass</span>
-            </div>
-          </Link>
-          <h1 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">Reset your password</h1>
-          <p className="text-sm text-hp-text-secondary opacity-70">Enter your email and we&apos;ll send you a reset link</p>
+    <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
+      <div className="w-full max-w-[420px] px-5">
+        {/* Logo */}
+        <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+          <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
+        </Link>
+
+        {/* Title */}
+        <div className="text-center mb-7">
+          <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Reset your password</h1>
+          <p className="text-sm text-[#999]">Enter your email and we&apos;ll send you a reset link</p>
         </div>
 
-        <div className="hp-glass-card bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/8 rounded-2xl p-8 shadow-2xl">
+        {/* Card */}
+        <div className="hp-glass-card p-7 sm:p-8">
           {sent ? (
             <div className="text-center py-4">
-              <div className="text-3xl mb-4">📧</div>
+              <div className="w-14 h-14 rounded-full bg-[#10b981]/15 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="w-7 h-7 text-[#10b981]" />
+              </div>
               <h2 className="text-base font-bold text-white mb-2">Check your email</h2>
-              <p className="text-xs text-hp-text-secondary opacity-70 leading-relaxed">
+              <p className="text-[13px] text-[#999] leading-relaxed">
                 We&apos;ve sent a password reset link to <strong className="text-white">{email}</strong>.<br />
                 The link will expire in 1 hour.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <div>
-                <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Email</label>
+                <label htmlFor="forgot-email" className="block text-[13px] font-semibold text-[#ccc] mb-2">Email</label>
                 <Input
-                  type="email" value={email} onChange={e => setEmail(e.target.value)} required
+                  id="forgot-email"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
                   placeholder="you@example.com"
+                  autoComplete="email"
+                  aria-required="true"
                 />
               </div>
 
               {error && (
-                <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs text-center">
+                <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">
                   {error}
                 </div>
               )}
 
-              <Button
-                type="submit" disabled={loading || !email}
-                className="w-full h-11 font-bold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Sending...' : 'Send Reset Link'}
+              <Button type="submit" disabled={loading || !email} className="w-full h-12 font-bold text-[15px]">
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  'Send Reset Link'
+                )}
               </Button>
             </form>
           )}
         </div>
 
-        <p className="text-center mt-6 text-xs text-hp-text-secondary/60">
-          <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">← Back to sign in</Link>
+        {/* Back link */}
+        <p className="text-center mt-6 text-[13px] text-[#777]">
+          <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">&larr; Back to sign in</Link>
         </p>
       </div>
     </div>

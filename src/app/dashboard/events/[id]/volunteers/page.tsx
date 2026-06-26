@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EventNav } from '@/components/event-nav';
 
 interface Volunteer { id: string; first_name: string; last_name: string; email: string; phone: string; status: string; checked_in_at: string | null; checked_out_at: string | null; }
 interface VolunteerTask { id: string; title: string; task_type: string; start_time: string; end_time: string; slots_total: number; slots_filled: number; is_active: boolean; location?: string; description?: string; }
@@ -82,13 +83,7 @@ export default function VolunteerPage() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans p-6 hp-bg-gradient hp-animate-fade-in">
-             <nav className="hp-nav">
-        <button onClick={() => router.back()} className="hp-nav-item text-hp-text-secondary hover:text-hp-primary">← Back</button>
-        <span className="hp-nav-item text-hp-text-muted">/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hp-nav-item text-hp-text-secondary hover:text-hp-primary">Event</Link>
-        <span className="hp-nav-item text-hp-text-muted">/</span>
-        <span className="hp-nav-item text-hp-primary font-medium">Volunteers</span>
-      </nav>
+             <EventNav eventId={eventId} active="volunteers" />
 
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Volunteer Management</h1>

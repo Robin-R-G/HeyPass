@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -107,19 +107,15 @@ export default function ApiKeysPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-    <nav style={{
-      display: 'flex', alignItems: 'center', gap: '0.5rem',
-      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-      background: 'rgba(20,33,61,0.6)',
-    }}>
-      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-      <span style={{ color: '#888888' }}>/</span>
-      <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Events</Link>
-      <span style={{ color: '#888888' }}>/</span>
-      <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
+    <div className="min-h-screen text-white font-sans antialiased">
+    <nav className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)]">
+      <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors">&larr; Back</button>
+      <span className="text-[#666]">/</span>
+      <Link href="/dashboard" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Events</Link>
+      <span className="text-[#666]">/</span>
+      <span className="text-sm text-white font-medium">Settings</span>
     </nav>
-    <div className="space-y-6" style={{ padding: '1.5rem' }}>
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">API Keys</h1>
         <Button onClick={() => setShowCreate(true)}>Create API Key</Button>

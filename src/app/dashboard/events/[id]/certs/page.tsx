@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
 import { PromptModal } from '@/components/confirm-modal';
+import { Loader2 } from 'lucide-react';
 
 interface ManualCert {
   id: string;
@@ -245,26 +246,26 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, backdropFilter: 'blur(4px)',
         }}>
-          <div className="hp-glass" style={{ padding: '2rem', width: '500px', maxHeight: '90vh', overflowY: 'auto' }}>
+          <div className="hp-glass" style={{ padding: '2rem', width: 'min(500px, 90vw)', maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', marginBottom: '1.5rem' }}>
               Generate Certificate
             </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Recipient Name *</label>
-                <input className="hp-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Full name" />
+                <label htmlFor="cert-name" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Recipient Name *</label>
+                <input id="cert-name" aria-label="Recipient Name" className="hp-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Full name" />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Email (optional)</label>
-                <input className="hp-input" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="email@example.com" />
+                <label htmlFor="cert-email" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Email (optional)</label>
+                <input id="cert-email" aria-label="Email" className="hp-input" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="email@example.com" />
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Certificate Type *</label>
-                  <select className="hp-input" value={form.type_id} onChange={(e) => setForm({ ...form, type_id: e.target.value })}>
+                  <label htmlFor="cert-type" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Certificate Type *</label>
+                  <select id="cert-type" aria-label="Certificate Type" className="hp-input" value={form.type_id} onChange={(e) => setForm({ ...form, type_id: e.target.value })}>
                     <option value="">Select type</option>
                     <option value="participation">Participation</option>
                     <option value="volunteer">Volunteer</option>
@@ -275,8 +276,8 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Template *</label>
-                  <select className="hp-input" value={form.template_id} onChange={(e) => setForm({ ...form, template_id: e.target.value })}>
+                  <label htmlFor="cert-template" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Template *</label>
+                  <select id="cert-template" aria-label="Template" className="hp-input" value={form.template_id} onChange={(e) => setForm({ ...form, template_id: e.target.value })}>
                     <option value="">Select template</option>
                     {templates.map(t => (
                       <option key={t.id} value={t.id}>{t.name}</option>
@@ -286,13 +287,13 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Event Title (override)</label>
-                <input className="hp-input" value={form.event_title} onChange={(e) => setForm({ ...form, event_title: e.target.value })} placeholder="Event name to display" />
+                <label htmlFor="cert-event-title" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Event Title (override)</label>
+                <input id="cert-event-title" aria-label="Event Title" className="hp-input" value={form.event_title} onChange={(e) => setForm({ ...form, event_title: e.target.value })} placeholder="Event name to display" />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Event Date (override)</label>
-                <input className="hp-input" type="date" value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} />
+                <label htmlFor="cert-event-date" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Event Date (override)</label>
+                <input id="cert-event-date" aria-label="Event Date" className="hp-input" type="date" value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} />
               </div>
             </div>
 
@@ -304,7 +305,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
                 style={{ flex: 1 }}
                 disabled={saving || !form.name || !form.type_id || !form.template_id}
               >
-                {saving ? 'Generating...' : 'Generate Certificate'}
+                {saving ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Generating...</span> : 'Generate Certificate'}
               </button>
             </div>
           </div>

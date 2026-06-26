@@ -18,6 +18,7 @@ import {
   Volume2, Plus, Search, Award, Star, Settings, ChevronRight, User, Briefcase,
   Building, CheckCircle2, AlertTriangle, ShieldCheck, Mail, Phone, DollarSign, Calendar
 } from 'lucide-react';
+import { EventNav } from '@/components/event-nav';
 
 export default function CRMDashboardPage() {
   const params = useParams();
@@ -370,15 +371,9 @@ export default function CRMDashboardPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#08080c', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
+    <div style={{ minHeight: '100vh', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="p-6">
       {/* Page Navigation */}
-      <nav className="flex items-center gap-2 mb-4 text-sm text-[#888888]">
-        <button onClick={() => router.back()} className="hover:text-white transition-colors cursor-pointer">← Back</button>
-        <span>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} className="hover:text-white transition-colors">Event</Link>
-        <span>/</span>
-        <span className="text-[#FCA311] font-medium">CRM Portal</span>
-      </nav>
+      <EventNav eventId={eventId} active="crm" />
 
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -435,7 +430,7 @@ export default function CRMDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader className="pb-2">
-                <CardDescription className="text-white0">Total CRM Contacts</CardDescription>
+                <CardDescription className="text-white/80">Total CRM Contacts</CardDescription>
                 <CardTitle className="text-3xl font-bold">{contacts.length}</CardTitle>
               </CardHeader>
               <CardContent>
@@ -446,7 +441,7 @@ export default function CRMDashboardPage() {
             </Card>
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader className="pb-2">
-                <CardDescription className="text-white0">Avg Engagement Score</CardDescription>
+                <CardDescription className="text-white/80">Avg Engagement Score</CardDescription>
                 <CardTitle className="text-3xl font-bold">
                   {contacts.length > 0
                     ? Math.round(contacts.reduce((acc, c) => acc + (c.engagement_score || 0), 0) / contacts.length)
@@ -459,7 +454,7 @@ export default function CRMDashboardPage() {
             </Card>
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader className="pb-2">
-                <CardDescription className="text-white0">WhatsApp Delivery Rate</CardDescription>
+                <CardDescription className="text-white/80">WhatsApp Delivery Rate</CardDescription>
                 <CardTitle className="text-3xl font-bold">98.4%</CardTitle>
               </CardHeader>
               <CardContent>
@@ -470,7 +465,7 @@ export default function CRMDashboardPage() {
             </Card>
             <Card className="bg-[#0a0a0a]/60 border-[#222]">
               <CardHeader className="pb-2">
-                <CardDescription className="text-white0">WhatsApp Read Rate</CardDescription>
+                <CardDescription className="text-white/80">WhatsApp Read Rate</CardDescription>
                 <CardTitle className="text-3xl font-bold">84.1%</CardTitle>
               </CardHeader>
               <CardContent>
@@ -525,7 +520,7 @@ export default function CRMDashboardPage() {
               </CardHeader>
               <CardContent>
                 {feedbacks.length === 0 ? (
-                  <p className="text-white0 text-center py-6">No feedbacks submitted yet.</p>
+                  <p className="text-white/80 text-center py-6">No feedbacks submitted yet.</p>
                 ) : (
                   <div className="space-y-4">
                     <div className="flex gap-4 items-center p-3 bg-[#111]/40 rounded border border-[#222]/40">
@@ -533,7 +528,7 @@ export default function CRMDashboardPage() {
                         <div className="text-4xl font-bold text-[#FCA311]">
                           {(feedbacks.reduce((acc, f) => acc + f.rating, 0) / feedbacks.length).toFixed(1)}
                         </div>
-                        <div className="text-xs text-white0">out of 5.0</div>
+                        <div className="text-xs text-white/80">out of 5.0</div>
                       </div>
                       <div className="flex-1">
                         <div className="text-sm font-semibold">Highly Satisfied Attendees</div>
@@ -553,7 +548,7 @@ export default function CRMDashboardPage() {
                           <TableRow key={idx} className="border-[#222] hover:bg-[#111]/20">
                             <TableCell className="font-medium text-white">
                               {f.registration?.first_name} {f.registration?.last_name}
-                              <div className="text-xs text-white0">{f.registration?.email}</div>
+                              <div className="text-xs text-white/80">{f.registration?.email}</div>
                             </TableCell>
                             <TableCell className="text-[#FCA311]">{'★'.repeat(f.rating)}</TableCell>
                             <TableCell className="text-[#ccc] text-xs italic">{f.comments || '-'}</TableCell>
@@ -605,7 +600,7 @@ export default function CRMDashboardPage() {
             {/* Search and Filters */}
             <div className="flex flex-wrap gap-2 items-center w-full md:w-auto">
               <div className="relative w-full md:w-64">
-                <Search className="w-4 h-4 text-white0 absolute left-3 top-2.5" />
+                <Search className="w-4 h-4 text-white/80 absolute left-3 top-2.5" />
                 <Input
                   value={searchQuery}
                   onChange={e => { setSearchQuery(e.target.value); }}
@@ -703,7 +698,7 @@ export default function CRMDashboardPage() {
                   <TableBody>
                     {contacts.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center text-white0 py-6">No contacts found.</TableCell>
+                        <TableCell colSpan={5} className="text-center text-white/80 py-6">No contacts found.</TableCell>
                       </TableRow>
                     ) : (
                       contacts.map((c: any) => (
@@ -729,7 +724,7 @@ export default function CRMDashboardPage() {
                               ))}
                             </div>
                           </TableCell>
-                          <TableCell><ChevronRight className="w-4 h-4 text-white0" /></TableCell>
+                          <TableCell><ChevronRight className="w-4 h-4 text-white/80" /></TableCell>
                         </TableRow>
                       ))
                     )}
@@ -748,7 +743,7 @@ export default function CRMDashboardPage() {
               </CardHeader>
               <CardContent className="pt-6">
                 {selectedContactId === null ? (
-                  <div className="text-center text-white0 py-12 flex flex-col items-center justify-center gap-2">
+                  <div className="text-center text-white/80 py-12 flex flex-col items-center justify-center gap-2">
                     <Users className="w-12 h-12 text-[#555]" />
                     <p className="text-sm">Select a contact from the directory table to inspect their lifecycle logs.</p>
                   </div>
@@ -763,7 +758,7 @@ export default function CRMDashboardPage() {
                       <p className="text-xs text-[#888]">{selectedContactProfile.profile.phone || 'No Phone'}</p>
                       {selectedContactProfile.profile.organization && (
                         <div className="flex items-center gap-1.5 text-xs text-[#ccc] mt-2">
-                          <Building className="w-3.5 h-3.5 text-white0" />
+                          <Building className="w-3.5 h-3.5 text-white/80" />
                           {selectedContactProfile.profile.organization} {selectedContactProfile.profile.designation ? `(${selectedContactProfile.profile.designation})` : ''}
                         </div>
                       )}
@@ -772,11 +767,11 @@ export default function CRMDashboardPage() {
                     {/* Engagement Metrics */}
                     <div className="grid grid-cols-2 gap-2 bg-[#111]/60 p-3 rounded border border-[#222]/40">
                       <div>
-                        <div className="text-xs text-white0">Engagement Score</div>
+                        <div className="text-xs text-white/80">Engagement Score</div>
                         <div className="text-lg font-bold text-[#FCA311]">{selectedContactProfile.profile.engagement_score || 0} pts</div>
                       </div>
                       <div>
-                        <div className="text-xs text-white0">Attendance Rate</div>
+                        <div className="text-xs text-white/80">Attendance Rate</div>
                         <div className="text-lg font-bold text-white">{selectedContactProfile.attendanceRate}%</div>
                       </div>
                     </div>
@@ -832,7 +827,7 @@ export default function CRMDashboardPage() {
                           <div className="space-y-1.5">
                             {selectedContactProfile.whatsappLogs.slice(0, 3).map((w: any, idx: number) => (
                               <div key={idx} className={`p-2 rounded text-[10px] ${w.direction === 'inbound' ? 'bg-[#111] border-l border-emerald-500' : 'bg-[#111]/40 border-l border-[#555]'}`}>
-                                <div className="flex justify-between text-white0 mb-1">
+                                <div className="flex justify-between text-white/80 mb-1">
                                   <span>{w.direction}</span>
                                   <span>{new Date(w.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 </div>
@@ -864,7 +859,7 @@ export default function CRMDashboardPage() {
                   <Badge className="bg-[#111] text-[#FCA311] border-[#222]">{conversations.length}</Badge>
                 </CardTitle>
                 <div className="relative mt-2">
-                  <Search className="w-3.5 h-3.5 text-white0 absolute left-2 top-2" />
+                  <Search className="w-3.5 h-3.5 text-white/80 absolute left-2 top-2" />
                   <Input
                     placeholder="Search chats..."
                     className="bg-[#111] border-[#222] text-white pl-8 h-8 text-xs"
@@ -883,7 +878,7 @@ export default function CRMDashboardPage() {
                     >
                       <div className="flex justify-between items-start mb-1">
                         <span className="font-semibold text-xs text-white">{chat.contact.name}</span>
-                        <span className="text-[9px] text-white0">
+                        <span className="text-[9px] text-white/80">
                           {chat.lastMessage ? new Date(chat.lastMessage.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                         </span>
                       </div>
@@ -932,18 +927,18 @@ export default function CRMDashboardPage() {
               </CardHeader>
               <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
                 {!activeChatContactId ? (
-                  <div className="text-center text-white0 py-24 flex flex-col items-center justify-center gap-2 h-full">
+                  <div className="text-center text-white/80 py-24 flex flex-col items-center justify-center gap-2 h-full">
                     <MessageSquare className="w-12 h-12 text-[#555]" />
                     <p className="text-sm">Pick a contact thread from the active chats list to read/reply messages.</p>
                   </div>
                 ) : chatMessages.length === 0 ? (
-                  <p className="text-white0 text-center py-24">No message logs recorded inside database.</p>
+                  <p className="text-white/80 text-center py-24">No message logs recorded inside database.</p>
                 ) : (
                   chatMessages.map((m, idx) => (
                     <div key={idx} className={`flex ${m.direction === 'inbound' ? 'justify-start' : 'justify-end'}`}>
                       <div className={`max-w-[75%] rounded p-3 text-xs ${m.direction === 'inbound' ? 'bg-[#111] text-white border border-[#222]' : 'bg-[#FCA311]/15 text-white border border-[#FCA311]/20'}`}>
                         <p>{m.message_text}</p>
-                        <div className="flex justify-between items-center text-[9px] text-white0 mt-2 gap-4">
+                        <div className="flex justify-between items-center text-[9px] text-white/80 mt-2 gap-4">
                           <span>{new Date(m.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                           {m.direction === 'outbound' && (
                             <span className="font-semibold">{m.status.toUpperCase()}</span>
@@ -956,7 +951,7 @@ export default function CRMDashboardPage() {
               </CardContent>
               {activeChatContactId && (
                 <div className="p-3 border-t border-[#222] bg-[#0a0a0a] space-y-2">
-                  <div className="flex items-center justify-between text-xs text-white0">
+                  <div className="flex items-center justify-between text-xs text-white/80">
                     <span className="flex items-center gap-1.5">
                       <Input
                         type="checkbox"
@@ -994,7 +989,7 @@ export default function CRMDashboardPage() {
               </CardHeader>
               <CardContent className="p-4 space-y-4">
                 {!activeChatContactId ? (
-                  <p className="text-xs text-white0 text-center py-12">Select a chat first to use webhook simulation controls.</p>
+                  <p className="text-xs text-white/80 text-center py-12">Select a chat first to use webhook simulation controls.</p>
                 ) : (
                   <>
                     <div>
@@ -1014,7 +1009,7 @@ export default function CRMDashboardPage() {
 
                     <div className="border-t border-[#222] pt-4">
                       <Label className="text-[11px] text-[#888]">Simulate Receipt Callback</Label>
-                      <p className="text-[9px] text-white0 mb-2">Simulate delivery or read updates for the outbound message logs.</p>
+                      <p className="text-[9px] text-white/80 mb-2">Simulate delivery or read updates for the outbound message logs.</p>
                       <div className="flex flex-col gap-1">
                         {chatMessages.filter(m => m.direction === 'outbound' && m.status !== 'read').slice(-3).map((m, idx) => (
                           <div key={idx} className="flex justify-between items-center p-2 bg-[#111] rounded text-[9px] mb-1">
@@ -1114,7 +1109,7 @@ export default function CRMDashboardPage() {
             {/* Visual Workflow list */}
             <div className="lg:col-span-2 space-y-4">
               {workflows.length === 0 ? (
-                <Card className="bg-[#0a0a0a]/60 border-[#222] p-8 text-center text-white0">
+                <Card className="bg-[#0a0a0a]/60 border-[#222] p-8 text-center text-white/80">
                   No automated event journeys configured yet.
                 </Card>
               ) : (
@@ -1160,13 +1155,13 @@ export default function CRMDashboardPage() {
                       <div key={r.id} className="p-3 text-xs flex justify-between items-center hover:bg-[#111]/10">
                         <div>
                           <span className="font-semibold text-white">{r.contact?.name || 'Contact'}</span>
-                          <div className="text-[10px] text-white0">Template: {r.execution_log?.template_name}</div>
+                          <div className="text-[10px] text-white/80">Template: {r.execution_log?.template_name}</div>
                         </div>
                         <div className="text-right">
                           <Badge variant="outline" className={r.status === 'completed' ? 'border-emerald-500/35 text-emerald-400 bg-emerald-500/5' : 'border-[#222] text-[#888] bg-[#111]'}>
                             {r.status}
                           </Badge>
-                          <div className="text-[9px] text-white0 mt-1">{new Date(r.created_at).toLocaleTimeString()}</div>
+                          <div className="text-[9px] text-white/80 mt-1">{new Date(r.created_at).toLocaleTimeString()}</div>
                         </div>
                       </div>
                     ))}
@@ -1221,7 +1216,7 @@ export default function CRMDashboardPage() {
                 </div>
                 <div className="bg-[#111]/60 p-3 rounded border border-[#222]/40 space-y-2 text-xs">
                   <div className="font-bold text-[#ccc]">Variables mapping:</div>
-                  <div className="text-[10px] text-white0">Maps index values to contact parameters.</div>
+                  <div className="text-[10px] text-white/80">Maps index values to contact parameters.</div>
                   <div className="flex gap-2 items-center">
                     <Badge variant="outline" className="font-mono">{'{{1}}'}</Badge>
                     <span className="text-[#888]">Attendee Name (automatically resolved)</span>
@@ -1239,7 +1234,7 @@ export default function CRMDashboardPage() {
               </CardHeader>
               <CardContent className="p-0">
                 {campaigns.length === 0 ? (
-                  <p className="text-white0 text-center py-12">No campaigns launched yet.</p>
+                  <p className="text-white/80 text-center py-12">No campaigns launched yet.</p>
                 ) : (
                   <Table>
                     <TableHeader className="border-[#222]">
@@ -1255,14 +1250,14 @@ export default function CRMDashboardPage() {
                         <TableRow key={c.id} className="border-[#222] hover:bg-[#111]/20">
                           <TableCell className="font-semibold text-white">
                             {c.name}
-                            <div className="text-xs text-white0">Template: {c.template?.name}</div>
+                            <div className="text-xs text-white/80">Template: {c.template?.name}</div>
                           </TableCell>
                           <TableCell><Badge className="bg-[#111] text-[#888] border-[#222]">{c.target_segment}</Badge></TableCell>
                           <TableCell className="text-xs">
                             <span className="text-white font-bold">{c.sent_count}</span>
-                            <span className="text-white0"> / </span>
+                            <span className="text-white/80"> / </span>
                             <span className="text-emerald-400">{c.delivered_count}</span>
-                            <span className="text-white0"> / </span>
+                            <span className="text-white/80"> / </span>
                             <span className="text-[#FCA311]">{c.read_count}</span>
                           </TableCell>
                           <TableCell>

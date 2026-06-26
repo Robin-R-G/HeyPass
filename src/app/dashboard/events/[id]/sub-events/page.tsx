@@ -319,7 +319,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, backdropFilter: 'blur(4px)',
         }}>
-          <div className="hp-glass" style={{ padding: '2rem', width: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
+          <div className="hp-glass" style={{ padding: '2rem', width: 'min(560px, 90vw)', maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', marginBottom: '1.5rem' }}>
               {editingId ? 'Edit Sub-Event' : 'Add Sub-Event'}
             </h2>

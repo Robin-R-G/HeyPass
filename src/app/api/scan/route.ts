@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { scanValidation } from '@/lib/qr-scanner';
 import { withAuth } from '@/lib/route-guard';
 import { checkRateLimit } from '@/lib/cache';
+import { extractClientIP } from '@/lib/auth-service';
 
 // POST /api/scan — Validate QR and process check-in/check-out
 export async function POST(req: NextRequest) {
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
         station_id: station_id || undefined,
         staff_id: userId,
         scan_type: scan_type || 'check_in',
-        ip_address: req.headers.get('x-forwarded-for') || undefined,
+        ip_address: extractClientIP(req.headers.get('x-forwarded-for')),
         device_id: req.headers.get('x-device-id') || undefined,
       });
 

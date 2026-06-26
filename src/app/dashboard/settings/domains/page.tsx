@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 import { ConfirmModal } from '@/components/confirm-modal';
 
 interface Domain {
@@ -143,24 +144,20 @@ export default function DomainSettingsPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <div className="flex items-center justify-center min-h-screen text-white">
+        <Loader2 size={24} className="text-[#FCA311] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-    <nav style={{
-      display: 'flex', alignItems: 'center', gap: '0.5rem',
-      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-      background: 'rgba(20,33,61,0.6)',
-    }}>
-      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-      <span style={{ color: '#888888' }}>/</span>
-      <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Events</Link>
-      <span style={{ color: '#888888' }}>/</span>
-      <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
+    <div className="min-h-screen text-white font-sans antialiased">
+    <nav className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)]">
+      <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors">&larr; Back</button>
+      <span className="text-[#666]">/</span>
+      <Link href="/dashboard" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Events</Link>
+      <span className="text-[#666]">/</span>
+      <span className="text-sm text-white font-medium">Settings</span>
     </nav>
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Custom Domain Settings</h1>
@@ -172,7 +169,7 @@ export default function DomainSettingsPage() {
       )}
 
       {/* Add Domain */}
-      <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6 mb-6">
+      <section className="hp-glass-card p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Add Custom Domain</h2>
         <div className="flex gap-4">
           <input
@@ -180,13 +177,13 @@ export default function DomainSettingsPage() {
             value={newDomain}
             onChange={(e) => setNewDomain(e.target.value)}
             placeholder="events.yourdomain.com"
-            className="flex-1 border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+            className="hp-input flex-1"
             onKeyDown={(e) => e.key === 'Enter' && handleAddDomain()}
           />
           <button
             onClick={handleAddDomain}
             disabled={adding || !newDomain.trim()}
-            className="bg-[#FCA311] text-white px-4 py-2 rounded-md hover:bg-[#E09800] disabled:opacity-50"
+            className="hp-btn hp-btn-primary disabled:opacity-50"
           >
             {adding ? 'Adding...' : 'Add Domain'}
           </button>
@@ -202,7 +199,7 @@ export default function DomainSettingsPage() {
           </p>
           <div className="space-y-2">
             {dnsInstructions.records.map((record, index) => (
-              <div key={index} className="bg-[rgba(229,229,229,0.03)] rounded p-3 border-[rgba(229,229,229,0.12)]">
+              <div key={index} className="hp-glass p-3">
                 <div className="flex items-center gap-4">
                   <span className="font-mono text-sm font-bold">{record.type}</span>
                   <span className="font-mono text-sm">{record.name}</span>
@@ -223,7 +220,7 @@ export default function DomainSettingsPage() {
       )}
 
       {/* Domain List */}
-      <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+      <section className="hp-glass-card p-6">
         <h2 className="text-lg font-semibold mb-4">Your Domains</h2>
 
         {domains.length === 0 ? (
@@ -239,7 +236,7 @@ export default function DomainSettingsPage() {
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{domain.domain}</span>
                     <span
-                      className={'px-2 py-0.5 rounded text-xs ' + (domain.verified ? 'bg-green-900/20 text-green-400' : 'bg-yellow-900/20 text-yellow-400')}
+                      className={'hp-badge ' + (domain.verified ? 'hp-badge-success' : 'hp-badge-warning')}
                     >
                       {domain.verified ? 'Verified' : 'Pending'}
                     </span>
@@ -255,7 +252,7 @@ export default function DomainSettingsPage() {
                     <button
                       onClick={() => handleVerifyDomain(domain.id)}
                       disabled={verifying === domain.id}
-                      className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 disabled:opacity-50"
+                      className="hp-btn hp-btn-success px-4 py-2 text-sm"
                     >
                       {verifying === domain.id ? 'Verifying...' : 'Verify'}
                     </button>

@@ -5,6 +5,31 @@ import { cacheGet, cacheSet, cacheDelete, checkRateLimit } from '@/lib/cache';
 import crypto from 'crypto';
 import type { JWTPayload } from '@/types';
 
+/**
+ * Extract client IP from x-forwarded-for header safely.
+ * Returns the rightmost non-private IP to prevent header spoofing.
+ */
+export function extractClientIP(forwardedFor: string | null): string | undefined {
+  if (!forwardedFor) return undefined;
+  const ips = forwardedFor.split(',').map(ip => ip.trim()).filter(Boolean);
+  // Return the rightmost IP (original client) that isn't a private/proxy IP
+  for (let i = ips.length - 1; i >= 0; i--) {
+    const ip = ips[i];
+    if (!ip || ip === 'unknown') continue;
+    // Skip known private/proxy ranges
+    if (
+      ip.startsWith('10.') ||
+      ip.startsWith('172.') ||
+      ip.startsWith('192.168.') ||
+      ip === '127.0.0.1' ||
+      ip === '::1'
+    ) continue;
+    return ip;
+  }
+  // Fallback to first IP if all are private
+  return ips[0] || undefined;
+}
+
 export interface AuthUser {
   id: string;
   email: string;
@@ -60,9 +85,6 @@ function validatePassword(password: string): { valid: boolean; error?: string } 
   }
   if (!/[0-9]/.test(password)) {
     return { valid: false, error: 'Password must contain at least one number' };
-  }
-  if (/[<>{}|\\^~\[\]`]/.test(password)) {
-    return { valid: false, error: 'Password contains invalid characters' };
   }
   return { valid: true };
 }

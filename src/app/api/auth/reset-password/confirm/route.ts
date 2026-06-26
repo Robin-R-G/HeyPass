@@ -1,9 +1,19 @@
 import { NextRequest } from 'next/server';
-import { resetPassword } from '@/lib/auth-service';
+import { resetPassword, extractClientIP } from '@/lib/auth-service';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
+import { checkRateLimit } from '@/lib/cache';
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: 5 password reset attempts per minute per IP
+    const ip = extractClientIP(req.headers.get('x-forwarded-for'));
+    if (ip) {
+      const { allowed } = await checkRateLimit(`auth:reset-confirm:ip:${ip}`, 5, 60);
+      if (!allowed) {
+        return createErrorResponse(429, 'Too many password reset attempts. Please try again later.');
+      }
+    }
+
     const { user_id, token, password } = await req.json();
 
     if (!user_id || !token || !password) {
@@ -18,7 +28,7 @@ export async function POST(req: NextRequest) {
       user_id,
       token,
       password,
-      req.headers.get('x-forwarded-for') || undefined,
+      ip,
       req.headers.get('user-agent') || undefined
     );
 

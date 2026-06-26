@@ -498,7 +498,20 @@ export const updateEventBrandingSchema = z.object({
     .string()
     .max(5000, 'Custom HTML must be less than 5,000 characters')
     .optional()
-    .transform((v) => v?.trim() || undefined),
+    .transform((v) => {
+      if (!v?.trim()) return undefined;
+      // Strip dangerous tags and event handlers to prevent stored XSS
+      const sanitized = v
+        .replace(/<script[\s\S]*?<\/script>/gi, '')
+        .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+        .replace(/<object[\s\S]*?<\/object>/gi, '')
+        .replace(/<embed[\s\S]*?>/gi, '')
+        .replace(/<link[\s\S]*?>/gi, '')
+        .replace(/\son\w+\s*=/gi, ' data-blocked=')
+        .replace(/javascript\s*:/gi, 'blocked:')
+        .replace(/data\s*:/gi, 'blocked:');
+      return sanitized.trim() || undefined;
+    }),
 });
 
 export const addDomainSchema = z.object({

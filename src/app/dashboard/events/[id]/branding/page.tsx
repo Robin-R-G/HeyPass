@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { EventNav } from '@/components/event-nav';
 
 interface EventBrandingData {
   banner_url: string | null;
@@ -125,22 +126,16 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
+      <div style={{ minHeight: '100vh', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
+    <div style={{ minHeight: '100vh', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
     <div className="max-w-4xl mx-auto p-6">
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Branding</span>
-      </nav>
+      <EventNav eventId={eventId} active="branding" />
       <h1 className="text-2xl font-bold mb-2">Event Branding</h1>
       <p className="text-[#888888] mb-6">
         Customize the look and feel of this event. Overrides client branding.
@@ -160,7 +155,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
 
       <div className="space-y-8">
         {/* Images */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Images</h2>
           <div className="grid grid-cols-2 gap-6">
             {/* Banner */}
@@ -224,7 +219,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
         </section>
 
         {/* Color Overrides */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Color Overrides</h2>
           <p className="text-sm text-[#888888] mb-4">
             Leave empty to use client branding colors.
@@ -260,7 +255,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
                       }))
                     }
                     placeholder="Inherit"
-                    className="flex-1 border-[rgba(229,229,229,0.12)] rounded px-2 py-1 text-sm font-mono"
+                    className="hp-input flex-1 font-mono text-sm"
                   />
                   {(branding as any)[key] && (
                     <button
@@ -277,7 +272,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
         </section>
 
         {/* Custom Code */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Custom Code</h2>
           <div className="space-y-4">
             <div>
@@ -289,7 +284,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, custom_css: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2 font-mono text-sm"
+                className="hp-input font-mono text-sm"
                 rows={6}
                 placeholder="/* Add custom CSS here */"
               />
@@ -306,7 +301,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
                     custom_head_html: e.target.value,
                   }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2 font-mono text-sm"
+                className="hp-input font-mono text-sm"
                 rows={4}
                 placeholder="<!-- Add tracking codes or meta tags -->"
               />
@@ -318,14 +313,14 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
         <div className="flex justify-end gap-4">
           <button
             onClick={() => fetchBranding()}
-            className="border-[rgba(229,229,229,0.12)] px-4 py-2 rounded-md hover:bg-[rgba(229,229,229,0.05)]"
+            className="hp-btn hp-btn-secondary"
           >
             Reset
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="bg-[#FCA311] text-black px-6 py-2 rounded-md font-semibold hover:bg-[#E09800] disabled:opacity-50"
+            className="hp-btn hp-btn-primary disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>

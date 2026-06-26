@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -12,6 +13,7 @@ function LoginForm() {
   const redirect = searchParams.get('redirect') || '/dashboard';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +43,6 @@ function LoginForm() {
           localStorage.setItem('refresh_token', tokens.refresh_token);
         }
 
-        // Decode JWT to check superadmin status
         try {
           const payload = JSON.parse(atob(tokens.access_token.split('.')[1]));
           if (payload.is_superadmin) {
@@ -51,7 +52,6 @@ function LoginForm() {
         } catch {}
       }
 
-      // Auto-select client if user has exactly one
       try {
         const clientsRes = await fetch('/api/auth/my-clients', {
           headers: { Authorization: `Bearer ${tokens.access_token}` },
@@ -78,9 +78,7 @@ function LoginForm() {
           router.push('/auth/select-client');
           return;
         }
-      } catch {
-        // If my-clients fails, try going to dashboard anyway
-      }
+      } catch {}
 
       router.push(redirect);
     } catch {
@@ -90,49 +88,98 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-[400px] p-6">
-      <div className="text-center mb-8">
-        <Link href="/" className="no-underline">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black">H</div>
-            <span className="text-xl font-bold text-white">HeyPass</span>
-          </div>
-        </Link>
-        <h1 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">Welcome back</h1>
-        <p className="text-sm text-hp-text-secondary opacity-70">Sign in to your account</p>
+    <div className="w-full max-w-[420px] px-5">
+      {/* Logo */}
+      <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
+        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+        <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
+      </Link>
+
+      {/* Title */}
+      <div className="text-center mb-7">
+        <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Welcome back</h1>
+        <p className="text-sm text-[#999]">Sign in to your account</p>
       </div>
 
-      <div className="hp-glass-card bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/8 rounded-2xl p-8 shadow-2xl">
-        <form onSubmit={handleLogin} className="space-y-5">
+      {/* Card */}
+      <div className="hp-glass-card p-7 sm:p-8">
+        <form onSubmit={handleLogin} className="space-y-5" noValidate>
+          {/* Email */}
           <div>
-            <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Email</label>
-            <Input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
+            <label htmlFor="login-email" className="block text-[13px] font-semibold text-[#ccc] mb-2">Email</label>
+            <Input
+              id="login-email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              placeholder="you@example.com"
+              autoComplete="email"
+              aria-required="true"
+            />
           </div>
 
+          {/* Password */}
           <div>
-            <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Password</label>
-            <Input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Enter your password" />
+            <label htmlFor="login-password" className="block text-[13px] font-semibold text-[#ccc] mb-2">Password</label>
+            <div className="hp-password-wrapper">
+              <Input
+                id="login-password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                aria-required="true"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                className="hp-password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
+          {/* Error */}
           {error && (
-            <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs text-center">
+            <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">
               {error}
             </div>
           )}
 
-          <Button type="submit" disabled={loading || !email || !password} className="w-full h-11 font-bold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-            {loading ? 'Signing in...' : 'Sign In'}
+          {/* Submit */}
+          <Button
+            type="submit"
+            disabled={loading || !email || !password}
+            className="w-full h-12 font-bold text-[15px]"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              'Sign In'
+            )}
           </Button>
         </form>
 
-        <div className="text-center mt-5">
-          <Link href="/auth/forgot-password" className="text-[#FCA311] text-xs font-medium no-underline hover:underline">
+        {/* Forgot password */}
+        <div className="text-center mt-5 pt-5 border-t border-white/[0.06]">
+          <Link href="/auth/forgot-password" className="text-[#FCA311] text-[13px] font-medium no-underline hover:underline">
             Forgot password?
           </Link>
         </div>
       </div>
 
-      <p className="text-center mt-6 text-xs text-hp-text-secondary/60">
+      {/* Sign up link */}
+      <p className="text-center mt-6 text-[13px] text-[#777]">
         Don&apos;t have an account?{' '}
         <Link href="/auth/register" className="text-[#FCA311] font-semibold no-underline hover:underline">Sign up</Link>
       </p>
@@ -142,8 +189,13 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-transparent flex items-center justify-center font-sans antialiased">
-      <Suspense fallback={<div className="text-hp-text-secondary opacity-70 text-sm animate-pulse">Loading...</div>}>
+    <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
+      <Suspense fallback={
+        <div className="flex items-center gap-2 text-[#888] text-sm">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Loading...
+        </div>
+      }>
         <LoginForm />
       </Suspense>
     </div>

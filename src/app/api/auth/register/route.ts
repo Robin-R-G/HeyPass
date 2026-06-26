@@ -1,9 +1,19 @@
 import { NextRequest } from 'next/server';
-import { registerUser } from '@/lib/auth-service';
+import { registerUser, extractClientIP } from '@/lib/auth-service';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
+import { checkRateLimit } from '@/lib/cache';
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit: 3 registrations per minute per IP
+    const ip = extractClientIP(req.headers.get('x-forwarded-for'));
+    if (ip) {
+      const { allowed } = await checkRateLimit(`auth:register:ip:${ip}`, 3, 60);
+      if (!allowed) {
+        return createErrorResponse(429, 'Too many registration attempts. Please try again later.');
+      }
+    }
+
     const body = await req.json();
     const { email, password, first_name, last_name } = body;
 

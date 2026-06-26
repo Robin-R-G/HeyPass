@@ -6,6 +6,7 @@ import Link from 'next/link';
 import CloneEventButton from '@/components/clone-event-button';
 import { useToast } from '@/components/toast';
 import { ConfirmModal } from '@/components/confirm-modal';
+import { EventNav } from '@/components/event-nav';
 
 interface Ticket {
   id: string;
@@ -121,13 +122,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Tickets</span>
-      </nav>
+      <EventNav eventId={eventId} active="tickets" />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Tickets & QR</h1>

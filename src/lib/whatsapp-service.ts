@@ -132,7 +132,7 @@ class WhatsAppService {
         return failedMsg;
       }
     } else {
-      console.log(`[WhatsApp Sandbox] Sending Template "${templateName}" to ${contact.name} (${contact.phone}): "${bodyText}"`);
+      console.log(`[WhatsApp Sandbox] Sending Template "${templateName}" to contact ${contactId}`);
     }
 
     const waMsg: WhatsAppMessage = {
@@ -223,7 +223,7 @@ class WhatsAppService {
         return failedMsg;
       }
     } else {
-      console.log(`[WhatsApp Sandbox] Sending Manual Text to ${contact.name} (${contact.phone}): "${text}"`);
+      console.log(`[WhatsApp Sandbox] Sending Manual Text to contact ${contactId}`);
     }
 
     const waMsg: WhatsAppMessage = {

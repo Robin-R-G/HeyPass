@@ -365,7 +365,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
     : visibleFields;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="py-12 px-4">
+    <div style={{ minHeight: '100vh', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -400,7 +400,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
         )}
 
         {/* Form */}
-        <div className="bg-[rgba(229,229,229,0.03)] rounded-lg shadow-md p-8">
+        <div className="hp-glass-card shadow-md p-8">
           {error && (
             <div className="bg-[rgba(239,68,68,0.1)] text-[#ef4444] border border-[rgba(239,68,68,0.2)] rounded p-4 mb-6">
               {error}
@@ -437,7 +437,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               <button
                 type="button"
                 onClick={() => setCurrentStep(currentStep - 1)}
-                className="px-6 py-2 border border-[rgba(229,229,229,0.12)] rounded-md text-[#E5E5E5] hover:bg-transparent"
+                className="hp-btn hp-btn-secondary"
               >
                 Back
               </button>
@@ -447,7 +447,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 <button
                   type="button"
                   onClick={() => setCurrentStep(currentStep + 1)}
-                  className="px-6 py-2 bg-[#FCA311] text-white rounded-md hover:bg-[#E09800]"
+                  className="hp-btn hp-btn-primary"
                 >
                   Next
                 </button>
@@ -456,7 +456,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="px-6 py-2 bg-[#FCA311] text-white rounded-md hover:bg-[#E09800] disabled:opacity-50"
+                  className="hp-btn hp-btn-primary disabled:opacity-50"
                 >
                   {submitting ? 'Submitting...' : 'Submit Registration'}
                 </button>
@@ -511,8 +511,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 }
               }}
               placeholder={field.placeholder || ''}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             />
             {field.help_text && (
@@ -542,8 +542,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
               }}
               placeholder={field.placeholder || ''}
               rows={4}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             />
             {field.help_text && (
@@ -571,8 +571,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                   });
                 }
               }}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             >
               <option value="">{field.placeholder || 'Select...'}</option>
@@ -690,8 +690,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                   });
                 }
               }}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             />
             {field.help_text && (
@@ -716,8 +716,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 }
               }}
               accept={field.validation?.allowed_types?.map((t) => `.${t}`).join(',')}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             />
             {field.validation?.max_size_mb && (
@@ -750,8 +750,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                   });
                 }
               }}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             >
               <option value="">Select Country...</option>
@@ -793,8 +793,8 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
                 }
               }}
               placeholder={field.placeholder || 'Enter state/province'}
-              className={`w-full border rounded-md px-3 py-2 ${
-                error ? 'border-red-500' : 'border-[rgba(229,229,229,0.12)]'
+              className={`hp-input ${
+                error ? 'border-red-500' : ''
               }`}
             />
             {field.help_text && (

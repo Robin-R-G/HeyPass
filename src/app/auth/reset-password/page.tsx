@@ -5,17 +5,21 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Loader2, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 
-type Props = {};
-
-function ResetForm({}: Props) {
+function ResetForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+
+  const passwordsMatch = password === confirmPassword || confirmPassword === '';
+  const passwordError = confirmPassword && !passwordsMatch ? 'Passwords do not match' : '';
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,10 +34,11 @@ function ResetForm({}: Props) {
 
     try {
       const token = searchParams.get('token');
+      const user_id = searchParams.get('user_id');
       const res = await fetch('/api/auth/reset-password/confirm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password }),
+        body: JSON.stringify({ token, user_id, password }),
       });
 
       if (res.ok) {
@@ -51,43 +56,88 @@ function ResetForm({}: Props) {
   };
 
   return (
-    <div className="w-full max-w-[400px] p-6">
-      <div className="text-center mb-8">
-        <Link href="/" className="no-underline">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black">H</div>
-            <span className="text-xl font-bold text-white">HeyPass</span>
-          </div>
-        </Link>
-        <h1 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">Set new password</h1>
-        <p className="text-sm text-hp-text-secondary opacity-70">Choose a strong password for your account</p>
+    <div className="w-full max-w-[420px] px-5">
+      {/* Logo */}
+      <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
+        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+        <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
+      </Link>
+
+      {/* Title */}
+      <div className="text-center mb-7">
+        <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Set new password</h1>
+        <p className="text-sm text-[#999]">Choose a strong password for your account</p>
       </div>
 
-      <div className="hp-glass-card bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/8 rounded-2xl p-8 shadow-2xl">
+      {/* Card */}
+      <div className="hp-glass-card p-7 sm:p-8">
         {done ? (
           <div className="text-center py-4">
-            <div className="text-3xl mb-4 text-[#10b981]">&#10003;</div>
+            <div className="w-14 h-14 rounded-full bg-[#10b981]/15 flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-7 h-7 text-[#10b981]" />
+            </div>
             <h2 className="text-base font-bold text-[#10b981] mb-2">Password updated!</h2>
-            <p className="text-xs text-hp-text-secondary opacity-70">Redirecting to sign in...</p>
+            <p className="text-[13px] text-[#999]">Redirecting to sign in...</p>
           </div>
         ) : (
-          <form onSubmit={handleReset} className="space-y-5">
+          <form onSubmit={handleReset} className="space-y-5" noValidate>
             <div>
-              <label className="block text-hp-text-secondary text-xs font-semibold mb-2">New Password</label>
-              <Input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Min 8 chars, uppercase..." />
+              <label htmlFor="reset-password" className="block text-[13px] font-semibold text-[#ccc] mb-2">New Password</label>
+              <div className="hp-password-wrapper">
+                <Input
+                  id="reset-password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  placeholder="Min 8 chars, uppercase, number"
+                  autoComplete="new-password"
+                  aria-required="true"
+                  className="pr-10"
+                />
+                <button type="button" className="hp-password-toggle" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'} tabIndex={-1}>
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
             <div>
-              <label className="block text-hp-text-secondary text-xs font-semibold mb-2">Confirm Password</label>
-              <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required placeholder="Repeat your password" />
+              <label htmlFor="reset-confirm" className="block text-[13px] font-semibold text-[#ccc] mb-2">Confirm Password</label>
+              <div className="hp-password-wrapper">
+                <Input
+                  id="reset-confirm"
+                  type={showConfirm ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  required
+                  placeholder="Repeat your password"
+                  autoComplete="new-password"
+                  aria-required="true"
+                  aria-invalid={!passwordsMatch}
+                  aria-describedby={passwordError ? 'reset-password-error' : undefined}
+                  className="pr-10"
+                />
+                <button type="button" className="hp-password-toggle" onClick={() => setShowConfirm(!showConfirm)} aria-label={showConfirm ? 'Hide password' : 'Show password'} tabIndex={-1}>
+                  {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              {passwordError && (
+                <p id="reset-password-error" className="text-[#ef4444] text-xs mt-1.5" role="alert">{passwordError}</p>
+              )}
             </div>
 
             {error && (
-              <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs text-center">{error}</div>
+              <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">{error}</div>
             )}
 
-            <Button type="submit" disabled={loading || !password || !confirmPassword}
-              className="w-full h-11 font-bold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-              {loading ? 'Updating...' : 'Update Password'}
+            <Button type="submit" disabled={loading || !password || !confirmPassword || !passwordsMatch} className="w-full h-12 font-bold text-[15px]">
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                'Update Password'
+              )}
             </Button>
           </form>
         )}
@@ -98,8 +148,13 @@ function ResetForm({}: Props) {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen bg-transparent flex items-center justify-center font-sans antialiased">
-      <Suspense fallback={<div className="text-hp-text-secondary opacity-70 text-sm animate-pulse">Loading...</div>}>
+    <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
+      <Suspense fallback={
+        <div className="flex items-center gap-2 text-[#888] text-sm">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Loading...
+        </div>
+      }>
         <ResetForm />
       </Suspense>
     </div>

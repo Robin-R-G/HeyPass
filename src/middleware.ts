@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { verifyAccessTokenEdge } from '@/lib/auth';
+import { verifyAccessTokenEdge } from '@/lib/auth-edge';
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
@@ -57,6 +57,11 @@ async function handleMiddleware(request: NextRequest) {
     'Strict-Transport-Security',
     'max-age=31536000; includeSubDomains'
   );
+  response.headers.set(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+  );
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
 
   if (isApiPath) {
     if (isPublicPath(pathname)) {

@@ -59,71 +59,48 @@ export default function BillingGatewaysPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-      <nav style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '1rem 2rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-        background: 'rgba(20,33,61,0.6)', backdropFilter: 'blur(16px)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <button onClick={() => router.back()} style={{
-            background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer',
-            fontSize: '0.85rem', padding: '0.4rem 0.6rem', borderRadius: '6px',
-          }}>← Back</button>
-          <span style={{ color: '#888888' }}>/</span>
-          <Link href="/dashboard/settings/billing" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Billing</Link>
-          <span style={{ color: '#888888' }}>/</span>
-          <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>Payment Gateways</span>
+    <div className="min-h-screen text-white font-sans antialiased">
+      <nav className="flex justify-between items-center px-6 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)] backdrop-blur-xl">
+        <div className="flex items-center gap-2">
+          <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors px-2 py-1 rounded-md">&larr; Back</button>
+          <span className="text-[#666]">/</span>
+          <Link href="/dashboard/settings/billing" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Billing</Link>
+          <span className="text-[#666]">/</span>
+          <span className="text-sm text-white font-medium">Payment Gateways</span>
         </div>
       </nav>
 
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="max-w-[800px] mx-auto p-8">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Payment Gateways</h1>
-            <p style={{ color: '#E5E5E5', fontSize: '0.85rem' }}>Configure Razorpay or Cashfree to accept payments</p>
+            <h1 className="text-2xl font-bold">Payment Gateways</h1>
+            <p className="text-sm text-[#ccc] mt-1">Configure Razorpay or Cashfree to accept payments</p>
           </div>
-          <button onClick={() => setShowAdd(!showAdd)} style={{
-            background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
-            padding: '0.6rem 1.2rem', borderRadius: '8px', border: 'none',
-            fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer',
-          }}>+ Add Gateway</button>
+          <button onClick={() => setShowAdd(!showAdd)} className="hp-btn hp-btn-primary">+ Add Gateway</button>
         </div>
 
         {showAdd && (
-          <Card style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.1)', marginBottom: '1.5rem' }}>
+          <Card className="hp-glass-card" style={{ marginBottom: '1.5rem' }}>
             <CardHeader><CardTitle style={{ color: '#fff' }}>Add Payment Gateway</CardTitle></CardHeader>
             <CardContent style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
                 <Label style={{ color: '#E5E5E5' }}>Provider</Label>
-                <select value={provider} onChange={e => setProvider(e.target.value)} style={{
-                  width: '100%', padding: '0.6rem', background: 'rgba(229,229,229,0.05)',
-                  border: '1px solid rgba(229,229,229,0.15)', borderRadius: '8px', color: '#fff', marginTop: '0.25rem',
-                }}>
+                <select value={provider} onChange={e => setProvider(e.target.value)} className="hp-input" style={{ marginTop: '0.25rem' }}>
                   <option value="razorpay">Razorpay</option>
                   <option value="cashfree">Cashfree</option>
                 </select>
               </div>
               <div>
                 <Label style={{ color: '#E5E5E5' }}>API Key ID</Label>
-                <Input value={keyId} onChange={e => setKeyId(e.target.value)} placeholder="rzp_live_..." style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }} />
+                <Input value={keyId} onChange={e => setKeyId(e.target.value)} placeholder="rzp_live_..." className="hp-input" style={{ marginTop: '0.25rem' }} />
               </div>
               <div>
                 <Label style={{ color: '#E5E5E5' }}>API Key Secret</Label>
-                <Input type="password" value={keySecret} onChange={e => setKeySecret(e.target.value)} placeholder="Enter secret..." style={{ background: 'rgba(229,229,229,0.05)', borderColor: 'rgba(229,229,229,0.15)', color: '#fff' }} />
+                <Input type="password" value={keySecret} onChange={e => setKeySecret(e.target.value)} placeholder="Enter secret..." className="hp-input" style={{ marginTop: '0.25rem' }} />
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={addGateway} disabled={!keyId || !keySecret || saving} style={{
-                  background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
-                  padding: '0.6rem 1.5rem', borderRadius: '8px', border: 'none',
-                  fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer',
-                  opacity: !keyId || !keySecret || saving ? 0.5 : 1,
-                }}>{saving ? 'Saving...' : 'Save Gateway'}</button>
-                <button onClick={() => setShowAdd(false)} style={{
-                  background: 'rgba(229,229,229,0.05)', color: '#E5E5E5',
-                  padding: '0.6rem 1.5rem', borderRadius: '8px', border: '1px solid rgba(229,229,229,0.15)',
-                  fontSize: '0.85rem', cursor: 'pointer',
-                }}>Cancel</button>
+                <button onClick={addGateway} disabled={!keyId || !keySecret || saving} className="hp-btn hp-btn-primary" style={{ opacity: !keyId || !keySecret || saving ? 0.5 : 1 }}>{saving ? 'Saving...' : 'Save Gateway'}</button>
+                <button onClick={() => setShowAdd(false)} className="hp-btn hp-btn-secondary">Cancel</button>
               </div>
             </CardContent>
           </Card>
@@ -140,7 +117,7 @@ export default function BillingGatewaysPage() {
             <p style={{ color: '#888888', fontSize: '0.8rem' }}>Add Razorpay or Cashfree to start accepting payments.</p>
           </div>
         ) : (
-          <Card style={{ background: 'rgba(229,229,229,0.03)', border: '1px solid rgba(229,229,229,0.08)' }}>
+          <Card className="hp-glass-card">
             <CardContent style={{ padding: 0 }}>
               <Table>
                 <TableHeader>
@@ -156,17 +133,11 @@ export default function BillingGatewaysPage() {
                     <TableRow key={gw.id} style={{ borderBottom: '1px solid rgba(229,229,229,0.05)' }}>
                       <TableCell style={{ color: '#fff', fontWeight: 500 }}>{gw.provider === 'razorpay' ? 'Razorpay' : 'Cashfree'}</TableCell>
                       <TableCell>
-                        <span style={{
-                          padding: '0.15rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600,
-                          background: gw.is_active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
-                          color: gw.is_active ? '#10b981' : '#ef4444',
-                        }}>{gw.is_active ? 'Active' : 'Inactive'}</span>
+                        <span className={`hp-badge ${gw.is_active ? 'hp-badge-success' : 'hp-badge-error'}`}>{gw.is_active ? 'Active' : 'Inactive'}</span>
                       </TableCell>
                       <TableCell style={{ color: '#E5E5E5', fontSize: '0.8rem' }}>{new Date(gw.created_at).toLocaleDateString()}</TableCell>
                       <TableCell>
-                        <button onClick={() => removeGateway(gw.id)} style={{
-                          background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem',
-                        }}>Remove</button>
+                        <button onClick={() => removeGateway(gw.id)} className="hp-btn hp-btn-ghost text-red-400 hover:text-red-300" style={{ padding: '0.25rem 0.5rem', minHeight: 'auto' }}>Remove</button>
                       </TableCell>
                     </TableRow>
                   ))}

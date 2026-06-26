@@ -142,11 +142,11 @@ export default function PaymentMethodsPage() {
   const upiCount = methods.filter(m => m.method_type === 'upi').length;
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+    <div className="max-w-[800px] mx-auto p-8">
+      <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Payment Methods</h1>
-          <p style={{ color: '#a1a1aa', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+          <h1 className="text-2xl font-bold text-white">Payment Methods</h1>
+          <p className="text-sm text-[#a1a1aa] mt-1">
             Manage bank accounts and UPI for receiving event payments
           </p>
         </div>
@@ -160,62 +160,57 @@ export default function PaymentMethodsPage() {
       </div>
 
       {loading ? (
-        <div className="hp-skeleton" style={{ height: '200px', borderRadius: '0.75rem' }} />
+        <div className="hp-skeleton h-[200px] rounded-xl" />
       ) : methods.length === 0 ? (
-        <div className="hp-card" style={{ textAlign: 'center', padding: '3rem' }}>
-          <p style={{ color: '#71717a' }}>No payment methods configured yet.</p>
-          <p style={{ color: '#52525b', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+        <div className="hp-glass-card text-center py-12">
+          <p className="text-[#71717a]">No payment methods configured yet.</p>
+          <p className="text-xs text-[#52525b] mt-2">
             Add bank accounts or UPI to receive payments from event registrations.
           </p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {methods.map((m) => (
+        <div className="flex flex-col gap-3">
+          {methods.map(m => (
             <div
               key={m.id}
-              className={`hp-card ${m.is_active ? 'hp-card-highlighted' : ''}`}
-              style={{ opacity: m.is_active ? 1 : 0.5 }}
+              className={`hp-glass-card p-5 ${m.is_active ? '' : 'opacity-50'}`}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <div style={{
-                    width: '48px', height: '48px', borderRadius: '0.75rem',
-                    background: m.method_type === 'bank_account' ? 'rgba(84, 172, 191, 0.15)' : 'rgba(6, 182, 212, 0.15)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem',
-                  }}>
+              <div className="flex justify-between items-start">
+                <div className="flex gap-4 items-start">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${
+                    m.method_type === 'bank_account' ? 'bg-[#54acbf]/15' : 'bg-[#06b6d4]/15'
+                  }`}>
                     {m.method_type === 'bank_account' ? '🏦' : '💳'}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 600, color: '#fff' }}>
+                    <div className="font-semibold text-white">
                       {m.method_type === 'bank_account' ? m.bank_name || 'Bank Account' : 'UPI'}
                     </div>
-                    <div style={{ color: '#a1a1aa', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                    <div className="text-sm text-[#a1a1aa] mt-0.5">
                       {m.method_type === 'bank_account'
                         ? `${m.account_holder_name} ••••${m.account_number?.slice(-4)}`
                         : m.upi_id}
                     </div>
                     {m.method_type === 'bank_account' && m.ifsc_code && (
-                      <div style={{ color: '#71717a', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                      <div className="text-xs text-[#71717a] mt-0.5">
                         IFSC: {m.ifsc_code}
                       </div>
                     )}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <div className="flex gap-2 items-center">
                   <span className={`hp-badge ${m.is_active ? 'hp-badge-success' : 'hp-badge-warning'}`}>
                     {m.is_active ? 'Active' : 'Inactive'}
                   </span>
                   <button
                     onClick={() => handleToggle(m.id)}
-                    className="hp-btn hp-btn-ghost"
-                    style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                    className="hp-btn hp-btn-ghost px-3 py-1.5 text-xs"
                   >
                     {m.is_active ? 'Disable' : 'Enable'}
                   </button>
                   <button
                     onClick={() => setConfirmDeletePayment(m.id)}
-                    className="hp-btn hp-btn-ghost"
-                    style={{ padding: '0.5rem', fontSize: '0.8rem', color: '#ef4444' }}
+                    className="hp-btn hp-btn-ghost px-3 py-1.5 text-xs text-[#ef4444] hover:text-white"
                   >
                     Delete
                   </button>
@@ -227,50 +222,47 @@ export default function PaymentMethodsPage() {
       )}
 
       {/* Limits info */}
-      <div style={{ marginTop: '2rem', padding: '1rem', background: 'rgba(84, 172, 191, 0.05)', borderRadius: '0.75rem', border: '1px solid rgba(84, 172, 191, 0.1)' }}>
-        <p style={{ color: '#E5E5E5', fontSize: '0.8rem' }}>
+      <div className="mt-8 p-4 bg-[#54acbf]/[0.05] rounded-xl border border-[#54acbf]/10">
+        <p className="text-sm text-[#ccc]">
           Limits: Maximum 2 bank accounts and 1 UPI method per organization.
           Currently: {bankCount}/2 bank accounts, {upiCount}/1 UPI.
         </p>
       </div>
 
       {/* Payment Transactions Export */}
-      <div className="hp-card" style={{ marginTop: '2rem' }}>
-        <div style={{ marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff' }}>Export Payment Transactions</h2>
-          <p style={{ color: '#a1a1aa', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+      <div className="hp-glass-card mt-8 p-6">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-white">Export Payment Transactions</h2>
+          <p className="text-xs text-[#a1a1aa] mt-1">
             Download CSV of all transactions (Bank, UPI, Razorpay)
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>From Date</label>
+            <label className="block text-[11px] text-[#a1a1aa] mb-1">From Date</label>
             <input
               type="date"
-              className="hp-input"
+              className="hp-input w-full"
               value={exportFrom}
               onChange={(e) => setExportFrom(e.target.value)}
-              style={{ width: '100%' }}
             />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>To Date</label>
+            <label className="block text-[11px] text-[#a1a1aa] mb-1">To Date</label>
             <input
               type="date"
-              className="hp-input"
+              className="hp-input w-full"
               value={exportTo}
               onChange={(e) => setExportTo(e.target.value)}
-              style={{ width: '100%' }}
             />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Status</label>
+            <label className="block text-[11px] text-[#a1a1aa] mb-1">Status</label>
             <select
-              className="hp-input"
+              className="hp-input w-full"
               value={exportStatus}
               onChange={(e) => setExportStatus(e.target.value)}
-              style={{ width: '100%' }}
             >
               <option value="">All Statuses</option>
               <option value="completed">Completed</option>
@@ -280,12 +272,11 @@ export default function PaymentMethodsPage() {
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: '0.75rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Payment Method</label>
+            <label className="block text-[11px] text-[#a1a1aa] mb-1">Payment Method</label>
             <select
-              className="hp-input"
+              className="hp-input w-full"
               value={exportMethodType}
               onChange={(e) => setExportMethodType(e.target.value)}
-              style={{ width: '100%' }}
             >
               <option value="">All Methods</option>
               <option value="bank_account">Bank Transfer</option>
@@ -305,37 +296,31 @@ export default function PaymentMethodsPage() {
 
       {/* Add Modal */}
       {showAdd && (
-        <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 1000, backdropFilter: 'blur(4px)',
-        }}>
-          <div className="hp-glass" style={{ padding: '2rem', width: '480px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', marginBottom: '1.5rem' }}>
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center">
+          <div className="hp-glass-card p-8 w-[480px] max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold text-white mb-6">
               Add Payment Method
             </h2>
 
             {/* Type selector */}
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            <div className="flex gap-3 mb-6">
               <button
                 onClick={() => setAddType('bank_account')}
-                className={`hp-btn ${addType === 'bank_account' ? 'hp-btn-primary' : 'hp-btn-secondary'}`}
-                style={{ flex: 1 }}
+                className={`hp-btn flex-1 ${addType === 'bank_account' ? 'hp-btn-primary' : 'hp-btn-secondary'}`}
                 disabled={bankCount >= 2}
               >
                 🏦 Bank Account ({bankCount}/2)
               </button>
               <button
                 onClick={() => setAddType('upi')}
-                className={`hp-btn ${addType === 'upi' ? 'hp-btn-primary' : 'hp-btn-secondary'}`}
-                style={{ flex: 1 }}
+                className={`hp-btn flex-1 ${addType === 'upi' ? 'hp-btn-primary' : 'hp-btn-secondary'}`}
                 disabled={upiCount >= 1}
               >
                 💳 UPI ({upiCount}/1)
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="flex flex-col gap-4">
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>
                   Account Holder Name *
@@ -351,7 +336,7 @@ export default function PaymentMethodsPage() {
               {addType === 'bank_account' ? (
                 <>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>
+                    <label className="block text-xs text-[#a1a1aa] mb-1">
                       Bank Name
                     </label>
                     <input
@@ -362,7 +347,7 @@ export default function PaymentMethodsPage() {
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>
+                    <label className="block text-xs text-[#a1a1aa] mb-1">
                       Account Number *
                     </label>
                     <input
@@ -372,9 +357,9 @@ export default function PaymentMethodsPage() {
                       placeholder="Account number"
                     />
                   </div>
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ flex: 1 }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>
+                  <div className="flex gap-4">
+                    <div className="flex-1">
+                      <label className="block text-xs text-[#a1a1aa] mb-1">
                         IFSC Code *
                       </label>
                       <input
@@ -385,8 +370,8 @@ export default function PaymentMethodsPage() {
                         maxLength={11}
                       />
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>
+                    <div className="flex-1">
+                      <label className="block text-xs text-[#a1a1aa] mb-1">
                         Branch
                       </label>
                       <input
@@ -400,7 +385,7 @@ export default function PaymentMethodsPage() {
                 </>
               ) : (
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>
+                  <label className="block text-xs text-[#a1a1aa] mb-1">
                     UPI ID *
                   </label>
                   <input
@@ -409,25 +394,23 @@ export default function PaymentMethodsPage() {
                     onChange={(e) => setForm({ ...form, upi_id: e.target.value })}
                     placeholder="yourname@bank"
                   />
-                  <p style={{ color: '#71717a', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                  <p className="text-[11px] text-[#71717a] mt-1">
                     Format: username@provider (e.g. user@okicici, user@paytm)
                   </p>
                 </div>
               )}
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+            <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setShowAdd(false)}
-                className="hp-btn hp-btn-secondary"
-                style={{ flex: 1 }}
+                className="hp-btn hp-btn-secondary flex-1"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAdd}
-                className="hp-btn hp-btn-primary"
-                style={{ flex: 1 }}
+                className="hp-btn hp-btn-primary flex-1"
                 disabled={saving || !form.account_holder_name}
               >
                 {saving ? 'Adding...' : 'Add Method'}

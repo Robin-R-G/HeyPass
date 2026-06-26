@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/toast';
 import { ConfirmModal } from '@/components/confirm-modal';
+import { EventNav } from '@/components/event-nav';
 
 interface Form {
   id: string;
@@ -158,13 +159,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div className="min-h-screen bg-transparent text-white font-sans antialiased relative p-6">
-      <nav className="flex items-center gap-2 mb-6 text-xs text-hp-text-secondary/60">
-        <button onClick={() => router.back()} className="bg-transparent border-none text-hp-text-secondary hover:text-white cursor-pointer text-[11px] transition-all duration-150">← Back</button>
-        <span>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} className="text-hp-text-secondary hover:text-white no-underline transition-all duration-150">Event</Link>
-        <span>/</span>
-        <span className="text-white font-medium">Forms</span>
-      </nav>
+      <EventNav eventId={eventId} active="forms" />
       <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <div>

@@ -126,88 +126,68 @@ export default function WhatsAppSettingsPage() {
     : '';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-      <nav style={{
-        display: 'flex', alignItems: 'center', gap: '0.5rem',
-        padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)',
-        background: 'rgba(20,33,61,0.6)',
-      }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888' }}>/</span>
-        <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Settings</Link>
-        <span style={{ color: '#888' }}>/</span>
-        <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>WhatsApp</span>
+    <div className="min-h-screen text-white font-sans antialiased">
+      <nav className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)]">
+        <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors">&larr; Back</button>
+        <span className="text-[#666]">/</span>
+        <Link href="/dashboard" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Settings</Link>
+        <span className="text-[#666]">/</span>
+        <span className="text-sm text-white font-medium">WhatsApp</span>
       </nav>
 
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>WhatsApp Integration</h1>
-        <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '2rem' }}>
+      <div className="max-w-[720px] mx-auto px-6 py-8">
+        <h1 className="text-2xl font-bold mb-2">WhatsApp Integration</h1>
+        <p className="text-sm text-[#888] mb-8">
           Connect your Meta WhatsApp Business Account to enable automated messaging and shared inbox.
         </p>
 
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
-            <Loader2 size={24} style={{ color: '#FCA311', animation: 'spin 1s linear infinite' }} />
+          <div className="flex justify-center py-12">
+            <Loader2 size={24} className="text-[#FCA311] animate-spin" />
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="flex flex-col gap-6">
             {/* Connection Status */}
-            <div style={{
-              background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '14px', padding: '1.5rem',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.5rem' }}>
+            <div className="hp-glass-card p-6">
+              <div className="flex items-center gap-3 mb-1.5">
                 {creds?.is_connected ? (
-                  <CheckCircle size={20} style={{ color: '#10b981' }} />
+                  <CheckCircle size={20} className="text-[#10b981]" />
                 ) : (
-                  <XCircle size={20} style={{ color: '#ef4444' }} />
+                  <XCircle size={20} className="text-[#ef4444]" />
                 )}
-                <span style={{ fontSize: '1rem', fontWeight: 600 }}>
+                <span className="text-base font-semibold">
                   {creds?.is_connected ? 'Connected' : 'Not Connected'}
                 </span>
               </div>
               {creds?.last_verified_at && (
-                <p style={{ color: '#666', fontSize: '0.8rem', marginLeft: '32px' }}>
+                <p className="text-xs text-[#666] ml-[32px]">
                   Last verified: {new Date(creds.last_verified_at).toLocaleString()}
                 </p>
               )}
             </div>
 
             {/* Credentials Form */}
-            <div style={{
-              background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '14px', padding: '1.5rem',
-            }}>
-              <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.25rem' }}>API Credentials</h2>
+            <div className="hp-glass-card p-6">
+              <h2 className="text-base font-semibold mb-5">API Credentials</h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="flex flex-col gap-4">
                 {/* API Token */}
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#aaa', marginBottom: '0.35rem', fontWeight: 500 }}>
+                  <label className="block text-xs font-medium text-[#aaa] mb-1.5">
                     Permanent Access Token
                   </label>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <div style={{ flex: 1, position: 'relative' }}>
+                  <div className="flex gap-2">
+                    <div className="flex-1 relative">
                       <input
                         type={showToken ? 'text' : 'password'}
                         value={form.api_token}
                         onChange={e => setForm({ ...form, api_token: e.target.value })}
                         placeholder="EAAx..."
-                        style={{
-                          width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.08)',
-                          borderRadius: '8px', padding: '10px 40px 10px 12px',
-                          color: '#fff', fontSize: '13px', outline: 'none',
-                        }}
-                        onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
-                        onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                        className="hp-input pr-10"
                       />
                       <button
                         onClick={() => setShowToken(!showToken)}
-                        style={{
-                          position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)',
-                          background: 'none', border: 'none', color: '#666', cursor: 'pointer',
-                          padding: '4px',
-                        }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#666] hover:text-white"
                       >
                         {showToken ? <EyeOff size={14} /> : <Eye size={14} />}
                       </button>
@@ -217,7 +197,7 @@ export default function WhatsAppSettingsPage() {
 
                 {/* Phone Number ID */}
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#aaa', marginBottom: '0.35rem', fontWeight: 500 }}>
+                  <label className="block text-xs font-medium text-[#aaa] mb-1.5">
                     Phone Number ID
                   </label>
                   <input
@@ -225,19 +205,13 @@ export default function WhatsAppSettingsPage() {
                     value={form.phone_number_id}
                     onChange={e => setForm({ ...form, phone_number_id: e.target.value })}
                     placeholder="123456789012345"
-                    style={{
-                      width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: '8px', padding: '10px 12px',
-                      color: '#fff', fontSize: '13px', outline: 'none',
-                    }}
-                    onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
-                    onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                    className="hp-input"
                   />
                 </div>
 
                 {/* WABA ID */}
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#aaa', marginBottom: '0.35rem', fontWeight: 500 }}>
+                  <label className="block text-xs font-medium text-[#aaa] mb-1.5">
                     WhatsApp Business Account ID
                   </label>
                   <input
@@ -245,115 +219,69 @@ export default function WhatsAppSettingsPage() {
                     value={form.waba_id}
                     onChange={e => setForm({ ...form, waba_id: e.target.value })}
                     placeholder="123456789012345"
-                    style={{
-                      width: '100%', background: '#111', border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: '8px', padding: '10px 12px',
-                      color: '#fff', fontSize: '13px', outline: 'none',
-                    }}
-                    onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
-                    onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                    className="hp-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <div className="flex gap-3 mt-2">
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '6px',
-                      background: 'linear-gradient(135deg, #FCA311, #E09800)',
-                      color: '#000', border: 'none', padding: '10px 24px',
-                      borderRadius: '10px', fontSize: '13px', fontWeight: 700,
-                      cursor: saving ? 'wait' : 'pointer',
-                      boxShadow: '0 4px 12px rgba(252,163,17,0.25)',
-                      transition: 'all 0.2s',
-                    }}
+                    className="hp-btn hp-btn-primary"
                   >
-                    {saving ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Saving...</> : 'Save Credentials'}
+                    {saving ? <><Loader2 size={14} className="animate-spin" /> Saving...</> : 'Save Credentials'}
                   </button>
                   <button
                     onClick={handleVerify}
                     disabled={verifying || !form.api_token || !form.phone_number_id}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '6px',
-                      background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
-                      color: '#E5E5E5', padding: '10px 24px',
-                      borderRadius: '10px', fontSize: '13px', fontWeight: 600,
-                      cursor: verifying ? 'wait' : 'pointer',
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                    className="hp-btn hp-btn-secondary"
                   >
-                    {verifying ? <><Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> Verifying...</> : 'Test Connection'}
+                    {verifying ? <><Loader2 size={14} className="animate-spin" /> Verifying...</> : 'Test Connection'}
                   </button>
                 </div>
               </div>
             </div>
 
             {/* Webhook Configuration */}
-            <div style={{
-              background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: '14px', padding: '1.5rem',
-            }}>
-              <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Webhook Configuration</h2>
-              <p style={{ color: '#888', fontSize: '0.8rem', marginBottom: '1.25rem' }}>
+            <div className="hp-glass-card p-6">
+              <h2 className="text-base font-semibold mb-1.5">Webhook Configuration</h2>
+              <p className="text-xs text-[#888] mb-5">
                 Configure this URL in your Meta WhatsApp Business Account settings to receive inbound messages and status updates.
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="flex flex-col gap-4">
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#aaa', marginBottom: '0.35rem', fontWeight: 500 }}>
+                  <label className="block text-xs font-medium text-[#aaa] mb-1.5">
                     Callback URL
                   </label>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       value={webhookUrl}
                       readOnly
-                      style={{
-                        flex: 1, background: '#111', border: '1px solid rgba(255,255,255,0.08)',
-                        borderRadius: '8px', padding: '10px 12px',
-                        color: '#FCA311', fontSize: '13px', outline: 'none',
-                        fontFamily: 'monospace',
-                      }}
+                      className="hp-input font-mono text-[#FCA311]"
                     />
                     <button
                       onClick={() => copyToClipboard(webhookUrl)}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '4px',
-                        background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-                        color: '#888', padding: '10px 16px', borderRadius: '8px',
-                        cursor: 'pointer', fontSize: '12px', fontWeight: 500,
-                      }}
+                      className="hp-btn hp-btn-secondary px-4"
                     ><Copy size={14} /> Copy</button>
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#aaa', marginBottom: '0.35rem', fontWeight: 500 }}>
+                  <label className="block text-xs font-medium text-[#aaa] mb-1.5">
                     Verify Token
                   </label>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       value={creds?.webhook_verify_token || 'Loading...'}
                       readOnly
-                      style={{
-                        flex: 1, background: '#111', border: '1px solid rgba(255,255,255,0.08)',
-                        borderRadius: '8px', padding: '10px 12px',
-                        color: '#fff', fontSize: '13px', outline: 'none',
-                        fontFamily: 'monospace',
-                      }}
+                      className="hp-input font-mono"
                     />
                     <button
                       onClick={handleResetWebhookToken}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '4px',
-                        background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-                        color: '#888', padding: '10px 16px', borderRadius: '8px',
-                        cursor: 'pointer', fontSize: '12px', fontWeight: 500,
-                      }}
+                      className="hp-btn hp-btn-secondary px-4"
                     ><RefreshCw size={14} /> Reset</button>
                   </div>
                 </div>
@@ -361,18 +289,15 @@ export default function WhatsAppSettingsPage() {
             </div>
 
             {/* Setup Guide */}
-            <div style={{
-              background: 'rgba(252,163,17,0.04)', border: '1px solid rgba(252,163,17,0.12)',
-              borderRadius: '14px', padding: '1.5rem',
-            }}>
-              <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.75rem', color: '#FCA311' }}>Setup Guide</h2>
-              <ol style={{ color: '#aaa', fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingLeft: '1.25rem' }}>
-                <li>Go to the <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer" style={{ color: '#FCA311', textDecoration: 'underline' }}>Meta Developer Portal <ExternalLink size={10} style={{ display: 'inline' }} /></a></li>
+            <div className="hp-glass-card p-6 bg-[#FCA311]/[0.04] border-[#FCA311]/20">
+              <h2 className="text-base font-semibold mb-3 text-[#FCA311]">Setup Guide</h2>
+              <ol className="text-xs text-[#aaa] flex flex-col gap-3 pl-5 list-decimal">
+                <li>Go to the <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer" className="text-[#FCA311] underline">Meta Developer Portal <ExternalLink size={10} className="inline" /></a></li>
                 <li>Create or open your WhatsApp Business App</li>
-                <li>Go to <strong>WhatsApp → Configuration</strong> and note your Phone Number ID and WABA ID</li>
-                <li>Go to <strong>WhatsApp → Configuration → Send Messages → Permanent Token</strong> to generate an access token</li>
+                <li>Go to <strong>WhatsApp &rarr; Configuration</strong> and note your Phone Number ID and WABA ID</li>
+                <li>Go to <strong>WhatsApp &rarr; Configuration &rarr; Send Messages &rarr; Permanent Token</strong> to generate an access token</li>
                 <li>Enter the credentials above and click <strong>Test Connection</strong></li>
-                <li>In the Meta App dashboard, go to <strong>Webhooks → Edit Subscription</strong></li>
+                <li>In the Meta App dashboard, go to <strong>Webhooks &rarr; Edit Subscription</strong></li>
                 <li>Set the Callback URL to the URL shown above and the Verify Token to the token shown above</li>
                 <li>Subscribe to: <strong>messages</strong>, <strong>message_deliveries</strong>, <strong>message_reads</strong></li>
               </ol>
@@ -380,10 +305,6 @@ export default function WhatsAppSettingsPage() {
           </div>
         )}
       </div>
-
-      <style jsx global>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 }

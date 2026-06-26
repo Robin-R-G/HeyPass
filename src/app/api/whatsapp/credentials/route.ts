@@ -19,7 +19,14 @@ export async function GET(req: NextRequest) {
     }
     if (error) throw error;
 
-    return successResponse({ credentials: data });
+    // Mask sensitive tokens before returning to client
+    const masked = {
+      ...data,
+      api_token: data.api_token ? `${data.api_token.slice(0, 8)}...${data.api_token.slice(-4)}` : null,
+      webhook_verify_token: data.webhook_verify_token ? `${data.webhook_verify_token.slice(0, 8)}...` : null,
+    };
+
+    return successResponse({ credentials: masked });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Internal error', 500);
   }
@@ -91,7 +98,12 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        const res = await fetch(`https://graph.facebook.com/v20.0/${creds.phone_number_id}?access_token=${creds.api_token}`);
+        const res = await fetch(`https://graph.facebook.com/v20.0/${creds.phone_number_id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${creds.api_token}`,
+          },
+        });
         const data = await res.json();
         const connected = res.ok && !data.error;
 

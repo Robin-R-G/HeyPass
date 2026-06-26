@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
 import { ConfirmModal } from '@/components/confirm-modal';
+import { EventNav } from '@/components/event-nav';
+import { Loader2 } from 'lucide-react';
 
 interface Gate {
   id: string;
@@ -114,13 +116,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Gates</span>
-      </nav>
+      <EventNav eventId={eventId} active="gates" />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Gates</h1>
@@ -224,12 +220,12 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, backdropFilter: 'blur(4px)',
         }}>
-          <div className="hp-glass" style={{ padding: '2rem', width: '480px' }}>
+          <div className="hp-glass" style={{ padding: '2rem', width: 'min(480px, 90vw)' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', marginBottom: '1.5rem' }}>Add Gate</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Gate Name *</label>
-                <input className="hp-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Main Entrance, Gate A" />
+                <label htmlFor="gate-name" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Gate Name *</label>
+                <input id="gate-name" aria-label="Gate Name" className="hp-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Main Entrance, Gate A" />
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Location</label>
@@ -258,7 +254,7 @@ export default function GatesPage({ params }: { params: Promise<{ id: string }> 
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
               <button onClick={() => setShowAdd(false)} className="hp-btn hp-btn-secondary" style={{ flex: 1 }}>Cancel</button>
               <button onClick={handleAdd} className="hp-btn hp-btn-primary" style={{ flex: 1 }} disabled={saving || !form.name}>
-                {saving ? 'Creating...' : 'Create Gate'}
+                {saving ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Creating...</span> : 'Create Gate'}
               </button>
             </div>
           </div>

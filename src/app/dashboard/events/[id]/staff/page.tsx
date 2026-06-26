@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
 import { ConfirmModal } from '@/components/confirm-modal';
+import { EventNav } from '@/components/event-nav';
+import { Loader2 } from 'lucide-react';
 
 interface Gate {
   id: string;
@@ -117,13 +119,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Staff</span>
-      </nav>
+      <EventNav eventId={eventId} active="staff" />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#fff' }}>Staff Management</h1>
@@ -243,12 +239,12 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, backdropFilter: 'blur(4px)',
         }}>
-          <div className="hp-glass" style={{ padding: '2rem', width: '420px' }}>
+          <div className="hp-glass" style={{ padding: '2rem', width: 'min(420px, 90vw)' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#fff', marginBottom: '1.5rem' }}>Assign Staff to Gate</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Gate *</label>
-                <select className="hp-input" value={assignForm.gate_id} onChange={(e) => setAssignForm({ ...assignForm, gate_id: e.target.value })}>
+                <label htmlFor="assign-gate" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Gate *</label>
+                <select id="assign-gate" aria-label="Gate" className="hp-input" value={assignForm.gate_id} onChange={(e) => setAssignForm({ ...assignForm, gate_id: e.target.value })}>
                   <option value="">Select gate</option>
                   {gates.filter(g => g.id).map(g => (
                     <option key={g.id} value={g.id}>{g.name}</option>
@@ -256,12 +252,12 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
                 </select>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Staff User ID *</label>
-                <input className="hp-input" value={assignForm.staff_id} onChange={(e) => setAssignForm({ ...assignForm, staff_id: e.target.value })} placeholder="User UUID" />
+                <label htmlFor="assign-staff-id" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Staff User ID *</label>
+                <input id="assign-staff-id" aria-label="Staff User ID" className="hp-input" value={assignForm.staff_id} onChange={(e) => setAssignForm({ ...assignForm, staff_id: e.target.value })} placeholder="User UUID" />
                 <p style={{ color: '#52525b', fontSize: '0.7rem', marginTop: '0.25rem' }}>Must be a member of this organization</p>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Role</label>
+                <label htmlFor="assign-role" style={{ display: 'block', fontSize: '0.8rem', color: '#a1a1aa', marginBottom: '0.25rem' }}>Role</label>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   {['scanner', 'supervisor', 'admin'].map(r => (
                     <button
@@ -279,7 +275,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
               <button onClick={() => setShowAssign(false)} className="hp-btn hp-btn-secondary" style={{ flex: 1 }}>Cancel</button>
               <button onClick={handleAssign} className="hp-btn hp-btn-primary" style={{ flex: 1 }} disabled={saving || !assignForm.gate_id || !assignForm.staff_id}>
-                {saving ? 'Assigning...' : 'Assign'}
+                {saving ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Assigning...</span> : 'Assign'}
               </button>
             </div>
           </div>

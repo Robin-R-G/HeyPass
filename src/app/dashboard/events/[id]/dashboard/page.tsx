@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, use } from 'react';
 import CloneEventButton from '@/components/clone-event-button';
+import { EventNav } from '@/components/event-nav';
 
 interface DashboardData {
   total_registered: number;
@@ -77,32 +78,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Event Navigation */}
-      <div className="flex gap-2 mb-6 flex-wrap">
-        {[
-          { label: 'Dashboard', href: `/dashboard/events/${eventId}/dashboard`, active: true },
-          { label: 'Tickets', href: `/dashboard/events/${eventId}/tickets` },
-          { label: 'Gates', href: `/dashboard/events/${eventId}/gates` },
-          { label: 'Staff', href: `/dashboard/events/${eventId}/staff` },
-          { label: 'Volunteers', href: `/dashboard/events/${eventId}/volunteers` },
-          { label: 'CRM Portal', href: `/dashboard/events/${eventId}/crm` },
-          { label: 'Forms', href: `/dashboard/events/${eventId}/forms` },
-          { label: 'Branding', href: `/dashboard/events/${eventId}/branding` },
-          { label: 'Analytics', href: `/dashboard/events/${eventId}/analytics` },
-          { label: 'Certificates', href: `/dashboard/events/${eventId}/certificates` },
-        ].map((nav) => (
-          <a
-            key={nav.href}
-            href={nav.href}
-            className={`hp-nav-item whitespace-nowrap text-xs border border-white/5 ${
-              nav.active
-                ? 'hp-nav-item-active font-semibold'
-                : 'text-hp-text-secondary/80 hover:text-white'
-            }`}
-          >
-            {nav.label}
-          </a>
-        ))}
-      </div>
+      <EventNav eventId={eventId} active="dashboard" />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>

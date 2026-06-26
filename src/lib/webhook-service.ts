@@ -79,6 +79,29 @@ class WebhookServiceImpl {
       throw new Error(`Invalid events: ${invalidEvents.join(', ')}`);
     }
 
+    // SSRF protection: validate URL is not pointing to internal/private networks
+    const url = new URL(input.url);
+    const hostname = url.hostname;
+    const isPrivate = (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1' ||
+      hostname === '0.0.0.0' ||
+      hostname.startsWith('10.') ||
+      hostname.startsWith('172.') ||
+      hostname.startsWith('192.168.') ||
+      hostname === '169.254.169.254' ||
+      hostname.endsWith('.internal') ||
+      hostname.endsWith('.local') ||
+      hostname === 'metadata.google.internal'
+    );
+    if (isPrivate) {
+      throw new Error('Webhook URL cannot point to private/internal networks');
+    }
+    if (url.protocol !== 'https:') {
+      throw new Error('Webhook URL must use HTTPS');
+    }
+
     const secret = crypto.randomBytes(32).toString('hex');
 
     const { data, error } = await supabaseAdmin

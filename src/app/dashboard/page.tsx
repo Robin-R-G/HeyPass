@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authFetch, isAuthenticated } from '@/lib/auth-client';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Loader2, CalendarDays } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -30,7 +31,6 @@ export default function DashboardPage() {
       return;
     }
 
-    // Redirect superadmins to superadmin dashboard
     try {
       const token = localStorage.getItem('access_token');
       if (token) {
@@ -63,116 +63,115 @@ export default function DashboardPage() {
       });
   }, [router]);
 
-  const statusColor = (s: string) => {
-    switch (s) {
-      case 'published': return 'bg-hp-success/15 text-hp-success';
-      case 'draft': return 'bg-hp-surface/10 text-hp-text-secondary';
-      case 'ended': return 'bg-hp-primary/15 text-hp-primary';
-      default: return 'bg-hp-warning/15 text-hp-warning';
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-hp-bg text-hp-text font-sans antialiased hp-animate-fade-in relative">
-      {/* Background decoration */}
+    <div className="min-h-screen bg-[#000] text-white font-sans antialiased relative">
       <div className="hp-bg-gradient" />
 
       {/* Nav */}
-      <nav className="hp-nav flex justify-between items-center px-8 py-4">
-        <Link href="/" className="flex items-center gap-2 no-underline focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none rounded">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
-          <span className="text-lg font-bold text-white">HeyPass</span>
-        </Link>
-        <div className="flex gap-5 items-center">
-          <Link href="/dashboard" className="hp-nav-item hp-nav-item-active">Events</Link>
-          <Link href="/dashboard/settings/branding" className="hp-nav-item">Settings</Link>
-          <button onClick={() => { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); router.push('/auth/login'); }}
-            className="hp-btn hp-btn-ghost text-sm">Sign Out</button>
+      <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center px-4 sm:px-8 h-16">
+          <Link href="/" className="flex items-center gap-2.5 no-underline">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
+            <span className="text-lg font-bold text-white">HeyPass</span>
+          </Link>
+          <div className="flex gap-1 sm:gap-2 items-center">
+            <Link href="/dashboard" className="px-3 py-2 rounded-lg text-sm font-medium text-[#FCA311] bg-[#FCA311]/10 no-underline">Events</Link>
+            <Link href="/dashboard/settings" className="px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 no-underline transition-colors">Settings</Link>
+            <button onClick={() => { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); router.push('/auth/login'); }}
+              className="px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-colors min-h-[44px]">
+              Sign Out
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Content */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' }}>
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-1 text-white tracking-tight">Your Events</h1>
-            <p className="text-[#888] text-sm">Manage and monitor all your events</p>
-          </div>
+      <main className="max-w-[1200px] mx-auto px-4 sm:px-8 py-8 sm:py-10 relative z-10">
+        <div className="mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Your Events</h1>
+          <p className="text-[#888] text-sm mt-1">Manage and monitor all your events</p>
         </div>
 
+        {/* Loading skeleton */}
         {loading && (
-          <div className="text-center py-16 text-[#E5E5E5] animate-pulse">Loading events...</div>
+          <div className="space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="hp-glass-card p-6">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-2 flex-1">
+                    <div className="hp-skeleton h-5 w-48 rounded" />
+                    <div className="hp-skeleton h-3 w-64 rounded" />
+                  </div>
+                  <div className="hp-skeleton h-5 w-16 rounded" />
+                </div>
+                <div className="flex gap-8 mt-4">
+                  <div className="hp-skeleton h-4 w-20 rounded" />
+                  <div className="hp-skeleton h-4 w-20 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
+        {/* Error */}
         {error && error !== 'NO_CLIENT' && (
-          <div className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-6 text-center text-[#ef4444]">
+          <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-6 text-center text-[#ef4444] text-sm">
             {error}
           </div>
         )}
 
+        {/* No client */}
         {error === 'NO_CLIENT' && (
-          <Card className="p-16 text-center hp-glass-card hp-animate-fade-in">
-            <div className="text-3xl mb-4" role="img" aria-label="Organization">🏢</div>
-            <h3 className="text-lg font-semibold mb-2 text-white">No organization found</h3>
-            <p className="text-[#E5E5E5] text-sm mb-6">
-              You need to select or create an organization first
-            </p>
-            <button
-              onClick={() => router.push('/auth/select-client')}
-              className="bg-gradient-to-r from-[#FCA311] to-[#E09800] text-black font-bold px-6 py-2.5 rounded-xl cursor-pointer text-sm transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
-            >
-              Select Organization
-            </button>
-          </Card>
-        )}
-
-        {!loading && !error && events.length === 0 && (
-          <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-16 text-center">
-            <div className="text-3xl mb-4" role="img" aria-label="Events">📋</div>
-            <h3 className="text-lg font-semibold mb-2 text-white">No events yet</h3>
-            <p className="text-[#E5E5E5] text-sm mb-6">
-              Create your first event to get started
-            </p>
-            <button
-              onClick={() => router.push('/dashboard/events/new')}
-              className="bg-gradient-to-r from-[#FCA311] to-[#E09800] text-black font-bold px-6 py-2.5 rounded-xl cursor-pointer text-sm transition-all focus-visible:ring-2 focus-visible:ring-[#FCA311] focus:outline-none"
-            >
-              Create Event
-            </button>
+          <div className="hp-glass-card p-12 sm:p-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 text-3xl" role="img" aria-label="Organization">🏢</div>
+            <h3 className="text-lg font-semibold text-white mb-2">No organization found</h3>
+            <p className="text-[#999] text-sm mb-6">You need to select or create an organization first</p>
+            <Button onClick={() => router.push('/auth/select-client')} className="font-bold text-sm">Select Organization</Button>
           </div>
         )}
 
+        {/* Empty state */}
+        {!loading && !error && events.length === 0 && (
+          <div className="hp-glass-card p-12 sm:p-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+              <CalendarDays className="w-7 h-7 text-[#888]" />
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-2">No events yet</h3>
+            <p className="text-[#999] text-sm mb-6">Create your first event to get started</p>
+            <Button onClick={() => router.push('/dashboard/events/new')} className="font-bold text-sm">Create Event</Button>
+          </div>
+        )}
+
+        {/* Events list */}
         {!loading && !error && events.length > 0 && (
-          <div className="grid gap-4">
+          <div className="space-y-4">
             {events.map(event => (
               <Link
                 key={event.id}
                 href={`/dashboard/events/${event.id}/dashboard`}
-                className="block hp-card hp-glass-card hp-animate-fade-in hover:hp-card-highlighted"
+                className="block hp-glass-card p-5 sm:p-6 no-underline hover:border-[rgba(252,163,17,0.35)] transition-all"
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-[#FCA311] transition-colors">
-                      {event.title}
-                    </h3>
-                    <p className="text-[#E5E5E5] text-xs">
+                <div className="flex justify-between items-start gap-4">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-semibold text-white mb-1 truncate">{event.title}</h3>
+                    <p className="text-[#999] text-xs">
                       {event.venue || 'No venue'} · {new Date(event.start_date).toLocaleDateString()}
                     </p>
                   </div>
-                  <span className={`px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${
-                    event.status === 'published' ? 'bg-[#10b981]/15 text-[#10b981]' : 'bg-white/10 text-[#E5E5E5]'
+                  <span className={`shrink-0 px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${
+                    event.status === 'published' ? 'bg-[#10b981]/15 text-[#10b981]' : 'bg-white/10 text-[#ccc]'
                   }`}>
                     {event.status}
                   </span>
                 </div>
-                <div className="flex gap-8 mt-4">
+                <div className="flex gap-8 mt-4 pt-4 border-t border-white/[0.06]">
                   <div>
-                    <span className="text-base font-bold text-[#E5E5E5]">{event.registrations_count || 0}</span>
-                    <span className="text-[#888888] text-xs ml-1.5">registered</span>
+                    <span className="text-base font-bold text-[#ccc]">{event.registrations_count || 0}</span>
+                    <span className="text-[#888] text-xs ml-1.5">registered</span>
                   </div>
                   <div>
                     <span className="text-base font-bold text-[#FCA311]">{event.check_ins_count || 0}</span>
-                    <span className="text-[#888888] text-xs ml-1.5">checked in</span>
+                    <span className="text-[#888] text-xs ml-1.5">checked in</span>
                   </div>
                 </div>
               </Link>

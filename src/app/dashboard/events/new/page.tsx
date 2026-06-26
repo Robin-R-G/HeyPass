@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
 export default function NewEventPage() {
   const router = useRouter();
@@ -69,17 +70,19 @@ export default function NewEventPage() {
 
         <form onSubmit={handleCreate}>
           {[
-            { label: 'Event Title', value: title, set: setTitle, type: 'text', placeholder: 'e.g. TechConf 2026', required: true },
-            { label: 'URL Slug', value: slug, set: setSlug, type: 'text', placeholder: 'techconf-2026' },
-            { label: 'Start Date', value: startDate, set: setStartDate, type: 'datetime-local', required: true },
-            { label: 'End Date', value: endDate, set: setEndDate, type: 'datetime-local', required: true },
-            { label: 'Venue', value: venue, set: setVenue, type: 'text', placeholder: 'e.g. Convention Center, Online' },
+            { id: 'event-title', label: 'Event Title', value: title, set: setTitle, type: 'text', placeholder: 'e.g. TechConf 2026', required: true },
+            { id: 'url-slug', label: 'URL Slug', value: slug, set: setSlug, type: 'text', placeholder: 'techconf-2026' },
+            { id: 'start-date', label: 'Start Date', value: startDate, set: setStartDate, type: 'datetime-local', required: true },
+            { id: 'end-date', label: 'End Date', value: endDate, set: setEndDate, type: 'datetime-local', required: true },
+            { id: 'venue', label: 'Venue', value: venue, set: setVenue, type: 'text', placeholder: 'e.g. Convention Center, Online' },
           ].map(f => (
-            <div key={f.label} style={{ marginBottom: '1.25rem' }}>
-              <label style={{ display: 'block', color: '#E5E5E5', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>
+            <div key={f.id} style={{ marginBottom: '1.25rem' }}>
+              <label htmlFor={f.id} style={{ display: 'block', color: '#E5E5E5', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>
                 {f.label} {f.required && <span style={{ color: '#ef4444' }}>*</span>}
               </label>
               <input
+                id={f.id}
+                aria-label={f.label}
                 type={f.type} value={f.value} onChange={e => f.set(e.target.value)}
                 required={f.required} placeholder={f.placeholder}
                 style={{
@@ -92,8 +95,10 @@ export default function NewEventPage() {
           ))}
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', color: '#E5E5E5', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>Description</label>
+            <label htmlFor="description" style={{ display: 'block', color: '#E5E5E5', fontSize: '0.8rem', marginBottom: '0.4rem', fontWeight: 500 }}>Description</label>
             <textarea
+              id="description"
+              aria-label="Description"
               value={description} onChange={e => setDescription(e.target.value)} rows={4}
               placeholder="Brief description of your event"
               style={{
@@ -115,7 +120,7 @@ export default function NewEventPage() {
               color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               opacity: saving || !title || !startDate || !endDate ? 0.5 : 1,
             }}>
-            {saving ? 'Creating...' : 'Create Event'}
+            {saving ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Creating...</span> : 'Create Event'}
           </button>
         </form>
       </div>

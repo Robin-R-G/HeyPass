@@ -12,6 +12,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn("hp-input", className)}
         ref={ref}
+        aria-invalid={props["aria-invalid"]}
+        aria-describedby={props["aria-describedby"]}
+        autoComplete={props.autoComplete}
         {...props}
       />
     )

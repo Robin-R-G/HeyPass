@@ -27,11 +27,10 @@ export interface CreateLinkInput {
 class RegistrationLinkServiceImpl {
   private generateShortCode(): string {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 8; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+    const bytes = crypto.getRandomValues(new Uint8Array(8));
+    return Array.from(bytes)
+      .map(b => chars[b % chars.length])
+      .join('');
   }
 
   private getBaseUrl(): string {

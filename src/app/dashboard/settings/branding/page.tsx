@@ -207,27 +207,23 @@ export default function BrandingSettingsPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }} className="flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <div className="flex items-center justify-center min-h-screen text-white">
+        <Loader2 size={24} className="text-[#FCA311] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', color: '#fff', fontFamily: 'var(--font-inter, system-ui, sans-serif)' }}>
-    <nav style={{
-      display: 'flex', alignItems: 'center', gap: '0.5rem',
-      padding: '1rem 1.5rem', borderBottom: '1px solid rgba(229,229,229,0.08)',
-      background: 'rgba(20,33,61,0.6)',
-    }}>
-      <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-      <span style={{ color: '#888888' }}>/</span>
-      <Link href="/dashboard" style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Events</Link>
-      <span style={{ color: '#888888' }}>/</span>
-      <span style={{ color: '#E5E5E5', fontSize: '0.85rem', fontWeight: 500 }}>Settings</span>
-    </nav>
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Branding Settings</h1>
+    <div className="min-h-screen text-white font-sans antialiased">
+      <nav className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)]">
+        <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors">&larr; Back</button>
+        <span className="text-[#666]">/</span>
+        <Link href="/dashboard" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Events</Link>
+        <span className="text-[#666]">/</span>
+        <span className="text-sm text-white font-medium">Settings</span>
+      </nav>
+      <div className="max-w-4xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Branding Settings</h1>
 
       {message && (
         <div className={'p-4 mb-6 rounded ' + (message.type === 'success' ? 'bg-green-900/20 text-green-400 border-green-900/30' : 'bg-red-900/20 text-red-400 border-red-900/30')}>
@@ -237,7 +233,7 @@ export default function BrandingSettingsPage() {
 
       <div className="space-y-8">
         {/* Identity */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Identity</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -250,7 +246,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, brand_name: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
                 placeholder="Your Brand Name"
               />
             </div>
@@ -264,7 +260,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, tagline: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
                 placeholder="Your tagline"
               />
             </div>
@@ -272,7 +268,7 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Logos */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Logos & Images</h2>
           <div className="grid grid-cols-2 gap-6">
             {/* Organization Logo */}
@@ -434,7 +430,7 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Colors */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Colors</h2>
           <div className="grid grid-cols-4 gap-4">
             {[
@@ -475,7 +471,7 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Typography & Shape */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Typography & Shape</h2>
           <div className="grid grid-cols-3 gap-4">
             <div>
@@ -488,7 +484,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, font_family: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
             <div>
@@ -506,7 +502,7 @@ export default function BrandingSettingsPage() {
                     border_radius: parseInt(e.target.value) || 0,
                   }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
             <div className="flex items-end">
@@ -529,7 +525,7 @@ export default function BrandingSettingsPage() {
         </section>
 
         {/* Footer & Support */}
-        <section className="bg-[rgba(229,229,229,0.03)] rounded-lg border-[rgba(229,229,229,0.12)] p-6">
+        <section className="hp-glass-card p-6">
           <h2 className="text-lg font-semibold mb-4">Footer & Support</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -545,7 +541,7 @@ export default function BrandingSettingsPage() {
                     footer_company_name: e.target.value,
                   }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
             <div>
@@ -561,7 +557,7 @@ export default function BrandingSettingsPage() {
                     footer_website_url: e.target.value,
                   }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
             <div className="col-span-2">
@@ -577,7 +573,7 @@ export default function BrandingSettingsPage() {
                     footer_copyright: e.target.value,
                   }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
             <div className="col-span-2">
@@ -589,7 +585,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, footer_text: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
                 rows={3}
               />
             </div>
@@ -603,7 +599,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, support_email: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
             <div>
@@ -616,7 +612,7 @@ export default function BrandingSettingsPage() {
                 onChange={(e) =>
                   setBranding((prev) => ({ ...prev, support_phone: e.target.value }))
                 }
-                className="w-full border-[rgba(229,229,229,0.12)] rounded-md px-3 py-2"
+                className="hp-input"
               />
             </div>
           </div>
@@ -627,7 +623,7 @@ export default function BrandingSettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="bg-[#FCA311] text-black font-semibold px-6 py-2 rounded-md hover:bg-[#E09800] disabled:opacity-50"
+            className="hp-btn hp-btn-primary disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
@@ -643,7 +639,6 @@ export default function BrandingSettingsPage() {
         onConfirm={executeDeleteAsset}
         onCancel={() => setConfirmDeleteAsset(null)}
       />
-    </div>
     </div>
   );
 }

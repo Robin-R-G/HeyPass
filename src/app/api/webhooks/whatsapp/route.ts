@@ -1,5 +1,10 @@
 import { NextRequest } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/client';
+import crypto from 'crypto';
+
+// TODO: Configure WHATSAPP_APP_SECRET in your environment variables.
+// Obtain this from the WhatsApp Business Dashboard → App Settings → App Secret.
+// Without it, signature verification is skipped (insecure for production).
 
 export async function GET(req: NextRequest) {
   const mode = req.nextUrl.searchParams.get('hub.mode');
@@ -23,7 +28,31 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const payload = await req.json();
+    const body = await req.text();
+    const appSecret = process.env.WHATSAPP_APP_SECRET;
+
+    if (appSecret) {
+      const signature = req.headers.get('x-hub-signature-256');
+      if (!signature) {
+        return new Response('Missing signature', { status: 401 });
+      }
+
+      const expectedSignature = `sha256=${crypto
+        .createHmac('sha256', appSecret)
+        .update(body)
+        .digest('hex')}`;
+
+      if (
+        Buffer.byteLength(signature) !== Buffer.byteLength(expectedSignature) ||
+        !crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))
+      ) {
+        return new Response('Invalid signature', { status: 401 });
+      }
+    } else {
+      console.warn('WHATSAPP_APP_SECRET not configured — webhook signature verification skipped');
+    }
+
+    const payload = JSON.parse(body);
     const entry = payload.entry?.[0];
     const changes = entry?.changes?.[0];
     const value = changes?.value;

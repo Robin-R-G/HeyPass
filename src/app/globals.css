@@ -37,9 +37,9 @@
   --hp-text-accent: #FCA311;
 
   /* Border Colors */
-  --hp-border: rgba(229, 229, 229, 0.08);
-  --hp-border-light: rgba(229, 229, 229, 0.15);
-  --hp-border-accent: rgba(252, 163, 17, 0.35);
+  --hp-border: rgba(229, 229, 229, 0.12);
+  --hp-border-light: rgba(229, 229, 229, 0.2);
+  --hp-border-accent: rgba(252, 163, 17, 0.4);
 
   /* Status Colors */
   --hp-success: #10b981;
@@ -55,8 +55,8 @@
   --hp-shadow-glow: 0 0 40px var(--hp-primary-glow);
 
   /* Glass Effect */
-  --hp-glass-bg: rgba(20, 33, 61, 0.8);
-  --hp-glass-border: rgba(229, 229, 229, 0.1);
+  --hp-glass-bg: rgba(20, 33, 61, 0.65);
+  --hp-glass-border: rgba(229, 229, 229, 0.12);
   --hp-glass-blur: blur(20px);
 
   /* Border Radius */
@@ -89,24 +89,20 @@
    BASE STYLES
    ============================================================ */
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: var(--hp-font-sans);
-  background: var(--hp-bg);
-  color: var(--hp-text);
-  line-height: 1.6;
-  overflow-x: hidden;
+  body {
+    font-family: var(--hp-font-sans);
+    background: var(--hp-bg);
+    color: var(--hp-text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
 }
 
 /* ============================================================
@@ -150,13 +146,12 @@ body {
   -webkit-backdrop-filter: var(--hp-glass-blur);
   border: 1px solid var(--hp-glass-border);
   border-radius: var(--hp-radius-xl);
-  transition: all var(--hp-transition-base);
+  transition: border-color var(--hp-transition-base), box-shadow var(--hp-transition-base);
 }
 
 .hp-glass-card:hover {
   border-color: var(--hp-border-accent);
   box-shadow: var(--hp-shadow-glow);
-  transform: translateY(-2px);
 }
 
 /* ============================================================
@@ -195,12 +190,13 @@ body {
 
 .hp-btn-primary {
   background: linear-gradient(135deg, var(--hp-gradient-start), var(--hp-gradient-mid));
-  color: white;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   box-shadow: 0 4px 15px var(--hp-primary-glow);
 }
 
 .hp-btn-primary:hover {
-  box-shadow: 0 6px 20px var(--hp-primary-glow);
+  box-shadow: 0 6px 24px var(--hp-primary-glow);
   transform: translateY(-1px);
 }
 
@@ -238,8 +234,8 @@ body {
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  background: var(--hp-surface);
-  border: 1px solid var(--hp-border);
+  background: rgba(229, 229, 229, 0.06);
+  border: 1px solid var(--hp-border-light);
   border-radius: var(--hp-radius-md);
   color: var(--hp-text);
   transition: all var(--hp-transition-fast);
@@ -253,10 +249,11 @@ body {
 .hp-input:focus {
   border-color: var(--hp-primary);
   box-shadow: 0 0 0 3px var(--hp-primary-glow);
+  background: rgba(229, 229, 229, 0.08);
 }
 
 .hp-input:hover:not(:focus) {
-  border-color: var(--hp-border-light);
+  border-color: rgba(229, 229, 229, 0.25);
 }
 
 /* ============================================================
@@ -502,26 +499,33 @@ body {
 
 /* Custom utility classes for premium design system */
 .bg-hp-bg { background: var(--hp-bg); }
+.bg-hp-surface { background: var(--hp-surface); }
+.bg-hp-surface-hover { background: var(--hp-surface-hover); }
+.bg-hp-glass { background: var(--hp-glass-bg); }
 .text-hp-text { color: var(--hp-text); }
 .text-hp-text-secondary { color: var(--hp-text-secondary); }
+.text-hp-text-muted { color: var(--hp-text-muted); }
 .text-hp-primary { color: var(--hp-primary); }
 .text-hp-primary:hover { color: var(--hp-primary-light); }
+.text-hp-success { color: var(--hp-success); }
+.text-hp-error { color: var(--hp-error); }
+.text-hp-warning { color: var(--hp-warning); }
+.border-hp-border { border-color: var(--hp-border); }
+.border-hp-border-light { border-color: var(--hp-border-light); }
+.border-hp-border-accent { border-color: var(--hp-border-accent); }
+.ring-hp-primary { --tw-ring-color: var(--hp-primary); }
 
-/* Navigation item utility */
-.hp-nav-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: var(--hp-text-secondary);
-  border-radius: var(--hp-radius-md);
-  transition: all var(--hp-transition-fast);
+/* Scrollable container for tables on mobile */
+.hp-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.hp-nav-item:hover {
-  background: var(--hp-surface-hover);
-  color: var(--hp-text);
+/* Truncate long text */
+.hp-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ============================================================
@@ -533,6 +537,68 @@ body {
     --hp-radius-lg: 0.75rem;
     --hp-radius-xl: 1rem;
   }
+
+  .hp-glass-card {
+    border-radius: var(--hp-radius-lg);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   FOCUS VISIBLE (Keyboard Navigation)
+   ============================================================ */
+
+*:focus-visible {
+  outline: 2px solid var(--hp-primary);
+  outline-offset: 2px;
+}
+
+.hp-btn:focus-visible {
+  outline: 2px solid var(--hp-primary);
+  outline-offset: 2px;
+}
+
+.hp-input:focus-visible {
+  outline: none;
+}
+
+/* ============================================================
+   PASSWORD TOGGLE
+   ============================================================ */
+
+.hp-password-wrapper {
+  position: relative;
+}
+
+.hp-password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--hp-text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--hp-transition-fast);
+}
+
+.hp-password-toggle:hover {
+  color: var(--hp-text-secondary);
 }
 
 /* ============================================================

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { authenticateUser } from '@/lib/auth-service';
+import { authenticateUser, extractClientIP } from '@/lib/auth-service';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
 
 export async function POST(req: NextRequest) {
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const result = await authenticateUser({
       email,
       password,
-      ip_address: req.headers.get('x-forwarded-for') || undefined,
+      ip_address: extractClientIP(req.headers.get('x-forwarded-for')),
       user_agent: req.headers.get('user-agent') || undefined,
     });
 

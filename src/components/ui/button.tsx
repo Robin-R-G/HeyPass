@@ -23,10 +23,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }[variant];
 
     const sizeClass = {
-      default: "h-9 px-4 py-2",
-      sm: "h-8 rounded-md px-3 text-xs",
-      lg: "h-10 rounded-md px-8",
-      icon: "h-9 w-9",
+      default: "h-10 px-4 py-2 min-h-[44px]",
+      sm: "h-9 rounded-md px-3 text-xs min-h-[36px]",
+      lg: "h-12 rounded-md px-8 min-h-[48px]",
+      icon: "h-10 w-10 min-h-[44px] min-w-[44px]",
     }[size];
 
     return (

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Building2 } from 'lucide-react';
 
 interface Client {
   client_id: string;
@@ -76,47 +76,65 @@ export default function SelectClientPage() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent flex items-center justify-center font-sans antialiased">
-      <div className="w-full max-w-[480px] p-6">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">Select Organization</h1>
-          <p className="text-sm text-hp-text-secondary opacity-70">Choose which organization to manage</p>
+    <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
+      <div className="w-full max-w-[480px] px-5">
+        {/* Logo */}
+        <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+          <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
+        </Link>
+
+        {/* Title */}
+        <div className="text-center mb-7">
+          <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Select Organization</h1>
+          <p className="text-sm text-[#999]">Choose which organization to manage</p>
         </div>
 
-        <div className="hp-glass-card bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/8 rounded-2xl p-8 shadow-2xl">
+        {/* Card */}
+        <div className="hp-glass-card p-7 sm:p-8">
           {loading ? (
             <div className="flex flex-col items-center gap-3 py-8">
               <Loader2 className="w-8 h-8 text-[#FCA311] animate-spin" />
-              <span className="text-hp-text-secondary opacity-70 text-sm">Loading organizations...</span>
+              <span className="text-[#999] text-sm">Loading organizations...</span>
             </div>
           ) : clients.length === 0 ? (
             <div className="text-center py-6">
-              <p className="text-hp-text-secondary opacity-70 text-sm mb-4">No organizations found.</p>
+              <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+                <Building2 className="w-7 h-7 text-[#888]" />
+              </div>
+              <p className="text-[#999] text-sm mb-4">No organizations found.</p>
               <Link href="/dashboard" className="text-[#FCA311] font-semibold text-sm no-underline hover:underline">
-                Continue to App →
+                Continue to App &rarr;
               </Link>
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="space-y-3" role="listbox" aria-label="Select an organization">
               {clients.map(c => (
                 <button
                   key={c.client_id}
                   onClick={() => selectClient(c.client_id)}
                   disabled={selecting !== null}
-                  className="hp-glass-card w-full p-5 text-left transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border border-white/8 hover:border-[#FCA311]/30 hover:shadow-glow"
+                  role="option"
+                  aria-selected={selecting === c.client_id}
+                  className="w-full p-5 text-left rounded-xl border border-white/[0.08] bg-white/[0.03] transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:border-[#FCA311]/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FCA311]"
                 >
                   <div className="font-semibold text-white text-base flex justify-between items-center">
-                    <span>{c.name}</span>
-                    {selecting === c.client_id && <Loader2 className="w-4 h-4 text-[#FCA311] animate-spin" />}
+                    <span className="truncate">{c.name}</span>
+                    {selecting === c.client_id && <Loader2 className="w-4 h-4 text-[#FCA311] animate-spin shrink-0 ml-3" />}
                   </div>
-                  <div className="text-hp-text-secondary/60 text-xs mt-1.5 capitalize">
-                    {c.role} · {c.slug}
+                  <div className="text-[#888] text-xs mt-1.5 capitalize">
+                    {c.role} &middot; {c.slug}
                   </div>
                 </button>
               ))}
             </div>
           )}
         </div>
+
+        {/* Back link */}
+        <p className="text-center mt-6 text-[13px] text-[#777]">
+          <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">&larr; Back to sign in</Link>
+        </p>
       </div>
     </div>
   );

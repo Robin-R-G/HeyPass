@@ -267,8 +267,10 @@ async function decryptData(data: string): Promise<string> {
 
     return new TextDecoder().decode(decrypted);
   } catch (err) {
-    // If decryption fails, the data might be unencrypted (backward compatibility)
-    return data;
+    // Decryption failure means data is corrupted or was stored unencrypted
+    // Refuse to return potentially sensitive data in plaintext
+    console.error('[Cache] Decryption failed — data may be corrupted or unencrypted');
+    throw new Error('Decryption failed — refusing to return unencrypted PII');
   }
 }
 

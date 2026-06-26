@@ -13,11 +13,10 @@ interface TokenTypeInput {
 
 function generateTokenCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = 'FT-';
-  for (let i = 0; i < 8; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return code;
+  const bytes = crypto.getRandomValues(new Uint8Array(8));
+  return 'FT-' + Array.from(bytes)
+    .map(b => chars[b % chars.length])
+    .join('');
 }
 
 async function createTokenType(clientId: string, eventId: string, input: TokenTypeInput) {

@@ -3,6 +3,7 @@ import { verifyAccessToken, extractTokenFromHeader } from '@/lib/auth';
 import { cacheGet, cacheSet } from '@/lib/cache';
 import type { NextRequest } from 'next/server';
 import { createAuditLog } from '@/lib/audit';
+import { extractClientIP } from '@/lib/auth-service';
 
 // ============================================================
 // PERMISSION CONSTANTS
@@ -299,7 +300,7 @@ export async function requirePermission(
         action: 'auth.failed_login',
         resource_type: 'permission',
         new_value: { required: requiredPermission, denied: true },
-        ip_address: req.headers.get('x-forwarded-for') || undefined,
+        ip_address: extractClientIP(req.headers.get('x-forwarded-for')),
         user_agent: req.headers.get('user-agent') || undefined,
       });
     }

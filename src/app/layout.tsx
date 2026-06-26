@@ -22,8 +22,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Heypass | Event Operations Platform",
-    template: "%s | Heypass",
+    default: "HeyPass | Event Operations Platform",
+    template: "%s | HeyPass",
   },
   description:
     "White-label event management platform. Create, manage, and scale your events with complete branding control.",
@@ -36,19 +36,19 @@ export const metadata: Metadata = {
     "white label",
     "branding",
   ],
-  authors: [{ name: "Heypass" }],
-  creator: "Heypass",
+  authors: [{ name: "HeyPass" }],
+  creator: "HeyPass",
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Heypass",
-    title: "Heypass | Event Operations Platform",
+    siteName: "HeyPass",
+    title: "HeyPass | Event Operations Platform",
     description:
       "White-label event management platform with complete branding control.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Heypass | Event Operations Platform",
+    title: "HeyPass | Event Operations Platform",
     description:
       "White-label event management platform with complete branding control.",
   },
@@ -70,8 +70,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
   themeColor: "#000000",
 };
 
@@ -101,7 +100,7 @@ export default function RootLayout({
         `}} />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-hp-bg text-hp-text font-sans hp-animate-fade-in`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-hp-bg text-hp-text font-sans`}
         suppressHydrationWarning
       >
         <ThemeProvider>

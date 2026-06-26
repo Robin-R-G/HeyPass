@@ -1,39 +1,62 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
+
 export default function OfflinePage() {
+  const [reloading, setReloading] = useState(false);
+
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+    <main className="min-h-screen bg-hp-bg flex items-center justify-center p-4">
       <div className="text-center space-y-6 max-w-md">
-        <div className="text-6xl">📡</div>
-        <h1 className="text-3xl font-bold text-white">You're Offline</h1>
-        <p className="text-[#888]">
+        <div className="text-6xl" aria-hidden="true">📡</div>
+        <h1 className="text-3xl font-bold text-white">You&apos;re Offline</h1>
+        <p className="text-hp-text-muted text-sm">
           No internet connection. Some features may be limited.
         </p>
         <div className="space-y-3">
-          <div className="bg-[#0a0a0a] border border-[#222] rounded-lg p-4 text-left">
-            <h3 className="font-medium text-white mb-2">Available Offline:</h3>
-            <ul className="text-sm text-[#888] space-y-1">
+          <div className="hp-glass-card p-4 text-left">
+            <h3 className="font-medium text-white mb-2 text-sm">Available Offline:</h3>
+            <ul className="text-sm text-hp-text-muted space-y-1">
               <li>• View cached pages</li>
               <li>• Queue scans for sync</li>
               <li>• View recent data</li>
             </ul>
           </div>
-          <div className="bg-[#0a0a0a] border border-[#222] rounded-lg p-4 text-left">
-            <h3 className="font-medium text-white mb-2">Unavailable Offline:</h3>
-            <ul className="text-sm text-[#888] space-y-1">
+          <div className="hp-glass-card p-4 text-left">
+            <h3 className="font-medium text-white mb-2 text-sm">Unavailable Offline:</h3>
+            <ul className="text-sm text-hp-text-muted space-y-1">
               <li>• Real-time updates</li>
               <li>• New registrations</li>
               <li>• Certificate generation</li>
             </ul>
           </div>
         </div>
-        <button
-          onClick={() => window.location.reload()}
-          className="bg-[#FCA311] hover:bg-[#E09800] text-black px-6 py-3 rounded-lg font-semibold transition-colors"
+        <Button
+          onClick={() => { setReloading(true); window.location.reload(); }}
+          disabled={reloading}
+          className="w-full font-bold text-sm"
         >
-          Try Again
-        </button>
+          {reloading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Reconnecting...
+            </>
+          ) : (
+            'Try Again'
+          )}
+        </Button>
+        <div className="flex gap-3">
+          <Link href="/" className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-colors">
+            Go Home
+          </Link>
+          <Link href="/auth/login" className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-colors">
+            Sign In
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

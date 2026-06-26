@@ -164,42 +164,42 @@ export default function SuperAdminPage() {
   ] : [];
 
   return (
-    <div className="min-h-screen bg-transparent text-hp-text font-sans antialiased hp-animate-fade-in relative">
+    <div className="min-h-screen bg-[#000] text-white font-sans antialiased relative">
       {/* Nav */}
-      <nav className="hp-nav sticky top-0 z-40">
-        <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center h-16">
+      <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2.5 no-underline">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
             <span className="text-lg font-bold text-white">HeyPass</span>
             <span className="text-[10px] font-bold text-[#FCA311] bg-[#FCA311]/10 border border-[#FCA311]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
-          <button onClick={logout} className="hp-btn hp-btn-ghost text-xs flex items-center gap-1.5 border border-white/8 text-hp-text-secondary hover:border-red-500/30 hover:text-red-500 transition-all duration-200 cursor-pointer">
+          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 min-h-[44px]">
             <LogOut size={14} /> Logout
           </button>
         </div>
       </nav>
 
       {/* Content */}
-      <main className="max-w-[1200px] mx-auto px-6 py-12">
+      <main className="max-w-[1200px] mx-auto px-4 sm:px-8 py-8 sm:py-12 relative z-10">
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-extrabold text-white mb-1.5 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-1.5 tracking-tight">
             Platform Overview
           </h1>
-          <p className="text-sm text-hp-text-secondary opacity-70">Manage all organizations and users across HeyPass</p>
+          <p className="text-sm text-[#999]">Manage all organizations and users across HeyPass</p>
         </div>
 
         {/* Loading */}
         {loading && (
-          <div className="flex items-center justify-center gap-3 py-20">
-            <Loader2 size={20} className="text-[#FCA311] animate-spin" />
-            <span className="text-hp-text-secondary opacity-70 text-sm">Loading platform data...</span>
+          <div className="flex flex-col items-center justify-center gap-3 py-20">
+            <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+            <span className="text-[#999] text-sm">Loading platform data...</span>
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-xl p-4 mb-8 text-[#ef4444] text-sm text-center">
+          <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-4 mb-8 text-[#ef4444] text-sm text-center">
             {error}
           </div>
         )}
@@ -291,12 +291,12 @@ export default function SuperAdminPage() {
       {/* Create Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-6" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
-          <div className="hp-glass-card bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/8 rounded-2xl w-full max-w-[440px] p-8 shadow-2xl hp-animate-scale-in" onClick={e => e.stopPropagation()}>
+          <div className="hp-glass-card backdrop-blur-xl border border-white/[0.12] rounded-2xl w-full max-w-[440px] p-7 sm:p-8 shadow-2xl hp-animate-scale-in" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-white">New Organization</h3>
               <button
                 onClick={() => { setShowCreateModal(false); setCreateError(''); }}
-                className="bg-white/5 hover:bg-white/10 text-hp-text-secondary hover:text-white w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-150"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-[#888] hover:text-white hover:bg-white/10 transition-all min-h-[44px] min-w-[44px]"
               >
                 <X size={16} />
               </button>
@@ -304,10 +304,12 @@ export default function SuperAdminPage() {
 
             <form onSubmit={handleCreateClient} className="flex flex-col gap-5">
               <div>
-                <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
+                <label htmlFor="org-name" className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
                   Organization Name
                 </label>
                 <Input
+                  id="org-name"
+                  aria-label="Organization Name"
                   type="text"
                   placeholder="e.g. IEEE Student Branch"
                   value={newClientName}
@@ -320,10 +322,12 @@ export default function SuperAdminPage() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
+                <label htmlFor="org-slug" className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
                   Subdomain / URL Slug
                 </label>
                 <Input
+                  id="org-slug"
+                  aria-label="Subdomain / URL Slug"
                   type="text"
                   placeholder="e.g. ieee-student"
                   value={newClientSlug}

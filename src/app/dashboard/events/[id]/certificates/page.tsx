@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/components/toast';
 import { PromptModal } from '@/components/confirm-modal';
+import { EventNav } from '@/components/event-nav';
 
 interface Certificate {
   id: string;
@@ -115,13 +116,7 @@ export default function CertificatesPage() {
 
   return (
     <div className="space-y-6">
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#E5E5E5', cursor: 'pointer', fontSize: '0.85rem' }}>← Back</button>
-        <span style={{ color: '#888888' }}>/</span>
-        <Link href={`/dashboard/events/${eventId}/dashboard`} style={{ color: '#E5E5E5', textDecoration: 'none', fontSize: '0.85rem' }}>Event</Link>
-        <span style={{ color: '#888888' }}>/</span>
-        <span style={{ color: '#e2e8f0', fontSize: '0.85rem', fontWeight: 500 }}>Certificates</span>
-      </nav>
+      <EventNav eventId={eventId} active="certificates" />
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Certificates</h1>
         <Button onClick={() => router.push(`/dashboard/events/${eventId}/certificates/generate`)}>
