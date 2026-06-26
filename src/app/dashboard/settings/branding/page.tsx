@@ -629,6 +629,7 @@ export default function BrandingSettingsPage() {
           </button>
         </div>
       </div>
+      </div>
 
       <ConfirmModal
         open={confirmDeleteAsset !== null}
