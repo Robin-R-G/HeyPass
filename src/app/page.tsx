@@ -51,7 +51,7 @@ export default function Home() {
 
         <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-[800] leading-[1.02] mb-6 max-w-[800px] tracking-[-0.04em]">
           The Event Platform<br />
-          <span className="bg-gradient-to-r from-[var(--hp-primary)] via-[var(--hp-primary-dark)] to-[var(--hp-primary)] bg-clip-text text-transparent">That Just Works</span>
+          <span className="bg-gradient-to-r from-[#FCA311] via-[#A78BFA] to-[#FCA311] bg-clip-text text-transparent">That Just Works</span>
         </h1>
 
         <p className="text-lg text-[#999] max-w-[540px] leading-relaxed mb-10">
