@@ -408,3 +408,127 @@ export interface Payment {
   notes: string | null;
   created_at: string;
 }
+
+// ============================================================
+// AI TYPES (BYOAI)
+// ============================================================
+
+export type AIProvider = 'openai' | 'groq' | 'openrouter' | 'together_ai' | 'xai' | 'anthropic' | 'google' | 'deepseek' | 'ollama';
+
+export type AIConnectionStatus = 'connected' | 'disconnected' | 'error';
+
+export type AIFeature =
+  | 'event_description' | 'workshop_description' | 'agenda'
+  | 'speaker_bio' | 'faq' | 'whatsapp_message' | 'email'
+  | 'certificate_message' | 'event_summary' | 'dashboard_insights'
+  | 'event_health' | 'support_assistant' | 'document_summary'
+  | 'marketing_content';
+
+export interface AIConfiguration {
+  id: string;
+  client_id: string;
+  provider: AIProvider;
+  api_key_prefix: string | null;
+  default_model: string;
+  temperature: number;
+  max_tokens: number;
+  system_prompt: string | null;
+  is_enabled: boolean;
+  connection_status: AIConnectionStatus;
+  last_connection_at: string | null;
+  last_error: string | null;
+  created_by: string;
+  updated_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AIPromptTemplate {
+  id: string;
+  client_id: string;
+  name: string;
+  slug: string;
+  category: string;
+  description: string | null;
+  template: string;
+  variables: string[];
+  is_default: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AIUsageLog {
+  id: string;
+  client_id: string;
+  user_id: string;
+  provider: AIProvider;
+  model: string;
+  feature: string;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+  latency_ms: number;
+  status: 'success' | 'error' | 'timeout';
+  error_message: string | null;
+  created_at: string;
+}
+
+export interface AIUsageStats {
+  provider: AIProvider;
+  model: string;
+  requests_today: number;
+  requests_this_month: number;
+  total_tokens_today: number;
+  total_tokens_this_month: number;
+  avg_latency_ms: number;
+  recent_errors: number;
+  connection_status: AIConnectionStatus;
+}
+
+export interface AIProviderInfo {
+  id: AIProvider;
+  name: string;
+  description: string;
+  models: AIModelInfo[];
+  requires_api_key: boolean;
+  base_url?: string;
+}
+
+export interface AIModelInfo {
+  id: string;
+  name: string;
+  context_window: number;
+  max_output: number;
+  supports_vision?: boolean;
+}
+
+export interface AICompletionRequest {
+  apiKey: string;
+  model: string;
+  messages: AIMessage[];
+  temperature?: number;
+  maxTokens?: number;
+  systemPrompt?: string;
+}
+
+export interface AIMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+export interface AICompletionResponse {
+  content: string;
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  latencyMs: number;
+  model: string;
+}
+
+export interface AITestResult {
+  success: boolean;
+  model?: string;
+  latencyMs?: number;
+  error?: string;
+}

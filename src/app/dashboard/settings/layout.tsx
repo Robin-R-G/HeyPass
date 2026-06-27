@@ -28,6 +28,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Integrations',
     items: [
       { label: 'WhatsApp', href: '/dashboard/settings/whatsapp' },
+      { label: 'Artificial Intelligence', href: '/dashboard/settings/ai' },
       { label: 'API Keys', href: '/dashboard/settings/api-keys' },
       { label: 'Webhooks', href: '/dashboard/settings/webhooks' },
     ],

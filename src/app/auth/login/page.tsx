@@ -96,7 +96,7 @@ function LoginForm() {
     <div className="w-full max-w-[420px] px-5">
       {/* Logo */}
       <Link href="/" className="flex items-center justify-center gap-2.5 mb-8 no-underline" aria-label="HeyPass home">
-        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-[var(--hp-primary)]/25">H</div>
+        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center shadow-lg shadow-[var(--hp-primary)]/25"></div>
         <span className="text-xl font-bold tracking-tight">
           <span className="text-[var(--hp-primary)]">Hey</span>
           <span className="text-[var(--hp-text)]">Pass</span>

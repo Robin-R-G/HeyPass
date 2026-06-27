@@ -167,6 +167,13 @@ export const PERMISSIONS = {
   WHATSAPP_BROADCAST: 'whatsapp.broadcast',
   WHATSAPP_CONTACTS: 'whatsapp.contacts',
   WHATSAPP_TEMPLATES: 'whatsapp.templates',
+
+  // AI (BYOAI)
+  AI_VIEW: 'ai.view',
+  AI_CONFIGURE: 'ai.configure',
+  AI_USE: 'ai.use',
+  AI_MANAGE: 'ai.manage',
+  AI_VIEW_USAGE: 'ai.view_usage',
 } as const;
 
 export type PermissionName = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

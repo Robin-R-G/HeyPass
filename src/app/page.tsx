@@ -27,7 +27,7 @@ export default function Home() {
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-8 flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2.5 no-underline" aria-label="HeyPass home">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-base text-white">H</div>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center"></div>
             <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
           </Link>
           <div className="flex items-center gap-5">

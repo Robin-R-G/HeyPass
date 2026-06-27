@@ -530,3 +530,42 @@ export const deleteDomainSchema = z.object({
 export const verifyDomainSchema = z.object({
   id: z.string().uuid('Invalid domain ID'),
 });
+
+// ============================================================
+// AI VALIDATORS (BYOAI)
+// ============================================================
+
+export const aiConfigSchema = z.object({
+  provider: z.enum(['openai', 'groq', 'openrouter', 'together_ai', 'xai', 'anthropic', 'google', 'deepseek', 'ollama']),
+  api_key: z.string().min(1, 'API key is required').max(500),
+  default_model: z.string().min(1, 'Model is required'),
+  temperature: z.number().min(0).max(2).default(0.7),
+  max_tokens: z.number().min(1).max(128000).default(2048),
+  system_prompt: z.string().max(10000).optional(),
+  is_enabled: z.boolean().default(true),
+});
+
+export const aiGenerateSchema = z.object({
+  feature: z.enum([
+    'event_description', 'workshop_description', 'agenda',
+    'speaker_bio', 'faq', 'whatsapp_message', 'email',
+    'certificate_message', 'event_summary', 'dashboard_insights',
+    'event_health', 'support_assistant', 'document_summary',
+    'marketing_content',
+  ]),
+  variables: z.record(z.string()),
+  prompt_override: z.string().max(10000).optional(),
+});
+
+export const aiPromptTemplateSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100),
+  slug: z.string().min(1, 'Slug is required').max(100).regex(/^[a-z0-9_-]+$/, 'Slug must be lowercase alphanumeric with hyphens or underscores'),
+  category: z.enum(['event', 'communication', 'certificate', 'marketing', 'general']),
+  description: z.string().max(500).optional(),
+  template: z.string().min(1, 'Template is required').max(10000),
+  variables: z.array(z.string()).default([]),
+});
+
+export const aiToggleSchema = z.object({
+  is_enabled: z.boolean(),
+});
