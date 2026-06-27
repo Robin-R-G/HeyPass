@@ -432,4 +432,54 @@ GRANT ALL ON ai_configurations TO service_role;
 GRANT ALL ON ai_prompt_templates TO service_role;
 GRANT ALL ON ai_usage_logs TO service_role;
 
+-- ============================================================
+-- SEED AI PERMISSIONS
+-- ============================================================
+INSERT INTO permissions (name, resource, action, description) VALUES
+  ('ai.view',         'ai', 'view',         'View AI configuration and status'),
+  ('ai.configure',    'ai', 'configure',    'Configure AI provider, API keys, and settings'),
+  ('ai.use',          'ai', 'use',          'Use AI features (generate content)'),
+  ('ai.manage',       'ai', 'manage',       'Delete AI configuration and manage prompts'),
+  ('ai.view_usage',   'ai', 'view_usage',   'View AI usage statistics and history')
+ON CONFLICT (name) DO NOTHING;
+
+-- ============================================================
+-- MAP AI PERMISSIONS TO ROLES
+-- ============================================================
+-- Owner gets all AI permissions (already gets ALL via seed_role_permissions)
+-- Admin gets all AI permissions
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.name IN ('ai.view', 'ai.configure', 'ai.use', 'ai.manage', 'ai.view_usage')
+WHERE r.slug = 'admin'
+  AND r.deleted_at IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM role_permissions rp WHERE rp.role_id = r.id AND rp.permission_id = p.id
+  );
+
+-- Manager gets view and use
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.name IN ('ai.view', 'ai.use')
+WHERE r.slug = 'manager'
+  AND r.deleted_at IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM role_permissions rp WHERE rp.role_id = r.id AND rp.permission_id = p.id
+  );
+
+-- Volunteer gets view and use
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM roles r
+JOIN permissions p ON p.name IN ('ai.view', 'ai.use')
+WHERE r.slug = 'volunteer'
+  AND r.deleted_at IS NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM role_permissions rp WHERE rp.role_id = r.id AND rp.permission_id = p.id
+  );
+
+-- Scanner gets no AI permissions
+
 SELECT 'Migration 028 completed: AI Configuration (BYOAI)' AS result;

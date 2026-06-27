@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withPermission, successResponse, errorResponse } from '@/lib/route-guard';
-import { getAIConfigService } from '@/lib/ai/ai-config-service';
+import { getAIConfigService, type AIConfigInput } from '@/lib/ai/ai-config-service';
 import { PERMISSIONS } from '@/lib/permissions';
 import { createAIAuditLog } from '@/lib/ai/ai-audit';
 import { aiConfigSchema } from '@/lib/validators';
@@ -29,7 +29,7 @@ export const POST = withPermission(async (req, auth) => {
   }
 
   const service = getAIConfigService();
-  const result = await service.saveConfig(auth.clientId, validation.data, auth.userId);
+  const result = await service.saveConfig(auth.clientId, validation.data as AIConfigInput, auth.userId);
 
   if (!result.success) {
     return errorResponse(result.error || 'Failed to save configuration', 500);

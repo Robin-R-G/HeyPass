@@ -39,6 +39,7 @@ export type AuditAction =
   | 'user.admin_delete'
   | 'config.save'
   | 'config.verify'
+  | 'config.delete'
   | 'template.sync'
   | 'contact.upsert'
   | 'contact.delete'
