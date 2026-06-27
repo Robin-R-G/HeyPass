@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { checkAndRefreshTokens } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
-import { Building2, Users, Calendar, Ticket, Plus, LogOut, ArrowRight, X, Loader2, UserCheck, Settings } from 'lucide-react';
+import { Building2, Users, Calendar, Ticket, Plus, LogOut, ArrowRight, X, Loader2, UserCheck, Settings, CreditCard } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 interface PlatformStats {
@@ -207,6 +207,15 @@ export default function SuperAdminPage() {
             <div>
               <div className="text-xs font-semibold text-[var(--hp-text)]">All Organizations</div>
               <div className="text-[10px] text-[var(--hp-text-muted)]">Manage org details</div>
+            </div>
+          </Link>
+          <Link href="/superadmin/plans" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-[var(--hp-surface-hover)] transition-all">
+            <div className="w-9 h-9 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center">
+              <CreditCard size={16} className="text-[var(--hp-primary)]" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-[var(--hp-text)]">Subscription Plans</div>
+              <div className="text-[10px] text-[var(--hp-text-muted)]">Manage plan definitions</div>
             </div>
           </Link>
         </div>
