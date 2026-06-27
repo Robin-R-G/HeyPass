@@ -162,7 +162,7 @@ export default function AIPromptsPage() {
                 {t.variables.length > 0 && (
                   <div className="flex gap-1 mt-2 flex-wrap">
                     {t.variables.map(v => (
-                      <span key={v} className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.04] text-[#888] font-mono">{'{{'}}{v}{{'}}'}</span>
+                      <span key={v} className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.04] text-[#888] font-mono">{`{{${v}}}`}</span>
                     ))}
                   </div>
                 )}
