@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { checkAndRefreshTokens } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
-import { Building2, Users, Calendar, Ticket, Plus, LogOut, ArrowRight, X, Loader2 } from 'lucide-react';
+import { Building2, Users, Calendar, Ticket, Plus, LogOut, ArrowRight, X, Loader2, UserCheck, Settings } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 interface PlatformStats {
@@ -187,6 +187,28 @@ export default function SuperAdminPage() {
             Platform Overview
           </h1>
           <p className="text-sm text-[#999]">Manage all organizations and users across HeyPass</p>
+        </div>
+
+        {/* Quick Nav */}
+        <div className="flex gap-3 mb-8">
+          <Link href="/superadmin/pending" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-white/[0.04] transition-all">
+            <div className="w-9 h-9 rounded-lg bg-[#FCA311]/10 flex items-center justify-center">
+              <UserCheck size={16} className="text-[#FCA311]" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-white">Pending Users</div>
+              <div className="text-[10px] text-hp-text-secondary/60">Review registrations</div>
+            </div>
+          </Link>
+          <Link href="/superadmin/organizations" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-white/[0.04] transition-all">
+            <div className="w-9 h-9 rounded-lg bg-[#FCA311]/10 flex items-center justify-center">
+              <Settings size={16} className="text-[#FCA311]" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-white">All Organizations</div>
+              <div className="text-[10px] text-hp-text-secondary/60">Manage org details</div>
+            </div>
+          </Link>
         </div>
 
         {/* Loading */}

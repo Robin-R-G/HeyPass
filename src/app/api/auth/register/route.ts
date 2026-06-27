@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { registerUser, extractClientIP } from '@/lib/auth-service';
 import { createSuccessResponse, createErrorResponse } from '@/lib/supabase/middleware';
 import { checkRateLimit } from '@/lib/cache';
+import { supabaseAdmin } from '@/lib/supabase/client';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { email, password, first_name, last_name } = body;
+    const { email, password, first_name, last_name, invitation_code } = body;
 
     if (!email || !password) {
       return createErrorResponse(400, 'Email and password are required');
@@ -27,6 +28,41 @@ export async function POST(req: NextRequest) {
       first_name,
       last_name,
     });
+
+    // If invitation code provided, associate user with organization
+    if (invitation_code && result.user) {
+      const { data: client } = await supabaseAdmin
+        .from('clients')
+        .select('id')
+        .eq('invitation_code', invitation_code.toUpperCase())
+        .is('deleted_at', null)
+        .single();
+
+      if (client) {
+        // Get the participant role for this client
+        const { data: role } = await supabaseAdmin
+          .from('roles')
+          .select('id')
+          .eq('client_id', client.id)
+          .eq('slug', 'participant')
+          .single();
+
+        // Create pending membership
+        await supabaseAdmin.from('client_memberships').insert({
+          client_id: client.id,
+          user_id: result.user.id,
+          role_id: role?.id || null,
+          status: 'invited',
+          invited_at: new Date().toISOString(),
+        });
+
+        // Update user status to pending
+        await supabaseAdmin
+          .from('users')
+          .update({ status: 'pending', invitation_code: invitation_code.toUpperCase() })
+          .eq('id', result.user.id);
+      }
+    }
 
     return createSuccessResponse({
       user: result.user,

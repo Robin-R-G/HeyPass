@@ -35,7 +35,7 @@ export default function DashboardPage() {
       const token = localStorage.getItem('access_token');
       if (token) {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        if (payload.is_superadmin) {
+        if (payload.is_superadmin && !payload.client_id) {
           router.push('/superadmin');
           return;
         }

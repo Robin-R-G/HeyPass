@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ToastProvider } from "@/components/toast";
 import { PWAInstallPrompt } from "@/components/pwa-install";
 import { AuthInterceptor } from "@/components/auth-interceptor";
+import { CommandPaletteProvider } from "@/components/command-palette-provider";
 import "./globals.css";
 import { PWARegister } from "./pwa-register";
 
@@ -105,12 +106,14 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <ToastProvider>
-            <AuthInterceptor />
-            <div className="hp-bg-gradient" />
-            <div className="min-h-screen">{children}</div>
-            <PWAInstallPrompt />
-            <PWARegister />
-            <Analytics />
+            <CommandPaletteProvider>
+              <AuthInterceptor />
+              <div className="hp-bg-gradient" />
+              <div className="min-h-screen">{children}</div>
+              <PWAInstallPrompt />
+              <PWARegister />
+              <Analytics />
+            </CommandPaletteProvider>
           </ToastProvider>
         </ThemeProvider>
       </body>

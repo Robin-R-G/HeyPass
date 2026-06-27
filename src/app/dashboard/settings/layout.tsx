@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const NAV_ITEMS = [
+  { label: 'Team', href: '/dashboard/settings/team' },
   { label: 'Branding', href: '/dashboard/settings/branding' },
   { label: 'Payments', href: '/dashboard/settings/payments' },
   { label: 'Billing', href: '/dashboard/settings/billing' },

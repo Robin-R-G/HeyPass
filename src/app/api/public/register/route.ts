@@ -127,7 +127,8 @@ export async function POST(req: NextRequest) {
       });
 
     if (ticketError) {
-      console.error('Ticket error:', ticketError);
+      await supabaseAdmin.from('registrations').delete().eq('id', registrationId);
+      return errorResponse('Failed to create ticket. Please try again.', 500);
     }
 
     // Store custom field responses

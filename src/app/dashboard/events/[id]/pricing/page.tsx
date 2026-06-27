@@ -43,9 +43,9 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
 
   const fetchPricing = async () => {
     try {
-      const res = await fetch(`/api/events?status=`);
+      const res = await fetch(`/api/events/${eventId}`);
       const data = await res.json();
-      const event = data.data?.events?.find((e: { id: string }) => e.id === eventId);
+      const event = data.data?.event || data.event;
       if (event) {
         setPricing({
           is_free: event.is_free ?? true,

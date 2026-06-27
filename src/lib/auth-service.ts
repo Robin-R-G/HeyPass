@@ -95,6 +95,7 @@ function validatePassword(password: string): { valid: boolean; error?: string } 
 export async function authenticateUser(params: LoginParams): Promise<{
   user: AuthUser;
   tokens: AuthTokens;
+  force_password_change: boolean;
 }> {
   const { email, password, ip_address, user_agent } = params;
 
@@ -197,7 +198,9 @@ export async function authenticateUser(params: LoginParams): Promise<{
     last_login_at: profile.last_login_at,
   };
 
-  return { user, tokens };
+  const force_password_change = !profile.password_changed_at;
+
+  return { user, tokens, force_password_change };
 }
 
 // ============================================================

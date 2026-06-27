@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'endpoint_id is required' }, { status: 400 });
       }
 
-      const deliveries = await webhookService.getDeliveries(endpointId, limit);
+      const deliveries = await webhookService.getDeliveries(clientId, endpointId, limit);
       return NextResponse.json({ deliveries });
     } catch (error) {
       return NextResponse.json({ error: (error as Error).message }, { status: 500 });

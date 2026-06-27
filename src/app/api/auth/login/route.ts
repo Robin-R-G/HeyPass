@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     return createSuccessResponse({
       user: result.user,
       session: result.tokens,
+      force_password_change: result.force_password_change,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Internal server error';

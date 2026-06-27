@@ -43,6 +43,12 @@ function LoginForm() {
           localStorage.setItem('refresh_token', tokens.refresh_token);
         }
 
+        // Check if force password change is required
+        if (data.data?.force_password_change) {
+          router.push('/auth/force-password-change');
+          return;
+        }
+
         try {
           const payload = JSON.parse(atob(tokens.access_token.split('.')[1]));
           if (payload.is_superadmin) {

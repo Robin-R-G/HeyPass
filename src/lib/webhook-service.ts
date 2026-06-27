@@ -157,7 +157,16 @@ class WebhookServiceImpl {
     if (error) throw error;
   }
 
-  async getDeliveries(endpointId: string, limit: number = 50): Promise<WebhookDelivery[]> {
+  async getDeliveries(clientId: string, endpointId: string, limit: number = 50): Promise<WebhookDelivery[]> {
+    const { data: endpoint, error: epErr } = await supabaseAdmin
+      .from('webhook_endpoints')
+      .select('id')
+      .eq('id', endpointId)
+      .eq('client_id', clientId)
+      .single();
+
+    if (epErr || !endpoint) throw new Error('Endpoint not found');
+
     const { data, error } = await supabaseAdmin
       .from('webhook_deliveries')
       .select('*')

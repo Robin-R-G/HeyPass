@@ -159,6 +159,14 @@ export const PERMISSIONS = {
   FOOD_TOKEN_MANAGE: 'food_token.manage',
   FOOD_TOKEN_GENERATE: 'food_token.generate',
   FOOD_TOKEN_VALIDATE: 'food_token.validate',
+
+  // WhatsApp
+  WHATSAPP_VIEW: 'whatsapp.view',
+  WHATSAPP_MANAGE: 'whatsapp.manage',
+  WHATSAPP_SEND: 'whatsapp.send',
+  WHATSAPP_BROADCAST: 'whatsapp.broadcast',
+  WHATSAPP_CONTACTS: 'whatsapp.contacts',
+  WHATSAPP_TEMPLATES: 'whatsapp.templates',
 } as const;
 
 export type PermissionName = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

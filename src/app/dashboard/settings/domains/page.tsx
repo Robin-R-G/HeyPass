@@ -252,7 +252,7 @@ export default function DomainSettingsPage() {
                     <button
                       onClick={() => handleVerifyDomain(domain.id)}
                       disabled={verifying === domain.id}
-                      className="hp-btn hp-btn-success px-4 py-2 text-sm"
+                      className="hp-btn hp-btn-primary px-4 py-2 text-sm"
                     >
                       {verifying === domain.id ? 'Verifying...' : 'Verify'}
                     </button>
