@@ -178,14 +178,14 @@ class CertificateServiceImpl {
     const tokenExpiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(); // 1 year
 
     // Build certificate data for hashing
-    const certData = JSON.stringify({
+    const certDataForHash = JSON.stringify({
       number: certificateNumber,
       name: input.name,
       event: input.event_title,
       type: input.type_id,
       ts: Date.now(),
     });
-    const contentHash = this.computeContentHash(certData);
+    const contentHash = this.computeContentHash(certDataForHash);
 
     // Build placeholder values
     const placeholders: Record<string, string> = {
