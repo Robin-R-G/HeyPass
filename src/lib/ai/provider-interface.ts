@@ -4,7 +4,7 @@ export interface AIProviderAdapter {
 
   validateKeyFormat(apiKey: string): boolean;
   testConnection(apiKey: string, model: string): Promise<AITestResult>;
-  listModels(apiKey: string): Promise<AIModelInfo[]>;
+  listModels(apiKey?: string): Promise<AIModelInfo[]>;
   complete(request: AICompletionRequest): Promise<AICompletionResponse>;
   getProviderInfo(): AIProviderInfo;
 }
