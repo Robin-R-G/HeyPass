@@ -54,6 +54,7 @@ export interface WhatsAppServiceResult<T = any> {
   success: boolean;
   data?: T;
   error?: string;
+  total?: number;
 }
 
 export class WhatsAppService {
