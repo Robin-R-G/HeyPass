@@ -11,18 +11,18 @@
    ============================================================ */
 
 :root {
-  /* Brand Colors — Deep Indigo */
-  --hp-primary: #6366F1;
-  --hp-primary-hover: #818CF8;
-  --hp-primary-light: #A5B4FC;
-  --hp-primary-dark: #4F46E5;
-  --hp-primary-glow: rgba(99, 102, 241, 0.25);
+  /* Brand Colors — Gold */
+  --hp-primary: #FCA311;
+  --hp-primary-hover: #FDB944;
+  --hp-primary-light: #FDD074;
+  --hp-primary-dark: #E8920F;
+  --hp-primary-glow: rgba(252, 163, 17, 0.25);
 
-  /* Accent — Electric Blue */
-  --hp-accent: #2563EB;
-  --hp-accent-hover: #3B82F6;
-  --hp-accent-light: #60A5FA;
-  --hp-accent-dark: #1D4ED8;
+  /* Accent — Deep Purple */
+  --hp-accent: #7C3AED;
+  --hp-accent-hover: #8B5CF6;
+  --hp-accent-light: #A78BFA;
+  --hp-accent-dark: #6D28D9;
 
   /* Secondary Accent — Emerald */
   --hp-emerald: #10B981;

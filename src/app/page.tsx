@@ -49,7 +49,7 @@ export default function Home() {
 
         <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-[800] leading-[1.02] mb-6 max-w-[800px] tracking-[-0.04em]">
           The Event Platform<br />
-          <span className="bg-gradient-to-r from-[#818CF8] via-[#6366F1] to-[#A78BFA] bg-clip-text text-transparent">That Just Works</span>
+          <span className="bg-gradient-to-r from-[#FCA311] via-[#A78BFA] to-[#FCA311] bg-clip-text text-transparent">That Just Works</span>
         </h1>
 
         <p className="text-lg text-[#999] max-w-[540px] leading-relaxed mb-10">
@@ -176,7 +176,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="py-20 sm:py-28 px-5 text-center relative z-10 border-t border-white/[0.08]"
-        style={{ background: 'radial-gradient(circle at center, rgba(99,102,241,0.05) 0%, transparent 60%)' }}>
+        style={{ background: 'radial-gradient(circle at center, rgba(252,163,17,0.05) 0%, transparent 60%)' }}>
         <div className="hp-glass-card max-w-[800px] mx-auto p-10 sm:p-12 flex flex-col items-center gap-5">
           <h2 className="text-[clamp(1.6rem,4vw,2.5rem)] font-[800] tracking-[-0.03em] leading-tight">
             Ready to run better events?
@@ -193,10 +193,11 @@ export default function Home() {
       {/* Footer */}
       <footer className="px-5 sm:px-8 py-10 border-t border-white/[0.08] bg-black/40 relative z-10">
         <div className="max-w-[1080px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
-            <span className="text-lg font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
-          </div>
+          <div>
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
+              <span className="text-lg font-bold text-white tracking-tight">HeyPass</span>
+            </div>
             <p className="text-xs text-[#666] mt-1">
               Developed from Kerala with &#10084; &middot; Robin R G &middot; &copy; 2026
             </p>
