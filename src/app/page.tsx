@@ -107,9 +107,78 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Ticketing */}
+      <section className="py-20 sm:py-28 px-5 relative z-10 border-t border-white/[0.08]">
+        <div className="max-w-[1080px] mx-auto">
+          <p className="text-xs font-semibold text-[var(--hp-primary)] text-center mb-3 tracking-[0.15em] uppercase">Ticketing</p>
+          <h2 className="text-[clamp(2rem,5vw,3rem)] font-[800] text-center mb-2 tracking-[-0.03em]">
+            Sell tickets. Your way.
+          </h2>
+          <p className="text-center text-[#999] text-base max-w-[500px] mx-auto mb-16 leading-relaxed">
+            Free, paid, early bird, VIP, donation — create any pricing model with zero platform fees on your ticket revenue.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-5 max-w-[900px] mx-auto mb-12">
+            {[
+              { tier: 'Free', price: '₹0', badge: 'No fees', features: ['Unlimited free tickets', 'Custom registration forms', 'QR check-in', 'Email confirmations'] },
+              { tier: 'Paid', price: 'You set it', badge: 'Zero platform fee', features: ['Stripe & Razorpay', 'Early bird discounts', 'Coupon codes', 'Refund management'] },
+              { tier: 'VIP', price: 'Premium', badge: 'Perks included', features: ['VIP-only gates', 'Priority check-in', 'Exclusive badges', 'Add-on upsells'] },
+            ].map(t => (
+              <div key={t.tier} className="hp-glass-card p-8 flex flex-col gap-4 text-center">
+                <div className="text-xs font-bold text-[var(--hp-primary)] uppercase tracking-widest">{t.badge}</div>
+                <h3 className="text-xl font-bold tracking-[-0.02em]">{t.tier}</h3>
+                <div className="text-[2rem] font-[800] tracking-[-0.03em] text-[var(--hp-primary)]">{t.price}</div>
+                <ul className="flex flex-col gap-2.5 text-sm text-[#999] mt-2">
+                  {t.features.map(f => (
+                    <li key={f} className="flex items-center gap-2">
+                      <span className="text-[var(--hp-success)] text-base">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Event Theme */}
+      <section className="pb-20 sm:pb-28 px-5 relative z-10">
+        <div className="max-w-[1080px] mx-auto">
+          <p className="text-xs font-semibold text-[var(--hp-primary)] text-center mb-3 tracking-[0.15em] uppercase">White Label</p>
+          <h2 className="text-[clamp(2rem,5vw,3rem)] font-[800] text-center mb-2 tracking-[-0.03em]">
+            Your brand. Your event.
+          </h2>
+          <p className="text-center text-[#999] text-base max-w-[500px] mx-auto mb-16 leading-relaxed">
+            Every event gets its own look — custom colors, logo, domain, and email templates. No HeyPass branding anywhere.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-[900px] mx-auto">
+            {[
+              { icon: '🎨', title: 'Custom Colors', desc: 'Per-event accent, background, and text colors. Match your college or conference brand.' },
+              { icon: '🖼️', title: 'Logo & Banner', desc: 'Upload your logo. It replaces ours everywhere — tickets, emails, certificates.' },
+              { icon: '🌐', title: 'Custom Domain', desc: 'Bring your own domain. Tickets and registration pages live at your URL.' },
+              { icon: '📧', title: 'Branded Emails', desc: 'Confirmation, reminder, and certificate emails use your brand colors and logo.' },
+            ].map(item => (
+              <div key={item.title} className="hp-glass-card p-6 flex flex-col gap-3 text-center">
+                <div className="text-[2rem] leading-none">{item.icon}</div>
+                <h3 className="text-sm font-bold tracking-[-0.01em]">{item.title}</h3>
+                <p className="text-xs text-[#999] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/auth/register" className="text-sm text-[var(--hp-primary)] hover:underline font-medium">
+              See all branding features →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 sm:py-28 px-5 text-center relative z-10 border-t border-white/[0.08]"
-        style={{ background: 'radial-gradient(circle at center, rgba(252,163,17,0.05) 0%, transparent 60%)' }}>
+        style={{ background: 'radial-gradient(circle at center, rgba(99,102,241,0.05) 0%, transparent 60%)' }}>
         <div className="hp-glass-card max-w-[800px] mx-auto p-10 sm:p-12 flex flex-col items-center gap-5">
           <h2 className="text-[clamp(1.6rem,4vw,2.5rem)] font-[800] tracking-[-0.03em] leading-tight">
             Ready to run better events?
