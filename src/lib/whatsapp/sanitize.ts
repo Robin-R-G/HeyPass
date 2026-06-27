@@ -12,7 +12,7 @@ export function sanitizeConfig<T extends SanitizedRecord>(config: T): T {
   const copy = { ...config };
   for (const field of SENSITIVE_FIELDS) {
     if (copy[field]) {
-      copy[field] = '***' as unknown;
+      (copy as Record<string, unknown>)[field] = '***';
     }
   }
   return copy;
