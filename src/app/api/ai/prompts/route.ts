@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { withPermission, successResponse, errorResponse } from '@/lib/route-guard';
-import { getAIPromptService } from '@/lib/ai/ai-prompt-service';
+import { getAIPromptService, type AIPromptTemplateInput } from '@/lib/ai/ai-prompt-service';
 import { PERMISSIONS } from '@/lib/permissions';
 import { aiPromptTemplateSchema } from '@/lib/validators';
 import { createAIAuditLog } from '@/lib/ai/ai-audit';
@@ -29,7 +29,7 @@ export const POST = withPermission(async (req, auth) => {
   }
 
   const service = getAIPromptService();
-  const result = await service.createTemplate(auth.clientId, validation.data);
+  const result = await service.createTemplate(auth.clientId, validation.data as AIPromptTemplateInput);
 
   if (!result.success) {
     return errorResponse(result.error || 'Failed to create template', 500);
