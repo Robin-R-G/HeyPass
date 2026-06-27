@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -7,7 +9,7 @@ import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 
-export default function AcceptInvitePage() {
+function AcceptInviteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -88,5 +90,20 @@ export default function AcceptInvitePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function AcceptInvitePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#000] text-white font-sans antialiased flex items-center justify-center p-6">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 size={32} className="text-[var(--hp-primary)] animate-spin" />
+          <p className="text-sm text-[#999]">Loading...</p>
+        </div>
+      </div>
+    }>
+      <AcceptInviteContent />
+    </Suspense>
   );
 }
