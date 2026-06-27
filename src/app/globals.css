@@ -6,46 +6,46 @@
    ============================================================ */
 
 :root {
-  /* Core Brand Colors — Black & Gold Elegance */
-  --hp-primary: #FCA311;
+  /* Core Brand Colors — Brighter Gold & Layered Dark */
+  --hp-primary: #FBBF24;
   --hp-primary-light: #FCD34D;
-  --hp-primary-dark: #E09800;
-  --hp-primary-glow: rgba(252, 163, 17, 0.4);
+  --hp-primary-dark: #D97706;
+  --hp-primary-glow: rgba(251, 191, 36, 0.35);
 
-  /* Accent Colors */
-  --hp-accent: #FCA311;
-  --hp-accent-light: #FCD34D;
-  --hp-accent-dark: #E09800;
+  /* Accent Colors — Cyan for secondary CTAs (distinct from gold) */
+  --hp-accent: #22D3EE;
+  --hp-accent-light: #67E8F9;
+  --hp-accent-dark: #0891B2;
 
   /* Gradient Stops */
   --hp-gradient-start: #14213D;
-  --hp-gradient-mid: #FCA311;
+  --hp-gradient-mid: #FBBF24;
   --hp-gradient-end: #FCD34D;
 
-  /* Surface Colors */
-  --hp-bg: #000000;
-  --hp-bg-secondary: #14213D;
-  --hp-bg-tertiary: #1a2a4a;
-  --hp-surface: rgba(229, 229, 229, 0.04);
-  --hp-surface-hover: rgba(229, 229, 229, 0.08);
-  --hp-surface-active: rgba(229, 229, 229, 0.12);
+  /* Surface Colors — Softened dark with blue undertone */
+  --hp-bg: #030712;
+  --hp-bg-secondary: #0a1126;
+  --hp-bg-tertiary: #111827;
+  --hp-surface: rgba(209, 213, 219, 0.04);
+  --hp-surface-hover: rgba(209, 213, 219, 0.08);
+  --hp-surface-active: rgba(209, 213, 219, 0.12);
 
-  /* Text Colors */
-  --hp-text: #ffffff;
-  --hp-text-secondary: #E5E5E5;
-  --hp-text-muted: #888888;
-  --hp-text-accent: #FCA311;
+  /* Text Colors — WCAG AA compliant */
+  --hp-text: #F9FAFB;
+  --hp-text-secondary: #D1D5DB;
+  --hp-text-muted: #9CA3AF;
+  --hp-text-accent: #FBBF24;
 
   /* Border Colors */
-  --hp-border: rgba(229, 229, 229, 0.12);
-  --hp-border-light: rgba(229, 229, 229, 0.2);
-  --hp-border-accent: rgba(252, 163, 17, 0.4);
+  --hp-border: rgba(209, 213, 219, 0.12);
+  --hp-border-light: rgba(209, 213, 219, 0.2);
+  --hp-border-accent: rgba(251, 191, 36, 0.4);
 
-  /* Status Colors */
-  --hp-success: #10b981;
-  --hp-warning: #f59e0b;
-  --hp-error: #ef4444;
-  --hp-info: #FCA311;
+  /* Status Colors — Semantically distinct */
+  --hp-success: #34D399;
+  --hp-warning: #FBBF24;
+  --hp-error: #F87171;
+  --hp-info: #60A5FA;
 
   /* Shadows */
   --hp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -55,7 +55,7 @@
   --hp-shadow-glow: 0 0 40px var(--hp-primary-glow);
 
   /* Glass Effect */
-  --hp-glass-bg: rgba(20, 33, 61, 0.65);
+  --hp-glass-bg: rgba(10, 17, 38, 0.7);
   --hp-glass-border: rgba(229, 229, 229, 0.12);
   --hp-glass-blur: blur(20px);
 
@@ -117,9 +117,9 @@
   bottom: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(252, 163, 17, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(252, 163, 17, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 60% at 50% 80%, rgba(20, 33, 61, 0.3) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(251, 191, 36, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(34, 211, 238, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 50% 80%, rgba(10, 17, 38, 0.3) 0%, transparent 50%);
   animation: hp-bg-pulse 15s ease-in-out infinite;
 }
 
@@ -234,7 +234,7 @@
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  background: rgba(229, 229, 229, 0.06);
+  background: rgba(209, 213, 219, 0.06);
   border: 1px solid var(--hp-border-light);
   border-radius: var(--hp-radius-md);
   color: var(--hp-text);
@@ -249,11 +249,11 @@
 .hp-input:focus {
   border-color: var(--hp-primary);
   box-shadow: 0 0 0 3px var(--hp-primary-glow);
-  background: rgba(229, 229, 229, 0.08);
+  background: rgba(209, 213, 219, 0.08);
 }
 
 .hp-input:hover:not(:focus) {
-  border-color: rgba(229, 229, 229, 0.25);
+  border-color: rgba(209, 213, 219, 0.25);
 }
 
 /* ============================================================
@@ -294,9 +294,9 @@
 }
 
 .hp-badge-primary {
-  background: rgba(252, 163, 17, 0.2);
+  background: rgba(251, 191, 36, 0.2);
   color: var(--hp-primary-light);
-  border-color: rgba(252, 163, 17, 0.3);
+  border-color: rgba(251, 191, 36, 0.3);
 }
 
 .hp-badge-success {
@@ -507,9 +507,12 @@
 .text-hp-text-muted { color: var(--hp-text-muted); }
 .text-hp-primary { color: var(--hp-primary); }
 .text-hp-primary:hover { color: var(--hp-primary-light); }
+.text-hp-accent { color: var(--hp-accent); }
+.text-hp-accent:hover { color: var(--hp-accent-light); }
 .text-hp-success { color: var(--hp-success); }
 .text-hp-error { color: var(--hp-error); }
 .text-hp-warning { color: var(--hp-warning); }
+.text-hp-info { color: var(--hp-info); }
 .border-hp-border { border-color: var(--hp-border); }
 .border-hp-border-light { border-color: var(--hp-border-light); }
 .border-hp-border-accent { border-color: var(--hp-border-accent); }

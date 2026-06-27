@@ -343,7 +343,7 @@ export default function WhatsAppSettingsPage() {
                     type={showTokens ? 'text' : 'password'}
                     value={formData.meta_app_secret}
                     onChange={(e) => setFormData(prev => ({ ...prev, meta_app_secret: e.target.value }))}
-                    placeholder={config?.meta_app_secret_encrypted ? '••••••••' : 'Enter App Secret'}
+                    placeholder={config?.meta_app_secret ? '••••••••' : 'Enter App Secret'}
                   />
                 </div>
               </div>
