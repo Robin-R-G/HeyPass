@@ -200,7 +200,7 @@ export default function CertificatesPage() {
                     </TableCell>
                     <TableCell>
                       <Badge variant={
-                        cert.status === 'revoked' ? 'destructive' :
+                        cert.status === 'revoked' ? 'danger' :
                         cert.status === 'downloaded' ? 'default' :
                         'secondary'
                       }>
