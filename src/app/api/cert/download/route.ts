@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/client';
 
-export async function GET(
-  req: NextRequest,
-  { searchParams }: { searchParams: Promise<{ [key: string]: string }> }
-) {
+export async function GET(req: NextRequest) {
   try {
-    const params = await searchParams;
-    const certificateNumber = params.get('number');
+    const certificateNumber = req.nextUrl.searchParams.get('number');
 
     if (!certificateNumber) {
       return NextResponse.json({ error: 'Certificate number required' }, { status: 400 });
