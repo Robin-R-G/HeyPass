@@ -54,21 +54,45 @@ export async function sendTicketEmail(
   attendeeName: string,
   eventTitle: string,
   ticketNumber: string,
-  ticketPdfUrl: string
+  ticketPdfBase64?: string
 ) {
+  const attachments = ticketPdfBase64 ? [{
+    filename: `ticket-${ticketNumber}.pdf`,
+    content: ticketPdfBase64,
+    type: 'application/pdf',
+  }] : undefined;
+
+  const downloadLink = ticketPdfBase64
+    ? '<p>Your ticket is attached to this email. You can also find it in your event dashboard.</p>'
+    : '<p>You can view your ticket in your event dashboard.</p>';
+
   await sendEmail({
     to,
     subject: `Your Ticket for ${eventTitle}`,
     html: `
-      <h1>Ticket Confirmed!</h1>
-      <p>Hi ${escapeHtml(attendeeName)},</p>
-      <p>Your ticket for <strong>${escapeHtml(eventTitle)}</strong> is ready.</p>
-      <p>Ticket Number: <strong>${escapeHtml(ticketNumber)}</strong></p>
-      <p>Please find your ticket attached.</p>
-      <p>Show the QR code at the entrance for check-in.</p>
-      <hr />
-      <p>Powered by HeyPass</p>
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #1a1a2e, #0f3460); padding: 32px; text-align: center; border-radius: 12px 12px 0 0;">
+          <h1 style="color: #fff; margin: 0; font-size: 24px; font-weight: 700;">🎫 Ticket Confirmed!</h1>
+        </div>
+        <div style="background: #1e1e2e; padding: 32px; border-radius: 0 0 12px 12px; color: #fff;">
+          <p style="color: #ccc; font-size: 16px;">Hi <strong style="color: #fff;">${escapeHtml(attendeeName)}</strong>,</p>
+          <p style="color: #ccc; font-size: 15px;">Your ticket for <strong style="color: #e94560;">${escapeHtml(eventTitle)}</strong> is confirmed.</p>
+          
+          <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 24px 0; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin: 0 0 8px; color: #888; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;">Ticket Number</p>
+            <p style="margin: 0; color: #fff; font-size: 18px; font-weight: 700; font-family: monospace;">${escapeHtml(ticketNumber)}</p>
+          </div>
+
+          ${downloadLink}
+
+          <p style="color: #ccc; font-size: 14px;">📱 <strong>Show the QR code at the entrance</strong> for quick check-in.</p>
+          
+          <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0;" />
+          <p style="color: #666; font-size: 12px;">Powered by HeyPass</p>
+        </div>
+      </div>
     `,
+    attachments,
   });
 }
 
@@ -77,21 +101,46 @@ export async function sendCertificateEmail(
   attendeeName: string,
   eventTitle: string,
   certificateNumber: string,
-  certificatePdfUrl: string
+  certificatePdfUrl: string,
+  certificatePdfBase64?: string
 ) {
+  const attachments = certificatePdfBase64 ? [{
+    filename: `certificate-${certificateNumber}.pdf`,
+    content: certificatePdfBase64,
+    type: 'application/pdf',
+  }] : undefined;
+
+  const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app'}/verify`;
+
   const result = await sendEmail({
     to,
     subject: `Your Certificate for ${eventTitle}`,
     html: `
-      <h1>Certificate Ready!</h1>
-      <p>Hi ${escapeHtml(attendeeName)},</p>
-      <p>Your certificate for <strong>${escapeHtml(eventTitle)}</strong> has been generated.</p>
-      <p>Certificate Number: <strong>${escapeHtml(certificateNumber)}</strong></p>
-      <p><a href="${certificatePdfUrl}">Download Certificate</a></p>
-      <p>Verify your certificate: ${process.env.NEXT_PUBLIC_APP_URL}/verify/${certificateNumber}</p>
-      <hr />
-      <p>Powered by HeyPass</p>
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #6366F1, #4F46E5); padding: 32px; text-align: center; border-radius: 12px 12px 0 0;">
+          <h1 style="color: #000; margin: 0; font-size: 24px; font-weight: 700;">🏆 Certificate Ready!</h1>
+        </div>
+        <div style="background: #1e1e2e; padding: 32px; border-radius: 0 0 12px 12px; color: #fff;">
+          <p style="color: #ccc; font-size: 16px;">Hi <strong style="color: #fff;">${escapeHtml(attendeeName)}</strong>,</p>
+          <p style="color: #ccc; font-size: 15px;">Your certificate for <strong style="color: #6366F1;">${escapeHtml(eventTitle)}</strong> has been generated.</p>
+          
+          <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 24px 0; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin: 0 0 8px; color: #888; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;">Certificate Number</p>
+            <p style="margin: 0; color: #fff; font-size: 18px; font-weight: 700; font-family: monospace;">${escapeHtml(certificateNumber)}</p>
+          </div>
+
+          <p style="color: #ccc; font-size: 14px;">Your certificate is attached to this email. You can also verify it online:</p>
+          
+          <div style="text-align: center; margin: 24px 0;">
+            <a href="${verifyUrl}" style="background: #6366F1; color: #000; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Verify Certificate</a>
+          </div>
+          
+          <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0;" />
+          <p style="color: #666; font-size: 12px;">Powered by HeyPass</p>
+        </div>
+      </div>
     `,
+    attachments,
   });
 }
 

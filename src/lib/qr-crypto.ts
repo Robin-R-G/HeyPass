@@ -70,7 +70,8 @@ export function verifyQRPayload(payload: QRPayload): QRVerifyResult {
   const signInput = `${payload.v}:${payload.tid}:${payload.n}:${payload.ts}:${payload.exp}`;
   const expectedSig = signPayload(signInput);
 
-  if (!crypto.timingSafeEqual(Buffer.from(payload.sig), Buffer.from(expectedSig))) {
+  if (payload.sig.length !== expectedSig.length ||
+      !crypto.timingSafeEqual(Buffer.from(payload.sig), Buffer.from(expectedSig))) {
     return { valid: false, reason: 'Invalid QR signature — possible tampering' };
   }
 

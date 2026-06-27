@@ -75,7 +75,7 @@ export class ManualCertificateService {
       .insert({
         client_id: clientId,
         event_id: input.event_id,
-        registration_id: '00000000-0000-0000-0000-000000000000',
+        registration_id: null,
         template_id: input.template_id,
         type_id: input.type_id,
         certificate_number,
@@ -83,6 +83,11 @@ export class ManualCertificateService {
         template_version: 1,
         is_manual: true,
         manual_data: manualData,
+        metadata: {
+          recipient_name: input.name,
+          email: input.email,
+          generated_at: new Date().toISOString(),
+        },
         status: 'generated',
       })
       .select('id, certificate_number, access_token, is_manual, manual_data, pdf_url, created_at')

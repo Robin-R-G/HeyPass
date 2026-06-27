@@ -1,6 +1,10 @@
 import { supabase, supabaseAdmin } from '@/lib/supabase/client';
 import crypto from 'crypto';
 import { randomUUID } from 'crypto';
+import { renderCertificateHTML, renderCertificatePDF, renderCertificatePNG } from './certificate-template';
+import { uploadFile } from './storage';
+import { sendCertificateEmail } from './email';
+import QRCode from 'qrcode';
 
 export interface CertificateTemplateLayout {
   page_size: string;
@@ -231,7 +235,7 @@ class CertificateServiceImpl {
 
     if (error) throw error;
 
-    return {
+    const certData: CertificateData = {
       id: cert.id,
       client_id: cert.client_id,
       certificate_number: cert.certificate_number,
@@ -249,6 +253,88 @@ class CertificateServiceImpl {
       certificate_type: template.name || '',
       organization_name: client?.name || '',
     };
+
+    // Render PDF/PNG asynchronously (fire-and-forget, don't block response)
+    this.renderAndStore(certData, placeholders, templateSnapshot).catch((err) => {
+      console.error(`Failed to render certificate ${certData.certificate_number}:`, err);
+    });
+
+    return certData;
+  }
+
+  /**
+   * Render certificate HTML → PDF + PNG, upload to storage, update DB record
+   */
+  private async renderAndStore(
+    certData: CertificateData,
+    placeholders: Record<string, string>,
+    layout: CertificateTemplateLayout
+  ): Promise<void> {
+    // Generate QR code for certificate verification
+    const qrDataUrl = await QRCode.toDataURL(
+      `${process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app'}/verify/${certData.certificate_number}`,
+      { width: 120, margin: 1, color: { dark: '#1a1a2e', light: '#ffffff' } }
+    );
+
+    const html = renderCertificateHTML({
+      layout,
+      placeholders,
+      qr_code_url: qrDataUrl,
+      output_type: 'pdf',
+    });
+
+    // Render both PDF and PNG
+    const [pdfBuffer, pngBuffer] = await Promise.all([
+      renderCertificatePDF(html),
+      renderCertificatePNG(html),
+    ]);
+
+    // Upload to Supabase Storage
+    const basePath = `certs/${certData.client_id}/${certData.certificate_number}`;
+    const [pdfUpload, pngUpload] = await Promise.all([
+      uploadFile('certificates', `${basePath}.pdf`, pdfBuffer, 'application/pdf'),
+      uploadFile('certificates', `${basePath}.png`, pngBuffer, 'image/png'),
+    ]);
+
+    // Update certificate record with URLs
+    await supabaseAdmin
+      .from('certificates')
+      .update({
+        pdf_url: pdfUpload.path,
+        png_url: pngUpload.path,
+        status: 'delivered',
+        delivered_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', certData.id);
+
+    // Log delivery
+    await supabaseAdmin.from('certificate_deliveries').insert({
+      certificate_id: certData.id,
+      client_id: certData.client_id,
+      method: 'storage',
+      status: 'completed',
+      delivered_at: new Date().toISOString(),
+    }).catch(() => {});
+
+    // Send email if recipient email is available
+    const recipientEmail = certData.metadata?.email as string | undefined;
+    const recipientName = certData.metadata?.recipient_name as string | undefined;
+    if (recipientEmail && recipientName) {
+      const pdfBase64 = pdfBuffer.toString('base64');
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hey-pass.vercel.app';
+      const pdfUrl = `${appUrl}/api/cert/download?number=${certData.certificate_number}`;
+      sendCertificateEmail(
+        recipientEmail,
+        recipientName,
+        certData.event_title,
+        certData.certificate_number,
+        pdfUrl,
+        pdfBase64
+      ).catch((err) => {
+        console.error(`Failed to send certificate email for ${certData.certificate_number}:`, err);
+      });
+    }
   }
 
   async batchGenerate(
@@ -259,12 +345,24 @@ class CertificateServiceImpl {
     const certificates: CertificateData[] = [];
     const errors: { index: number; error: string }[] = [];
 
-    for (let i = 0; i < inputs.length; i++) {
-      try {
-        const cert = await this.generate(clientId, { ...inputs[i], event_id: eventId });
-        certificates.push(cert);
-      } catch (err) {
-        errors.push({ index: i, error: (err as Error).message });
+    // Process in batches of 10 for parallel execution
+    const BATCH_SIZE = 10;
+    for (let i = 0; i < inputs.length; i += BATCH_SIZE) {
+      const batch = inputs.slice(i, i + BATCH_SIZE);
+      const results = await Promise.allSettled(
+        batch.map((input, batchIdx) =>
+          this.generate(clientId, { ...input, event_id: eventId })
+            .then((cert) => ({ cert, idx: i + batchIdx }))
+        )
+      );
+
+      for (const result of results) {
+        if (result.status === 'fulfilled') {
+          certificates.push(result.value.cert);
+        } else {
+          const batchIdx = results.indexOf(result);
+          errors.push({ index: i + batchIdx, error: result.reason?.message || 'Unknown error' });
+        }
       }
     }
 
@@ -351,19 +449,19 @@ class CertificateServiceImpl {
   }
 
   async verify(certificateNumber: string, ip: string, method: 'number' | 'qr_code' | 'url'): Promise<VerificationResult> {
-    // Check rate limit
-    const { data: rateLimitOk } = await supabaseAdmin
-      .rpc('check_cert_download_limit', {
-        p_certificate_id: '00000000-0000-0000-0000-000000000000', // placeholder for verify
-        p_ip: ip,
-        p_limit: 50,
-        p_window_minutes: 60,
-      });
-
     const cert = await this.getByNumber(certificateNumber);
     if (!cert) {
       return { valid: false };
     }
+
+    // Check rate limit using actual certificate ID
+    await supabaseAdmin
+      .rpc('check_cert_download_limit', {
+        p_certificate_id: cert.id,
+        p_ip: ip,
+        p_limit: 50,
+        p_window_minutes: 60,
+      });
 
     // Log verification attempt
     await supabaseAdmin.from('certificate_verifications').insert({
@@ -477,6 +575,49 @@ class CertificateServiceImpl {
       .from('certificate_share_links')
       .delete()
       .eq('certificate_id', certificateId);
+  }
+
+  /**
+   * Get certificate data by share link token (for public /cert/[token] page)
+   */
+  async getByShareToken(token: string): Promise<{
+    certificate: CertificateData;
+    share_link: { access_count: number; max_access: number; expires_at: string };
+  } | null> {
+    // Look up share link
+    const { data: link, error: linkError } = await supabaseAdmin
+      .from('certificate_share_links')
+      .select('*')
+      .eq('token', token)
+      .gt('expires_at', new Date().toISOString())
+      .single();
+
+    if (linkError || !link) return null;
+
+    // Check max access
+    if (link.access_count >= link.max_access) return null;
+
+    // Increment access count
+    await supabaseAdmin
+      .from('certificate_share_links')
+      .update({ access_count: link.access_count + 1 })
+      .eq('id', link.id);
+
+    // Get the certificate
+    const cert = await this.getByNumber(
+      (await supabaseAdmin.from('certificates').select('certificate_number').eq('id', link.certificate_id).single())?.data?.certificate_number || ''
+    );
+
+    if (!cert) return null;
+
+    return {
+      certificate: cert,
+      share_link: {
+        access_count: link.access_count + 1,
+        max_access: link.max_access,
+        expires_at: link.expires_at,
+      },
+    };
   }
 }
 

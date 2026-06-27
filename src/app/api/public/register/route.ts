@@ -5,6 +5,10 @@ import { createAuditLog } from '@/lib/audit';
 import { checkRateLimit } from '@/lib/cache';
 import { extractClientIP } from '@/lib/auth-service';
 import { v4 as uuidv4 } from 'uuid';
+import { sendTicketEmail } from '@/lib/email';
+import { generateTicketImage } from '@/lib/ticket-template';
+import { uploadFile } from '@/lib/storage';
+import { qrGenerator } from '@/lib/qr-generator';
 
 // POST /api/public/register — Submit registration
 export async function POST(req: NextRequest) {
@@ -131,6 +135,31 @@ export async function POST(req: NextRequest) {
       return errorResponse('Failed to create ticket. Please try again.', 500);
     }
 
+    // Get the ticket ID for QR generation
+    const { data: ticketRecord } = await supabaseAdmin
+      .from('tickets')
+      .select('id')
+      .eq('registration_id', registrationId)
+      .single();
+
+    // Generate secure QR code and ticket PDF in background (non-blocking)
+    if (ticketRecord) {
+      generateAndDeliverTicket({
+        ticketId: ticketRecord.id,
+        clientId: form.client_id,
+        email,
+        firstName: first_name,
+        lastName: last_name,
+        eventTitle: event.title,
+        eventDate: event.start_date,
+        eventLocation: event.is_virtual ? 'Virtual' : (event.location || 'TBA'),
+        ticketNumber,
+        ticketTypeName: ticket_type_id ? 'Registered' : 'General',
+      }).catch((err) => {
+        console.error('Ticket delivery failed (non-blocking):', err);
+      });
+    }
+
     // Store custom field responses
     if (custom_fields && typeof custom_fields === 'object') {
       for (const [fieldId, value] of Object.entries(custom_fields)) {
@@ -157,7 +186,7 @@ export async function POST(req: NextRequest) {
     // Audit log
     await createAuditLog({
       client_id: form.client_id,
-      action: 'ticket.validate',
+      action: 'registration.create',
       resource_type: 'registration',
       resource_id: registrationId,
       new_value: { email, first_name, last_name, event_id: event.id },
@@ -179,4 +208,68 @@ export async function POST(req: NextRequest) {
     const message = err instanceof Error ? err.message : 'Internal server error';
     return errorResponse(message, 500);
   }
+}
+
+/**
+ * Background task: Generate secure QR → render ticket PNG/PDF → upload → email
+ * Runs fire-and-forget so registration response isn't delayed
+ */
+async function generateAndDeliverTicket(opts: {
+  ticketId: string;
+  clientId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  eventTitle: string;
+  eventDate: string;
+  eventLocation: string;
+  ticketNumber: string;
+  ticketTypeName: string;
+}) {
+  // 1. Generate secure HMAC-signed QR code
+  const qrData = await qrGenerator.generate(opts.clientId, opts.ticketId);
+  if (!qrData) {
+    console.error('Failed to generate QR for ticket', opts.ticketId);
+    return;
+  }
+
+  // 2. Render ticket image
+  const attendeeName = `${opts.firstName} ${opts.lastName}`;
+  const { png, pdf } = await generateTicketImage({
+    ticket_number: opts.ticketNumber,
+    event_title: opts.eventTitle,
+    event_date: opts.eventDate,
+    event_location: opts.eventLocation,
+    attendee_name: attendeeName,
+    attendee_email: opts.email,
+    ticket_type: opts.ticketTypeName,
+    qr_code_data_url: qrData.qr_data_url,
+  });
+
+  // 3. Upload to Supabase Storage
+  const basePath = `tickets/${opts.clientId}/${opts.ticketNumber}`;
+  const [pngUpload, pdfUpload] = await Promise.all([
+    uploadFile('tickets', `${basePath}.png`, png, 'image/png'),
+    uploadFile('tickets', `${basePath}.pdf`, pdf, 'application/pdf'),
+  ]);
+
+  // 4. Update ticket record with storage URLs
+  await supabaseAdmin
+    .from('tickets')
+    .update({
+      pdf_url: pdfUpload.path,
+      qr_code_url: pngUpload.path,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', opts.ticketId);
+
+  // 5. Send ticket email with PDF attachment
+  const pdfBase64 = pdf.toString('base64');
+  await sendTicketEmail(
+    opts.email,
+    attendeeName,
+    opts.eventTitle,
+    opts.ticketNumber,
+    pdfBase64
+  );
 }
