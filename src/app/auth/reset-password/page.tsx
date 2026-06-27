@@ -60,29 +60,29 @@ function ResetForm() {
       {/* Logo */}
       <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
         <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-[var(--hp-primary)]/25">H</div>
-        <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+        <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
       </Link>
 
       {/* Title */}
       <div className="text-center mb-7">
-        <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Set new password</h1>
-        <p className="text-sm text-[#999]">Choose a strong password for your account</p>
+        <h1 className="text-[1.7rem] font-extrabold text-[var(--hp-text)] mb-1.5 tracking-tight">Set new password</h1>
+        <p className="text-sm text-[var(--hp-text-muted)]">Choose a strong password for your account</p>
       </div>
 
       {/* Card */}
       <div className="hp-glass-card p-7 sm:p-8">
         {done ? (
           <div className="text-center py-4">
-            <div className="w-14 h-14 rounded-full bg-[#10b981]/15 flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-7 h-7 text-[#10b981]" />
+            <div className="w-14 h-14 rounded-full bg-[var(--hp-success)]/15 flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-7 h-7 text-[var(--hp-text-success)]" />
             </div>
-            <h2 className="text-base font-bold text-[#10b981] mb-2">Password updated!</h2>
-            <p className="text-[13px] text-[#999]">Redirecting to sign in...</p>
+            <h2 className="text-base font-bold text-[var(--hp-text-success)] mb-2">Password updated!</h2>
+            <p className="text-[13px] text-[var(--hp-text-muted)]">Redirecting to sign in...</p>
           </div>
         ) : (
           <form onSubmit={handleReset} className="space-y-5" noValidate>
             <div>
-              <label htmlFor="reset-password" className="block text-[13px] font-semibold text-[#ccc] mb-2">New Password</label>
+              <label htmlFor="reset-password" className="hp-form-label">New Password</label>
               <div className="hp-password-wrapper">
                 <Input
                   id="reset-password"
@@ -101,7 +101,7 @@ function ResetForm() {
               </div>
             </div>
             <div>
-              <label htmlFor="reset-confirm" className="block text-[13px] font-semibold text-[#ccc] mb-2">Confirm Password</label>
+              <label htmlFor="reset-confirm" className="hp-form-label">Confirm Password</label>
               <div className="hp-password-wrapper">
                 <Input
                   id="reset-confirm"
@@ -121,12 +121,12 @@ function ResetForm() {
                 </button>
               </div>
               {passwordError && (
-                <p id="reset-password-error" className="text-[#ef4444] text-xs mt-1.5" role="alert">{passwordError}</p>
+                <p id="reset-password-error" className="text-[var(--hp-error)] text-xs mt-1.5" role="alert">{passwordError}</p>
               )}
             </div>
 
             {error && (
-              <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">{error}</div>
+              <div role="alert" className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-md)] px-4 py-3 text-[var(--hp-error)] text-[13px] text-center">{error}</div>
             )}
 
             <Button type="submit" disabled={loading || !password || !confirmPassword || !passwordsMatch} className="w-full h-12 font-bold text-[15px]">
@@ -150,7 +150,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
       <Suspense fallback={
-        <div className="flex items-center gap-2 text-[#888] text-sm">
+        <div className="flex items-center gap-2 text-[var(--hp-text-muted)] text-sm">
           <Loader2 className="w-4 h-4 animate-spin" />
           Loading...
         </div>

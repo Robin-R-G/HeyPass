@@ -42,24 +42,24 @@ export default function ForgotPasswordPage() {
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-[var(--hp-primary)]/25">H</div>
-          <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+          <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
         </Link>
 
         {/* Title */}
         <div className="text-center mb-7">
-          <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Reset your password</h1>
-          <p className="text-sm text-[#999]">Enter your email and we&apos;ll send you a reset link</p>
+          <h1 className="text-[1.7rem] font-extrabold text-[var(--hp-text)] mb-1.5 tracking-tight">Reset your password</h1>
+          <p className="text-sm text-[var(--hp-text-muted)]">Enter your email and we&apos;ll send you a reset link</p>
         </div>
 
         {/* Card */}
         <div className="hp-glass-card p-7 sm:p-8">
           {sent ? (
             <div className="text-center py-4">
-              <div className="w-14 h-14 rounded-full bg-[#10b981]/15 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 className="w-7 h-7 text-[#10b981]" />
+              <div className="w-14 h-14 rounded-full bg-[var(--hp-success)]/15 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="w-7 h-7 text-[var(--hp-text-success)]" />
               </div>
-              <h2 className="text-base font-bold text-white mb-2">Check your email</h2>
-              <p className="text-[13px] text-[#999] leading-relaxed">
+              <h2 className="text-base font-bold text-[var(--hp-text)] mb-2">Check your email</h2>
+              <p className="text-[13px] text-[var(--hp-text-muted)] leading-relaxed">
                 We&apos;ve sent a password reset link to <strong className="text-white">{email}</strong>.<br />
                 The link will expire in 1 hour.
               </p>
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <div>
-                <label htmlFor="forgot-email" className="block text-[13px] font-semibold text-[#ccc] mb-2">Email</label>
+                <label htmlFor="forgot-email" className="hp-form-label">Email</label>
                 <Input
                   id="forgot-email"
                   type="email"
@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
               </div>
 
               {error && (
-                <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">
+                <div role="alert" className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-md)] px-4 py-3 text-[var(--hp-error)] text-[13px] text-center">
                   {error}
                 </div>
               )}
@@ -101,7 +101,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         {/* Back link */}
-        <p className="text-center mt-6 text-[13px] text-[#777]">
+        <p className="text-center mt-6 text-[13px] text-[var(--hp-text-muted)]">
           <Link href="/auth/login" className="text-[var(--hp-primary)] font-semibold no-underline hover:underline">&larr; Back to sign in</Link>
         </p>
       </div>

@@ -62,10 +62,10 @@ export default function BillingGatewaysPage() {
     <div className="min-h-screen text-white font-sans antialiased">
       <nav className="flex justify-between items-center px-6 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)] backdrop-blur-xl">
         <div className="flex items-center gap-2">
-          <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors px-2 py-1 rounded-md">&larr; Back</button>
-          <span className="text-[#666]">/</span>
-          <Link href="/dashboard/settings/billing" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Billing</Link>
-          <span className="text-[#666]">/</span>
+          <button onClick={() => router.back()} className="text-sm text-[var(--hp-text-secondary)] hover:text-[var(--hp-text)] transition-colors px-2 py-1 rounded-md">&larr; Back</button>
+          <span className="text-[var(--hp-text-muted)]">/</span>
+          <Link href="/dashboard/settings/billing" className="text-sm text-[var(--hp-text-secondary)] hover:text-[var(--hp-text)] no-underline transition-colors">Billing</Link>
+          <span className="text-[var(--hp-text-muted)]">/</span>
           <span className="text-sm text-white font-medium">Payment Gateways</span>
         </div>
       </nav>
@@ -74,7 +74,7 @@ export default function BillingGatewaysPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-2xl font-bold">Payment Gateways</h1>
-            <p className="text-sm text-[#ccc] mt-1">Configure Razorpay or Cashfree to accept payments</p>
+            <p className="text-sm text-[var(--hp-text-secondary)] mt-1">Configure Razorpay or Cashfree to accept payments</p>
           </div>
           <button onClick={() => setShowAdd(!showAdd)} className="hp-btn hp-btn-primary">+ Add Gateway</button>
         </div>

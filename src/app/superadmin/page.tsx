@@ -164,16 +164,16 @@ export default function SuperAdminPage() {
   ] : [];
 
   return (
-    <div className="min-h-screen bg-[#000] text-white font-sans antialiased relative">
+    <div className="min-h-screen bg-[var(--hp-bg)] text-white font-sans antialiased relative">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
+      <nav className="sticky top-0 z-50 hp-nav border-b border-[var(--hp-border)]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2.5 no-underline">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
-            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
             <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
-          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 min-h-[44px]">
+          <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[var(--hp-text-muted)] hover:text-[var(--hp-error)] hover:bg-[var(--hp-error-bg)] transition-all duration-200 min-h-[44px]">
             <LogOut size={14} /> Logout
           </button>
         </div>
@@ -183,30 +183,30 @@ export default function SuperAdminPage() {
       <main className="max-w-[1200px] mx-auto px-4 sm:px-8 py-8 sm:py-12 relative z-10">
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-1.5 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--hp-text)] mb-1.5 tracking-tight">
             Platform Overview
           </h1>
-          <p className="text-sm text-[#999]">Manage all organizations and users across HeyPass</p>
+          <p className="text-sm text-[var(--hp-text-muted)]">Manage all organizations and users across HeyPass</p>
         </div>
 
         {/* Quick Nav */}
         <div className="flex gap-3 mb-8">
-          <Link href="/superadmin/pending" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-white/[0.04] transition-all">
+          <Link href="/superadmin/pending" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-[var(--hp-surface-hover)] transition-all">
             <div className="w-9 h-9 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center">
               <UserCheck size={16} className="text-[var(--hp-primary)]" />
             </div>
             <div>
-              <div className="text-xs font-semibold text-white">Pending Users</div>
-              <div className="text-[10px] text-hp-text-secondary/60">Review registrations</div>
+              <div className="text-xs font-semibold text-[var(--hp-text)]">Pending Users</div>
+              <div className="text-[10px] text-[var(--hp-text-muted)]">Review registrations</div>
             </div>
           </Link>
-          <Link href="/superadmin/organizations" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-white/[0.04] transition-all">
+          <Link href="/superadmin/organizations" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-[var(--hp-surface-hover)] transition-all">
             <div className="w-9 h-9 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center">
               <Settings size={16} className="text-[var(--hp-primary)]" />
             </div>
             <div>
-              <div className="text-xs font-semibold text-white">All Organizations</div>
-              <div className="text-[10px] text-hp-text-secondary/60">Manage org details</div>
+              <div className="text-xs font-semibold text-[var(--hp-text)]">All Organizations</div>
+              <div className="text-[10px] text-[var(--hp-text-muted)]">Manage org details</div>
             </div>
           </Link>
         </div>
@@ -215,13 +215,13 @@ export default function SuperAdminPage() {
         {loading && (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
             <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
-            <span className="text-[#999] text-sm">Loading platform data...</span>
+            <span className="text-[var(--hp-text-muted)] text-sm">Loading platform data...</span>
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-4 mb-8 text-[#ef4444] text-sm text-center">
+          <div role="alert" className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-lg)] p-4 mb-8 text-[var(--hp-error)] text-sm text-center">
             {error}
           </div>
         )}
@@ -236,7 +236,7 @@ export default function SuperAdminPage() {
                   <div key={s.label} className="hp-glass-card p-6 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-radial from-[var(--hp-primary)]/5 to-transparent translate-x-1/3 -translate-y-1/3 pointer-events-none" />
                     <div className="flex justify-between items-start mb-4">
-                      <span className="text-[10px] font-semibold text-hp-text-secondary/60 uppercase tracking-wider">{s.label}</span>
+                      <span className="text-[10px] font-semibold text-[var(--hp-text-muted)] uppercase tracking-wider">{s.label}</span>
                       <div className="w-8 h-8 rounded-lg bg-[var(--hp-primary)]/8 flex items-center justify-center">
                         <Icon size={16} className="text-[var(--hp-primary)]" />
                       </div>
@@ -261,8 +261,8 @@ export default function SuperAdminPage() {
 
               {clients.length === 0 ? (
                 <div className="hp-glass-card border-dashed border-white/10 p-16 text-center">
-                  <Building2 size={40} className="text-white/20 mx-auto mb-4" />
-                  <p className="text-hp-text-secondary opacity-60 text-sm mb-3">No organizations yet</p>
+                  <Building2 size={40} className="text-[var(--hp-text-muted)] mx-auto mb-4" />
+                  <p className="text-[var(--hp-text-muted)] text-sm mb-3">No organizations yet</p>
                   <button
                     onClick={() => setShowCreateModal(true)}
                     className="bg-transparent border-none text-[var(--hp-primary)] text-sm font-semibold cursor-pointer hover:underline"
@@ -277,15 +277,15 @@ export default function SuperAdminPage() {
                           {c.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-white mb-0.5">{c.name}</div>
-                          <div className="text-xs text-hp-text-secondary/60">
+                          <div className="text-sm font-semibold text-[var(--hp-text)] mb-0.5">{c.name}</div>
+                          <div className="text-xs text-[var(--hp-text-muted)]">
                             {c.slug} · Created {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${
-                          c.status === 'active' ? 'bg-[#10b981]/12 text-[#10b981]' : 'bg-white/6 text-hp-text-secondary/60'
+                          c.status === 'active' ? 'bg-[var(--hp-success-bg)] text-[var(--hp-success)]' : 'bg-[var(--hp-surface)] text-[var(--hp-text-muted)]'
                         }`}>{c.status}</span>
                         <button
                           onClick={() => selectClient(c.id)}
@@ -312,13 +312,13 @@ export default function SuperAdminPage() {
 
       {/* Create Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-6" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
-          <div className="hp-glass-card backdrop-blur-xl border border-white/[0.12] rounded-2xl w-full max-w-[440px] p-7 sm:p-8 shadow-2xl hp-animate-scale-in" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
+          <div className="hp-glass-card backdrop-blur-xl border border-[var(--hp-border-hover)] rounded-[var(--hp-radius-xl)] w-full max-w-[440px] p-7 sm:p-8 shadow-2xl hp-animate-scale-in" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-white">New Organization</h3>
               <button
                 onClick={() => { setShowCreateModal(false); setCreateError(''); }}
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-[#888] hover:text-white hover:bg-white/10 transition-all min-h-[44px] min-w-[44px]"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--hp-text-muted)] hover:text-white hover:bg-[var(--hp-surface-hover)] transition-all min-h-[44px] min-w-[44px]"
               >
                 <X size={16} />
               </button>
@@ -326,7 +326,7 @@ export default function SuperAdminPage() {
 
             <form onSubmit={handleCreateClient} className="flex flex-col gap-5">
               <div>
-                <label htmlFor="org-name" className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
+                <label htmlFor="org-name" className="block text-[10px] font-semibold text-[var(--hp-text-muted)] mb-2 uppercase tracking-wider">
                   Organization Name
                 </label>
                 <Input
@@ -344,7 +344,7 @@ export default function SuperAdminPage() {
               </div>
 
               <div>
-                <label htmlFor="org-slug" className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-2 uppercase tracking-wider">
+                <label htmlFor="org-slug" className="block text-[10px] font-semibold text-[var(--hp-text-muted)] mb-2 uppercase tracking-wider">
                   Subdomain / URL Slug
                 </label>
                 <Input
@@ -359,7 +359,7 @@ export default function SuperAdminPage() {
               </div>
 
               {createError && (
-                <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs">
+                <div className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-md)] p-3 text-[var(--hp-error)] text-xs">
                   {createError}
                 </div>
               )}

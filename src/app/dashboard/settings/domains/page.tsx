@@ -153,10 +153,10 @@ export default function DomainSettingsPage() {
   return (
     <div className="min-h-screen text-white font-sans antialiased">
     <nav className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.06] bg-[rgba(20,33,61,0.6)]">
-      <button onClick={() => router.back()} className="text-sm text-[#ccc] hover:text-white transition-colors">&larr; Back</button>
-      <span className="text-[#666]">/</span>
-      <Link href="/dashboard" className="text-sm text-[#ccc] hover:text-white no-underline transition-colors">Events</Link>
-      <span className="text-[#666]">/</span>
+      <button onClick={() => router.back()} className="text-sm text-[var(--hp-text-secondary)] hover:text-[var(--hp-text)] transition-colors">&larr; Back</button>
+      <span className="text-[var(--hp-text-muted)]">/</span>
+      <Link href="/dashboard" className="text-sm text-[var(--hp-text-secondary)] hover:text-[var(--hp-text)] no-underline transition-colors">Events</Link>
+      <span className="text-[var(--hp-text-muted)]">/</span>
       <span className="text-sm text-white font-medium">Settings</span>
     </nav>
     <div className="max-w-4xl mx-auto p-6">

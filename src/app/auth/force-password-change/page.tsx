@@ -61,11 +61,11 @@ export default function ForcePasswordChangePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000] text-white font-sans antialiased flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[var(--hp-bg)] text-white font-sans antialiased flex items-center justify-center p-6">
       <div className="w-full max-w-[420px]">
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-8 no-underline">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-[var(--hp-primary)]/25">H</div>
-          <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+          <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
         </Link>
 
         <div className="hp-glass-card p-8">
@@ -73,8 +73,8 @@ export default function ForcePasswordChangePage() {
             <div className="w-12 h-12 rounded-xl bg-[var(--hp-primary)]/10 flex items-center justify-center mx-auto mb-4">
               <Lock size={24} className="text-[var(--hp-primary)]" />
             </div>
-            <h1 className="text-xl font-extrabold text-white mb-1.5">Change Your Password</h1>
-            <p className="text-sm text-[#999]">For security, please set a new password before continuing.</p>
+            <h1 className="text-xl font-extrabold text-[var(--hp-text)] mb-1.5">Change Your Password</h1>
+            <p className="text-sm text-[var(--hp-text-muted)]">For security, please set a new password before continuing.</p>
           </div>
 
           <form onSubmit={handleChangePassword} className="flex flex-col gap-4">
@@ -91,7 +91,7 @@ export default function ForcePasswordChangePage() {
                   className="pr-10"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666] hover:text-white transition-colors">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--hp-text-muted)] hover:text-white transition-colors">
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
@@ -110,12 +110,12 @@ export default function ForcePasswordChangePage() {
             </div>
 
             {error && (
-              <div className="bg-[#ef4444]/8 border border-[#ef4444]/15 rounded-lg p-3 text-[#ef4444] text-xs">
+              <div className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/15 rounded-[var(--hp-radius-md)] p-3 text-[var(--hp-error)] text-xs">
                 {error}
               </div>
             )}
 
-            <Button type="submit" disabled={loading} className="w-full bg-[var(--hp-primary)] hover:bg-[var(--hp-primary-dark)] text-black font-bold py-2.5 rounded-xl">
+            <Button type="submit" disabled={loading} className="w-full h-12 font-bold text-[15px]">
               {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
               {loading ? 'Updating...' : 'Update Password'}
             </Button>

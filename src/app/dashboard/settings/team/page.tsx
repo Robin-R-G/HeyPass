@@ -222,15 +222,15 @@ export default function TeamManagementPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#000] text-white font-sans antialiased">
+    <div className="min-h-screen bg-[var(--hp-bg)] text-white font-sans antialiased">
       <ConfirmDialog />
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/dashboard" className="flex items-center gap-2.5 no-underline">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
-            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
           </Link>
-          <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-all">
+          <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] transition-all">
             <ArrowLeft size={14} /> Dashboard
           </Link>
         </div>
@@ -240,7 +240,7 @@ export default function TeamManagementPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-1.5 tracking-tight">Team Management</h1>
-            <p className="text-sm text-[#999]">{members.length} members · {invitations.filter(i => i.status === 'pending').length} pending invitations</p>
+            <p className="text-sm text-[var(--hp-text-muted)]">{members.length} members · {invitations.filter(i => i.status === 'pending').length} pending invitations</p>
           </div>
           <button onClick={() => setShowInviteModal(true)} className="hp-btn hp-btn-primary text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5">
             <UserPlus size={14} /> Invite Member
@@ -252,7 +252,7 @@ export default function TeamManagementPage() {
           {(['members', 'invitations', 'roles'] as const).map(t => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                tab === t ? 'bg-[var(--hp-primary)] text-black' : 'text-[#999] hover:text-white'
+                tab === t ? 'bg-[var(--hp-primary)] text-white' : 'text-[var(--hp-text-muted)] hover:text-white'
               }`}>
               {t === 'members' ? `Members (${members.length})` : t === 'invitations' ? `Invitations (${invitations.filter(i => i.status === 'pending').length})` : `Roles (${roles.length})`}
             </button>
@@ -262,13 +262,13 @@ export default function TeamManagementPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
             <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
-            <span className="text-[#999] text-sm">Loading...</span>
+            <span className="text-[var(--hp-text-muted)] text-sm">Loading...</span>
           </div>
         ) : tab === 'members' ? (
           <>
             <div className="mb-4">
               <div className="relative max-w-md">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--hp-text-muted)]" />
                 <input type="text" placeholder="Search members..." value={search} onChange={e => setSearch(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50" />
               </div>
@@ -395,7 +395,7 @@ export default function TeamManagementPage() {
           <div className="hp-glass-card backdrop-blur-xl border border-white/[0.12] rounded-2xl w-full max-w-[480px] p-7 sm:p-8 shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-lg font-bold text-white">Invite Team Member</h3>
-              <button onClick={() => setShowInviteModal(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-[#888] hover:text-white hover:bg-white/10 transition-all">
+              <button onClick={() => setShowInviteModal(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] transition-all">
                 <X size={16} />
               </button>
             </div>
@@ -435,7 +435,7 @@ export default function TeamManagementPage() {
                   {(['email', 'link', 'code'] as const).map(type => (
                     <button key={type} type="button" onClick={() => setInviteForm({ ...inviteForm, invitation_type: type })}
                       className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                        inviteForm.invitation_type === type ? 'bg-[var(--hp-primary)] text-black' : 'bg-white/[0.05] text-[#999] hover:text-white'
+                        inviteForm.invitation_type === type ? 'bg-[var(--hp-primary)] text-white' : 'bg-white/[0.05] text-[var(--hp-text-muted)] hover:text-white'
                       }`}>
                       {type.charAt(0).toUpperCase() + type.slice(1)}
                     </button>

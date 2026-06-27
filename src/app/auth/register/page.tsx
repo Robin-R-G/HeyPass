@@ -66,13 +66,13 @@ export default function RegisterPage() {
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-[var(--hp-primary)]/25">H</div>
-          <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+          <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
         </Link>
 
         {/* Title */}
         <div className="text-center mb-7">
-          <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Create your account</h1>
-          <p className="text-sm text-[#999]">Start managing events today</p>
+          <h1 className="text-[1.7rem] font-extrabold text-[var(--hp-text)] mb-1.5 tracking-tight">Create your account</h1>
+          <p className="text-sm text-[var(--hp-text-muted)]">Start managing events today</p>
         </div>
 
         {/* Card */}
@@ -81,24 +81,24 @@ export default function RegisterPage() {
             {/* Name row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="reg-first" className="block text-[13px] font-semibold text-[#ccc] mb-2">First Name</label>
+                <label htmlFor="reg-first" className="hp-form-label">First Name</label>
                 <Input id="reg-first" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} placeholder="John" autoComplete="given-name" />
               </div>
               <div>
-                <label htmlFor="reg-last" className="block text-[13px] font-semibold text-[#ccc] mb-2">Last Name</label>
+                <label htmlFor="reg-last" className="hp-form-label">Last Name</label>
                 <Input id="reg-last" type="text" value={lastName} onChange={e => setLastName(e.target.value)} placeholder="Doe" autoComplete="family-name" />
               </div>
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="reg-email" className="block text-[13px] font-semibold text-[#ccc] mb-2">Email</label>
+              <label htmlFor="reg-email" className="hp-form-label">Email</label>
               <Input id="reg-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" autoComplete="email" aria-required="true" />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="reg-password" className="block text-[13px] font-semibold text-[#ccc] mb-2">Password</label>
+              <label htmlFor="reg-password" className="hp-form-label">Password</label>
               <div className="hp-password-wrapper">
                 <Input
                   id="reg-password"
@@ -119,7 +119,7 @@ export default function RegisterPage() {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="reg-confirm" className="block text-[13px] font-semibold text-[#ccc] mb-2">Confirm Password</label>
+              <label htmlFor="reg-confirm" className="hp-form-label">Confirm Password</label>
               <div className="hp-password-wrapper">
                 <Input
                   id="reg-confirm"
@@ -139,13 +139,13 @@ export default function RegisterPage() {
                 </button>
               </div>
               {passwordError && (
-                <p id="reg-password-error" className="text-[#ef4444] text-xs mt-1.5" role="alert">{passwordError}</p>
+                <p id="reg-password-error" className="text-[var(--hp-error)] text-xs mt-1.5" role="alert">{passwordError}</p>
               )}
             </div>
 
             {/* Error */}
             {error && (
-              <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">
+              <div role="alert" className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-md)] px-4 py-3 text-[var(--hp-error)] text-[13px] text-center">
                 {error}
               </div>
             )}
@@ -165,7 +165,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Sign in link */}
-        <p className="text-center mt-6 text-[13px] text-[#777]">
+        <p className="text-center mt-6 text-[13px] text-[var(--hp-text-muted)]">
           Already have an account?{' '}
           <Link href="/auth/login" className="text-[var(--hp-primary)] font-semibold no-underline hover:underline">Sign in</Link>
         </p>

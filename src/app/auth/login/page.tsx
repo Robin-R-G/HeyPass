@@ -43,7 +43,6 @@ function LoginForm() {
           localStorage.setItem('refresh_token', tokens.refresh_token);
         }
 
-        // Check if force password change is required
         if (data.data?.force_password_change) {
           router.push('/auth/force-password-change');
           return;
@@ -96,23 +95,25 @@ function LoginForm() {
   return (
     <div className="w-full max-w-[420px] px-5">
       {/* Logo */}
-      <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
+      <Link href="/" className="flex items-center justify-center gap-2.5 mb-8 no-underline" aria-label="HeyPass home">
         <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-white shadow-lg shadow-[var(--hp-primary)]/25">H</div>
-        <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+        <span className="text-xl font-bold tracking-tight">
+          <span className="text-[var(--hp-primary)]">Hey</span>
+          <span className="text-[var(--hp-text)]">Pass</span>
+        </span>
       </Link>
 
       {/* Title */}
       <div className="text-center mb-7">
-        <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Welcome back</h1>
-        <p className="text-sm text-[#999]">Sign in to your account</p>
+        <h1 className="text-[1.7rem] font-extrabold text-[var(--hp-text)] mb-1.5 tracking-tight">Welcome back</h1>
+        <p className="text-sm text-[var(--hp-text-muted)]">Sign in to your account</p>
       </div>
 
       {/* Card */}
       <div className="hp-glass-card p-7 sm:p-8">
         <form onSubmit={handleLogin} className="space-y-5" noValidate>
-          {/* Email */}
-          <div>
-            <label htmlFor="login-email" className="block text-[13px] font-semibold text-[#ccc] mb-2">Email</label>
+          <div className="hp-form-group">
+            <label htmlFor="login-email" className="hp-form-label">Email</label>
             <Input
               id="login-email"
               type="email"
@@ -125,10 +126,9 @@ function LoginForm() {
             />
           </div>
 
-          {/* Password */}
-          <div>
-            <label htmlFor="login-password" className="block text-[13px] font-semibold text-[#ccc] mb-2">Password</label>
-            <div className="hp-password-wrapper">
+          <div className="hp-form-group">
+            <label htmlFor="login-password" className="hp-form-label">Password</label>
+            <div className="relative">
               <Input
                 id="login-password"
                 type={showPassword ? 'text' : 'password'}
@@ -142,7 +142,7 @@ function LoginForm() {
               />
               <button
                 type="button"
-                className="hp-password-toggle"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 tabIndex={-1}
@@ -152,14 +152,12 @@ function LoginForm() {
             </div>
           </div>
 
-          {/* Error */}
           {error && (
-            <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-lg px-4 py-3 text-[#ef4444] text-[13px] text-center">
+            <div role="alert" className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-md)] px-4 py-3 text-[var(--hp-error)] text-[13px] text-center">
               {error}
             </div>
           )}
 
-          {/* Submit */}
           <Button
             type="submit"
             disabled={loading || !email || !password}
@@ -176,16 +174,14 @@ function LoginForm() {
           </Button>
         </form>
 
-        {/* Forgot password */}
-        <div className="text-center mt-5 pt-5 border-t border-white/[0.06]">
+        <div className="text-center mt-5 pt-5 border-t border-[var(--hp-border)]">
           <Link href="/auth/forgot-password" className="text-[var(--hp-primary)] text-[13px] font-medium no-underline hover:underline">
             Forgot password?
           </Link>
         </div>
       </div>
 
-      {/* Sign up link */}
-      <p className="text-center mt-6 text-[13px] text-[#777]">
+      <p className="text-center mt-6 text-[13px] text-[var(--hp-text-muted)]">
         Don&apos;t have an account?{' '}
         <Link href="/auth/register" className="text-[var(--hp-primary)] font-semibold no-underline hover:underline">Sign up</Link>
       </p>
@@ -197,7 +193,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
       <Suspense fallback={
-        <div className="flex items-center gap-2 text-[#888] text-sm">
+        <div className="flex items-center gap-2 text-[var(--hp-text-muted)] text-sm">
           <Loader2 className="w-4 h-4 animate-spin" />
           Loading...
         </div>

@@ -53,74 +53,59 @@ export function ConfirmModal({
 
   if (!visible) return null;
 
-  const iconBg = variant === 'danger' ? 'rgba(239,68,68,0.12)' : variant === 'warning' ? 'rgba(245,158,11,0.12)' : 'rgba(99,102,241,0.12)';
-  const iconColor = variant === 'danger' ? '#ef4444' : variant === 'warning' ? '#f59e0b' : 'var(--hp-primary)';
-  const confirmBg = variant === 'danger'
-    ? 'linear-gradient(135deg, #ef4444, #dc2626)'
-    : 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))';
-  const confirmShadow = variant === 'danger'
-    ? '0 4px 12px rgba(239,68,68,0.25)'
-    : '0 4px 12px rgba(99,102,241,0.25)';
+  const iconBgClass = variant === 'danger'
+    ? 'bg-[var(--hp-error-bg)]'
+    : variant === 'warning'
+    ? 'bg-[var(--hp-warning-bg)]'
+    : 'bg-[var(--hp-primary)]/10';
+
+  const iconColorClass = variant === 'danger'
+    ? 'text-[var(--hp-error)]'
+    : variant === 'warning'
+    ? 'text-[var(--hp-warning)]'
+    : 'text-[var(--hp-primary)]';
+
+  const confirmClass = variant === 'danger'
+    ? 'bg-[var(--hp-error)] hover:bg-[#E11D48] text-white shadow-sm'
+    : 'bg-[var(--hp-primary)] hover:bg-[var(--hp-primary-hover)] text-white shadow-sm';
 
   return (
     <div
       ref={backdropRef}
       onClick={(e) => { if (e.target === backdropRef.current) onCancel(); }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        background: animating ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0)',
-        backdropFilter: animating ? 'blur(8px)' : 'blur(0px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '24px',
-        transition: 'background 0.2s, backdrop-filter 0.2s',
-      }}
+      className={`fixed inset-0 z-[var(--hp-z-modal)] flex items-center justify-center p-6 transition-all duration-[var(--hp-duration-base)] ${
+        animating ? 'bg-black/70 backdrop-blur-sm' : 'bg-black/0 backdrop-blur-none'
+      }`}
     >
-      <div style={{
-        background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: '20px', width: '100%', maxWidth: '420px',
-        padding: '32px', boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
-        opacity: animating ? 1 : 0,
-        transform: animating ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(10px)',
-        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', marginBottom: '20px' }}>
-          <div style={{
-            width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
-            background: iconBg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            {variant === 'danger' ? <Trash2 size={20} style={{ color: iconColor }} /> : <AlertTriangle size={20} style={{ color: iconColor }} />}
+      <div className={`w-full max-w-[420px] bg-[var(--hp-bg-elevated)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xl)] shadow-[var(--hp-shadow-xl)] p-8 transition-all duration-[var(--hp-duration-slow)] ease-[var(--hp-ease-spring)] ${
+        animating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.95] translate-y-2'
+      }`}>
+        <div className="flex items-start gap-4 mb-5">
+          <div className={`w-11 h-11 rounded-[var(--hp-radius-md)] ${iconBgClass} flex items-center justify-center shrink-0`}>
+            {variant === 'danger'
+              ? <Trash2 size={20} className={iconColorClass} />
+              : <AlertTriangle size={20} className={iconColorClass} />
+            }
           </div>
-          <div style={{ flex: 1 }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>{title}</h3>
-            <p style={{ fontSize: '13px', color: '#888', lineHeight: 1.5 }}>{message}</p>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-[var(--hp-text)]">{title}</h3>
+            <p className="text-sm text-[var(--hp-text-muted)] mt-1 leading-relaxed">{message}</p>
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+        <div className="flex justify-end gap-3">
           <button
             onClick={onCancel}
-            style={{
-              background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
-              color: '#888', padding: '10px 20px', borderRadius: '10px',
-              fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#888'; }}
-          >{cancelLabel}</button>
+            className="px-4 py-2 text-sm font-medium text-[var(--hp-text-secondary)] bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] hover:bg-[var(--hp-surface-hover)] hover:border-[var(--hp-border-hover)] transition-all duration-[var(--hp-duration-fast)]"
+          >
+            {cancelLabel}
+          </button>
           <button
             onClick={onConfirm}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              background: confirmBg, color: variant === 'danger' ? '#fff' : '#000',
-              border: 'none', padding: '10px 24px', borderRadius: '10px',
-              fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-              boxShadow: confirmShadow, transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
-          >{confirmLabel}</button>
+            className={`px-5 py-2 text-sm font-semibold rounded-[var(--hp-radius-md)] transition-all duration-[var(--hp-duration-fast)] active:scale-[0.98] ${confirmClass}`}
+          >
+            {confirmLabel}
+          </button>
         </div>
       </div>
     </div>
@@ -188,38 +173,23 @@ export function PromptModal({
     <div
       ref={backdropRef}
       onClick={(e) => { if (e.target === backdropRef.current) onCancel(); }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        background: animating ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0)',
-        backdropFilter: animating ? 'blur(8px)' : 'blur(0px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '24px',
-        transition: 'background 0.2s, backdrop-filter 0.2s',
-      }}
+      className={`fixed inset-0 z-[var(--hp-z-modal)] flex items-center justify-center p-6 transition-all duration-[var(--hp-duration-base)] ${
+        animating ? 'bg-black/70 backdrop-blur-sm' : 'bg-black/0 backdrop-blur-none'
+      }`}
     >
-      <div style={{
-        background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: '20px', width: '100%', maxWidth: '420px',
-        padding: '32px', boxShadow: '0 24px 48px rgba(0,0,0,0.5)',
-        opacity: animating ? 1 : 0,
-        transform: animating ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(10px)',
-        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>{title}</h3>
+      <div className={`w-full max-w-[420px] bg-[var(--hp-bg-elevated)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xl)] shadow-[var(--hp-shadow-xl)] p-8 transition-all duration-[var(--hp-duration-slow)] ease-[var(--hp-ease-spring)] ${
+        animating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.95] translate-y-2'
+      }`}>
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-base font-semibold text-[var(--hp-text)]">{title}</h3>
           <button
             onClick={onCancel}
-            style={{
-              background: 'rgba(255,255,255,0.05)', border: 'none',
-              color: '#666', width: '28px', height: '28px', borderRadius: '8px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#666'; }}
-          ><X size={14} /></button>
+            className="p-1 text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] rounded-[var(--hp-radius-sm)] transition-colors"
+          >
+            <X size={14} />
+          </button>
         </div>
-        <p style={{ fontSize: '13px', color: '#888', marginBottom: '20px' }}>{message}</p>
+        <p className="text-sm text-[var(--hp-text-muted)] mb-5">{message}</p>
 
         <input
           ref={inputRef}
@@ -227,40 +197,22 @@ export function PromptModal({
           value={value}
           onChange={e => setValue(e.target.value)}
           placeholder={placeholder}
-          style={{
-            width: '100%', background: '#111',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '10px', padding: '12px 16px',
-            color: '#fff', fontSize: '14px', outline: 'none',
-            transition: 'border-color 0.2s', marginBottom: '20px',
-          }}
-          onFocus={e => e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'}
-          onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+          className="hp-input mb-5"
         />
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+        <div className="flex justify-end gap-3">
           <button
             onClick={onCancel}
-            style={{
-              background: 'transparent', border: '1px solid rgba(255,255,255,0.08)',
-              color: '#888', padding: '10px 20px', borderRadius: '10px',
-              fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#888'; }}
-          >{cancelLabel}</button>
+            className="px-4 py-2 text-sm font-medium text-[var(--hp-text-secondary)] bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] hover:bg-[var(--hp-surface-hover)] hover:border-[var(--hp-border-hover)] transition-all duration-[var(--hp-duration-fast)]"
+          >
+            {cancelLabel}
+          </button>
           <button
             onClick={() => { if (value.trim()) onConfirm(value.trim()); }}
-            style={{
-              background: 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))',
-              color: '#000', border: 'none', padding: '10px 24px', borderRadius: '10px',
-              fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(99,102,241,0.25)', transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
-          >{confirmLabel}</button>
+            className="px-5 py-2 text-sm font-semibold bg-[var(--hp-primary)] hover:bg-[var(--hp-primary-hover)] text-white rounded-[var(--hp-radius-md)] shadow-sm transition-all duration-[var(--hp-duration-fast)] active:scale-[0.98]"
+          >
+            {confirmLabel}
+          </button>
         </div>
       </div>
     </div>

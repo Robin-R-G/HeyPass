@@ -117,15 +117,15 @@ export default function PendingUsersPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#000] text-white font-sans antialiased">
-      <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
+    <div className="min-h-screen bg-[var(--hp-bg)] text-white font-sans antialiased">
+      <nav className="sticky top-0 z-50 hp-nav border-b border-[var(--hp-border)]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/superadmin" className="flex items-center gap-2.5 no-underline">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
-            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
             <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
-          <Link href="/superadmin" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-all">
+          <Link href="/superadmin" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[var(--hp-text-muted)] hover:text-white hover:bg-[var(--hp-surface-hover)] transition-all">
             <ArrowLeft size={14} /> Back to Dashboard
           </Link>
         </div>
@@ -133,8 +133,8 @@ export default function PendingUsersPage() {
 
       <main className="max-w-[1200px] mx-auto px-4 sm:px-8 py-8 sm:py-12">
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-1.5 tracking-tight">Pending Users</h1>
-          <p className="text-sm text-[#999]">Review and approve new user registrations</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--hp-text)] mb-1.5 tracking-tight">Pending Users</h1>
+          <p className="text-sm text-[var(--hp-text-muted)]">Review and approve new user registrations</p>
         </div>
 
         {/* Search */}
@@ -146,7 +146,7 @@ export default function PendingUsersPage() {
               placeholder="Search users..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] text-sm text-[var(--hp-text)] placeholder:text-[var(--hp-text-muted)] focus:outline-none focus:border-[var(--hp-border-focus)] focus:ring-2 focus:ring-[var(--hp-primary-glow)]"
             />
           </div>
         </div>
@@ -154,12 +154,12 @@ export default function PendingUsersPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
             <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
-            <span className="text-[#999] text-sm">Loading pending users...</span>
+            <span className="text-[var(--hp-text-muted)] text-sm">Loading pending users...</span>
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="hp-glass-card p-16 text-center">
-            <Users size={40} className="text-white/20 mx-auto mb-4" />
-            <p className="text-hp-text-secondary opacity-60 text-sm">
+            <Users size={40} className="text-[var(--hp-text-muted)] mx-auto mb-4" />
+            <p className="text-[var(--hp-text-muted)] text-sm">
               {search ? 'No users match your search' : 'No pending users'}
             </p>
           </div>
@@ -173,11 +173,11 @@ export default function PendingUsersPage() {
                       {(user.first_name || user.email)[0].toUpperCase()}
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-white">
+                      <div className="text-sm font-semibold text-[var(--hp-text)]">
                         {user.first_name} {user.last_name || user.email}
                       </div>
-                      <div className="text-xs text-hp-text-secondary/60">{user.email}</div>
-                      <div className="text-xs text-hp-text-secondary/40 mt-0.5">
+                      <div className="text-xs text-[var(--hp-text-muted)]">{user.email}</div>
+                      <div className="text-xs text-[var(--hp-text-muted)] mt-0.5">
                         Registered {new Date(user.created_at).toLocaleDateString()}
                         {user.memberships?.[0]?.client && (
                           <span className="ml-2 text-[var(--hp-primary)]">
@@ -208,7 +208,7 @@ export default function PendingUsersPage() {
                     <button
                       onClick={() => handleReject(user.id)}
                       disabled={actionLoading === user.id}
-                      className="text-xs font-bold px-4 py-2 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-all flex items-center gap-1.5"
+                      className="text-xs font-bold px-4 py-2 rounded-lg border border-[var(--hp-error)]/20 text-[var(--hp-error)] hover:bg-[var(--hp-error-bg)] transition-all flex items-center gap-1.5"
                     >
                       <XCircle size={12} />
                       Reject

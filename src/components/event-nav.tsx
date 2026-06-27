@@ -20,17 +20,21 @@ const EVENT_TABS = [
 
 export function EventNav({ eventId, active }: { eventId: string; active: string }) {
   return (
-    <nav className="flex gap-1 mb-6 overflow-x-auto pb-1 scrollbar-none" role="navigation" aria-label="Event navigation">
+    <nav
+      className="flex gap-1 mb-6 overflow-x-auto pb-1 scrollbar-none"
+      role="navigation"
+      aria-label="Event navigation"
+    >
       {EVENT_TABS.map(tab => {
         const isActive = tab.slug === active;
         return (
           <Link
             key={tab.slug}
             href={`/dashboard/events/${eventId}/${tab.slug}`}
-            className={`shrink-0 px-3 py-1.5 rounded-[var(--hp-radius-sm)] text-xs font-medium transition-all duration-[var(--hp-duration-fast)] ${
+            className={`shrink-0 px-3 py-1.5 rounded-[var(--hp-radius-sm)] text-xs font-medium transition-all duration-[var(--hp-duration-fast)] border ${
               isActive
-                ? 'bg-[var(--hp-primary)]/10 text-[var(--hp-primary)] border border-[var(--hp-primary)]/20 font-semibold'
-                : 'text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface)] border border-transparent'
+                ? 'bg-[var(--hp-primary)]/10 text-[var(--hp-primary)] border-[var(--hp-primary)]/20 font-semibold shadow-sm'
+                : 'text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] border-transparent'
             }`}
             aria-current={isActive ? 'page' : undefined}
           >

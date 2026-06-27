@@ -46,6 +46,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
 
   return (
     <div className="flex min-h-screen">
+      {/* Sidebar */}
       <nav className="w-[240px] shrink-0 bg-[var(--hp-bg-elevated)] border-r border-[var(--hp-border)] flex flex-col py-6 hidden md:flex">
         <Link
           href="/dashboard"
@@ -55,11 +56,11 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           Back to Events
         </Link>
 
-        <div className="border-t border-[var(--hp-border)] mx-5 mb-5" />
+        <div className="hp-divider mx-5" />
 
         {NAV_SECTIONS.map((section, sIdx) => (
           <div key={section.title} className={sIdx > 0 ? 'mt-5' : ''}>
-            <div className="text-[10px] font-semibold text-[var(--hp-text-muted)] uppercase tracking-wider px-5 mb-1.5">
+            <div className="hp-kpi-label px-5 mb-1.5">
               {section.title}
             </div>
             {section.items.map(item => {
@@ -82,6 +83,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         ))}
       </nav>
 
+      {/* Content */}
       <main className="flex-1 overflow-auto">
         {children}
       </main>

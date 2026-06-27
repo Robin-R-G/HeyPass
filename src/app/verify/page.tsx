@@ -60,13 +60,13 @@ export default function VerifyPage() {
   return (
     <div className="min-h-screen bg-transparent flex items-center justify-center py-12 font-sans antialiased">
       <div className="w-full max-w-[440px] px-5">
-        <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-[#777] hover:text-white no-underline mb-6 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] no-underline mb-6 transition-colors">
           &larr; Back to Home
         </Link>
 
         <div className="text-center mb-7">
           <h1 className="text-[1.7rem] font-extrabold text-white mb-1.5 tracking-tight">Certificate Verification</h1>
-          <p className="text-sm text-[#999]">Verify the authenticity of a certificate</p>
+          <p className="text-sm text-[var(--hp-text-muted)]">Verify the authenticity of a certificate</p>
         </div>
 
         <div className="hp-glass-card p-7 sm:p-8">
@@ -82,7 +82,7 @@ export default function VerifyPage() {
                 className={`py-2.5 px-3 rounded-lg text-xs font-semibold cursor-pointer transition-all duration-150 min-h-[44px] ${
                   method === t.key
                     ? 'bg-[var(--hp-primary)]/20 text-white shadow-sm'
-                    : 'bg-transparent text-[#888] hover:text-white'
+                    : 'bg-transparent text-[var(--hp-text-muted)] hover:text-white'
                 }`}
               >
                 {t.label}
@@ -92,7 +92,7 @@ export default function VerifyPage() {
 
           {/* Input */}
           <div className="mb-5">
-            <label className="block text-[13px] font-semibold text-[#ccc] mb-2">
+            <label className="block text-[13px] font-semibold text-[var(--hp-text-secondary)] mb-2">
               {method === 'number' ? 'Certificate Number' : 'Verification Token'}
             </label>
             <Input
@@ -143,14 +143,14 @@ export default function VerifyPage() {
                 { label: 'Issued', value: result.issued_at ? new Date(result.issued_at).toLocaleDateString() : '-' },
               ].map(item => (
                 <div key={item.label}>
-                  <div className="text-[#888] text-[10px] font-medium uppercase tracking-wider mb-1">{item.label}</div>
-                  <div className={`text-white text-sm font-medium ${item.mono ? 'font-mono text-[#999]' : ''}`}>{item.value}</div>
+                  <div className="text-[var(--hp-text-muted)] text-[10px] font-medium uppercase tracking-wider mb-1">{item.label}</div>
+                  <div className={`text-white text-sm font-medium ${item.mono ? 'font-mono text-[var(--hp-text-muted)]' : ''}`}>{item.value}</div>
                 </div>
               ))}
             </div>
 
             <div className="border-t border-white/[0.06] pt-3.5 mt-3.5">
-              <div className="text-xs text-[#888]">Verified {result.verification_count || 0} time(s)</div>
+              <div className="text-xs text-[var(--hp-text-muted)]">Verified {result.verification_count || 0} time(s)</div>
             </div>
 
             {result.pdf_url && (

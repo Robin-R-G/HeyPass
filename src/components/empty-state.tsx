@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Inbox, Search, type LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface EmptyStateProps {
   icon?: LucideIcon;
@@ -11,6 +12,7 @@ interface EmptyStateProps {
     label: string;
     onClick: () => void;
     icon?: LucideIcon;
+    variant?: 'default' | 'secondary';
   };
   secondaryAction?: {
     label: string;
@@ -48,22 +50,22 @@ export function EmptyState({
 
       <div className="flex items-center gap-3">
         {action && (
-          <button
+          <Button
             onClick={action.onClick}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--hp-primary)] text-white font-medium rounded-[var(--hp-radius-md)] text-sm hover:bg-[var(--hp-primary-hover)] transition-colors"
+            variant={action.variant === 'secondary' ? 'secondary' : 'default'}
           >
             {action.icon && <action.icon size={16} />}
             {action.label}
-          </button>
+          </Button>
         )}
         {secondaryAction && (
-          <button
+          <Button
             onClick={secondaryAction.onClick}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] text-[var(--hp-text-secondary)] rounded-[var(--hp-radius-md)] text-sm hover:bg-[var(--hp-surface-hover)] hover:border-[var(--hp-border-hover)] transition-colors"
+            variant="secondary"
           >
             {secondaryAction.icon && <secondaryAction.icon size={16} />}
             {secondaryAction.label}
-          </button>
+          </Button>
         )}
       </div>
     </div>
@@ -99,12 +101,9 @@ export function EmptyStateTable({
       <p className="text-sm text-[var(--hp-text-secondary)]">{title || 'No records found'}</p>
       {description && <p className="text-xs text-[var(--hp-text-muted)] mt-1">{description}</p>}
       {actionLabel && onAction && (
-        <button
-          onClick={onAction}
-          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[var(--hp-primary)] text-white font-medium rounded-[var(--hp-radius-md)] text-xs hover:bg-[var(--hp-primary-hover)] transition-colors"
-        >
+        <Button onClick={onAction} size="sm" className="mt-4">
           {actionLabel}
-        </button>
+        </Button>
       )}
     </div>
   );

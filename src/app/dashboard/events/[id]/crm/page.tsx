@@ -360,7 +360,7 @@ export default function CRMDashboardPage() {
   const getScoreBadgeClass = (score: number) => {
     if (score >= 80) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
     if (score >= 40) return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-    return 'bg-[#555]/10 text-[#888] border-[#555]/20';
+    return 'bg-[var(--hp-surface)] text-[var(--hp-text-muted)] border-[#555]/20';
   };
 
   const getScoreTier = (score: number) => {
@@ -386,20 +386,20 @@ export default function CRMDashboardPage() {
               SaaS Engine
             </Badge>
           </div>
-          <p className="text-sm text-[#888] mt-1">
+          <p className="text-sm text-[var(--hp-text-muted)] mt-1">
             Build long-term retention, manage automated messaging templates, and view comprehensive contact lifecycle logs.
           </p>
         </div>
         <div className="flex gap-2">
-          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm" className="border-[#222] hover:bg-[#111]">Attendance</Button></Link>
-          <Link href={`/dashboard/events/${eventId}/sponsors`}><Button variant="outline" size="sm" className="border-[#222] hover:bg-[#111]">Sponsors</Button></Link>
-          <Link href={`/dashboard/events/${eventId}/volunteers`}><Button variant="outline" size="sm" className="border-[#222] hover:bg-[#111]">Volunteers</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/dashboard`}><Button variant="outline" size="sm" className="border-[var(--hp-border)] hover:bg-[var(--hp-surface)]">Attendance</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/sponsors`}><Button variant="outline" size="sm" className="border-[var(--hp-border)] hover:bg-[var(--hp-surface)]">Sponsors</Button></Link>
+          <Link href={`/dashboard/events/${eventId}/volunteers`}><Button variant="outline" size="sm" className="border-[var(--hp-border)] hover:bg-[var(--hp-surface)]">Volunteers</Button></Link>
         </div>
       </div>
 
       {/* Main Tabs Container */}
       <Tabs defaultValue="analytics" onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="bg-[#0a0a0a]/60 p-1 border border-[#222]/60 flex flex-wrap h-auto gap-1">
+        <TabsList className="bg-[#0a0a0a]/60 p-1 border border-[var(--hp-border)]/60 flex flex-wrap h-auto gap-1">
           <TabsTrigger value="analytics" className="data-[state=active]:bg-[var(--hp-primary)] data-[state=active]:text-black text-xs md:text-sm py-1.5 px-3 rounded">
             <TrendingUp className="w-4 h-4 mr-1.5 inline" /> Analytics
           </TabsTrigger>
@@ -428,7 +428,7 @@ export default function CRMDashboardPage() {
             ============================================== */}
         <TabsContent value="analytics" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader className="pb-2">
                 <CardDescription className="text-white/80">Total CRM Contacts</CardDescription>
                 <CardTitle className="text-3xl font-bold">{contacts.length}</CardTitle>
@@ -439,7 +439,7 @@ export default function CRMDashboardPage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader className="pb-2">
                 <CardDescription className="text-white/80">Avg Engagement Score</CardDescription>
                 <CardTitle className="text-3xl font-bold">
@@ -449,10 +449,10 @@ export default function CRMDashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-xs text-[#888]">Score of all contacts inside system</div>
+                <div className="text-xs text-[var(--hp-text-muted)]">Score of all contacts inside system</div>
               </CardContent>
             </Card>
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader className="pb-2">
                 <CardDescription className="text-white/80">WhatsApp Delivery Rate</CardDescription>
                 <CardTitle className="text-3xl font-bold">98.4%</CardTitle>
@@ -463,7 +463,7 @@ export default function CRMDashboardPage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader className="pb-2">
                 <CardDescription className="text-white/80">WhatsApp Read Rate</CardDescription>
                 <CardTitle className="text-3xl font-bold">84.1%</CardTitle>
@@ -476,7 +476,7 @@ export default function CRMDashboardPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Feedback stats */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] md:col-span-2">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] md:col-span-2">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle>Attendee Feedback Summary</CardTitle>
@@ -489,7 +489,7 @@ export default function CRMDashboardPage() {
                   <DialogContent className="max-w-lg">
                     <DialogHeader>
                       <DialogTitle>Mock Attendee Feedback Submission</DialogTitle>
-                      <DialogDescription className="text-[#888]">Simulate attendee feedback to trigger CRM points recalculation.</DialogDescription>
+                      <DialogDescription className="text-[var(--hp-text-muted)]">Simulate attendee feedback to trigger CRM points recalculation.</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 mt-4">
                       <div>
@@ -499,8 +499,8 @@ export default function CRMDashboardPage() {
                       <div>
                         <Label>Rating (1 to 5 Stars)</Label>
                         <Select value={newFeedback.rating} onValueChange={v => setNewFeedback({ ...newFeedback, rating: v })}>
-                          <SelectTrigger className="bg-[#111] border-[#222]"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-[#111] border-[#222] text-white">
+                          <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)]"><SelectValue /></SelectTrigger>
+                          <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                             <SelectItem value="5">⭐⭐⭐⭐⭐ (5 Stars)</SelectItem>
                             <SelectItem value="4">⭐⭐⭐⭐ (4 Stars)</SelectItem>
                             <SelectItem value="3">⭐⭐⭐ (3 Stars)</SelectItem>
@@ -523,7 +523,7 @@ export default function CRMDashboardPage() {
                   <p className="text-white/80 text-center py-6">No feedbacks submitted yet.</p>
                 ) : (
                   <div className="space-y-4">
-                    <div className="flex gap-4 items-center p-3 bg-[#111]/40 rounded border border-[#222]/40">
+                    <div className="flex gap-4 items-center p-3 bg-[var(--hp-surface)]/40 rounded border border-[var(--hp-border)]/40">
                       <div className="text-center">
                         <div className="text-4xl font-bold text-[var(--hp-primary)]">
                           {(feedbacks.reduce((acc, f) => acc + f.rating, 0) / feedbacks.length).toFixed(1)}
@@ -532,26 +532,26 @@ export default function CRMDashboardPage() {
                       </div>
                       <div className="flex-1">
                         <div className="text-sm font-semibold">Highly Satisfied Attendees</div>
-                        <div className="text-xs text-[#888]">Recalculated dynamically based on {feedbacks.length} reviews</div>
+                        <div className="text-xs text-[var(--hp-text-muted)]">Recalculated dynamically based on {feedbacks.length} reviews</div>
                       </div>
                     </div>
                     <Table>
-                      <TableHeader className="border-[#222]">
-                        <TableRow className="border-[#222]">
-                          <TableHead className="text-[#888]">Attendee</TableHead>
-                          <TableHead className="text-[#888]">Rating</TableHead>
-                          <TableHead className="text-[#888]">Comments</TableHead>
+                      <TableHeader className="border-[var(--hp-border)]">
+                        <TableRow className="border-[var(--hp-border)]">
+                          <TableHead className="text-[var(--hp-text-muted)]">Attendee</TableHead>
+                          <TableHead className="text-[var(--hp-text-muted)]">Rating</TableHead>
+                          <TableHead className="text-[var(--hp-text-muted)]">Comments</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {feedbacks.map((f, idx) => (
-                          <TableRow key={idx} className="border-[#222] hover:bg-[#111]/20">
+                          <TableRow key={idx} className="border-[var(--hp-border)] hover:bg-[var(--hp-surface)]/20">
                             <TableCell className="font-medium text-white">
                               {f.registration?.first_name} {f.registration?.last_name}
                               <div className="text-xs text-white/80">{f.registration?.email}</div>
                             </TableCell>
                             <TableCell className="text-[var(--hp-primary)]">{'★'.repeat(f.rating)}</TableCell>
-                            <TableCell className="text-[#ccc] text-xs italic">{f.comments || '-'}</TableCell>
+                            <TableCell className="text-[var(--hp-text-secondary)] text-xs italic">{f.comments || '-'}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -562,7 +562,7 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Engagement tiers */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader>
                 <CardTitle>Community Segments</CardTitle>
                 <CardDescription>Contact distribution by engagement score levels.</CardDescription>
@@ -578,10 +578,10 @@ export default function CRMDashboardPage() {
                   return (
                     <div key={s.segment}>
                       <div className="flex justify-between text-xs mb-1">
-                        <span className="text-[#ccc]">{s.segment}</span>
+                        <span className="text-[var(--hp-text-secondary)]">{s.segment}</span>
                         <span className="font-semibold">{s.count} ({ratio}%)</span>
                       </div>
-                      <div className="h-2 rounded bg-[#111] overflow-hidden">
+                      <div className="h-2 rounded bg-[var(--hp-surface)] overflow-hidden">
                         <div className={`h-full ${s.color}`} style={{ width: `${ratio}%` }} />
                       </div>
                     </div>
@@ -605,21 +605,21 @@ export default function CRMDashboardPage() {
                   value={searchQuery}
                   onChange={e => { setSearchQuery(e.target.value); }}
                   placeholder="Search contacts..."
-                  className="bg-[#111] border-[#222] text-white pl-9 h-9"
+                  className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white pl-9 h-9"
                 />
               </div>
 
               <Select value={scopeFilter} onValueChange={v => { setScopeFilter(v); }}>
-                <SelectTrigger className="bg-[#111] border-[#222] h-9 w-32"><SelectValue placeholder="Scope" /></SelectTrigger>
-                <SelectContent className="bg-[#111] border-[#222] text-white">
+                <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)] h-9 w-32"><SelectValue placeholder="Scope" /></SelectTrigger>
+                <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                   <SelectItem value="event">This Event</SelectItem>
                   <SelectItem value="all">All Contacts</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={typeFilter} onValueChange={v => { setTypeFilter(v); }}>
-                <SelectTrigger className="bg-[#111] border-[#222] h-9 w-32"><SelectValue placeholder="Role Type" /></SelectTrigger>
-                <SelectContent className="bg-[#111] border-[#222] text-white">
+                <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)] h-9 w-32"><SelectValue placeholder="Role Type" /></SelectTrigger>
+                <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                   <SelectItem value=" ">All Roles</SelectItem>
                   <SelectItem value="Attendee">Attendee</SelectItem>
                   <SelectItem value="Volunteer">Volunteer</SelectItem>
@@ -628,7 +628,7 @@ export default function CRMDashboardPage() {
                 </SelectContent>
               </Select>
 
-              <Button size="sm" onClick={fetchContacts} className="bg-[#0a0a0a] hover:bg-[#111] h-9">Apply</Button>
+              <Button size="sm" onClick={fetchContacts} className="bg-[#0a0a0a] hover:bg-[var(--hp-surface)] h-9">Apply</Button>
             </div>
 
             <Dialog>
@@ -638,7 +638,7 @@ export default function CRMDashboardPage() {
               <DialogContent className="max-w-lg">
                 <DialogHeader>
                   <DialogTitle>Create New CRM Contact</DialogTitle>
-                  <DialogDescription className="text-[#888]">Add personal details and tags directly inside the database.</DialogDescription>
+                  <DialogDescription className="text-[var(--hp-text-muted)]">Add personal details and tags directly inside the database.</DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <div>
@@ -679,20 +679,20 @@ export default function CRMDashboardPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Contacts Table */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] lg:col-span-2">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] lg:col-span-2">
               <CardHeader className="pb-3">
                 <CardTitle>CRM Contacts Directory</CardTitle>
                 <CardDescription>Directory listing of contacts matching scope criteria.</CardDescription>
               </CardHeader>
               <CardContent className="p-0">
                 <Table>
-                  <TableHeader className="border-[#222]">
-                    <TableRow className="border-[#222]">
-                      <TableHead className="text-[#888]">Name</TableHead>
-                      <TableHead className="text-[#888]">Phone</TableHead>
-                      <TableHead className="text-[#888]">Score & Tier</TableHead>
-                      <TableHead className="text-[#888]">Tags</TableHead>
-                      <TableHead className="text-[#888]"></TableHead>
+                  <TableHeader className="border-[var(--hp-border)]">
+                    <TableRow className="border-[var(--hp-border)]">
+                      <TableHead className="text-[var(--hp-text-muted)]">Name</TableHead>
+                      <TableHead className="text-[var(--hp-text-muted)]">Phone</TableHead>
+                      <TableHead className="text-[var(--hp-text-muted)]">Score & Tier</TableHead>
+                      <TableHead className="text-[var(--hp-text-muted)]">Tags</TableHead>
+                      <TableHead className="text-[var(--hp-text-muted)]"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -705,13 +705,13 @@ export default function CRMDashboardPage() {
                         <TableRow
                           key={c.id}
                           onClick={() => openContactProfile(c.id)}
-                          className={`border-[#222] cursor-pointer transition-colors ${selectedContactId === c.id ? 'bg-[var(--hp-primary)]/5 hover:bg-[var(--hp-primary)]/10' : 'hover:bg-[#111]/40'}`}
+                          className={`border-[var(--hp-border)] cursor-pointer transition-colors ${selectedContactId === c.id ? 'bg-[var(--hp-primary)]/5 hover:bg-[var(--hp-primary)]/10' : 'hover:bg-[var(--hp-surface)]/40'}`}
                         >
                           <TableCell className="font-semibold text-white">
                             {c.name}
-                            <div className="text-xs text-[#888]">{c.email || 'No email'}</div>
+                            <div className="text-xs text-[var(--hp-text-muted)]">{c.email || 'No email'}</div>
                           </TableCell>
-                          <TableCell className="text-xs text-[#ccc]">{c.phone || '-'}</TableCell>
+                          <TableCell className="text-xs text-[var(--hp-text-secondary)]">{c.phone || '-'}</TableCell>
                           <TableCell>
                             <Badge variant="outline" className={getScoreBadgeClass(c.engagement_score || 0)}>
                               {c.engagement_score || 0} ({getScoreTier(c.engagement_score || 0)})
@@ -720,7 +720,7 @@ export default function CRMDashboardPage() {
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
                               {(c.tags || []).map((t: string) => (
-                                <Badge key={t} className="bg-[#111] border-[#222] text-[10px] py-0.5 text-[#888]">{t}</Badge>
+                                <Badge key={t} className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-[10px] py-0.5 text-[var(--hp-text-muted)]">{t}</Badge>
                               ))}
                             </div>
                           </TableCell>
@@ -734,8 +734,8 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Profile Detail Drawer (Right panel context) */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
-              <CardHeader className="border-b border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
+              <CardHeader className="border-b border-[var(--hp-border)]">
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5 text-[var(--hp-primary)]" /> Relationship Profile
                 </CardTitle>
@@ -744,20 +744,20 @@ export default function CRMDashboardPage() {
               <CardContent className="pt-6">
                 {selectedContactId === null ? (
                   <div className="text-center text-white/80 py-12 flex flex-col items-center justify-center gap-2">
-                    <Users className="w-12 h-12 text-[#555]" />
+                    <Users className="w-12 h-12 text-[var(--hp-text-muted)]" />
                     <p className="text-sm">Select a contact from the directory table to inspect their lifecycle logs.</p>
                   </div>
                 ) : profileLoading ? (
-                  <div className="p-12 text-center text-[#888]">Loading profile data...</div>
+                  <div className="p-12 text-center text-[var(--hp-text-muted)]">Loading profile data...</div>
                 ) : selectedContactProfile && (
                   <div className="space-y-6">
                     {/* Header Details */}
                     <div>
                       <h3 className="text-xl font-bold text-white">{selectedContactProfile.profile.name}</h3>
-                      <p className="text-xs text-[#888]">{selectedContactProfile.profile.email || 'No Email'}</p>
-                      <p className="text-xs text-[#888]">{selectedContactProfile.profile.phone || 'No Phone'}</p>
+                      <p className="text-xs text-[var(--hp-text-muted)]">{selectedContactProfile.profile.email || 'No Email'}</p>
+                      <p className="text-xs text-[var(--hp-text-muted)]">{selectedContactProfile.profile.phone || 'No Phone'}</p>
                       {selectedContactProfile.profile.organization && (
-                        <div className="flex items-center gap-1.5 text-xs text-[#ccc] mt-2">
+                        <div className="flex items-center gap-1.5 text-xs text-[var(--hp-text-secondary)] mt-2">
                           <Building className="w-3.5 h-3.5 text-white/80" />
                           {selectedContactProfile.profile.organization} {selectedContactProfile.profile.designation ? `(${selectedContactProfile.profile.designation})` : ''}
                         </div>
@@ -765,7 +765,7 @@ export default function CRMDashboardPage() {
                     </div>
 
                     {/* Engagement Metrics */}
-                    <div className="grid grid-cols-2 gap-2 bg-[#111]/60 p-3 rounded border border-[#222]/40">
+                    <div className="grid grid-cols-2 gap-2 bg-[var(--hp-surface)]/60 p-3 rounded border border-[var(--hp-border)]/40">
                       <div>
                         <div className="text-xs text-white/80">Engagement Score</div>
                         <div className="text-lg font-bold text-[var(--hp-primary)]">{selectedContactProfile.profile.engagement_score || 0} pts</div>
@@ -781,7 +781,7 @@ export default function CRMDashboardPage() {
                       <div className="flex items-center gap-1 text-xs text-[var(--hp-primary)] font-semibold mb-1">
                         <Bot className="w-4 h-4" /> AI Ready Core Infrastructure
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-[10px] text-[#888] mt-2">
+                      <div className="grid grid-cols-2 gap-2 text-[10px] text-[var(--hp-text-muted)] mt-2">
                         <div>
                           <span>Lead Scoring Rank:</span>
                           <span className="font-semibold text-white block">High Conversion Target</span>
@@ -796,12 +796,12 @@ export default function CRMDashboardPage() {
                     {/* Timelines Accordion style summary */}
                     <div className="space-y-4 text-xs">
                       <div>
-                        <h4 className="font-bold text-[#ccc] mb-1">Event Registrations ({selectedContactProfile.eventHistory.length})</h4>
+                        <h4 className="font-bold text-[var(--hp-text-secondary)] mb-1">Event Registrations ({selectedContactProfile.eventHistory.length})</h4>
                         <div className="space-y-1">
                           {selectedContactProfile.eventHistory.map((reg: any, idx: number) => (
-                            <div key={idx} className="flex justify-between bg-[#111]/20 p-2 rounded">
-                              <span className="text-[#ccc] truncate max-w-[150px]">{reg.event?.title}</span>
-                              <Badge className="bg-[#111] border-[#222] text-[10px] text-[#888]">{reg.status}</Badge>
+                            <div key={idx} className="flex justify-between bg-[var(--hp-surface)]/20 p-2 rounded">
+                              <span className="text-[var(--hp-text-secondary)] truncate max-w-[150px]">{reg.event?.title}</span>
+                              <Badge className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-[10px] text-[var(--hp-text-muted)]">{reg.status}</Badge>
                             </div>
                           ))}
                         </div>
@@ -809,12 +809,12 @@ export default function CRMDashboardPage() {
 
                       {selectedContactProfile.certificates?.length > 0 && (
                         <div>
-                          <h4 className="font-bold text-[#ccc] mb-1">Certificates Earned</h4>
+                          <h4 className="font-bold text-[var(--hp-text-secondary)] mb-1">Certificates Earned</h4>
                           <div className="space-y-1">
                             {selectedContactProfile.certificates.map((c: any, idx: number) => (
-                              <div key={idx} className="flex justify-between items-center bg-[#111]/20 p-2 rounded">
+                              <div key={idx} className="flex justify-between items-center bg-[var(--hp-surface)]/20 p-2 rounded">
                                 <span className="text-[var(--hp-primary)] font-mono">{c.certificate_number}</span>
-                                <span className="text-[10px] text-[#888]">{c.template?.name}</span>
+                                <span className="text-[10px] text-[var(--hp-text-muted)]">{c.template?.name}</span>
                               </div>
                             ))}
                           </div>
@@ -823,15 +823,15 @@ export default function CRMDashboardPage() {
 
                       {selectedContactProfile.whatsappLogs?.length > 0 && (
                         <div>
-                          <h4 className="font-bold text-[#ccc] mb-1">WhatsApp Chat Log (Last 3)</h4>
+                          <h4 className="font-bold text-[var(--hp-text-secondary)] mb-1">WhatsApp Chat Log (Last 3)</h4>
                           <div className="space-y-1.5">
                             {selectedContactProfile.whatsappLogs.slice(0, 3).map((w: any, idx: number) => (
-                              <div key={idx} className={`p-2 rounded text-[10px] ${w.direction === 'inbound' ? 'bg-[#111] border-l border-emerald-500' : 'bg-[#111]/40 border-l border-[#555]'}`}>
+                              <div key={idx} className={`p-2 rounded text-[10px] ${w.direction === 'inbound' ? 'bg-[var(--hp-surface)] border-l border-emerald-500' : 'bg-[var(--hp-surface)]/40 border-l border-[#555]'}`}>
                                 <div className="flex justify-between text-white/80 mb-1">
                                   <span>{w.direction}</span>
                                   <span>{new Date(w.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 </div>
-                                <p className="text-[#ccc] italic">"{w.message_text}"</p>
+                                <p className="text-[var(--hp-text-secondary)] italic">"{w.message_text}"</p>
                               </div>
                             ))}
                           </div>
@@ -852,17 +852,17 @@ export default function CRMDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             
             {/* Left sidebar chats list */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] lg:col-span-1 h-[600px] flex flex-col">
-              <CardHeader className="pb-3 border-b border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] lg:col-span-1 h-[600px] flex flex-col">
+              <CardHeader className="pb-3 border-b border-[var(--hp-border)]">
                 <CardTitle className="text-md flex items-center justify-between">
                   <span>Active Chats</span>
-                  <Badge className="bg-[#111] text-[var(--hp-primary)] border-[#222]">{conversations.length}</Badge>
+                  <Badge className="bg-[var(--hp-surface)] text-[var(--hp-primary)] border-[var(--hp-border)]">{conversations.length}</Badge>
                 </CardTitle>
                 <div className="relative mt-2">
                   <Search className="w-3.5 h-3.5 text-white/80 absolute left-2 top-2" />
                   <Input
                     placeholder="Search chats..."
-                    className="bg-[#111] border-[#222] text-white pl-8 h-8 text-xs"
+                    className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white pl-8 h-8 text-xs"
                   />
                 </div>
               </CardHeader>
@@ -874,7 +874,7 @@ export default function CRMDashboardPage() {
                     <div
                       key={chat.contact.id}
                       onClick={() => { openChatThread(chat.contact.id); }}
-                        className={`p-3 border-b border-[#222] cursor-pointer transition-colors ${activeChatContactId === chat.contact.id ? 'bg-[var(--hp-primary)]/5 border-r-2 border-r-[var(--hp-primary)]' : 'hover:bg-[#111]/30'}`}
+                        className={`p-3 border-b border-[var(--hp-border)] cursor-pointer transition-colors ${activeChatContactId === chat.contact.id ? 'bg-[var(--hp-primary)]/5 border-r-2 border-r-[var(--hp-primary)]' : 'hover:bg-[var(--hp-surface)]/30'}`}
                     >
                       <div className="flex justify-between items-start mb-1">
                         <span className="font-semibold text-xs text-white">{chat.contact.name}</span>
@@ -882,7 +882,7 @@ export default function CRMDashboardPage() {
                           {chat.lastMessage ? new Date(chat.lastMessage.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                         </span>
                       </div>
-                      <p className="text-[11px] text-[#888] truncate italic">
+                      <p className="text-[11px] text-[var(--hp-text-muted)] truncate italic">
                         {chat.lastMessage?.text || 'No messages'}
                       </p>
                       {chat.contact.status === 'pending' && (
@@ -895,8 +895,8 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Middle chat window */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] lg:col-span-2 h-[600px] flex flex-col">
-              <CardHeader className="pb-3 border-b border-[#222] flex flex-row items-center justify-between">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] lg:col-span-2 h-[600px] flex flex-col">
+              <CardHeader className="pb-3 border-b border-[var(--hp-border)] flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-sm">
                     {activeChatContactId
@@ -908,16 +908,16 @@ export default function CRMDashboardPage() {
                 {activeChatContactId && (
                   <div className="flex gap-2">
                     <Select value={chatAssignee} onValueChange={v => { setChatAssignee(v); persistContactInboxSettings(activeChatContactId, { assigned_to: v }); }}>
-                      <SelectTrigger className="bg-[#111] border-[#222] text-xs h-7 py-0"><SelectValue placeholder="Assign" /></SelectTrigger>
-                      <SelectContent className="bg-[#111] border-[#222] text-white">
+                      <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-xs h-7 py-0"><SelectValue placeholder="Assign" /></SelectTrigger>
+                      <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                         <SelectItem value="unassigned">Unassigned</SelectItem>
                         <SelectItem value="me">Assigned to Me</SelectItem>
                         <SelectItem value="manager">Assigned to Manager</SelectItem>
                       </SelectContent>
                     </Select>
                     <Select value={chatStatus} onValueChange={v => { setChatStatus(v); persistContactInboxSettings(activeChatContactId, { chat_status: v }); }}>
-                      <SelectTrigger className="bg-[#111] border-[#222] text-xs h-7 py-0"><SelectValue /></SelectTrigger>
-                      <SelectContent className="bg-[#111] border-[#222] text-white">
+                      <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-xs h-7 py-0"><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                         <SelectItem value="active">Active</SelectItem>
                         <SelectItem value="resolved">Resolved</SelectItem>
                       </SelectContent>
@@ -928,7 +928,7 @@ export default function CRMDashboardPage() {
               <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
                 {!activeChatContactId ? (
                   <div className="text-center text-white/80 py-24 flex flex-col items-center justify-center gap-2 h-full">
-                    <MessageSquare className="w-12 h-12 text-[#555]" />
+                    <MessageSquare className="w-12 h-12 text-[var(--hp-text-muted)]" />
                     <p className="text-sm">Pick a contact thread from the active chats list to read/reply messages.</p>
                   </div>
                 ) : chatMessages.length === 0 ? (
@@ -936,7 +936,7 @@ export default function CRMDashboardPage() {
                 ) : (
                   chatMessages.map((m, idx) => (
                     <div key={idx} className={`flex ${m.direction === 'inbound' ? 'justify-start' : 'justify-end'}`}>
-                      <div className={`max-w-[75%] rounded p-3 text-xs ${m.direction === 'inbound' ? 'bg-[#111] text-white border border-[#222]' : 'bg-[var(--hp-primary)]/15 text-white border border-[var(--hp-primary)]/20'}`}>
+                      <div className={`max-w-[75%] rounded p-3 text-xs ${m.direction === 'inbound' ? 'bg-[var(--hp-surface)] text-white border border-[var(--hp-border)]' : 'bg-[var(--hp-primary)]/15 text-white border border-[var(--hp-primary)]/20'}`}>
                         <p>{m.message_text}</p>
                         <div className="flex justify-between items-center text-[9px] text-white/80 mt-2 gap-4">
                           <span>{new Date(m.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -950,14 +950,14 @@ export default function CRMDashboardPage() {
                 )}
               </CardContent>
               {activeChatContactId && (
-                <div className="p-3 border-t border-[#222] bg-[#0a0a0a] space-y-2">
+                <div className="p-3 border-t border-[var(--hp-border)] bg-[#0a0a0a] space-y-2">
                   <div className="flex items-center justify-between text-xs text-white/80">
                     <span className="flex items-center gap-1.5">
                       <Input
                         type="checkbox"
                         checked={internalNote}
                         onChange={e => setInternalNote(e.target.checked)}
-                        className="w-3.5 h-3.5 accent-[var(--hp-primary)] bg-[#111] border-[#222] rounded"
+                        className="w-3.5 h-3.5 accent-[var(--hp-primary)] bg-[var(--hp-surface)] border-[var(--hp-border)] rounded"
                       />
                       Internal Team Note
                     </span>
@@ -968,7 +968,7 @@ export default function CRMDashboardPage() {
                       value={replyText}
                       onChange={e => setReplyText(e.target.value)}
                       placeholder={internalNote ? 'Log internal note (invisible to attendee)...' : 'Type manual WhatsApp text message...'}
-                      className="bg-[#111] border-[#222] text-white flex-1"
+                      className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white flex-1"
                       onKeyDown={e => { if (e.key === 'Enter') sendOutboundReply(); }}
                     />
                     <Button onClick={sendOutboundReply} className="bg-[var(--hp-primary)] text-black hover:bg-[var(--hp-primary-dark)]">
@@ -980,8 +980,8 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Right sidebar Meta webhook simulation */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] lg:col-span-1 h-[600px] flex flex-col">
-              <CardHeader className="pb-3 border-b border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] lg:col-span-1 h-[600px] flex flex-col">
+              <CardHeader className="pb-3 border-b border-[var(--hp-border)]">
                 <CardTitle className="text-xs flex items-center gap-1">
                   <Bot className="w-4 h-4 text-emerald-400 animate-pulse" /> Webhook Simulator
                 </CardTitle>
@@ -993,13 +993,13 @@ export default function CRMDashboardPage() {
                 ) : (
                   <>
                     <div>
-                      <Label className="text-[11px] text-[#888]">Simulate Inbound User Message</Label>
+                      <Label className="text-[11px] text-[var(--hp-text-muted)]">Simulate Inbound User Message</Label>
                       <div className="flex flex-col gap-2 mt-1">
                         <Input
                           value={simText}
                           onChange={e => setSimText(e.target.value)}
                           placeholder="Attendee typing..."
-                          className="bg-[#111] border-[#222] text-xs h-8"
+                          className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-xs h-8"
                         />
                         <Button size="sm" onClick={triggerSimulatedInbound} className="bg-emerald-500 text-black hover:bg-emerald-600 text-xs w-full py-1 h-7">
                           Inject Inbound Chat
@@ -1007,13 +1007,13 @@ export default function CRMDashboardPage() {
                       </div>
                     </div>
 
-                    <div className="border-t border-[#222] pt-4">
-                      <Label className="text-[11px] text-[#888]">Simulate Receipt Callback</Label>
+                    <div className="border-t border-[var(--hp-border)] pt-4">
+                      <Label className="text-[11px] text-[var(--hp-text-muted)]">Simulate Receipt Callback</Label>
                       <p className="text-[9px] text-white/80 mb-2">Simulate delivery or read updates for the outbound message logs.</p>
                       <div className="flex flex-col gap-1">
                         {chatMessages.filter(m => m.direction === 'outbound' && m.status !== 'read').slice(-3).map((m, idx) => (
-                          <div key={idx} className="flex justify-between items-center p-2 bg-[#111] rounded text-[9px] mb-1">
-                            <span className="truncate max-w-[80px] font-mono text-[#888]">{m.message_id}</span>
+                          <div key={idx} className="flex justify-between items-center p-2 bg-[var(--hp-surface)] rounded text-[9px] mb-1">
+                            <span className="truncate max-w-[80px] font-mono text-[var(--hp-text-muted)]">{m.message_id}</span>
                             <div className="flex gap-1">
                               <Button
                                 size="sm"
@@ -1062,7 +1062,7 @@ export default function CRMDashboardPage() {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold">Automated Event Journeys</h2>
-              <p className="text-xs text-[#888]">Trigger custom template WhatsApp notifications on specific registration and attendance actions.</p>
+              <p className="text-xs text-[var(--hp-text-muted)]">Trigger custom template WhatsApp notifications on specific registration and attendance actions.</p>
             </div>
             <Dialog>
               <DialogTrigger asChild>
@@ -1071,7 +1071,7 @@ export default function CRMDashboardPage() {
               <DialogContent className="max-w-lg">
                 <DialogHeader>
                   <DialogTitle>Build Automated Workflow</DialogTitle>
-                  <DialogDescription className="text-[#888]">Setup trigger conditions and action delay intervals.</DialogDescription>
+                  <DialogDescription className="text-[var(--hp-text-muted)]">Setup trigger conditions and action delay intervals.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 mt-4">
                   <div>
@@ -1081,8 +1081,8 @@ export default function CRMDashboardPage() {
                   <div>
                     <Label>Workflow Trigger Event</Label>
                     <Select value={newWorkflow.triggerType} onValueChange={v => setNewWorkflow({ ...newWorkflow, triggerType: v })}>
-                      <SelectTrigger className="bg-[#111] border-[#222]"><SelectValue /></SelectTrigger>
-                      <SelectContent className="bg-[#111] border-[#222] text-white">
+                      <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)]"><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                         <SelectItem value="registration_complete">On Registration Complete</SelectItem>
                         <SelectItem value="checkin_complete">On Gate Check-In Complete</SelectItem>
                         <SelectItem value="certificate_ready">On Certificate Generated</SelectItem>
@@ -1109,27 +1109,27 @@ export default function CRMDashboardPage() {
             {/* Visual Workflow list */}
             <div className="lg:col-span-2 space-y-4">
               {workflows.length === 0 ? (
-                <Card className="bg-[#0a0a0a]/60 border-[#222] p-8 text-center text-white/80">
+                <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] p-8 text-center text-white/80">
                   No automated event journeys configured yet.
                 </Card>
               ) : (
                 workflows.map((w: any) => (
-                  <Card key={w.id} className="bg-[#0a0a0a]/60 border-[#222]">
+                  <Card key={w.id} className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-start">
                         <div>
                           <CardTitle className="text-sm font-bold flex items-center gap-1.5">
                             <ShieldCheck className="w-4 h-4 text-emerald-400" /> {w.name}
                           </CardTitle>
-                          <CardDescription className="text-xs">Trigger: <span className="font-mono text-white text-[10px] bg-[#111] px-1 py-0.5 rounded">{w.trigger_type}</span></CardDescription>
+                          <CardDescription className="text-xs">Trigger: <span className="font-mono text-white text-[10px] bg-[var(--hp-surface)] px-1 py-0.5 rounded">{w.trigger_type}</span></CardDescription>
                         </div>
                         <Badge variant={w.is_active ? 'default' : 'secondary'}>{w.is_active ? 'Active' : 'Inactive'}</Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="pt-2">
-                      <div className="flex items-center gap-4 bg-[#111]/40 p-3 rounded border border-[#222]/40 text-xs">
-                        <div className="text-[#888]">Step 1 Action:</div>
-                        <div className="flex-1 font-mono text-[#ccc]">
+                      <div className="flex items-center gap-4 bg-[var(--hp-surface)]/40 p-3 rounded border border-[var(--hp-border)]/40 text-xs">
+                        <div className="text-[var(--hp-text-muted)]">Step 1 Action:</div>
+                        <div className="flex-1 font-mono text-[var(--hp-text-secondary)]">
                           whatsapp_template: <span className="text-[var(--hp-primary)]">{w.actions?.[0]?.template_name}</span> 
                           {w.actions?.[0]?.delay_minutes > 0 ? ` (Delayed ${w.actions?.[0]?.delay_minutes}m)` : ' (Immediate)'}
                         </div>
@@ -1141,7 +1141,7 @@ export default function CRMDashboardPage() {
             </div>
 
             {/* Run logs */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader>
                 <CardTitle className="text-md">Workflow Execution Log</CardTitle>
                 <CardDescription>Tracks automation runs and delivery steps.</CardDescription>
@@ -1152,13 +1152,13 @@ export default function CRMDashboardPage() {
                 ) : (
                   <div className="divide-y divide-[#222]">
                     {workflowRuns.map((r: any) => (
-                      <div key={r.id} className="p-3 text-xs flex justify-between items-center hover:bg-[#111]/10">
+                      <div key={r.id} className="p-3 text-xs flex justify-between items-center hover:bg-[var(--hp-surface)]/10">
                         <div>
                           <span className="font-semibold text-white">{r.contact?.name || 'Contact'}</span>
                           <div className="text-[10px] text-white/80">Template: {r.execution_log?.template_name}</div>
                         </div>
                         <div className="text-right">
-                          <Badge variant="outline" className={r.status === 'completed' ? 'border-emerald-500/35 text-emerald-400 bg-emerald-500/5' : 'border-[#222] text-[#888] bg-[#111]'}>
+                          <Badge variant="outline" className={r.status === 'completed' ? 'border-emerald-500/35 text-emerald-400 bg-emerald-500/5' : 'border-[var(--hp-border)] text-[var(--hp-text-muted)] bg-[var(--hp-surface)]'}>
                             {r.status}
                           </Badge>
                           <div className="text-[9px] text-white/80 mt-1">{new Date(r.created_at).toLocaleTimeString()}</div>
@@ -1179,7 +1179,7 @@ export default function CRMDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Create Campaign form */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] lg:col-span-1">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] lg:col-span-1">
               <CardHeader>
                 <CardTitle>Create Broadcast Campaign</CardTitle>
                 <CardDescription>Dispatch bulk template messages to targeted segments.</CardDescription>
@@ -1192,8 +1192,8 @@ export default function CRMDashboardPage() {
                 <div>
                   <Label>WhatsApp Template</Label>
                   <Select value={newCampaign.templateId} onValueChange={v => setNewCampaign({ ...newCampaign, templateId: v })}>
-                    <SelectTrigger className="bg-[#111] border-[#222]"><SelectValue placeholder="Select a Template" /></SelectTrigger>
-                    <SelectContent className="bg-[#111] border-[#222] text-white">
+                    <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)]"><SelectValue placeholder="Select a Template" /></SelectTrigger>
+                    <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                       {templates.map(t => (
                         <SelectItem key={t.id} value={t.id}>{t.name} ({t.category})</SelectItem>
                       ))}
@@ -1203,8 +1203,8 @@ export default function CRMDashboardPage() {
                 <div>
                   <Label>Target Segments</Label>
                   <Select value={newCampaign.targetSegment} onValueChange={v => setNewCampaign({ ...newCampaign, targetSegment: v })}>
-                    <SelectTrigger className="bg-[#111] border-[#222]"><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#111] border-[#222] text-white">
+                    <SelectTrigger className="bg-[var(--hp-surface)] border-[var(--hp-border)]"><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-[var(--hp-surface)] border-[var(--hp-border)] text-white">
                       <SelectItem value="all">All Attendees</SelectItem>
                       <SelectItem value="checked_in">Checked-In Attendees</SelectItem>
                       <SelectItem value="absent">Absent Attendees</SelectItem>
@@ -1214,12 +1214,12 @@ export default function CRMDashboardPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="bg-[#111]/60 p-3 rounded border border-[#222]/40 space-y-2 text-xs">
-                  <div className="font-bold text-[#ccc]">Variables mapping:</div>
+                <div className="bg-[var(--hp-surface)]/60 p-3 rounded border border-[var(--hp-border)]/40 space-y-2 text-xs">
+                  <div className="font-bold text-[var(--hp-text-secondary)]">Variables mapping:</div>
                   <div className="text-[10px] text-white/80">Maps index values to contact parameters.</div>
                   <div className="flex gap-2 items-center">
                     <Badge variant="outline" className="font-mono">{'{{1}}'}</Badge>
-                    <span className="text-[#888]">Attendee Name (automatically resolved)</span>
+                    <span className="text-[var(--hp-text-muted)]">Attendee Name (automatically resolved)</span>
                   </div>
                 </div>
                 <Button onClick={handleLaunchCampaign} className="bg-[var(--hp-primary)] text-black hover:bg-[var(--hp-primary-dark)] w-full">Launch Broadcast</Button>
@@ -1227,7 +1227,7 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Broadcast dispatches list */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222] lg:col-span-2">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)] lg:col-span-2">
               <CardHeader>
                 <CardTitle>Broadcast Campaign History</CardTitle>
                 <CardDescription>Dispatched bulk messages and status analytics</CardDescription>
@@ -1237,22 +1237,22 @@ export default function CRMDashboardPage() {
                   <p className="text-white/80 text-center py-12">No campaigns launched yet.</p>
                 ) : (
                   <Table>
-                    <TableHeader className="border-[#222]">
-                      <TableRow className="border-[#222]">
-                        <TableHead className="text-[#888]">Name</TableHead>
-                        <TableHead className="text-[#888]">Segment</TableHead>
-                        <TableHead className="text-[#888]">Sent / Deliv / Read</TableHead>
-                        <TableHead className="text-[#888]">Status</TableHead>
+                    <TableHeader className="border-[var(--hp-border)]">
+                      <TableRow className="border-[var(--hp-border)]">
+                        <TableHead className="text-[var(--hp-text-muted)]">Name</TableHead>
+                        <TableHead className="text-[var(--hp-text-muted)]">Segment</TableHead>
+                        <TableHead className="text-[var(--hp-text-muted)]">Sent / Deliv / Read</TableHead>
+                        <TableHead className="text-[var(--hp-text-muted)]">Status</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {campaigns.map(c => (
-                        <TableRow key={c.id} className="border-[#222] hover:bg-[#111]/20">
+                        <TableRow key={c.id} className="border-[var(--hp-border)] hover:bg-[var(--hp-surface)]/20">
                           <TableCell className="font-semibold text-white">
                             {c.name}
                             <div className="text-xs text-white/80">Template: {c.template?.name}</div>
                           </TableCell>
-                          <TableCell><Badge className="bg-[#111] text-[#888] border-[#222]">{c.target_segment}</Badge></TableCell>
+                          <TableCell><Badge className="bg-[var(--hp-surface)] text-[var(--hp-text-muted)] border-[var(--hp-border)]">{c.target_segment}</Badge></TableCell>
                           <TableCell className="text-xs">
                             <span className="text-white font-bold">{c.sent_count}</span>
                             <span className="text-white/80"> / </span>
@@ -1282,7 +1282,7 @@ export default function CRMDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             {/* Volunteer CRM Assignments */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <ClipboardList className="w-5 h-5 text-[var(--hp-primary)]" /> Volunteer Planners & Status
@@ -1290,21 +1290,21 @@ export default function CRMDashboardPage() {
                 <CardDescription>Track assignments, shifts, and WhatsApp check-in status notifications.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-xs text-[#888]">
+                <p className="text-xs text-[var(--hp-text-muted)]">
                   Volunteers automatically link to CRM contact profiles. Manage their tasks, training status, and reporting alerts.
                 </p>
                 <div className="space-y-2">
                   {volunteers.length === 0 ? (
-                    <p className="text-xs text-[#888] text-center py-6">No volunteers registered yet.</p>
+                    <p className="text-xs text-[var(--hp-text-muted)] text-center py-6">No volunteers registered yet.</p>
                   ) : (
                     volunteers.slice(0, 10).map((v: any) => (
-                      <div key={v.id} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
+                      <div key={v.id} className="p-3 bg-[var(--hp-surface)]/40 rounded border border-[var(--hp-border)]/40 text-xs flex justify-between items-center">
                         <div>
                           <div className="font-bold text-white">{v.first_name} {v.last_name}</div>
-                          <div className="text-[#888] mt-1">{v.email || v.phone || 'No contact'}</div>
+                          <div className="text-[var(--hp-text-muted)] mt-1">{v.email || v.phone || 'No contact'}</div>
                         </div>
                         <div className="text-right">
-                          <Badge variant="outline" className={v.status === 'approved' || v.checked_in_at ? 'border-emerald-500/40 text-emerald-400 bg-emerald-500/5' : 'border-[#222] text-[#888] bg-[#111]'}>
+                          <Badge variant="outline" className={v.status === 'approved' || v.checked_in_at ? 'border-emerald-500/40 text-emerald-400 bg-emerald-500/5' : 'border-[var(--hp-border)] text-[var(--hp-text-muted)] bg-[var(--hp-surface)]'}>
                             {v.checked_in_at ? 'Checked In' : v.status}
                           </Badge>
                         </div>
@@ -1316,7 +1316,7 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Tasks overview */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-[var(--hp-primary)]" /> Volunteer Tasks
@@ -1324,7 +1324,7 @@ export default function CRMDashboardPage() {
                 <CardDescription>Manage shifts and assignments.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="text-xs text-[#888] mb-2">
+                <div className="text-xs text-[var(--hp-text-muted)] mb-2">
                   <Link href={`/dashboard/events/${eventId}/volunteers`} className="text-[var(--hp-primary)] hover:underline">
                     Manage volunteers →
                   </Link>
@@ -1341,7 +1341,7 @@ export default function CRMDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             {/* Speaker profile lists */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5 text-[var(--hp-primary)]" /> Sponsors Directory
@@ -1351,17 +1351,17 @@ export default function CRMDashboardPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   {sponsors.length === 0 ? (
-                    <p className="text-xs text-[#888] text-center py-6">No sponsors added yet.</p>
+                    <p className="text-xs text-[var(--hp-text-muted)] text-center py-6">No sponsors added yet.</p>
                   ) : (
                     sponsors.slice(0, 10).map((s: any) => (
-                      <div key={s.id} className="p-3 bg-[#111]/40 rounded border border-[#222]/40 text-xs flex justify-between items-center">
+                      <div key={s.id} className="p-3 bg-[var(--hp-surface)]/40 rounded border border-[var(--hp-border)]/40 text-xs flex justify-between items-center">
                         <div>
                           <div className="font-bold text-white">{s.name}</div>
-                          {s.booth_location && <div className="text-[#888] mt-1">Booth: {s.booth_location}</div>}
+                          {s.booth_location && <div className="text-[var(--hp-text-muted)] mt-1">Booth: {s.booth_location}</div>}
                         </div>
                         <div className="text-right">
                           <div className="text-white font-bold">₹{(s.amount_paid || 0).toLocaleString()}</div>
-                          <Badge className="bg-[#111] text-[#888] border-[#222] mt-1">{s.tier || 'N/A'}</Badge>
+                          <Badge className="bg-[var(--hp-surface)] text-[var(--hp-text-muted)] border-[var(--hp-border)] mt-1">{s.tier || 'N/A'}</Badge>
                         </div>
                       </div>
                     ))
@@ -1376,7 +1376,7 @@ export default function CRMDashboardPage() {
             </Card>
 
             {/* Quick actions */}
-            <Card className="bg-[#0a0a0a]/60 border-[#222]">
+            <Card className="bg-[#0a0a0a]/60 border-[var(--hp-border)]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-[var(--hp-primary)]" /> Speakers & Partners
@@ -1384,7 +1384,7 @@ export default function CRMDashboardPage() {
                 <CardDescription>Speaker engagement and partner tracking.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-xs text-[#888]">
+                <p className="text-xs text-[var(--hp-text-muted)]">
                   Manage speaker profiles, session scheduling, and partner communications from the dedicated sponsors page.
                 </p>
               </CardContent>

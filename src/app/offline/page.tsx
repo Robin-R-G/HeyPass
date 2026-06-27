@@ -49,10 +49,10 @@ export default function OfflinePage() {
           )}
         </Button>
         <div className="flex gap-3">
-          <Link href="/" className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-colors">
+          <Link href="/" className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] transition-colors">
             Go Home
           </Link>
-          <Link href="/auth/login" className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-colors">
+          <Link href="/auth/login" className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] transition-colors">
             Sign In
           </Link>
         </div>

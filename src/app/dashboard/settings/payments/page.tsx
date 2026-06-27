@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/toast';
@@ -223,7 +223,7 @@ export default function PaymentMethodsPage() {
 
       {/* Limits info */}
       <div className="mt-8 p-4 bg-[#54acbf]/[0.05] rounded-xl border border-[#54acbf]/10">
-        <p className="text-sm text-[#ccc]">
+        <p className="text-sm text-[var(--hp-text-secondary)]">
           Limits: Maximum 2 bank accounts and 1 UPI method per organization.
           Currently: {bankCount}/2 bank accounts, {upiCount}/1 UPI.
         </p>

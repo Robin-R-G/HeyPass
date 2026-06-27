@@ -90,8 +90,8 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
     switch (p) {
       case 'high': return 'text-[#ef4444]';
       case 'medium': return 'text-[var(--hp-primary)]';
-      case 'low': return 'text-[#888]';
-      default: return 'text-[#888]';
+      case 'low': return 'text-[var(--hp-text-muted)]';
+      default: return 'text-[var(--hp-text-muted)]';
     }
   };
 
@@ -118,16 +118,16 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
               <StatusBadge status={data.live_status} variant={statusColor(data.live_status)} size="md" />
             )}
           </div>
-          <p className="text-sm text-[#888]">Real-time event operations center</p>
+          <p className="text-sm text-[var(--hp-text-muted)]">Real-time event operations center</p>
         </div>
         {data && (
-          <div className="flex items-center gap-2 text-xs text-[#666]">
+          <div className="flex items-center gap-2 text-xs text-[var(--hp-text-muted)]">
             <Clock size={12} />
             <span>Timezone: {data.event.timezone || 'UTC'}</span>
             <button
               onClick={() => setAutoRefresh(!autoRefresh)}
               className={`ml-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
-                autoRefresh ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-white/[0.04] text-[#666]'
+                autoRefresh ? 'bg-[var(--hp-success-bg)] text-[var(--hp-success)]' : 'bg-[var(--hp-surface)] text-[var(--hp-text-muted)]'
               }`}
             >
               <RefreshCw size={12} className={autoRefresh ? 'animate-hp-spin' : ''} />
@@ -187,12 +187,12 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
               { label: 'Peak Hour', value: data.kpis.peak_hour, icon: Zap, color: 'var(--hp-primary)' },
             ].map((kpi) => (
               <div key={kpi.label} className="hp-glass-card p-3 flex items-start gap-3">
-                <div className="w-9 h-9 rounded-lg bg-white/[0.04] flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-lg bg-[var(--hp-surface)] flex items-center justify-center shrink-0">
                   <kpi.icon size={16} style={{ color: kpi.color }} />
                 </div>
                 <div className="min-w-0">
                   <div className="text-lg font-bold leading-tight" style={{ color: kpi.color }}>{kpi.value}</div>
-                  <div className="text-[11px] text-[#666] truncate">{kpi.label}</div>
+                  <div className="text-[11px] text-[var(--hp-text-muted)] truncate">{kpi.label}</div>
                 </div>
               </div>
             ))}
@@ -251,7 +251,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                         {severityIcon(alert.severity)}
                         <div className="min-w-0 flex-1">
                           <p className="text-xs font-semibold text-white">{alert.title}</p>
-                          <p className="text-[11px] text-[#888] mt-0.5">{alert.description}</p>
+                          <p className="text-[11px] text-[var(--hp-text-muted)] mt-0.5">{alert.description}</p>
                           {alert.action && (
                             <a href={alert.action.link} className="inline-block mt-1.5 text-[11px] text-[var(--hp-primary)] hover:underline">
                               {alert.action.label} →
@@ -275,7 +275,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                   ].map(item => (
                     <div key={item.label} className="text-center p-3 rounded-lg bg-white/[0.02]">
                       <div className="text-lg font-bold text-white">{item.value}</div>
-                      <div className="text-[11px] text-[#666]">{item.label}</div>
+                      <div className="text-[11px] text-[var(--hp-text-muted)]">{item.label}</div>
                     </div>
                   ))}
                 </div>
@@ -291,7 +291,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                     <div key={h.id} className="flex items-center justify-between py-1.5">
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${healthDot(h.status)}`} />
-                        <span className="text-xs text-[#ccc]">{h.label}</span>
+                        <span className="text-xs text-[var(--hp-text-secondary)]">{h.label}</span>
                       </div>
                       <span className={`text-[11px] ${
                         h.status === 'healthy' ? 'text-[#10b981]' : h.status === 'degraded' ? 'text-[var(--hp-primary)]' : 'text-[#ef4444]'
@@ -316,7 +316,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                       <item.icon size={14} style={{ color: item.color }} />
                       <div>
                         <div className="text-sm font-bold text-white">{item.value}</div>
-                        <div className="text-[10px] text-[#666]">{item.label}</div>
+                        <div className="text-[10px] text-[var(--hp-text-muted)]">{item.label}</div>
                       </div>
                     </div>
                   ))}
@@ -326,7 +326,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                     <div className="text-[11px] text-[#555] font-medium mb-1.5">Recent Activity</div>
                     <div className="space-y-1 max-h-[120px] overflow-y-auto">
                       {data.team.recent_activity.slice(0, 4).map((a, i) => (
-                        <div key={i} className="flex items-center gap-2 text-[11px] text-[#888]">
+                        <div key={i} className="flex items-center gap-2 text-[11px] text-[var(--hp-text-muted)]">
                           <span className="text-white font-medium">{a.name}</span>
                           <span>{a.action}</span>
                         </div>
@@ -346,7 +346,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                       <div key={task.id} className="flex items-start gap-2 p-2.5 rounded-lg bg-white/[0.02]">
                         <div className={`w-1.5 h-1.5 rounded-full mt-1 shrink-0 ${priorityColor(task.priority).replace('text-', 'bg-')}`} />
                         <div className="min-w-0">
-                          <p className="text-xs text-[#ccc]">{task.title}</p>
+                          <p className="text-xs text-[var(--hp-text-secondary)]">{task.title}</p>
                           {task.due && (
                             <p className="text-[10px] text-[#555] mt-0.5">Due: {new Date(task.due).toLocaleDateString()}</p>
                           )}
@@ -364,7 +364,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                   <p className="text-xs text-[#555]">Live venue mapping coming soon</p>
                   <div className="flex flex-wrap gap-1.5 mt-3 justify-center">
                     {['Entry Gates', 'Exit Gates', 'Food Area', 'Reg Desk', 'Help Desk', 'Sponsor Booths', 'Emergency'].map(label => (
-                      <span key={label} className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.04] text-[#555]">{label}</span>
+                      <span key={label} className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--hp-surface)] text-[#555]">{label}</span>
                     ))}
                   </div>
                 </div>
@@ -391,7 +391,7 @@ export default function OperationsCenter({ params }: { params: Promise<{ id: str
                 <a
                   key={action.label}
                   href={action.link}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-[#ccc] hover:bg-white/[0.08] hover:text-white transition-all"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--hp-surface)] border border-[var(--hp-border)] text-xs text-[var(--hp-text-secondary)] hover:bg-[var(--hp-surface-hover)] hover:text-[var(--hp-text)] transition-all"
                 >
                   <action.icon size={14} />
                   {action.label}
