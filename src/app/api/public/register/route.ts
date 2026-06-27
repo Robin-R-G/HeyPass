@@ -186,7 +186,7 @@ export async function POST(req: NextRequest) {
     // Audit log
     await createAuditLog({
       client_id: form.client_id,
-      action: 'registration.create',
+      action: 'ticket.validate',
       resource_type: 'registration',
       resource_id: registrationId,
       new_value: { email, first_name, last_name, event_id: event.id },
