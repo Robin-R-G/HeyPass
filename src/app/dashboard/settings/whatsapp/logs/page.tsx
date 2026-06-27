@@ -56,7 +56,7 @@ export default function WhatsAppLogsPage() {
   const actionColor = (a: string) => {
     if (a.includes('delete')) return 'text-[#ef4444]';
     if (a.includes('send') || a.includes('broadcast.send')) return 'text-[#10b981]';
-    if (a.includes('verify') || a.includes('save')) return 'text-[#FCA311]';
+    if (a.includes('verify') || a.includes('save')) return 'text-[var(--hp-primary)]';
     return 'text-[#888]';
   };
 
@@ -87,7 +87,7 @@ export default function WhatsAppLogsPage() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>
+        <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>
       ) : logs.length === 0 ? (
         <div className="text-center py-12 text-[#666]">
           <History size={32} className="mx-auto mb-3 text-[#444]" />

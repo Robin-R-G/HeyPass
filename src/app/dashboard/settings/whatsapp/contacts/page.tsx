@@ -136,7 +136,7 @@ export default function WhatsAppContactsPage() {
       )}
 
       {loading ? (
-        <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>
+        <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>
       ) : contacts.length === 0 ? (
         <EmptyState
           icon={Users}

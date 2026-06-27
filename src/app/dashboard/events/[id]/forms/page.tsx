@@ -175,7 +175,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
           </button>
           <button
             onClick={handleCreateBlankForm}
-            className="bg-[#FCA311] text-black px-4 py-2 rounded-md font-semibold hover:bg-[#E09800]"
+            className="bg-[var(--hp-primary)] text-black px-4 py-2 rounded-md font-semibold hover:bg-[var(--hp-primary-dark)]"
           >
             Create Blank Form
           </button>
@@ -202,7 +202,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="border-[rgba(229,229,229,0.12)] rounded-lg p-4 cursor-pointer hover:border-[#FCA311] hover:bg-[rgba(252,163,17,0.08)]"
+                className="border-[rgba(229,229,229,0.12)] rounded-lg p-4 cursor-pointer hover:border-[var(--hp-primary)] hover:bg-[rgba(252,163,17,0.08)]"
                 onClick={() => handleCreateFromTemplate(template.id)}
               >
                 <div className="flex items-center gap-2 mb-2">
@@ -241,7 +241,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
           <p className="text-[#888888] mb-4">No forms created yet</p>
           <button
             onClick={handleCreateBlankForm}
-            className="bg-[#FCA311] text-black px-4 py-2 rounded-md font-semibold hover:bg-[#E09800]"
+            className="bg-[var(--hp-primary)] text-black px-4 py-2 rounded-md font-semibold hover:bg-[var(--hp-primary-dark)]"
           >
             Create Your First Form
           </button>

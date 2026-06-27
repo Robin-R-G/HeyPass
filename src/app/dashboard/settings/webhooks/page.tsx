@@ -189,7 +189,7 @@ export default function WebhooksPage() {
                     </TableCell>
                     <TableCell>
                       {ep.failure_count > 0 ? (
-                        <Badge variant="destructive">{ep.failure_count}</Badge>
+                        <Badge variant="danger">{ep.failure_count}</Badge>
                       ) : (
                         <span className="text-muted-foreground">0</span>
                       )}
@@ -202,7 +202,7 @@ export default function WebhooksPage() {
                         <Button size="sm" variant="outline" onClick={() => handleTest(ep.id)}>
                           Test
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteWebhook(ep.id)}>
+                        <Button size="sm" variant="danger" onClick={() => setConfirmDeleteWebhook(ep.id)}>
                           Delete
                         </Button>
                       </div>

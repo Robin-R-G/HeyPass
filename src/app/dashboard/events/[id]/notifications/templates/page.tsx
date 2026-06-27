@@ -175,7 +175,7 @@ export default function TemplatesPage() {
                         <Button size="sm" variant="outline" onClick={() => openEdit(t)}>
                           Edit
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteTemplate(t.id)}>
+                        <Button size="sm" variant="danger" onClick={() => setConfirmDeleteTemplate(t.id)}>
                           Delete
                         </Button>
                       </div>

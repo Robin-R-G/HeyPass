@@ -134,7 +134,7 @@ export default function CertificatesPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-[#FCA311]">{stats.generated}</div>
+            <div className="text-2xl font-bold text-[var(--hp-primary)]">{stats.generated}</div>
             <div className="text-sm text-muted-foreground">Generated</div>
           </CardContent>
         </Card>
@@ -224,7 +224,7 @@ export default function CertificatesPage() {
                           Share
                         </Button>
                         {cert.status !== 'revoked' && (
-                          <Button size="sm" variant="destructive" onClick={() => setPromptRevokeCert(cert.id)}>
+                          <Button size="sm" variant="danger" onClick={() => setPromptRevokeCert(cert.id)}>
                             Revoke
                           </Button>
                         )}

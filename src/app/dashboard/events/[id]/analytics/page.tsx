@@ -283,7 +283,7 @@ export default function AnalyticsPage() {
                     <CardTitle className="text-sm">Certificate Downloads</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold text-[#FCA311]">
+                    <div className="text-3xl font-bold text-[var(--hp-primary)]">
                       {overview.total_certificates > 0
                         ? ((overview.certificates_downloaded / overview.total_certificates) * 100).toFixed(1)
                         : 0}%
@@ -448,7 +448,7 @@ export default function AnalyticsPage() {
                       data={revenue.by_payment_method}
                       labelKey="method"
                       valueKey="amount"
-                      color="#FCA311"
+                      color="var(--hp-primary)"
                     />
                   </CardContent>
                 </Card>
@@ -517,7 +517,7 @@ export default function AnalyticsPage() {
                 </Card>
                 <Card>
                   <CardContent className="p-4">
-                    <div className="text-2xl font-bold text-[#FCA311]">{certificates.download_rate.rate.toFixed(1)}%</div>
+                    <div className="text-2xl font-bold text-[var(--hp-primary)]">{certificates.download_rate.rate.toFixed(1)}%</div>
                     <div className="text-sm text-muted-foreground">Download Rate</div>
                   </CardContent>
                 </Card>
@@ -558,7 +558,7 @@ export default function AnalyticsPage() {
                             <Badge variant="outline" className="text-xs">+{row.generated}</Badge>
                             <Badge variant="secondary" className="text-xs">{row.downloaded} dl</Badge>
                             {row.revoked > 0 && (
-                              <Badge variant="destructive" className="text-xs">{row.revoked} revoked</Badge>
+                              <Badge variant="danger" className="text-xs">{row.revoked} revoked</Badge>
                             )}
                           </div>
                         ))}
@@ -585,13 +585,13 @@ export default function AnalyticsPage() {
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-3xl font-bold text-[#FCA311]">{realtime.check_ins_last_30min}</div>
+                  <div className="text-3xl font-bold text-[var(--hp-primary)]">{realtime.check_ins_last_30min}</div>
                   <div className="text-sm text-muted-foreground">Check-ins (30 min)</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-4">
-                  <div className="text-3xl font-bold text-[#FCA311]">{realtime.active_scanners}</div>
+                  <div className="text-3xl font-bold text-[var(--hp-primary)]">{realtime.active_scanners}</div>
                   <div className="text-sm text-muted-foreground">Active Scanners</div>
                 </CardContent>
               </Card>

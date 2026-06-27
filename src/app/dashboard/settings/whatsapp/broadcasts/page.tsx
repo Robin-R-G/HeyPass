@@ -152,7 +152,7 @@ export default function WhatsAppBroadcastsPage() {
       )}
 
       {loading ? (
-        <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>
+        <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>
       ) : broadcasts.length === 0 ? (
         <EmptyState
           icon={Radio}
@@ -174,7 +174,7 @@ export default function WhatsAppBroadcastsPage() {
                     {b.total_contacts} contacts &middot; {b.sent_count} sent &middot; {b.delivered_count} delivered &middot; {b.failed_count} failed
                   </div>
                   {b.scheduled_at && (
-                    <div className="text-xs text-[#FCA311] mt-1 flex items-center gap-1">
+                    <div className="text-xs text-[var(--hp-primary)] mt-1 flex items-center gap-1">
                       <Clock size={10} /> Scheduled: {new Date(b.scheduled_at).toLocaleString()}
                     </div>
                   )}

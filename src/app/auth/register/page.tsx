@@ -65,7 +65,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-[420px] px-5">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[var(--hp-primary)]/25">H</div>
           <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
         </Link>
 
@@ -167,7 +167,7 @@ export default function RegisterPage() {
         {/* Sign in link */}
         <p className="text-center mt-6 text-[13px] text-[#777]">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">Sign in</Link>
+          <Link href="/auth/login" className="text-[var(--hp-primary)] font-semibold no-underline hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

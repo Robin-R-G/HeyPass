@@ -97,7 +97,7 @@ function LoginForm() {
     <div className="w-full max-w-[420px] px-5">
       {/* Logo */}
       <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
-        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[var(--hp-primary)]/25">H</div>
         <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
       </Link>
 
@@ -178,7 +178,7 @@ function LoginForm() {
 
         {/* Forgot password */}
         <div className="text-center mt-5 pt-5 border-t border-white/[0.06]">
-          <Link href="/auth/forgot-password" className="text-[#FCA311] text-[13px] font-medium no-underline hover:underline">
+          <Link href="/auth/forgot-password" className="text-[var(--hp-primary)] text-[13px] font-medium no-underline hover:underline">
             Forgot password?
           </Link>
         </div>
@@ -187,7 +187,7 @@ function LoginForm() {
       {/* Sign up link */}
       <p className="text-center mt-6 text-[13px] text-[#777]">
         Don&apos;t have an account?{' '}
-        <Link href="/auth/register" className="text-[#FCA311] font-semibold no-underline hover:underline">Sign up</Link>
+        <Link href="/auth/register" className="text-[var(--hp-primary)] font-semibold no-underline hover:underline">Sign up</Link>
       </p>
     </div>
   );

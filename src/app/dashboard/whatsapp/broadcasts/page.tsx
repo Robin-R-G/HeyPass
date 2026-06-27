@@ -152,7 +152,7 @@ export default function WhatsAppBroadcastsPage() {
             <h1 className="text-2xl font-bold" style={{ color: '#000' }}>Broadcasts</h1>
             <p className="text-sm" style={{ color: '#666' }}>Send messages to multiple contacts at once</p>
           </div>
-          <Button onClick={() => setShowCreate(true)} style={{ background: '#FCA311', color: '#000' }}>
+          <Button onClick={() => setShowCreate(true)} style={{ background: 'var(--hp-primary)', color: '#000' }}>
             <Plus className="w-4 h-4 mr-2" /> New Broadcast
           </Button>
         </div>
@@ -161,14 +161,14 @@ export default function WhatsAppBroadcastsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Radio className="w-5 h-5" style={{ color: '#FCA311' }} />
+              <Radio className="w-5 h-5" style={{ color: 'var(--hp-primary)' }} />
               Broadcasts ({broadcasts.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#FCA311' }} />
+                <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--hp-primary)' }} />
               </div>
             ) : broadcasts.length === 0 ? (
               <div className="text-center py-8" style={{ color: '#666' }}>
@@ -214,7 +214,7 @@ export default function WhatsAppBroadcastsPage() {
                             size="sm"
                             onClick={() => handleSend(broadcast.id)}
                             disabled={sending === broadcast.id}
-                            style={{ background: '#FCA311', color: '#000' }}
+                            style={{ background: 'var(--hp-primary)', color: '#000' }}
                           >
                             {sending === broadcast.id ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
@@ -291,7 +291,7 @@ export default function WhatsAppBroadcastsPage() {
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
                   <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-                  <Button onClick={handleCreate} disabled={!newBroadcast.name || !newBroadcast.template_id} style={{ background: '#FCA311', color: '#000' }}>
+                  <Button onClick={handleCreate} disabled={!newBroadcast.name || !newBroadcast.template_id} style={{ background: 'var(--hp-primary)', color: '#000' }}>
                     <Plus className="w-4 h-4 mr-2" /> Create
                   </Button>
                 </div>

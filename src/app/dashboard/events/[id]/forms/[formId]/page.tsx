@@ -194,7 +194,7 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
                     onClick={() => setNewField({ ...newField, required: !newField.required })}
                     style={{
                       width: '40px', height: '22px', borderRadius: '11px', border: 'none',
-                      background: newField.required ? '#FCA311' : '#E09800',
+                      background: newField.required ? 'var(--hp-primary)' : 'var(--hp-primary-dark)',
                       cursor: 'pointer', position: 'relative',
                     }}
                   >
@@ -206,7 +206,7 @@ export default function FormEditorPage({ params }: { params: Promise<{ id: strin
                   </button>
                 </div>
                 <button onClick={addField} disabled={!newField.label} style={{
-                  background: 'linear-gradient(135deg, #FCA311, #E09800)', color: '#000',
+                  background: 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))', color: '#000',
                   padding: '0.6rem', borderRadius: '8px', border: 'none', fontWeight: 600,
                   fontSize: '0.85rem', cursor: 'pointer', opacity: !newField.label ? 0.5 : 1,
                 }}>Add Field</button>

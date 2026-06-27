@@ -60,13 +60,13 @@ export default function AcceptInvitePage() {
     <div className="min-h-screen bg-[#000] text-white font-sans antialiased flex items-center justify-center p-6">
       <div className="w-full max-w-[420px] text-center">
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-8 no-underline">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[var(--hp-primary)]/25">H</div>
           <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
         </Link>
 
         {loading || accepting ? (
           <div className="flex flex-col items-center gap-3">
-            <Loader2 size={32} className="text-[#FCA311] animate-spin" />
+            <Loader2 size={32} className="text-[var(--hp-primary)] animate-spin" />
             <p className="text-sm text-[#999]">Accepting invitation...</p>
           </div>
         ) : result === 'success' ? (

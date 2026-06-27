@@ -142,7 +142,7 @@ export default function EventTicketsPage({ params }: { params: Promise<{ id: str
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {[
           { label: 'Total', value: stats.total, color: '#fff' },
-          { label: 'Active', value: stats.active, color: '#FCA311' },
+          { label: 'Active', value: stats.active, color: 'var(--hp-primary)' },
           { label: 'Checked In', value: stats.used, color: '#10b981' },
           { label: 'Cancelled', value: stats.cancelled, color: '#ef4444' },
           { label: 'Fraud Flags', value: stats.fraud, color: '#f59e0b' },

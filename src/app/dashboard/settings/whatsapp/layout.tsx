@@ -43,7 +43,7 @@ export default function WhatsAppSettingsLayout({ children }: { children: React.R
                   href={tab.href}
                   className={`flex items-center gap-2 px-4 py-2.5 text-sm whitespace-nowrap border-b-2 transition-all duration-150 ${
                     isActive
-                      ? 'text-[#FCA311] border-[#FCA311] bg-[#FCA311]/5'
+                      ? 'text-[var(--hp-primary)] border-[var(--hp-primary)] bg-[var(--hp-primary)]/5'
                       : 'text-[#888] border-transparent hover:text-[#ccc] hover:bg-white/[0.02]'
                   }`}
                 >

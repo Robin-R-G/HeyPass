@@ -273,7 +273,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
                         <div style={{
                           height: '100%', borderRadius: '3px',
                           width: `${Math.min(pct, 100)}%`,
-                          background: 'linear-gradient(90deg, #FCA311, #FCD34D)',
+                          background: 'linear-gradient(90deg, var(--hp-primary), var(--hp-primary-dark))',
                           transition: 'width 0.5s ease',
                         }} />
                       </div>
@@ -373,7 +373,7 @@ export default function SubEventsPage({ params }: { params: Promise<{ id: string
                     onClick={() => setForm({ ...form, is_free: !form.is_free })}
                     style={{
                       width: '44px', height: '24px', borderRadius: '12px',
-                      background: form.is_free ? '#27272a' : '#FCA311',
+                      background: form.is_free ? '#27272a' : 'var(--hp-primary)',
                       border: 'none', cursor: 'pointer', position: 'relative',
                     }}
                   >

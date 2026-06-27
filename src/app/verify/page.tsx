@@ -81,7 +81,7 @@ export default function VerifyPage() {
                 onClick={() => { setMethod(t.key); setResult(null); setError(''); }}
                 className={`py-2.5 px-3 rounded-lg text-xs font-semibold cursor-pointer transition-all duration-150 min-h-[44px] ${
                   method === t.key
-                    ? 'bg-[#FCA311]/20 text-white shadow-sm'
+                    ? 'bg-[var(--hp-primary)]/20 text-white shadow-sm'
                     : 'bg-transparent text-[#888] hover:text-white'
                 }`}
               >

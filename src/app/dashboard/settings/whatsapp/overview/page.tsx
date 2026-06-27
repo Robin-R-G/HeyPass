@@ -84,14 +84,14 @@ export default function WhatsAppOverviewPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>;
+    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>;
   }
 
   if (!status || !status.connected) {
     return (
       <div className="max-w-[600px] mx-auto text-center py-16">
-        <div className="w-16 h-16 rounded-full bg-[#FCA311]/10 flex items-center justify-center mx-auto mb-5">
-          <MessageCircle size={28} className="text-[#FCA311]" />
+        <div className="w-16 h-16 rounded-full bg-[var(--hp-primary)]/10 flex items-center justify-center mx-auto mb-5">
+          <MessageCircle size={28} className="text-[var(--hp-primary)]" />
         </div>
         <h2 className="text-xl font-bold mb-2">WhatsApp Not Connected</h2>
         <p className="text-sm text-[#888] mb-6">
@@ -99,7 +99,7 @@ export default function WhatsAppOverviewPage() {
         </p>
         <Link
           href="/dashboard/settings/whatsapp/config"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FCA311] text-black font-semibold rounded-lg text-sm hover:bg-[#e5950a] transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--hp-primary)] text-black font-semibold rounded-lg text-sm hover:bg-[var(--hp-primary-dark)] transition-colors"
         >
           Connect WhatsApp <ExternalLink size={14} />
         </Link>
@@ -123,9 +123,9 @@ export default function WhatsAppOverviewPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[
           { label: 'Status', value: status.connected ? 'Connected' : 'Disconnected', icon: status.connected ? CheckCircle : XCircle, color: status.connected ? '#10b981' : '#ef4444' },
-          { label: 'Templates', value: status.templates_count, icon: FileText, color: '#FCA311', href: '/dashboard/settings/whatsapp/templates' },
-          { label: 'Contacts', value: status.contacts_count, icon: Users, color: '#FCA311', href: '/dashboard/settings/whatsapp/contacts' },
-          { label: 'Broadcasts', value: status.broadcasts_count, icon: Radio, color: '#FCA311', href: '/dashboard/settings/whatsapp/broadcasts' },
+          { label: 'Templates', value: status.templates_count, icon: FileText, color: 'var(--hp-primary)', href: '/dashboard/settings/whatsapp/templates' },
+          { label: 'Contacts', value: status.contacts_count, icon: Users, color: 'var(--hp-primary)', href: '/dashboard/settings/whatsapp/contacts' },
+          { label: 'Broadcasts', value: status.broadcasts_count, icon: Radio, color: 'var(--hp-primary)', href: '/dashboard/settings/whatsapp/broadcasts' },
         ].map(card => (
           <div key={card.label} className="hp-glass-card p-5">
             <div className="flex items-center gap-2 mb-2">
@@ -133,7 +133,7 @@ export default function WhatsAppOverviewPage() {
               <span className="text-xs text-[#888] uppercase tracking-wide">{card.label}</span>
             </div>
             <div className="text-2xl font-bold">{card.value}</div>
-            {card.href && <Link href={card.href} className="text-xs text-[#FCA311] mt-1 inline-block hover:underline">View &rarr;</Link>}
+            {card.href && <Link href={card.href} className="text-xs text-[var(--hp-primary)] mt-1 inline-block hover:underline">View &rarr;</Link>}
           </div>
         ))}
       </div>

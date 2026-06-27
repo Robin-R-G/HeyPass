@@ -112,7 +112,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
             {[
               { label: 'Registered', value: data.total_registered, color: '#fff' },
-              { label: 'Checked In', value: data.total_checked_in, color: '#FCA311' },
+              { label: 'Checked In', value: data.total_checked_in, color: 'var(--hp-primary)' },
               { label: 'Checked Out', value: data.total_checked_out, color: '#a1a1aa' },
               { label: 'Inside Now', value: data.currently_inside, color: '#10b981' },
               { label: 'Check-in Rate', value: `${data.check_in_rate}%`, color: '#E5E5E5' },
@@ -135,7 +135,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
                 {data.gate_breakdown.map((gate) => (
-                  <div key={gate.gate_id} className="hp-card" style={{ borderLeft: `3px solid ${gate.is_active ? '#FCA311' : '#52525b'}` }}>
+                  <div key={gate.gate_id} className="hp-card" style={{ borderLeft: `3px solid ${gate.is_active ? 'var(--hp-primary)' : '#52525b'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                       <div>
                         <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>{gate.gate_name}</div>
@@ -156,7 +156,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
                         <div style={{
                           height: '100%', borderRadius: '3px',
                           width: `${Math.min((gate.checkins / Math.max(data.total_registered, 1)) * 100, 100)}%`,
-                          background: 'linear-gradient(90deg, #FCA311, #FCD34D)',
+                          background: 'linear-gradient(90deg, var(--hp-primary), var(--hp-primary-dark))',
                         }} />
                       </div>
                     </div>
@@ -241,7 +241,7 @@ export default function AttendanceDashboardPage({ params }: { params: Promise<{ 
                         title={`${String(h.hour).padStart(2, '0')}:00 — ${h.checkins} check-ins`}
                         style={{
                           width: '100%', height: `${Math.max(height, 2)}%`,
-                          background: h.checkins > 0 ? 'linear-gradient(180deg, #FCA311, #E09800)' : 'transparent',
+                          background: h.checkins > 0 ? 'linear-gradient(180deg, var(--hp-primary), var(--hp-primary-dark))' : 'transparent',
                           borderRadius: '2px 2px 0 0',
                           transition: 'height 0.3s ease',
                         }}

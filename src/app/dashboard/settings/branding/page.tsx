@@ -209,7 +209,7 @@ export default function BrandingSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen text-white">
-        <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+        <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
       </div>
     );
   }

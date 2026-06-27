@@ -392,7 +392,7 @@ export default function PublicRegistrationPage({ params }: PublicRegistrationPag
             </div>
             <div className="h-2 bg-[rgba(229,229,229,0.08)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#FCA311] transition-all"
+                className="h-full bg-[var(--hp-primary)] transition-all"
                 style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
               />
             </div>

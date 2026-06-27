@@ -169,9 +169,9 @@ export default function SuperAdminPage() {
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-black">H</div>
             <span className="text-lg font-bold text-white">HeyPass</span>
-            <span className="text-[10px] font-bold text-[#FCA311] bg-[#FCA311]/10 border border-[#FCA311]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
+            <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
           <button onClick={logout} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 min-h-[44px]">
             <LogOut size={14} /> Logout
@@ -192,8 +192,8 @@ export default function SuperAdminPage() {
         {/* Quick Nav */}
         <div className="flex gap-3 mb-8">
           <Link href="/superadmin/pending" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-white/[0.04] transition-all">
-            <div className="w-9 h-9 rounded-lg bg-[#FCA311]/10 flex items-center justify-center">
-              <UserCheck size={16} className="text-[#FCA311]" />
+            <div className="w-9 h-9 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center">
+              <UserCheck size={16} className="text-[var(--hp-primary)]" />
             </div>
             <div>
               <div className="text-xs font-semibold text-white">Pending Users</div>
@@ -201,8 +201,8 @@ export default function SuperAdminPage() {
             </div>
           </Link>
           <Link href="/superadmin/organizations" className="hp-glass-card px-5 py-3 flex items-center gap-3 no-underline hover:bg-white/[0.04] transition-all">
-            <div className="w-9 h-9 rounded-lg bg-[#FCA311]/10 flex items-center justify-center">
-              <Settings size={16} className="text-[#FCA311]" />
+            <div className="w-9 h-9 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center">
+              <Settings size={16} className="text-[var(--hp-primary)]" />
             </div>
             <div>
               <div className="text-xs font-semibold text-white">All Organizations</div>
@@ -214,7 +214,7 @@ export default function SuperAdminPage() {
         {/* Loading */}
         {loading && (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
-            <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+            <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
             <span className="text-[#999] text-sm">Loading platform data...</span>
           </div>
         )}
@@ -234,14 +234,14 @@ export default function SuperAdminPage() {
                 const Icon = s.icon;
                 return (
                   <div key={s.label} className="hp-glass-card p-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-radial from-[#FCA311]/5 to-transparent translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-radial from-[var(--hp-primary)]/5 to-transparent translate-x-1/3 -translate-y-1/3 pointer-events-none" />
                     <div className="flex justify-between items-start mb-4">
                       <span className="text-[10px] font-semibold text-hp-text-secondary/60 uppercase tracking-wider">{s.label}</span>
-                      <div className="w-8 h-8 rounded-lg bg-[#FCA311]/8 flex items-center justify-center">
-                        <Icon size={16} className="text-[#FCA311]" />
+                      <div className="w-8 h-8 rounded-lg bg-[var(--hp-primary)]/8 flex items-center justify-center">
+                        <Icon size={16} className="text-[var(--hp-primary)]" />
                       </div>
                     </div>
-                    <div className="text-3xl font-extrabold text-[#FCA311] leading-none">{s.value}</div>
+                    <div className="text-3xl font-extrabold text-[var(--hp-primary)] leading-none">{s.value}</div>
                   </div>
                 );
               })}
@@ -265,7 +265,7 @@ export default function SuperAdminPage() {
                   <p className="text-hp-text-secondary opacity-60 text-sm mb-3">No organizations yet</p>
                   <button
                     onClick={() => setShowCreateModal(true)}
-                    className="bg-transparent border-none text-[#FCA311] text-sm font-semibold cursor-pointer hover:underline"
+                    className="bg-transparent border-none text-[var(--hp-primary)] text-sm font-semibold cursor-pointer hover:underline"
                   >Create your first organization</button>
                 </div>
               ) : (
@@ -273,7 +273,7 @@ export default function SuperAdminPage() {
                   {clients.map(c => (
                     <div key={c.id} className="hp-glass-card px-6 py-5 flex items-center justify-between transition-all duration-200">
                       <div className="flex items-center gap-4">
-                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311]/15 to-[#FCA311]/5 flex items-center justify-center text-lg font-extrabold text-[#FCA311]">
+                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)]/15 to-[var(--hp-primary)]/5 flex items-center justify-center text-lg font-extrabold text-[var(--hp-primary)]">
                           {c.name.charAt(0).toUpperCase()}
                         </div>
                         <div>

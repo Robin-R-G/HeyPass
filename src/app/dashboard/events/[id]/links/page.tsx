@@ -121,7 +121,7 @@ export default function LinksPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-[#FCA311]">{stats.total_clicks.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-[var(--hp-primary)]">{stats.total_clicks.toLocaleString()}</div>
             <div className="text-sm text-muted-foreground">Total Clicks</div>
           </CardContent>
         </Card>
@@ -133,7 +133,7 @@ export default function LinksPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-[#FCA311]">{stats.conversion_rate.toFixed(1)}%</div>
+            <div className="text-2xl font-bold text-[var(--hp-primary)]">{stats.conversion_rate.toFixed(1)}%</div>
             <div className="text-sm text-muted-foreground">Conversion Rate</div>
           </CardContent>
         </Card>
@@ -177,7 +177,7 @@ export default function LinksPage() {
                         <Button size="sm" variant="outline" onClick={() => copyLink(link.full_url)}>
                           Copy
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteLink(link.id)}>
+                        <Button size="sm" variant="danger" onClick={() => setConfirmDeleteLink(link.id)}>
                           Delete
                         </Button>
                       </div>

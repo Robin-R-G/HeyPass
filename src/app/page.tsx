@@ -28,7 +28,7 @@ export default function Home() {
         <div className="max-w-[1200px] mx-auto px-5 sm:px-8 flex justify-between items-center h-16">
           <Link href="/" className="flex items-center no-underline">
             <span className="text-xl font-bold tracking-[-0.03em]">
-              <span className="text-[#FCA311]">Hey</span>
+              <span className="text-[var(--hp-primary)]">Hey</span>
               <span className="text-white">Pass</span>
             </span>
           </Link>
@@ -44,14 +44,14 @@ export default function Home() {
 
       {/* Hero */}
       <main className="flex-1 flex flex-col items-center justify-center px-5 pt-24 pb-16 text-center relative z-10">
-        <div className="inline-flex items-center gap-2 bg-[#FCA311]/10 border border-[#FCA311]/20 rounded-full px-4 py-1.5 mb-7">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#FCA311] shadow-[0_0_8px_#FCA311]" />
-          <span className="text-xs font-semibold text-[#FCA311] tracking-wide">Now in Public Beta</span>
+        <div className="inline-flex items-center gap-2 bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 rounded-full px-4 py-1.5 mb-7">
+          <div className="w-1.5 h-1.5 rounded-full bg-[var(--hp-primary)] shadow-[0_0_8px_var(--hp-primary)]" />
+          <span className="text-xs font-semibold text-[var(--hp-primary)] tracking-wide">Now in Public Beta</span>
         </div>
 
         <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-[800] leading-[1.02] mb-6 max-w-[800px] tracking-[-0.04em]">
           The Event Platform<br />
-          <span className="bg-gradient-to-r from-[#FCA311] via-[#e09800] to-[#FCA311] bg-clip-text text-transparent">That Just Works</span>
+          <span className="bg-gradient-to-r from-[var(--hp-primary)] via-[var(--hp-primary-dark)] to-[var(--hp-primary)] bg-clip-text text-transparent">That Just Works</span>
         </h1>
 
         <p className="text-lg text-[#999] max-w-[540px] leading-relaxed mb-10">
@@ -74,7 +74,7 @@ export default function Home() {
           {STATS.map(s => (
             <div key={s.label}>
               <div className="text-[2rem] sm:text-[2.5rem] font-[800] tracking-[-0.02em] leading-tight">
-                <span className="text-[#FCA311]">{s.value}</span>
+                <span className="text-[var(--hp-primary)]">{s.value}</span>
               </div>
               <div className="text-xs font-semibold text-[#777] mt-1 uppercase tracking-widest">{s.label}</div>
             </div>
@@ -85,7 +85,7 @@ export default function Home() {
       {/* Features */}
       <section className="py-20 sm:py-28 px-5 relative z-10">
         <div className="max-w-[1080px] mx-auto">
-          <p className="text-xs font-semibold text-[#FCA311] text-center mb-3 tracking-[0.15em] uppercase">Core Capabilities</p>
+          <p className="text-xs font-semibold text-[var(--hp-primary)] text-center mb-3 tracking-[0.15em] uppercase">Core Capabilities</p>
           <h2 className="text-[clamp(2rem,5vw,3rem)] font-[800] text-center mb-2 tracking-[-0.03em]">
             Everything you need.
           </h2>
@@ -128,7 +128,7 @@ export default function Home() {
         <div className="max-w-[1080px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
           <div>
             <span className="text-lg font-bold tracking-[-0.02em]">
-              <span className="text-[#FCA311]">Hey</span>
+              <span className="text-[var(--hp-primary)]">Hey</span>
               <span className="text-white">Pass</span>
             </span>
             <p className="text-xs text-[#666] mt-1">

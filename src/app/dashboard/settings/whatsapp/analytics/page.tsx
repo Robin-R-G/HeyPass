@@ -57,7 +57,7 @@ export default function WhatsAppAnalyticsPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>;
+    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>;
   }
 
   if (!analytics) {
@@ -73,9 +73,9 @@ export default function WhatsAppAnalyticsPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Contacts', value: analytics.total_contacts, icon: Users, color: '#FCA311' },
-          { label: 'Messages Sent', value: analytics.total_messages_sent, icon: MessageCircle, color: '#FCA311' },
-          { label: 'Broadcasts', value: analytics.total_broadcasts, icon: Radio, color: '#FCA311' },
+          { label: 'Contacts', value: analytics.total_contacts, icon: Users, color: 'var(--hp-primary)' },
+          { label: 'Messages Sent', value: analytics.total_messages_sent, icon: MessageCircle, color: 'var(--hp-primary)' },
+          { label: 'Broadcasts', value: analytics.total_broadcasts, icon: Radio, color: 'var(--hp-primary)' },
           { label: 'Delivery Rate', value: `${analytics.delivery_rate}%`, icon: TrendingUp, color: '#10b981' },
         ].map(card => (
           <div key={card.label} className="hp-glass-card p-5">
@@ -103,7 +103,7 @@ export default function WhatsAppAnalyticsPage() {
                   <span className="text-white">{item.value} ({item.pct}%)</span>
                 </div>
                 <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#FCA311] rounded-full transition-all" style={{ width: `${item.pct}%` }} />
+                  <div className="h-full bg-[var(--hp-primary)] rounded-full transition-all" style={{ width: `${item.pct}%` }} />
                 </div>
               </div>
             ))}

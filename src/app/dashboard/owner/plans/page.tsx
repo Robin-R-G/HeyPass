@@ -235,7 +235,7 @@ export default function OwnerPlansPage() {
                         <Button size="sm" variant="outline" onClick={() => toggleActive(plan)}>
                           {plan.is_active ? 'Deactivate' : 'Activate'}
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => setConfirmDelete(plan.id)}>
+                        <Button size="sm" variant="danger" onClick={() => setConfirmDelete(plan.id)}>
                           Delete
                         </Button>
                       </div>

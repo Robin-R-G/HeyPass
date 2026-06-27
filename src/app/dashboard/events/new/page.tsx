@@ -116,7 +116,7 @@ export default function NewEventPage() {
           <button type="submit" disabled={saving || !title || !startDate || !endDate}
             style={{
               width: '100%', padding: '0.75rem', borderRadius: '10px', border: 'none',
-              background: 'linear-gradient(135deg, #FCA311, #E09800)',
+              background: 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))',
               color: '#000', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
               opacity: saving || !title || !startDate || !endDate ? 0.5 : 1,
             }}>

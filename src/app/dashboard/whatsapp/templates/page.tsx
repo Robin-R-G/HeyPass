@@ -110,7 +110,7 @@ export default function WhatsAppTemplatesPage() {
               Manage your WhatsApp Business message templates
             </p>
           </div>
-          <Button onClick={handleSync} disabled={syncing} style={{ background: '#FCA311', color: '#000' }}>
+          <Button onClick={handleSync} disabled={syncing} style={{ background: 'var(--hp-primary)', color: '#000' }}>
             {syncing ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (
@@ -142,7 +142,7 @@ export default function WhatsAppTemplatesPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <MessageCircle className="w-5 h-5 mt-0.5" style={{ color: '#FCA311' }} />
+              <MessageCircle className="w-5 h-5 mt-0.5" style={{ color: 'var(--hp-primary)' }} />
               <div className="text-sm" style={{ color: '#666' }}>
                 <p className="font-medium" style={{ color: '#000' }}>About Templates</p>
                 <p className="mt-1">
@@ -158,7 +158,7 @@ export default function WhatsAppTemplatesPage() {
         {/* Templates Grid */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#FCA311' }} />
+            <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--hp-primary)' }} />
           </div>
         ) : templates.length === 0 ? (
           <Card>
@@ -223,7 +223,7 @@ export default function WhatsAppTemplatesPage() {
                       <p className="text-xs mb-1" style={{ color: '#666' }}>Buttons:</p>
                       <div className="flex flex-wrap gap-1">
                         {template.buttons.map((btn, i) => (
-                          <Badge key={i} style={{ background: '#FCA311', color: '#000' }} className="text-xs">
+                          <Badge key={i} style={{ background: 'var(--hp-primary)', color: '#000' }} className="text-xs">
                             {btn.text}
                           </Badge>
                         ))}

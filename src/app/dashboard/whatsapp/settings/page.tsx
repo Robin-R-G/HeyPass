@@ -170,7 +170,7 @@ export default function WhatsAppSettingsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#FCA311' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--hp-primary)' }} />
       </div>
     );
   }
@@ -210,7 +210,7 @@ export default function WhatsAppSettingsPage() {
                     {config?.messages_sent_today || 0}
                   </p>
                 </div>
-                <MessageCircle className="w-8 h-8" style={{ color: '#FCA311' }} />
+                <MessageCircle className="w-8 h-8" style={{ color: 'var(--hp-primary)' }} />
               </div>
             </CardContent>
           </Card>
@@ -224,7 +224,7 @@ export default function WhatsAppSettingsPage() {
                     {config?.daily_limit || 250}
                   </p>
                 </div>
-                <Zap className="w-8 h-8" style={{ color: '#FCA311' }} />
+                <Zap className="w-8 h-8" style={{ color: 'var(--hp-primary)' }} />
               </div>
             </CardContent>
           </Card>
@@ -238,7 +238,7 @@ export default function WhatsAppSettingsPage() {
                     {config?.messaging_limit_tier || 'restricted'}
                   </p>
                 </div>
-                <Shield className="w-8 h-8" style={{ color: '#FCA311' }} />
+                <Shield className="w-8 h-8" style={{ color: 'var(--hp-primary)' }} />
               </div>
             </CardContent>
           </Card>
@@ -252,7 +252,7 @@ export default function WhatsAppSettingsPage() {
                     {config?.connection_status || 'disconnected'}
                   </p>
                 </div>
-                <Globe className="w-8 h-8" style={{ color: '#FCA311' }} />
+                <Globe className="w-8 h-8" style={{ color: 'var(--hp-primary)' }} />
               </div>
             </CardContent>
           </Card>
@@ -279,7 +279,7 @@ export default function WhatsAppSettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5" style={{ color: '#FCA311' }} />
+              <Settings className="w-5 h-5" style={{ color: 'var(--hp-primary)' }} />
               Business Configuration
             </CardTitle>
             <CardDescription>
@@ -343,7 +343,7 @@ export default function WhatsAppSettingsPage() {
                     type={showTokens ? 'text' : 'password'}
                     value={formData.meta_app_secret}
                     onChange={(e) => setFormData(prev => ({ ...prev, meta_app_secret: e.target.value }))}
-                    placeholder={config?.meta_app_secret ? '••••••••' : 'Enter App Secret'}
+                    placeholder="Enter App Secret"
                   />
                 </div>
               </div>
@@ -358,7 +358,7 @@ export default function WhatsAppSettingsPage() {
                 type={showTokens ? 'text' : 'password'}
                 value={formData.access_token}
                 onChange={(e) => setFormData(prev => ({ ...prev, access_token: e.target.value }))}
-                placeholder={config?.access_token_encrypted === '***' ? '•••••••• (saved)' : 'Paste your access token'}
+                placeholder="Paste your access token"
               />
               <p className="text-xs mt-1" style={{ color: '#666' }}>
                 From Meta Developer Console → WhatsApp → API Setup
@@ -399,7 +399,7 @@ export default function WhatsAppSettingsPage() {
                       type={showTokens ? 'text' : 'password'}
                       value={formData.webhook_secret}
                       onChange={(e) => setFormData(prev => ({ ...prev, webhook_secret: e.target.value }))}
-                      placeholder={config?.webhook_secret_encrypted === '***' ? '••••••••' : 'Enter App Secret again'}
+                      placeholder="Enter App Secret again"
                     />
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function WhatsAppSettingsPage() {
               <Button
                 onClick={handleSave}
                 disabled={saving}
-                style={{ background: '#FCA311', color: '#000' }}
+                style={{ background: 'var(--hp-primary)', color: '#000' }}
               >
                 {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Settings className="w-4 h-4 mr-2" />}
                 Save Configuration
@@ -475,7 +475,7 @@ export default function WhatsAppSettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Zap className="w-5 h-5" style={{ color: '#FCA311' }} />
+              <Zap className="w-5 h-5" style={{ color: 'var(--hp-primary)' }} />
               Quick Actions
             </CardTitle>
           </CardHeader>

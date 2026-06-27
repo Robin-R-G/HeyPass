@@ -129,7 +129,7 @@ export default function WhatsAppContactsPage() {
             <p className="text-sm" style={{ color: '#666' }}>Manage your WhatsApp contact list</p>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => setShowAdd(true)} style={{ background: '#FCA311', color: '#000' }}>
+            <Button onClick={() => setShowAdd(true)} style={{ background: 'var(--hp-primary)', color: '#000' }}>
               <Plus className="w-4 h-4 mr-2" /> Add Contact
             </Button>
           </div>
@@ -172,14 +172,14 @@ export default function WhatsAppContactsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" style={{ color: '#FCA311' }} />
+              <Users className="w-5 h-5" style={{ color: 'var(--hp-primary)' }} />
               Contacts ({contacts.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#FCA311' }} />
+                <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--hp-primary)' }} />
               </div>
             ) : contacts.length === 0 ? (
               <div className="text-center py-8" style={{ color: '#666' }}>
@@ -220,7 +220,7 @@ export default function WhatsAppContactsPage() {
                         <td className="py-3 px-2">
                           <div className="flex gap-1 flex-wrap">
                             {(contact.tags || []).slice(0, 2).map((tag) => (
-                              <Badge key={tag} style={{ background: '#FCA311', color: '#000' }} className="text-xs">
+                              <Badge key={tag} style={{ background: 'var(--hp-primary)', color: '#000' }} className="text-xs">
                                 {tag}
                               </Badge>
                             ))}
@@ -302,7 +302,7 @@ export default function WhatsAppContactsPage() {
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
                   <Button variant="outline" onClick={() => setShowAdd(false)}>Cancel</Button>
-                  <Button onClick={handleAdd} disabled={saving || !newContact.phone} style={{ background: '#FCA311', color: '#000' }}>
+                  <Button onClick={handleAdd} disabled={saving || !newContact.phone} style={{ background: 'var(--hp-primary)', color: '#000' }}>
                     {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
                     Add Contact
                   </Button>
@@ -366,7 +366,7 @@ export default function WhatsAppContactsPage() {
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
                   <Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
-                  <Button onClick={() => handleUpdate(editing.id, { name: editing.name, email: editing.email, status: editing.status, lead_status: editing.lead_status })} style={{ background: '#FCA311', color: '#000' }}>
+                  <Button onClick={() => handleUpdate(editing.id, { name: editing.name, email: editing.email, status: editing.status, lead_status: editing.lead_status })} style={{ background: 'var(--hp-primary)', color: '#000' }}>
                     Save Changes
                   </Button>
                 </div>

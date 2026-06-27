@@ -147,7 +147,7 @@ export default function EventCertsPage({ params }: { params: Promise<{ id: strin
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {[
           { label: 'Total', value: stats.total, color: '#fff' },
-          { label: 'Generated', value: stats.generated, color: '#FCA311' },
+          { label: 'Generated', value: stats.generated, color: 'var(--hp-primary)' },
           { label: 'Downloaded', value: stats.downloaded, color: '#10b981' },
           { label: 'Revoked', value: stats.revoked, color: '#ef4444' },
         ].map((s) => (

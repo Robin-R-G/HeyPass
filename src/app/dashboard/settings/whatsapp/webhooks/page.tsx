@@ -36,7 +36,7 @@ export default function WhatsAppWebhooksPage() {
   const webhookUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/webhooks/whatsapp` : '';
 
   if (loading) {
-    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>;
+    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>;
   }
 
   return (
@@ -82,13 +82,13 @@ export default function WhatsAppWebhooksPage() {
         )}
       </div>
 
-      <div className="hp-glass-card p-6 bg-[#FCA311]/[0.04] border-[#FCA311]/20">
-        <h3 className="text-sm font-semibold mb-2 text-[#FCA311]">Troubleshooting</h3>
+      <div className="hp-glass-card p-6 bg-[var(--hp-primary)]/[0.04] border-[var(--hp-primary)]/20">
+        <h3 className="text-sm font-semibold mb-2 text-[var(--hp-primary)]">Troubleshooting</h3>
         <ul className="text-xs text-[#aaa] flex flex-col gap-1.5 pl-5 list-disc">
           <li>Ensure the Callback URL matches exactly (no trailing slash)</li>
           <li>Verify the Verify Token matches your saved token</li>
           <li>Check that the correct webhook subscriptions are active</li>
-          <li>Use Meta&apos;s <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer" className="text-[#FCA311] underline">Webhook Test Tool <ExternalLink size={10} className="inline" /></a> to send test events</li>
+          <li>Use Meta&apos;s <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer" className="text-[var(--hp-primary)] underline">Webhook Test Tool <ExternalLink size={10} className="inline" /></a> to send test events</li>
         </ul>
       </div>
     </div>

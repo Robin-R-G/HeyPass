@@ -133,7 +133,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
             onClick={() => setPricing({ ...pricing, is_free: !pricing.is_free })}
             style={{
               width: '52px', height: '28px', borderRadius: '14px',
-              background: pricing.is_free ? '#FCA311' : '#27272a',
+              background: pricing.is_free ? 'var(--hp-primary)' : '#27272a',
               border: 'none', cursor: 'pointer', position: 'relative',
               transition: 'background 0.2s',
             }}
@@ -205,7 +205,7 @@ export default function EventPricingPage({ params }: { params: Promise<{ id: str
                   type="checkbox"
                   checked={pricing.payment_method_ids.includes(m.id)}
                   onChange={() => togglePaymentMethod(m.id)}
-                  style={{ accentColor: '#FCA311' }}
+                  style={{ accentColor: 'var(--hp-primary)' }}
                 />
                 <div>
                   <div style={{ color: '#fff', fontSize: '0.875rem' }}>

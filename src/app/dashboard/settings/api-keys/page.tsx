@@ -156,7 +156,7 @@ export default function ApiKeysPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-[#FCA311]">{keys.filter(k => k.scope === 'full').length}</div>
+            <div className="text-2xl font-bold text-[var(--hp-primary)]">{keys.filter(k => k.scope === 'full').length}</div>
             <div className="text-sm text-muted-foreground">Full Access</div>
           </CardContent>
         </Card>
@@ -208,7 +208,7 @@ export default function ApiKeysPage() {
                         <Button size="sm" variant="outline" onClick={() => setConfirmRegenKey(key.id)}>
                           Regenerate
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => setConfirmDeleteKey(key.id)}>
+                        <Button size="sm" variant="danger" onClick={() => setConfirmDeleteKey(key.id)}>
                           Delete
                         </Button>
                       </div>

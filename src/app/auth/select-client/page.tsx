@@ -80,7 +80,7 @@ export default function SelectClientPage() {
       <div className="w-full max-w-[480px] px-5">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-6 no-underline" aria-label="HeyPass home">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[var(--hp-primary)]/25">H</div>
           <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
         </Link>
 
@@ -94,7 +94,7 @@ export default function SelectClientPage() {
         <div className="hp-glass-card p-7 sm:p-8">
           {loading ? (
             <div className="flex flex-col items-center gap-3 py-8">
-              <Loader2 className="w-8 h-8 text-[#FCA311] animate-spin" />
+              <Loader2 className="w-8 h-8 text-[var(--hp-primary)] animate-spin" />
               <span className="text-[#999] text-sm">Loading organizations...</span>
             </div>
           ) : clients.length === 0 ? (
@@ -103,7 +103,7 @@ export default function SelectClientPage() {
                 <Building2 className="w-7 h-7 text-[#888]" />
               </div>
               <p className="text-[#999] text-sm mb-4">No organizations found.</p>
-              <Link href="/dashboard" className="text-[#FCA311] font-semibold text-sm no-underline hover:underline">
+              <Link href="/dashboard" className="text-[var(--hp-primary)] font-semibold text-sm no-underline hover:underline">
                 Continue to App &rarr;
               </Link>
             </div>
@@ -116,11 +116,11 @@ export default function SelectClientPage() {
                   disabled={selecting !== null}
                   role="option"
                   aria-selected={selecting === c.client_id}
-                  className="w-full p-5 text-left rounded-xl border border-white/[0.08] bg-white/[0.03] transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:border-[#FCA311]/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FCA311]"
+                  className="w-full p-5 text-left rounded-xl border border-white/[0.08] bg-white/[0.03] transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:border-[var(--hp-primary)]/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--hp-primary)]"
                 >
                   <div className="font-semibold text-white text-base flex justify-between items-center">
                     <span className="truncate">{c.name}</span>
-                    {selecting === c.client_id && <Loader2 className="w-4 h-4 text-[#FCA311] animate-spin shrink-0 ml-3" />}
+                    {selecting === c.client_id && <Loader2 className="w-4 h-4 text-[var(--hp-primary)] animate-spin shrink-0 ml-3" />}
                   </div>
                   <div className="text-[#888] text-xs mt-1.5 capitalize">
                     {c.role} &middot; {c.slug}
@@ -133,7 +133,7 @@ export default function SelectClientPage() {
 
         {/* Back link */}
         <p className="text-center mt-6 text-[13px] text-[#777]">
-          <Link href="/auth/login" className="text-[#FCA311] font-semibold no-underline hover:underline">&larr; Back to sign in</Link>
+          <Link href="/auth/login" className="text-[var(--hp-primary)] font-semibold no-underline hover:underline">&larr; Back to sign in</Link>
         </p>
       </div>
     </div>

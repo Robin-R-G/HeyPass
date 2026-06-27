@@ -121,9 +121,9 @@ export default function PendingUsersPage() {
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/superadmin" className="flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-black">H</div>
             <span className="text-lg font-bold text-white">HeyPass</span>
-            <span className="text-[10px] font-bold text-[#FCA311] bg-[#FCA311]/10 border border-[#FCA311]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
+            <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
           <Link href="/superadmin" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-all">
             <ArrowLeft size={14} /> Back to Dashboard
@@ -146,14 +146,14 @@ export default function PendingUsersPage() {
               placeholder="Search users..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
             />
           </div>
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
-            <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+            <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
             <span className="text-[#999] text-sm">Loading pending users...</span>
           </div>
         ) : filteredUsers.length === 0 ? (
@@ -169,7 +169,7 @@ export default function PendingUsersPage() {
               <div key={user.id} className="hp-glass-card px-6 py-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311]/15 to-[#FCA311]/5 flex items-center justify-center text-lg font-extrabold text-[#FCA311]">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)]/15 to-[var(--hp-primary)]/5 flex items-center justify-center text-lg font-extrabold text-[var(--hp-primary)]">
                       {(user.first_name || user.email)[0].toUpperCase()}
                     </div>
                     <div>
@@ -180,12 +180,12 @@ export default function PendingUsersPage() {
                       <div className="text-xs text-hp-text-secondary/40 mt-0.5">
                         Registered {new Date(user.created_at).toLocaleDateString()}
                         {user.memberships?.[0]?.client && (
-                          <span className="ml-2 text-[#FCA311]">
+                          <span className="ml-2 text-[var(--hp-primary)]">
                             via {user.memberships[0].client.name}
                           </span>
                         )}
                         {user.invitation_code && (
-                          <span className="ml-2 text-[#FCA311]">
+                          <span className="ml-2 text-[var(--hp-primary)]">
                             Code: {user.invitation_code}
                           </span>
                         )}

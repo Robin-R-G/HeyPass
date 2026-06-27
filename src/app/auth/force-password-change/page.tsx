@@ -64,14 +64,14 @@ export default function ForcePasswordChangePage() {
     <div className="min-h-screen bg-[#000] text-white font-sans antialiased flex items-center justify-center p-6">
       <div className="w-full max-w-[420px]">
         <Link href="/" className="flex items-center justify-center gap-2.5 mb-8 no-underline">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[#FCA311]/25">H</div>
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-lg text-black shadow-lg shadow-[var(--hp-primary)]/25">H</div>
           <span className="text-xl font-bold text-white tracking-tight">HeyPass</span>
         </Link>
 
         <div className="hp-glass-card p-8">
           <div className="text-center mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#FCA311]/10 flex items-center justify-center mx-auto mb-4">
-              <Lock size={24} className="text-[#FCA311]" />
+            <div className="w-12 h-12 rounded-xl bg-[var(--hp-primary)]/10 flex items-center justify-center mx-auto mb-4">
+              <Lock size={24} className="text-[var(--hp-primary)]" />
             </div>
             <h1 className="text-xl font-extrabold text-white mb-1.5">Change Your Password</h1>
             <p className="text-sm text-[#999]">For security, please set a new password before continuing.</p>
@@ -115,7 +115,7 @@ export default function ForcePasswordChangePage() {
               </div>
             )}
 
-            <Button type="submit" disabled={loading} className="w-full bg-[#FCA311] hover:bg-[#E09800] text-black font-bold py-2.5 rounded-xl">
+            <Button type="submit" disabled={loading} className="w-full bg-[var(--hp-primary)] hover:bg-[var(--hp-primary-dark)] text-black font-bold py-2.5 rounded-xl">
               {loading ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
               {loading ? 'Updating...' : 'Update Password'}
             </Button>

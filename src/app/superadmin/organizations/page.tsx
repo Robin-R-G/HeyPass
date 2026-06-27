@@ -147,9 +147,9 @@ export default function OrganizationsPage() {
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/superadmin" className="flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-black">H</div>
             <span className="text-lg font-bold text-white">HeyPass</span>
-            <span className="text-[10px] font-bold text-[#FCA311] bg-[#FCA311]/10 border border-[#FCA311]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
+            <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
           <Link href="/superadmin" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-all">
             <ArrowLeft size={14} /> Dashboard
@@ -172,13 +172,13 @@ export default function OrganizationsPage() {
           <div className="relative max-w-md">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" />
             <input type="text" placeholder="Search organizations..." value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50" />
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50" />
           </div>
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
-            <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+            <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
             <span className="text-[#999] text-sm">Loading organizations...</span>
           </div>
         ) : (
@@ -187,7 +187,7 @@ export default function OrganizationsPage() {
               <div key={org.id} className="hp-glass-card px-6 py-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FCA311]/15 to-[#FCA311]/5 flex items-center justify-center text-lg font-extrabold text-[#FCA311]">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--hp-primary)]/15 to-[var(--hp-primary)]/5 flex items-center justify-center text-lg font-extrabold text-[var(--hp-primary)]">
                       {org.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -239,7 +239,7 @@ export default function OrganizationsPage() {
 
             {detailLoading ? (
               <div className="flex justify-center py-12">
-                <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+                <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
               </div>
             ) : orgDetail ? (
               <div className="space-y-6">
@@ -252,7 +252,7 @@ export default function OrganizationsPage() {
                     { label: 'Tickets', value: orgDetail.stats?.tickets || 0 },
                   ].map(s => (
                     <div key={s.label} className="bg-white/[0.03] rounded-xl p-3 text-center">
-                      <div className="text-xl font-extrabold text-[#FCA311]">{s.value}</div>
+                      <div className="text-xl font-extrabold text-[var(--hp-primary)]">{s.value}</div>
                       <div className="text-[10px] text-hp-text-secondary/60 uppercase tracking-wider mt-1">{s.label}</div>
                     </div>
                   ))}
@@ -265,7 +265,7 @@ export default function OrganizationsPage() {
                     {orgDetail.members?.map((m: any) => (
                       <div key={m.id} className="flex items-center justify-between bg-white/[0.03] rounded-lg px-4 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-[#FCA311]/10 flex items-center justify-center text-xs font-bold text-[#FCA311]">
+                          <div className="w-8 h-8 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center text-xs font-bold text-[var(--hp-primary)]">
                             {(m.user?.first_name || m.user?.email || '?')[0].toUpperCase()}
                           </div>
                           <div>
@@ -274,7 +274,7 @@ export default function OrganizationsPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-[#FCA311] bg-[#FCA311]/10 px-2 py-0.5 rounded">
+                          <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 px-2 py-0.5 rounded">
                             {m.role?.slug || 'no role'}
                           </span>
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
@@ -309,39 +309,39 @@ export default function OrganizationsPage() {
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Organization Name</label>
                 <input type="text" required value={createForm.organization_name} onChange={e => setCreateForm({ ...createForm, organization_name: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                   placeholder="e.g. IEEE Student Branch" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Owner First Name</label>
                   <input type="text" value={createForm.first_name} onChange={e => setCreateForm({ ...createForm, first_name: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                    className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                     placeholder="First name" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Owner Last Name</label>
                   <input type="text" value={createForm.last_name} onChange={e => setCreateForm({ ...createForm, last_name: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                    className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                     placeholder="Last name" />
                 </div>
               </div>
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Owner Email</label>
                 <input type="email" required value={createForm.email} onChange={e => setCreateForm({ ...createForm, email: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                   placeholder="owner@example.com" />
               </div>
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Temporary Password</label>
                 <input type="password" required minLength={8} value={createForm.password} onChange={e => setCreateForm({ ...createForm, password: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                   placeholder="Min 8 characters" />
               </div>
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Subscription Plan</label>
                 <select value={createForm.subscription_plan} onChange={e => setCreateForm({ ...createForm, subscription_plan: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white focus:outline-none focus:border-[#FCA311]/50">
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white focus:outline-none focus:border-[var(--hp-primary)]/50">
                   <option value="free">Free</option>
                   <option value="starter">Starter</option>
                   <option value="professional">Professional</option>

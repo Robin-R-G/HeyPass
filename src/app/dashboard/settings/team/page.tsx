@@ -227,7 +227,7 @@ export default function TeamManagementPage() {
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/dashboard" className="flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-black">H</div>
             <span className="text-lg font-bold text-white">HeyPass</span>
           </Link>
           <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-all">
@@ -252,7 +252,7 @@ export default function TeamManagementPage() {
           {(['members', 'invitations', 'roles'] as const).map(t => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                tab === t ? 'bg-[#FCA311] text-black' : 'text-[#999] hover:text-white'
+                tab === t ? 'bg-[var(--hp-primary)] text-black' : 'text-[#999] hover:text-white'
               }`}>
               {t === 'members' ? `Members (${members.length})` : t === 'invitations' ? `Invitations (${invitations.filter(i => i.status === 'pending').length})` : `Roles (${roles.length})`}
             </button>
@@ -261,7 +261,7 @@ export default function TeamManagementPage() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
-            <Loader2 size={24} className="text-[#FCA311] animate-spin" />
+            <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
             <span className="text-[#999] text-sm">Loading...</span>
           </div>
         ) : tab === 'members' ? (
@@ -270,7 +270,7 @@ export default function TeamManagementPage() {
               <div className="relative max-w-md">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" />
                 <input type="text" placeholder="Search members..." value={search} onChange={e => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50" />
+                  className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50" />
               </div>
             </div>
 
@@ -290,7 +290,7 @@ export default function TeamManagementPage() {
                     <tr key={member.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-[#FCA311]/10 flex items-center justify-center text-xs font-bold text-[#FCA311]">
+                          <div className="w-9 h-9 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center text-xs font-bold text-[var(--hp-primary)]">
                             {(member.user?.first_name || member.user?.email || '?')[0].toUpperCase()}
                           </div>
                           <div>
@@ -301,7 +301,7 @@ export default function TeamManagementPage() {
                       </td>
                       <td className="px-4 py-3">
                         <select value={member.role?.id || ''} onChange={e => handleRoleChange(member.id, e.target.value)}
-                          className="bg-transparent border border-white/[0.08] rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-[#FCA311]/50">
+                          className="bg-transparent border border-white/[0.08] rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-[var(--hp-primary)]/50">
                           {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                         </select>
                       </td>
@@ -348,12 +348,12 @@ export default function TeamManagementPage() {
                   <div className="text-sm font-medium text-white">{inv.email}</div>
                   <div className="text-xs text-hp-text-secondary/60">
                     {inv.role?.name || 'No role'} · Sent {new Date(inv.created_at).toLocaleDateString()}
-                    {inv.invitation_code && <span className="ml-2 text-[#FCA311]">Code: {inv.invitation_code}</span>}
+                    {inv.invitation_code && <span className="ml-2 text-[var(--hp-primary)]">Code: {inv.invitation_code}</span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    inv.status === 'pending' ? 'bg-[#FCA311]/12 text-[#FCA311]' :
+                    inv.status === 'pending' ? 'bg-[var(--hp-primary)]/12 text-[var(--hp-primary)]' :
                     inv.status === 'accepted' ? 'bg-[#10b981]/12 text-[#10b981]' :
                     'bg-white/6 text-hp-text-secondary/60'
                   }`}>{inv.status}</span>
@@ -404,13 +404,13 @@ export default function TeamManagementPage() {
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Email *</label>
                 <input type="email" required value={inviteForm.email} onChange={e => setInviteForm({ ...inviteForm, email: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                   placeholder="colleague@example.com" />
               </div>
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Role</label>
                 <select value={inviteForm.role_id} onChange={e => setInviteForm({ ...inviteForm, role_id: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white focus:outline-none focus:border-[#FCA311]/50">
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white focus:outline-none focus:border-[var(--hp-primary)]/50">
                   <option value="">Select role...</option>
                   {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
                 </select>
@@ -419,13 +419,13 @@ export default function TeamManagementPage() {
                 <div>
                   <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Department</label>
                   <input type="text" value={inviteForm.department} onChange={e => setInviteForm({ ...inviteForm, department: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                    className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                     placeholder="e.g. Technical" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Phone</label>
                   <input type="text" value={inviteForm.phone} onChange={e => setInviteForm({ ...inviteForm, phone: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50"
+                    className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50"
                     placeholder="+91..." />
                 </div>
               </div>
@@ -435,7 +435,7 @@ export default function TeamManagementPage() {
                   {(['email', 'link', 'code'] as const).map(type => (
                     <button key={type} type="button" onClick={() => setInviteForm({ ...inviteForm, invitation_type: type })}
                       className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                        inviteForm.invitation_type === type ? 'bg-[#FCA311] text-black' : 'bg-white/[0.05] text-[#999] hover:text-white'
+                        inviteForm.invitation_type === type ? 'bg-[var(--hp-primary)] text-black' : 'bg-white/[0.05] text-[#999] hover:text-white'
                       }`}>
                       {type.charAt(0).toUpperCase() + type.slice(1)}
                     </button>
@@ -445,7 +445,7 @@ export default function TeamManagementPage() {
               <div>
                 <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Message (optional)</label>
                 <textarea value={inviteForm.message} onChange={e => setInviteForm({ ...inviteForm, message: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-[#14213D] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[#FCA311]/50 resize-none"
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50 resize-none"
                   rows={3} placeholder="Welcome to the team!" />
               </div>
               <div className="flex justify-end gap-3 mt-2">

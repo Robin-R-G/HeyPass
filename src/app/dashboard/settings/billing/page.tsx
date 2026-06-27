@@ -127,16 +127,16 @@ export default function BillingPage() {
 
       <Tabs defaultValue="subscription">
         <TabsList className="gap-1 bg-[#111] border border-[#222] p-1">
-          <TabsTrigger value="subscription" className="data-[state=active]:bg-[#FCA311] data-[state=active]:text-black">Subscription</TabsTrigger>
-          <TabsTrigger value="invoices" className="data-[state=active]:bg-[#FCA311] data-[state=active]:text-black">Invoices</TabsTrigger>
-          <TabsTrigger value="gateways" className="data-[state=active]:bg-[#FCA311] data-[state=active]:text-black">Payment Gateways</TabsTrigger>
+          <TabsTrigger value="subscription" className="data-[state=active]:bg-[var(--hp-primary)] data-[state=active]:text-black">Subscription</TabsTrigger>
+          <TabsTrigger value="invoices" className="data-[state=active]:bg-[var(--hp-primary)] data-[state=active]:text-black">Invoices</TabsTrigger>
+          <TabsTrigger value="gateways" className="data-[state=active]:bg-[var(--hp-primary)] data-[state=active]:text-black">Payment Gateways</TabsTrigger>
         </TabsList>
 
         {/* Subscription Tab */}
         <TabsContent value="subscription" className="space-y-6">
           {/* Current Plan */}
           {subscription && subscription.plan && (
-            <Card className="border-[#FCA311]">
+            <Card className="border-[var(--hp-primary)]">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Current Plan: {subscription.plan.name}</span>
@@ -197,7 +197,7 @@ export default function BillingPage() {
               const isCurrent = subscription?.plan_id === plan.id;
 
               return (
-                <Card key={plan.id} className={isCurrent ? 'border-[#FCA311]' : ''}>
+                <Card key={plan.id} className={isCurrent ? 'border-[var(--hp-primary)]' : ''}>
                   <CardHeader>
                     <CardTitle className="text-lg">{plan.name}</CardTitle>
                     <div className="text-3xl font-bold">

@@ -111,7 +111,7 @@ export default function WhatsAppConfigPage() {
   const webhookUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/webhooks/whatsapp` : '';
 
   if (loading) {
-    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>;
+    return <div className="flex justify-center py-12"><Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" /></div>;
   }
 
   return (
@@ -229,7 +229,7 @@ export default function WhatsAppConfigPage() {
           <div>
             <label className="block text-xs text-[#aaa] mb-1.5">Callback URL</label>
             <div className="flex gap-2">
-              <input value={webhookUrl} readOnly className="hp-input font-mono text-[#FCA311] text-xs" />
+              <input value={webhookUrl} readOnly className="hp-input font-mono text-[var(--hp-primary)] text-xs" />
               <button onClick={() => copyToClipboard(webhookUrl)} className="hp-btn hp-btn-secondary px-3"><Copy size={14} /></button>
             </div>
           </div>
@@ -244,10 +244,10 @@ export default function WhatsAppConfigPage() {
       </div>
 
       {/* Setup Guide */}
-      <div className="hp-glass-card p-6 bg-[#FCA311]/[0.04] border-[#FCA311]/20">
-        <h3 className="text-sm font-semibold mb-3 text-[#FCA311]">Setup Guide</h3>
+      <div className="hp-glass-card p-6 bg-[var(--hp-primary)]/[0.04] border-[var(--hp-primary)]/20">
+        <h3 className="text-sm font-semibold mb-3 text-[var(--hp-primary)]">Setup Guide</h3>
         <ol className="text-xs text-[#aaa] flex flex-col gap-2 pl-5 list-decimal">
-          <li>Go to <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer" className="text-[#FCA311] underline">Meta Developer Portal <ExternalLink size={10} className="inline" /></a></li>
+          <li>Go to <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener noreferrer" className="text-[var(--hp-primary)] underline">Meta Developer Portal <ExternalLink size={10} className="inline" /></a></li>
           <li>Create or open your WhatsApp Business App</li>
           <li>Note your Phone Number ID and WABA ID from <strong>WhatsApp &rarr; Configuration</strong></li>
           <li>Generate a Permanent Access Token</li>
