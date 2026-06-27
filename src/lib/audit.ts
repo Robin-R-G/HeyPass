@@ -9,6 +9,7 @@ export type AuditAction =
   | 'auth.password_reset_request'
   | 'auth.password_reset_complete'
   | 'auth.session_compromised'
+  | 'auth.password_change'
   | 'role.change'
   | 'event.create'
   | 'event.update'
