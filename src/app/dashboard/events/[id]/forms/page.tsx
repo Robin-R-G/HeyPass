@@ -202,7 +202,7 @@ export default function FormsPage({ params }: { params: Promise<{ id: string }> 
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="border-[rgba(229,229,229,0.12)] rounded-lg p-4 cursor-pointer hover:border-[var(--hp-primary)] hover:bg-[rgba(252,163,17,0.08)]"
+                className="border-[rgba(229,229,229,0.12)] rounded-lg p-4 cursor-pointer hover:border-[var(--hp-primary)] hover:bg-[rgba(99,102,241,0.08)]"
                 onClick={() => handleCreateFromTemplate(template.id)}
               >
                 <div className="flex items-center gap-2 mb-2">

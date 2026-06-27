@@ -147,8 +147,8 @@ export default function OrganizationsPage() {
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
           <Link href="/superadmin" className="flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-black">H</div>
-            <span className="text-lg font-bold text-white">HeyPass</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
+            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
             <span className="text-[10px] font-bold text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border border-[var(--hp-primary)]/20 px-2 py-0.5 rounded-md tracking-wider uppercase">Superadmin</span>
           </Link>
           <Link href="/superadmin" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-all">

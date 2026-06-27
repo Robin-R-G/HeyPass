@@ -26,11 +26,9 @@ export default function Home() {
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-8 flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center no-underline">
-            <span className="text-xl font-bold tracking-[-0.03em]">
-              <span className="text-[var(--hp-primary)]">Hey</span>
-              <span className="text-white">Pass</span>
-            </span>
+          <Link href="/" className="flex items-center gap-2.5 no-underline" aria-label="HeyPass home">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-base text-white">H</div>
+            <span className="text-xl font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
           </Link>
           <div className="flex items-center gap-5">
             <Link href="/verify" className="text-sm font-medium text-[#999] hover:text-white transition-colors">Verify</Link>
@@ -51,7 +49,7 @@ export default function Home() {
 
         <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-[800] leading-[1.02] mb-6 max-w-[800px] tracking-[-0.04em]">
           The Event Platform<br />
-          <span className="bg-gradient-to-r from-[#FCA311] via-[#A78BFA] to-[#FCA311] bg-clip-text text-transparent">That Just Works</span>
+          <span className="bg-gradient-to-r from-[#818CF8] via-[#6366F1] to-[#A78BFA] bg-clip-text text-transparent">That Just Works</span>
         </h1>
 
         <p className="text-lg text-[#999] max-w-[540px] leading-relaxed mb-10">
@@ -195,11 +193,10 @@ export default function Home() {
       {/* Footer */}
       <footer className="px-5 sm:px-8 py-10 border-t border-white/[0.08] bg-black/40 relative z-10">
         <div className="max-w-[1080px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div>
-            <span className="text-lg font-bold tracking-[-0.02em]">
-              <span className="text-[var(--hp-primary)]">Hey</span>
-              <span className="text-white">Pass</span>
-            </span>
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--hp-primary)] to-[var(--hp-primary-dark)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
+            <span className="text-lg font-bold tracking-tight"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-white">Pass</span></span>
+          </div>
             <p className="text-xs text-[#666] mt-1">
               Developed from Kerala with &#10084; &middot; Robin R G &middot; &copy; 2026
             </p>

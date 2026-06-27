@@ -109,15 +109,15 @@ export async function sendInvitationEmail(
     subject: `You're invited to join ${organizationName} on HeyPass`,
     html: `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #FBBF24, #D97706); padding: 32px; text-align: center; border-radius: 12px 12px 0 0;">
+        <div style="background: linear-gradient(135deg, #6366F1, #4F46E5); padding: 32px; text-align: center; border-radius: 12px 12px 0 0;">
           <h1 style="color: #000; margin: 0; font-size: 24px; font-weight: 700;">HeyPass</h1>
         </div>
         <div style="background: var(--hp-bg-elevated); padding: 32px; border-radius: 0 0 12px 12px; color: #fff;">
-          <h2 style="color: #FBBF24; margin-top: 0;">You're Invited!</h2>
+          <h2 style="color: #6366F1; margin-top: 0;">You're Invited!</h2>
           <p><strong>${escapeHtml(inviterName)}</strong> has invited you to join <strong>${escapeHtml(organizationName)}</strong> on HeyPass as a <strong>${escapeHtml(role)}</strong>.</p>
           ${message ? `<p style="color: #999; font-style: italic;">"${escapeHtml(message)}"</p>` : ''}
           <div style="text-align: center; margin: 32px 0;">
-            <a href="${invitationLink}" style="background: #FBBF24; color: #000; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Accept Invitation</a>
+            <a href="${invitationLink}" style="background: #6366F1; color: #000; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Accept Invitation</a>
           </div>
           <p style="color: #999; font-size: 13px;">This invitation expires on <strong>${new Date(expiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>.</p>
           <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0;" />
@@ -141,20 +141,20 @@ export async function sendOrgCreatedEmail(
     subject: `Welcome to ${organizationName} on HeyPass`,
     html: `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #FBBF24, #D97706); padding: 32px; text-align: center; border-radius: 12px 12px 0 0;">
+        <div style="background: linear-gradient(135deg, #6366F1, #4F46E5); padding: 32px; text-align: center; border-radius: 12px 12px 0 0;">
           <h1 style="color: #000; margin: 0; font-size: 24px; font-weight: 700;">HeyPass</h1>
         </div>
         <div style="background: var(--hp-bg-elevated); padding: 32px; border-radius: 0 0 12px 12px; color: #fff;">
-          <h2 style="color: #FBBF24; margin-top: 0;">Welcome aboard!</h2>
+          <h2 style="color: #6366F1; margin-top: 0;">Welcome aboard!</h2>
           <p>Hi ${escapeHtml(ownerName)},</p>
           <p>Your organization <strong>${escapeHtml(organizationName)}</strong> has been created on HeyPass.</p>
           <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin: 24px 0;">
             <p style="margin: 0 0 8px; color: #999; font-size: 12px;">LOGIN CREDENTIALS</p>
             <p style="margin: 0; color: #fff; font-size: 14px;">Email: <strong>${escapeHtml(to)}</strong></p>
-            <p style="margin: 4px 0 0; color: #fff; font-size: 14px;">Password: <strong style="color: #FBBF24;">${escapeHtml(tempPassword)}</strong></p>
+            <p style="margin: 4px 0 0; color: #fff; font-size: 14px;">Password: <strong style="color: #6366F1;">${escapeHtml(tempPassword)}</strong></p>
           </div>
           <div style="text-align: center; margin: 32px 0;">
-            <a href="${loginLink}" style="background: #FBBF24; color: #000; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Login to HeyPass</a>
+            <a href="${loginLink}" style="background: #6366F1; color: #000; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Login to HeyPass</a>
           </div>
           <p style="color: #ef4444; font-size: 13px;"><strong>Important:</strong> You will be asked to change your password on first login.</p>
           <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0;" />

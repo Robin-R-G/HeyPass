@@ -53,14 +53,14 @@ export function ConfirmModal({
 
   if (!visible) return null;
 
-  const iconBg = variant === 'danger' ? 'rgba(239,68,68,0.12)' : variant === 'warning' ? 'rgba(245,158,11,0.12)' : 'rgba(252,163,17,0.12)';
+  const iconBg = variant === 'danger' ? 'rgba(239,68,68,0.12)' : variant === 'warning' ? 'rgba(245,158,11,0.12)' : 'rgba(99,102,241,0.12)';
   const iconColor = variant === 'danger' ? '#ef4444' : variant === 'warning' ? '#f59e0b' : 'var(--hp-primary)';
   const confirmBg = variant === 'danger'
     ? 'linear-gradient(135deg, #ef4444, #dc2626)'
     : 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))';
   const confirmShadow = variant === 'danger'
     ? '0 4px 12px rgba(239,68,68,0.25)'
-    : '0 4px 12px rgba(252,163,17,0.25)';
+    : '0 4px 12px rgba(99,102,241,0.25)';
 
   return (
     <div
@@ -234,7 +234,7 @@ export function PromptModal({
             color: '#fff', fontSize: '14px', outline: 'none',
             transition: 'border-color 0.2s', marginBottom: '20px',
           }}
-          onFocus={e => e.currentTarget.style.borderColor = 'rgba(252,163,17,0.4)'}
+          onFocus={e => e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'}
           onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
         />
 
@@ -256,7 +256,7 @@ export function PromptModal({
               background: 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))',
               color: '#000', border: 'none', padding: '10px 24px', borderRadius: '10px',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(252,163,17,0.25)', transition: 'all 0.2s',
+              boxShadow: '0 4px 12px rgba(99,102,241,0.25)', transition: 'all 0.2s',
             }}
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}

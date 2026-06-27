@@ -70,7 +70,7 @@ export default function DashboardPage() {
         <div className="max-w-[1200px] mx-auto flex justify-between items-center px-4 sm:px-8 h-14">
           <Link href="/" className="flex items-center gap-2.5 no-underline">
             <div className="w-8 h-8 rounded-[var(--hp-radius-sm)] bg-[var(--hp-primary)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
-            <span className="text-lg font-bold text-[var(--hp-text)]">HeyPass</span>
+            <span className="text-lg font-bold"><span className="text-[var(--hp-primary)]">Hey</span><span className="text-[var(--hp-text)]">Pass</span></span>
           </Link>
           <div className="flex gap-1 items-center">
             <Link href="/dashboard" className="px-3 py-1.5 rounded-[var(--hp-radius-sm)] text-sm font-medium text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 no-underline">Events</Link>

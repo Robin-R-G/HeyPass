@@ -172,7 +172,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
                   />
                 </div>
               )}
-              <label className="cursor-pointer bg-[rgba(252,163,17,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(252,163,17,0.15)]">
+              <label className="cursor-pointer bg-[rgba(99,102,241,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(99,102,241,0.15)]">
                 {uploading === 'banner' ? 'Uploading...' : 'Upload Banner'}
                 <input
                   type="file"
@@ -201,7 +201,7 @@ export default function EventBrandingPage({ params }: { params: Promise<{ id: st
                   />
                 </div>
               )}
-              <label className="cursor-pointer bg-[rgba(252,163,17,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(252,163,17,0.15)]">
+              <label className="cursor-pointer bg-[rgba(99,102,241,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(99,102,241,0.15)]">
                 {uploading === 'logo' ? 'Uploading...' : 'Upload Logo'}
                 <input
                   type="file"

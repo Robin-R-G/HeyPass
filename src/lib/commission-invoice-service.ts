@@ -345,7 +345,7 @@ class CommissionInvoiceServiceImpl {
     body { font-family: 'Arial', sans-serif; color: #1a1a2e; margin: 0; padding: 0; }
     .container { max-width: 800px; margin: 0 auto; padding: 40px; }
     .header { display: flex; justify-content: space-between; margin-bottom: 40px; }
-    .logo { font-size: 28px; font-weight: 700; color: #FBBF24; }
+    .logo { font-size: 28px; font-weight: 700; color: #6366F1; }
     .invoice-title { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
     .invoice-number { color: #6b7280; }
     .section { margin-bottom: 32px; }

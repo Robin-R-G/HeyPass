@@ -287,7 +287,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-[rgba(252,163,17,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(252,163,17,0.15)]">
+                <label className="cursor-pointer bg-[rgba(99,102,241,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(99,102,241,0.15)]">
                   {uploading === 'logo' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -326,7 +326,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-[rgba(252,163,17,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(252,163,17,0.15)]">
+                <label className="cursor-pointer bg-[rgba(99,102,241,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(99,102,241,0.15)]">
                   {uploading === 'college-logo' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -365,7 +365,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-[rgba(252,163,17,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(252,163,17,0.15)]">
+                <label className="cursor-pointer bg-[rgba(99,102,241,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(99,102,241,0.15)]">
                   {uploading === 'favicon' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
@@ -404,7 +404,7 @@ export default function BrandingSettingsPage() {
                 </div>
               )}
               <div className="flex gap-2">
-                <label className="cursor-pointer bg-[rgba(252,163,17,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(252,163,17,0.15)]">
+                <label className="cursor-pointer bg-[rgba(99,102,241,0.08)] text-[#E5E5E5] px-3 py-1 rounded text-sm hover:bg-[rgba(99,102,241,0.15)]">
                   {uploading === 'banner' ? 'Uploading...' : 'Upload'}
                   <input
                     type="file"
