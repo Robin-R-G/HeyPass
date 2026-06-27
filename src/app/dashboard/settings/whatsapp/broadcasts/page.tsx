@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/toast';
 import { useConfirm } from '@/components/confirm-dialog';
-import { Loader2, Plus, Send, Trash2, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { StatusBadge } from '@/components/status-badge';
+import { EmptyState } from '@/components/empty-state';
+import { Loader2, Plus, Send, Trash2, Clock, CheckCircle, XCircle, Radio } from 'lucide-react';
 
 interface Broadcast {
   id: string;
@@ -116,18 +118,6 @@ export default function WhatsAppBroadcastsPage() {
     }
   }
 
-  const statusBadge = (s: string) => {
-    const map: Record<string, string> = {
-      draft: 'bg-[#666]/20 text-[#666]',
-      scheduled: 'bg-[#FCA311]/20 text-[#FCA311]',
-      sending: 'bg-blue-500/20 text-blue-400',
-      sent: 'bg-[#10b981]/20 text-[#10b981]',
-      failed: 'bg-[#ef4444]/20 text-[#ef4444]',
-      cancelled: 'bg-[#666]/20 text-[#666]',
-    };
-    return map[s] || map.draft;
-  };
-
   return (
     <div className="flex flex-col gap-6">
       <ConfirmDialog />
@@ -164,7 +154,12 @@ export default function WhatsAppBroadcastsPage() {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>
       ) : broadcasts.length === 0 ? (
-        <div className="text-center py-12 text-[#666]"><p className="text-sm">No broadcasts yet.</p></div>
+        <EmptyState
+          icon={Radio}
+          title="No broadcasts yet"
+          description="Create a broadcast to send bulk messages to your contacts."
+          action={{ label: 'New Broadcast', onClick: () => setShowCreate(true), icon: Plus }}
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {broadcasts.map(b => (
@@ -173,7 +168,7 @@ export default function WhatsAppBroadcastsPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm font-semibold">{b.name}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${statusBadge(b.status)}`}>{b.status}</span>
+                    <StatusBadge status={b.status} />
                   </div>
                   <div className="text-xs text-[#888]">
                     {b.total_contacts} contacts &middot; {b.sent_count} sent &middot; {b.delivered_count} delivered &middot; {b.failed_count} failed

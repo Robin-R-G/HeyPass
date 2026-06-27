@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/toast';
 import { useConfirm } from '@/components/confirm-dialog';
-import { Loader2, Search, Plus, Trash2, Tag, X } from 'lucide-react';
+import { StatusBadge } from '@/components/status-badge';
+import { EmptyState } from '@/components/empty-state';
+import { Loader2, Search, Plus, Trash2, Tag, X, Users } from 'lucide-react';
 
 interface WhatsAppContact {
   id: string;
@@ -136,7 +138,12 @@ export default function WhatsAppContactsPage() {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>
       ) : contacts.length === 0 ? (
-        <div className="text-center py-12 text-[#666]"><p className="text-sm">No contacts found.</p></div>
+        <EmptyState
+          icon={Users}
+          title="No contacts yet"
+          description="Add contacts to start building your WhatsApp audience."
+          action={{ label: 'Add Contact', onClick: () => setShowAdd(true), icon: Plus }}
+        />
       ) : (
         <div className="hp-glass-card overflow-hidden">
           <table className="w-full text-sm">
@@ -159,11 +166,7 @@ export default function WhatsAppContactsPage() {
                   </td>
                   <td className="px-4 py-3 font-mono text-xs">{c.phone}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      c.status === 'active' ? 'bg-[#10b981]/20 text-[#10b981]' :
-                      c.status === 'blocked' ? 'bg-[#ef4444]/20 text-[#ef4444]' :
-                      'bg-[#666]/20 text-[#666]'
-                    }`}>{c.status}</span>
+                    <StatusBadge status={c.status} />
                   </td>
                   <td className="px-4 py-3 text-xs text-[#888]">{c.lead_status}</td>
                   <td className="px-4 py-3 text-xs">{c.messages_sent}</td>

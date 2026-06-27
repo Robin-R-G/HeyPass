@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useToast } from '@/components/toast';
+import { StatusBadge } from '@/components/status-badge';
 import { CheckCircle, XCircle, RefreshCw, Loader2, MessageCircle, Users, Radio, FileText, ExternalLink } from 'lucide-react';
 
 interface WhatsAppStatus {

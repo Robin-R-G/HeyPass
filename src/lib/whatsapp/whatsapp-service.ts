@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import { createWhatsAppProvider, WhatsAppConfigInput } from './provider-interface';
+import { createWhatsAppProvider } from './meta-provider';
+import type { WhatsAppConfigInput } from './provider-interface';
 import crypto from 'crypto';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;

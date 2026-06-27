@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/toast';
-import { Loader2, RefreshCw, Search, Plus, CheckCircle, XCircle, Clock, Trash2 } from 'lucide-react';
+import { StatusBadge } from '@/components/status-badge';
+import { EmptyState } from '@/components/empty-state';
+import { Loader2, RefreshCw, Search, Plus, CheckCircle, XCircle, Clock, Trash2, FileText } from 'lucide-react';
 
 interface WhatsAppTemplate {
   id: string;
@@ -65,13 +67,6 @@ export default function WhatsAppTemplatesPage() {
     return true;
   });
 
-  const statusIcon = (s: string) => {
-    if (s === 'approved') return <CheckCircle size={14} className="text-[#10b981]" />;
-    if (s === 'pending') return <Clock size={14} className="text-[#FCA311]" />;
-    if (s === 'rejected') return <XCircle size={14} className="text-[#ef4444]" />;
-    return <XCircle size={14} className="text-[#666]" />;
-  };
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -106,10 +101,12 @@ export default function WhatsAppTemplatesPage() {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 size={24} className="text-[#FCA311] animate-spin" /></div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-[#666]">
-          <p className="text-sm">No templates found.</p>
-          <p className="text-xs mt-1">Sync from Meta to import your approved templates.</p>
-        </div>
+        <EmptyState
+          icon={FileText}
+          title="No templates found"
+          description="Sync from Meta to import your approved WhatsApp templates."
+          action={{ label: 'Sync from Meta', onClick: handleSync, icon: RefreshCw }}
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {filtered.map(tpl => (
@@ -117,7 +114,6 @@ export default function WhatsAppTemplatesPage() {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    {statusIcon(tpl.status)}
                     <span className="text-sm font-semibold">{tpl.name}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/[0.06] text-[#888]">{tpl.category}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-white/[0.06] text-[#888]">{tpl.language}</span>
@@ -126,11 +122,7 @@ export default function WhatsAppTemplatesPage() {
                   <p className="text-xs text-[#888] line-clamp-2">{tpl.body_text}</p>
                   {tpl.footer_text && <p className="text-xs text-[#666] mt-1">Footer: {tpl.footer_text}</p>}
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  tpl.status === 'approved' ? 'bg-[#10b981]/20 text-[#10b981]' :
-                  tpl.status === 'pending' ? 'bg-[#FCA311]/20 text-[#FCA311]' :
-                  'bg-[#ef4444]/20 text-[#ef4444]'
-                }`}>{tpl.status}</span>
+                <StatusBadge status={tpl.status} />
               </div>
               {tpl.last_synced_at && (
                 <p className="text-[10px] text-[#555] mt-2">Last synced: {new Date(tpl.last_synced_at).toLocaleString()}</p>

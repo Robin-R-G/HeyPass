@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
 import { useConfirm } from '@/components/confirm-dialog';
+import { StatusBadge } from '@/components/status-badge';
 import { Loader2, Users, UserPlus, Search, Filter, MoreVertical, Shield, Mail, Phone, Building, Calendar, ArrowLeft, X, Check, ChevronDown, Trash2, RefreshCw, Copy } from 'lucide-react';
 
 interface TeamMember {
@@ -305,11 +306,7 @@ export default function TeamManagementPage() {
                         </select>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                          member.status === 'active' ? 'bg-[#10b981]/12 text-[#10b981]' :
-                          member.status === 'suspended' ? 'bg-[#ef4444]/12 text-[#ef4444]' :
-                          'bg-white/6 text-hp-text-secondary/60'
-                        }`}>{member.status}</span>
+                        <StatusBadge status={member.status} />
                       </td>
                       <td className="px-4 py-3 text-xs text-hp-text-secondary/60">
                         {member.joined_at ? new Date(member.joined_at).toLocaleDateString() : 'Pending'}

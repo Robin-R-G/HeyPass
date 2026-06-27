@@ -1,4 +1,3 @@
-export { createWhatsAppProvider } from './provider-interface';
+export { createWhatsAppProvider, MetaWhatsAppProvider } from './meta-provider';
 export type { WhatsAppProvider, WhatsAppConfigInput, WhatsAppTemplate, WhatsAppWebhookEvent } from './provider-interface';
-export { MetaWhatsAppProvider } from './meta-provider';
 export { getWhatsAppService, WhatsAppService } from './whatsapp-service';
