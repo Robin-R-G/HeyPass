@@ -23,11 +23,29 @@ export type AuditAction =
   | 'billing.action'
   | 'member.add'
   | 'member.remove'
+  | 'member.update'
   | 'member.role_change'
   | 'settings.update'
   | 'volunteer.status_update'
   | 'volunteer.assign'
-  | 'volunteer.unassign';
+  | 'volunteer.unassign'
+  | 'invitation.create'
+  | 'invitation.accept'
+  | 'invitation.revoke'
+  | 'org.admin_create'
+  | 'org.admin_update'
+  | 'org.admin_delete'
+  | 'user.admin_update'
+  | 'user.admin_delete'
+  | 'config.save'
+  | 'config.verify'
+  | 'template.sync'
+  | 'contact.upsert'
+  | 'contact.delete'
+  | 'message.send'
+  | 'broadcast.create'
+  | 'broadcast.send'
+  | 'broadcast.cancel';
 
 export async function createAuditLog(params: {
   client_id?: string | null;
