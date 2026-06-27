@@ -16,7 +16,7 @@ export const GET = withPermission(async (req, auth) => {
 
   try {
     const provider = getProvider(config.provider);
-    const models = await provider.listModels();
+    const models = await provider.listModels(config.api_key);
     return successResponse({ models, provider: config.provider });
   } catch (err) {
     return errorResponse(err instanceof Error ? err.message : 'Failed to list models', 500);
