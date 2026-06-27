@@ -88,7 +88,7 @@ export default function NotificationsPage() {
       case 'sent': case 'delivered': return 'default';
       case 'queued': case 'sending': return 'secondary';
       case 'opened': case 'clicked': return 'default';
-      case 'failed': return 'destructive';
+      case 'failed': return 'danger';
       default: return 'outline';
     }
   }

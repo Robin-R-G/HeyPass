@@ -111,7 +111,7 @@ export default function BillingPage() {
   function getStatusColor(status: string) {
     switch (status) {
       case 'active': case 'paid': return 'default';
-      case 'past_due': case 'overdue': return 'destructive';
+      case 'past_due': case 'overdue': return 'danger';
       case 'cancelled': return 'secondary';
       default: return 'outline';
     }

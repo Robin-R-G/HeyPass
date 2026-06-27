@@ -240,7 +240,7 @@ export default function WebhooksPage() {
                     <TableRow key={d.id}>
                       <TableCell className="font-mono text-sm">{d.event_type}</TableCell>
                       <TableCell>
-                        <Badge variant={d.status === 'delivered' ? 'default' : d.status === 'failed' ? 'destructive' : 'secondary'}>
+                        <Badge variant={d.status === 'delivered' ? 'default' : d.status === 'failed' ? 'danger' : 'secondary'}>
                           {d.status}
                         </Badge>
                       </TableCell>
