@@ -22,18 +22,15 @@ export async function GET(
         return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
       }
 
-      // Try PDF first, then PNG
+      // Try PDF first, then QR image
       const filePath = ticket.pdf_url || ticket.qr_code_url;
       if (!filePath) {
         return NextResponse.json({ error: 'Ticket file not yet generated' }, { status: 404 });
       }
 
-      const isPdf = ticket.pdf_url && filePath === ticket.pdf_url;
-      const bucket = isPdf ? 'tickets' : 'tickets';
-
       // Generate signed URL
       const { data: urlData } = await supabaseAdmin.storage
-        .from(bucket)
+        .from('tickets')
         .createSignedUrl(filePath, 900);
 
       if (!urlData?.signedUrl) {

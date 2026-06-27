@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/client';
 
-export async function GET(
-  req: NextRequest,
-  { searchParams }: { searchParams: Promise<{ [key: string]: string }> }
-) {
+export async function GET(req: NextRequest) {
   try {
-    const params = await searchParams;
-    const imagePath = params.get('path');
+    const imagePath = req.nextUrl.searchParams.get('path');
 
     if (!imagePath) {
       return NextResponse.json({ error: 'Image path required' }, { status: 400 });
