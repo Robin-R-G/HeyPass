@@ -22,7 +22,7 @@ export function SearchInput({
 }: SearchInputProps) {
   return (
     <div className={`relative ${className}`}>
-      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" />
+      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--hp-text-muted)]" />
       <input
         type="text"
         value={value}
@@ -30,12 +30,12 @@ export function SearchInput({
         placeholder={placeholder}
         autoFocus={autoFocus}
         onKeyDown={onKeyDown}
-        className="w-full pl-9 pr-9 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-sm text-white placeholder:text-[#555] focus:outline-none focus:border-[#FCA311]/50 transition-colors"
+        className="w-full pl-10 pr-9 py-2.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] text-sm text-[var(--hp-text)] placeholder:text-[var(--hp-text-muted)] focus:outline-none focus:border-[var(--hp-border-focus)] focus:ring-2 focus:ring-[var(--hp-primary-glow)] transition-all duration-[var(--hp-duration-fast)]"
       />
       {value && (
         <button
           onClick={() => onChange('')}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-[#666] hover:text-white transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] transition-colors"
         >
           <X size={14} />
         </button>

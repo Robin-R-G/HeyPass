@@ -45,31 +45,37 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const iconMap: Record<ToastType, React.ReactNode> = {
-    success: <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />,
-    error: <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />,
-    info: <Info className="w-4 h-4 text-[#FCA311] shrink-0" />,
+    success: <CheckCircle2 className="w-4 h-4 text-[var(--hp-success)] shrink-0" />,
+    error: <AlertTriangle className="w-4 h-4 text-[var(--hp-error)] shrink-0" />,
+    info: <Info className="w-4 h-4 text-[var(--hp-info)] shrink-0" />,
   };
 
   const borderMap: Record<ToastType, string> = {
-    success: 'border-emerald-500/30',
-    error: 'border-red-500/30',
-    info: 'border-[#FCA311]/30',
+    success: 'border-[var(--hp-success)]/20',
+    error: 'border-[var(--hp-error)]/20',
+    info: 'border-[var(--hp-info)]/20',
+  };
+
+  const bgMap: Record<ToastType, string> = {
+    success: 'bg-[var(--hp-success-bg)]',
+    error: 'bg-[var(--hp-error-bg)]',
+    info: 'bg-[var(--hp-info-bg)]',
   };
 
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
-      <div className="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
+      <div className="fixed top-4 right-4 z-[var(--hp-z-toast)] flex flex-col gap-2 pointer-events-none">
         {toasts.map(t => (
           <div
             key={t.id}
-            className={`hp-toast-enter pointer-events-auto flex items-center gap-3 bg-[#0a0a0a]/80 backdrop-blur-xl border ${borderMap[t.type]} rounded-xl px-4 py-3 shadow-2xl max-w-sm`}
+            className={`pointer-events-auto flex items-center gap-3 rounded-[var(--hp-radius-md)] border px-4 py-3 shadow-[var(--hp-shadow-lg)] max-w-sm animate-[hp-toast-in_0.3s_var(--hp-ease-spring)] ${bgMap[t.type]} ${borderMap[t.type]}`}
           >
             {iconMap[t.type]}
-            <span className="text-sm text-white flex-1">{t.message}</span>
+            <span className="text-sm text-[var(--hp-text)] flex-1">{t.message}</span>
             <button
               onClick={() => remove(t.id)}
-              className="text-[#888] hover:text-white transition-colors shrink-0"
+              className="text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] transition-colors shrink-0"
             >
               <X className="w-3.5 h-3.5" />
             </button>

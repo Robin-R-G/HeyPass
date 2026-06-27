@@ -47,46 +47,46 @@ export function ConfirmDialog({
 
   const variantStyles = {
     default: {
-      icon: icon || <AlertTriangle size={20} className="text-[#FCA311]" />,
-      bg: 'bg-[#FCA311]/10',
-      btn: 'bg-[#FCA311] hover:bg-[#e5950a] text-black',
+      icon: icon || <AlertTriangle size={20} className="text-[var(--hp-primary)]" />,
+      bg: 'bg-[var(--hp-primary)]/10',
+      btn: 'bg-[var(--hp-primary)] hover:bg-[var(--hp-primary-hover)] text-white',
     },
     danger: {
-      icon: icon || <Trash2 size={20} className="text-[#ef4444]" />,
-      bg: 'bg-[#ef4444]/10',
-      btn: 'bg-[#ef4444] hover:bg-[#dc2626] text-white',
+      icon: icon || <Trash2 size={20} className="text-[var(--hp-error)]" />,
+      bg: 'bg-[var(--hp-error-bg)]',
+      btn: 'bg-[var(--hp-error)] hover:brightness-110 text-white',
     },
     warning: {
-      icon: icon || <AlertTriangle size={20} className="text-[#FCA311]" />,
-      bg: 'bg-[#FCA311]/10',
-      btn: 'bg-[#FCA311] hover:bg-[#e5950a] text-black',
+      icon: icon || <AlertTriangle size={20} className="text-[var(--hp-warning)]" />,
+      bg: 'bg-[var(--hp-warning-bg)]',
+      btn: 'bg-[var(--hp-warning)] hover:bg-[#D97706] text-white',
     },
   };
 
   const v = variantStyles[variant];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[var(--hp-z-modal)] flex items-center justify-center">
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 animate-[hp-overlay-in_0.2s_var(--hp-ease-out)]"
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative z-10 w-full max-w-md mx-4 bg-[#0a0a0a] border border-white/[0.08] rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-md mx-4 bg-[var(--hp-glass-bg)] backdrop-blur-xl border border-[var(--hp-glass-border)] rounded-[var(--hp-radius-xl)] shadow-[var(--hp-shadow-xl)] p-6 animate-[hp-modal-in_0.25s_var(--hp-ease-spring)]">
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute top-4 right-4 p-1 text-[#666] hover:text-white transition-colors"
+          className="absolute top-4 right-4 p-1 text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] transition-colors rounded-[var(--hp-radius-sm)] hover:bg-[var(--hp-surface-hover)]"
         >
           <X size={16} />
         </button>
 
         <div className="flex items-start gap-4 mb-5">
-          <div className={`w-10 h-10 rounded-xl ${v.bg} flex items-center justify-center shrink-0`}>
+          <div className={`w-10 h-10 rounded-[var(--hp-radius-md)] ${v.bg} flex items-center justify-center shrink-0`}>
             {v.icon}
           </div>
           <div>
-            <h3 className="text-base font-semibold text-white">{title}</h3>
+            <h3 className="text-base font-semibold text-[var(--hp-text)]">{title}</h3>
             {description && (
-              <p className="text-sm text-[#888] mt-1">{description}</p>
+              <p className="text-sm text-[var(--hp-text-muted)] mt-1">{description}</p>
             )}
           </div>
         </div>
@@ -95,14 +95,14 @@ export function ConfirmDialog({
           <button
             onClick={() => onOpenChange(false)}
             disabled={loading}
-            className="px-4 py-2 text-sm text-[#ccc] bg-white/[0.06] border border-white/[0.08] rounded-lg hover:bg-white/[0.10] transition-colors"
+            className="px-4 py-2 text-sm text-[var(--hp-text-secondary)] bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] hover:bg-[var(--hp-surface-hover)] hover:border-[var(--hp-border-hover)] transition-colors disabled:opacity-50"
           >
             {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${v.btn} disabled:opacity-50`}
+            className={`px-4 py-2 text-sm font-medium rounded-[var(--hp-radius-md)] transition-colors ${v.btn} disabled:opacity-50`}
           >
             {loading ? 'Processing...' : confirmLabel}
           </button>

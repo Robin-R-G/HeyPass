@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 interface NavSection {
   title: string;
@@ -44,20 +45,21 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   const pathname = usePathname();
 
   return (
-    <div className="flex min-h-screen font-sans antialiased">
-      <nav className="w-[220px] shrink-0 bg-white/[0.02] border-r border-white/[0.06] flex flex-col py-6 hidden md:flex">
+    <div className="flex min-h-screen">
+      <nav className="w-[240px] shrink-0 bg-[var(--hp-bg-elevated)] border-r border-[var(--hp-border)] flex flex-col py-6 hidden md:flex">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 px-5 py-2.5 text-sm text-[#ccc] hover:text-white no-underline mb-3 transition-colors"
+          className="flex items-center gap-2 px-5 py-2 text-sm text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] no-underline mb-4 transition-colors"
         >
-          &larr; Back to Events
+          <ArrowLeft size={16} />
+          Back to Events
         </Link>
 
-        <div className="border-t border-white/[0.06] mx-5 mb-5" />
+        <div className="border-t border-[var(--hp-border)] mx-5 mb-5" />
 
         {NAV_SECTIONS.map((section, sIdx) => (
           <div key={section.title} className={sIdx > 0 ? 'mt-5' : ''}>
-            <div className="text-[10px] font-semibold text-[#555] uppercase tracking-wider px-5 mb-1.5">
+            <div className="text-[10px] font-semibold text-[var(--hp-text-muted)] uppercase tracking-wider px-5 mb-1.5">
               {section.title}
             </div>
             {section.items.map(item => {
@@ -66,10 +68,10 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-5 py-2 text-sm no-underline transition-all duration-150 border-l-[3px] ${
+                  className={`flex items-center px-5 py-2 text-sm no-underline transition-all duration-[var(--hp-duration-fast)] border-l-[3px] ${
                     isActive
-                      ? 'text-[#FCA311] bg-[#FCA311]/10 border-l-[#FCA311]'
-                      : 'text-[#ccc] hover:text-white border-l-transparent hover:bg-white/[0.04]'
+                      ? 'text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 border-l-[var(--hp-primary)] font-medium'
+                      : 'text-[var(--hp-text-secondary)] hover:text-[var(--hp-text)] border-l-transparent hover:bg-[var(--hp-surface-hover)]'
                   }`}
                 >
                   {item.label}

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-type StatusVariant = 'success' | 'warning' | 'error' | 'info' | 'default' | 'pending' | 'active' | 'inactive' | 'draft' | 'archived';
+type StatusVariant = 'success' | 'warning' | 'error' | 'info' | 'default';
 
 interface StatusBadgeProps {
   status: string;
@@ -11,69 +11,75 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
-  success: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  connected: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  active: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  approved: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  completed: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  sent: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  delivered: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  read: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  paid: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
-  published: { bg: 'bg-[#10b981]/12', text: 'text-[#10b981]' },
+const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string }> = {
+  // Success states
+  success:     { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  connected:   { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  active:      { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  approved:    { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  completed:   { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  sent:        { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  delivered:   { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  read:        { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  paid:        { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  published:   { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
+  verified:    { bg: 'bg-[var(--hp-success-bg)]', text: 'text-[var(--hp-success)]', dot: 'bg-[var(--hp-success)]' },
 
-  warning: { bg: 'bg-[#FCA311]/12', text: 'text-[#FCA311]' },
-  pending: { bg: 'bg-[#FCA311]/12', text: 'text-[#FCA311]' },
-  draft: { bg: 'bg-[#FCA311]/12', text: 'text-[#FCA311]' },
-  scheduled: { bg: 'bg-[#FCA311]/12', text: 'text-[#FCA311]' },
-  restricted: { bg: 'bg-[#FCA311]/12', text: 'text-[#FCA311]' },
-  unpaid: { bg: 'bg-[#FCA311]/12', text: 'text-[#FCA311]' },
+  // Warning states
+  warning:     { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
+  pending:     { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
+  draft:       { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
+  scheduled:   { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
+  restricted:  { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
+  unpaid:      { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
+  processing:  { bg: 'bg-[var(--hp-warning-bg)]', text: 'text-[var(--hp-warning)]', dot: 'bg-[var(--hp-warning)]' },
 
-  error: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  failed: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  rejected: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  disconnected: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  cancelled: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  revoked: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  blocked: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  expired: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
-  suspended: { bg: 'bg-[#ef4444]/12', text: 'text-[#ef4444]' },
+  // Error states
+  error:       { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  failed:      { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  rejected:    { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  disconnected:{ bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  cancelled:   { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  revoked:     { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  blocked:     { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  expired:     { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
+  suspended:   { bg: 'bg-[var(--hp-error-bg)]', text: 'text-[var(--hp-error)]', dot: 'bg-[var(--hp-error)]' },
 
-  info: { bg: 'bg-blue-500/12', text: 'text-blue-400' },
-  sending: { bg: 'bg-blue-500/12', text: 'text-blue-400' },
+  // Info states
+  info:        { bg: 'bg-[var(--hp-info-bg)]', text: 'text-[var(--hp-info)]', dot: 'bg-[var(--hp-info)]' },
+  sending:     { bg: 'bg-[var(--hp-info-bg)]', text: 'text-[var(--hp-info)]', dot: 'bg-[var(--hp-info)]' },
+  syncing:     { bg: 'bg-[var(--hp-info-bg)]', text: 'text-[var(--hp-info)]', dot: 'bg-[var(--hp-info)]' },
 
-  default: { bg: 'bg-white/[0.06]', text: 'text-[#888]' },
-  inactive: { bg: 'bg-white/[0.06]', text: 'text-[#888]' },
-  archived: { bg: 'bg-white/[0.06]', text: 'text-[#888]' },
-  disabled: { bg: 'bg-white/[0.06]', text: 'text-[#888]' },
+  // Default / Neutral
+  default:     { bg: 'bg-[var(--hp-surface)]', text: 'text-[var(--hp-text-muted)]', dot: 'bg-[var(--hp-text-muted)]' },
+  inactive:    { bg: 'bg-[var(--hp-surface)]', text: 'text-[var(--hp-text-muted)]', dot: 'bg-[var(--hp-text-muted)]' },
+  archived:    { bg: 'bg-[var(--hp-surface)]', text: 'text-[var(--hp-text-muted)]', dot: 'bg-[var(--hp-text-muted)]' },
+  disabled:    { bg: 'bg-[var(--hp-surface)]', text: 'text-[var(--hp-text-muted)]', dot: 'bg-[var(--hp-text-muted)]' },
 };
 
-function getStatusStyle(status: string): { bg: string; text: string } {
+function getStatusConfig(status: string) {
   const normalized = status.toLowerCase().trim();
-  return STATUS_STYLES[normalized] || STATUS_STYLES.default;
+  return STATUS_CONFIG[normalized] || STATUS_CONFIG.default;
 }
 
 export function StatusBadge({ status, size = 'sm', className = '' }: StatusBadgeProps) {
-  const style = getStatusStyle(status);
+  const config = getStatusConfig(status);
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-full ${style.bg} ${style.text} ${
+      className={`inline-flex items-center gap-1.5 font-medium rounded-[var(--hp-radius-full)] border border-transparent ${config.bg} ${config.text} ${
         size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
       } ${className}`}
     >
+      <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
       {status}
     </span>
   );
 }
 
 export function StatusDot({ status, className = '' }: { status: string; className?: string }) {
-  const style = getStatusStyle(status);
-  const dotColor = style.text.replace('text-', 'bg-');
-  return (
-    <span className={`inline-block w-2 h-2 rounded-full ${dotColor} ${className}`} />
-  );
+  const config = getStatusConfig(status);
+  return <span className={`inline-block w-2 h-2 rounded-full ${config.dot} ${className}`} />;
 }
 
-export { STATUS_STYLES };
+export { STATUS_CONFIG };

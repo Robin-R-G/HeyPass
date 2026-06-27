@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
-import { Loader2, CalendarDays } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -64,21 +64,19 @@ export default function DashboardPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-[#000] text-white font-sans antialiased relative">
-      <div className="hp-bg-gradient" />
-
+    <div className="min-h-screen font-sans antialiased relative">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-[rgba(20,33,61,0.85)] backdrop-blur-xl border-b border-white/[0.08]">
-        <div className="max-w-[1200px] mx-auto flex justify-between items-center px-4 sm:px-8 h-16">
+      <nav className="sticky top-0 z-[var(--hp-z-sticky)] bg-[var(--hp-glass-bg)] backdrop-blur-xl border-b border-[var(--hp-border)]">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center px-4 sm:px-8 h-14">
           <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#FCA311] to-[#E09800] flex items-center justify-center font-extrabold text-sm text-black">H</div>
-            <span className="text-lg font-bold text-white">HeyPass</span>
+            <div className="w-8 h-8 rounded-[var(--hp-radius-sm)] bg-[var(--hp-primary)] flex items-center justify-center font-extrabold text-sm text-white">H</div>
+            <span className="text-lg font-bold text-[var(--hp-text)]">HeyPass</span>
           </Link>
-          <div className="flex gap-1 sm:gap-2 items-center">
-            <Link href="/dashboard" className="px-3 py-2 rounded-lg text-sm font-medium text-[#FCA311] bg-[#FCA311]/10 no-underline">Events</Link>
-            <Link href="/dashboard/settings" className="px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 no-underline transition-colors">Settings</Link>
+          <div className="flex gap-1 items-center">
+            <Link href="/dashboard" className="px-3 py-1.5 rounded-[var(--hp-radius-sm)] text-sm font-medium text-[var(--hp-primary)] bg-[var(--hp-primary)]/10 no-underline">Events</Link>
+            <Link href="/dashboard/settings" className="px-3 py-1.5 rounded-[var(--hp-radius-sm)] text-sm font-medium text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface)] no-underline transition-colors">Settings</Link>
             <button onClick={() => { localStorage.removeItem('access_token'); localStorage.removeItem('refresh_token'); router.push('/auth/login'); }}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#999] hover:text-white hover:bg-white/5 transition-colors min-h-[44px]">
+              className="px-3 py-1.5 rounded-[var(--hp-radius-sm)] text-sm font-medium text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface)] transition-colors min-h-[36px]">
               Sign Out
             </button>
           </div>
@@ -88,25 +86,25 @@ export default function DashboardPage() {
       {/* Content */}
       <main className="max-w-[1200px] mx-auto px-4 sm:px-8 py-8 sm:py-10 relative z-10">
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">Your Events</h1>
-          <p className="text-[#888] text-sm mt-1">Manage and monitor all your events</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--hp-text)] tracking-tight">Your Events</h1>
+          <p className="text-[var(--hp-text-muted)] text-sm mt-1">Manage and monitor all your events</p>
         </div>
 
         {/* Loading skeleton */}
         {loading && (
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="hp-glass-card p-6">
+              <div key={i} className="rounded-[var(--hp-radius-lg)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)] p-6">
                 <div className="flex justify-between items-start">
                   <div className="space-y-2 flex-1">
-                    <div className="hp-skeleton h-5 w-48 rounded" />
-                    <div className="hp-skeleton h-3 w-64 rounded" />
+                    <div className="hp-skeleton h-5 w-48" />
+                    <div className="hp-skeleton h-3 w-64" />
                   </div>
-                  <div className="hp-skeleton h-5 w-16 rounded" />
+                  <div className="hp-skeleton h-5 w-16 rounded-[var(--hp-radius-full)]" />
                 </div>
                 <div className="flex gap-8 mt-4">
-                  <div className="hp-skeleton h-4 w-20 rounded" />
-                  <div className="hp-skeleton h-4 w-20 rounded" />
+                  <div className="hp-skeleton h-4 w-20" />
+                  <div className="hp-skeleton h-4 w-20" />
                 </div>
               </div>
             ))}
@@ -115,63 +113,65 @@ export default function DashboardPage() {
 
         {/* Error */}
         {error && error !== 'NO_CLIENT' && (
-          <div role="alert" className="bg-[#ef4444]/10 border border-[#ef4444]/20 rounded-xl p-6 text-center text-[#ef4444] text-sm">
+          <div role="alert" className="bg-[var(--hp-error-bg)] border border-[var(--hp-error)]/20 rounded-[var(--hp-radius-lg)] p-6 text-center text-[var(--hp-error)] text-sm">
             {error}
           </div>
         )}
 
         {/* No client */}
         {error === 'NO_CLIENT' && (
-          <div className="hp-glass-card p-12 sm:p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4 text-3xl" role="img" aria-label="Organization">🏢</div>
-            <h3 className="text-lg font-semibold text-white mb-2">No organization found</h3>
-            <p className="text-[#999] text-sm mb-6">You need to select or create an organization first</p>
-            <Button onClick={() => router.push('/auth/select-client')} className="font-bold text-sm">Select Organization</Button>
+          <div className="rounded-[var(--hp-radius-lg)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)] p-12 sm:p-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-[var(--hp-surface)] flex items-center justify-center mx-auto mb-4 text-3xl" role="img" aria-label="Organization">🏢</div>
+            <h3 className="text-lg font-semibold text-[var(--hp-text)] mb-2">No organization found</h3>
+            <p className="text-[var(--hp-text-muted)] text-sm mb-6">You need to select or create an organization first</p>
+            <Button onClick={() => router.push('/auth/select-client')}>Select Organization</Button>
           </div>
         )}
 
         {/* Empty state */}
         {!loading && !error && events.length === 0 && (
-          <div className="hp-glass-card p-12 sm:p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
-              <CalendarDays className="w-7 h-7 text-[#888]" />
+          <div className="rounded-[var(--hp-radius-lg)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)] p-12 sm:p-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-[var(--hp-surface)] flex items-center justify-center mx-auto mb-4">
+              <CalendarDays className="w-7 h-7 text-[var(--hp-text-muted)]" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">No events yet</h3>
-            <p className="text-[#999] text-sm mb-6">Create your first event to get started</p>
-            <Button onClick={() => router.push('/dashboard/events/new')} className="font-bold text-sm">Create Event</Button>
+            <h3 className="text-lg font-semibold text-[var(--hp-text)] mb-2">No events yet</h3>
+            <p className="text-[var(--hp-text-muted)] text-sm mb-6">Create your first event to get started</p>
+            <Button onClick={() => router.push('/dashboard/events/new')}>Create Event</Button>
           </div>
         )}
 
         {/* Events list */}
         {!loading && !error && events.length > 0 && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {events.map(event => (
               <Link
                 key={event.id}
                 href={`/dashboard/events/${event.id}/dashboard`}
-                className="block hp-glass-card p-5 sm:p-6 no-underline hover:border-[rgba(252,163,17,0.35)] transition-all"
+                className="block rounded-[var(--hp-radius-lg)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)] p-5 sm:p-6 no-underline transition-all duration-[var(--hp-duration-base)] hover:shadow-[var(--hp-shadow-md)] hover:border-[var(--hp-border-hover)]"
               >
                 <div className="flex justify-between items-start gap-4">
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-lg font-semibold text-white mb-1 truncate">{event.title}</h3>
-                    <p className="text-[#999] text-xs">
+                    <h3 className="text-lg font-semibold text-[var(--hp-text)] mb-1 truncate">{event.title}</h3>
+                    <p className="text-[var(--hp-text-muted)] text-xs">
                       {event.venue || 'No venue'} · {new Date(event.start_date).toLocaleDateString()}
                     </p>
                   </div>
-                  <span className={`shrink-0 px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider ${
-                    event.status === 'published' ? 'bg-[#10b981]/15 text-[#10b981]' : 'bg-white/10 text-[#ccc]'
+                  <span className={`shrink-0 px-2.5 py-1 rounded-[var(--hp-radius-full)] text-[10px] font-semibold uppercase tracking-wider ${
+                    event.status === 'published'
+                      ? 'bg-[var(--hp-success-bg)] text-[var(--hp-success)]'
+                      : 'bg-[var(--hp-surface)] text-[var(--hp-text-muted)]'
                   }`}>
                     {event.status}
                   </span>
                 </div>
-                <div className="flex gap-8 mt-4 pt-4 border-t border-white/[0.06]">
+                <div className="flex gap-8 mt-4 pt-4 border-t border-[var(--hp-border)]">
                   <div>
-                    <span className="text-base font-bold text-[#ccc]">{event.registrations_count || 0}</span>
-                    <span className="text-[#888] text-xs ml-1.5">registered</span>
+                    <span className="text-base font-bold text-[var(--hp-text-secondary)]">{event.registrations_count || 0}</span>
+                    <span className="text-[var(--hp-text-muted)] text-xs ml-1.5">registered</span>
                   </div>
                   <div>
-                    <span className="text-base font-bold text-[#FCA311]">{event.check_ins_count || 0}</span>
-                    <span className="text-[#888] text-xs ml-1.5">checked in</span>
+                    <span className="text-base font-bold text-[var(--hp-primary)]">{event.check_ins_count || 0}</span>
+                    <span className="text-[var(--hp-text-muted)] text-xs ml-1.5">checked in</span>
                   </div>
                 </div>
               </Link>

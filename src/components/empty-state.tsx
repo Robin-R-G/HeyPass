@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Inbox, Search, Plus, ArrowRight, type LucideIcon } from 'lucide-react';
+import { Inbox, Search, type LucideIcon } from 'lucide-react';
 
 interface EmptyStateProps {
   icon?: LucideIcon;
@@ -32,16 +32,16 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={`flex flex-col items-center justify-center py-16 px-6 ${className}`}>
-      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-5 ${
-        variant === 'search' ? 'bg-[#FCA311]/10' : 'bg-white/[0.04]'
+      <div className={`w-14 h-14 rounded-[var(--hp-radius-lg)] flex items-center justify-center mb-4 ${
+        variant === 'search' ? 'bg-[var(--hp-primary)]/10' : 'bg-[var(--hp-surface)]'
       }`}>
-        <Icon size={28} className={variant === 'search' ? 'text-[#FCA311]' : 'text-[#555]'} />
+        <Icon size={24} className={variant === 'search' ? 'text-[var(--hp-primary)]' : 'text-[var(--hp-text-muted)]'} />
       </div>
 
-      <h3 className="text-base font-semibold text-white mb-1.5">{title}</h3>
+      <h3 className="text-base font-semibold text-[var(--hp-text)] mb-1">{title}</h3>
 
       {description && (
-        <p className="text-sm text-[#888] text-center max-w-[320px] mb-6">{description}</p>
+        <p className="text-sm text-[var(--hp-text-muted)] text-center max-w-[320px] mb-6">{description}</p>
       )}
 
       {!description && <div className="mb-6" />}
@@ -50,7 +50,7 @@ export function EmptyState({
         {action && (
           <button
             onClick={action.onClick}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#FCA311] text-black font-semibold rounded-lg text-sm hover:bg-[#e5950a] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--hp-primary)] text-white font-medium rounded-[var(--hp-radius-md)] text-sm hover:bg-[var(--hp-primary-hover)] transition-colors"
           >
             {action.icon && <action.icon size={16} />}
             {action.label}
@@ -59,7 +59,7 @@ export function EmptyState({
         {secondaryAction && (
           <button
             onClick={secondaryAction.onClick}
-            className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.06] border border-white/[0.08] text-[#ccc] rounded-lg text-sm hover:bg-white/[0.10] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] text-[var(--hp-text-secondary)] rounded-[var(--hp-radius-md)] text-sm hover:bg-[var(--hp-surface-hover)] hover:border-[var(--hp-border-hover)] transition-colors"
           >
             {secondaryAction.icon && <secondaryAction.icon size={16} />}
             {secondaryAction.label}
@@ -95,15 +95,15 @@ export function EmptyStateTable({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-6">
-      <Inbox size={32} className="text-[#444] mb-3" />
-      <p className="text-sm text-[#888]">{title || 'No records found'}</p>
-      {description && <p className="text-xs text-[#666] mt-1">{description}</p>}
+      <Inbox size={28} className="text-[var(--hp-text-muted)] mb-3" />
+      <p className="text-sm text-[var(--hp-text-secondary)]">{title || 'No records found'}</p>
+      {description && <p className="text-xs text-[var(--hp-text-muted)] mt-1">{description}</p>}
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="mt-4 flex items-center gap-2 px-4 py-2 bg-[#FCA311] text-black font-semibold rounded-lg text-xs hover:bg-[#e5950a] transition-colors"
+          className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[var(--hp-primary)] text-white font-medium rounded-[var(--hp-radius-md)] text-xs hover:bg-[var(--hp-primary-hover)] transition-colors"
         >
-          <Plus size={14} /> {actionLabel}
+          {actionLabel}
         </button>
       )}
     </div>

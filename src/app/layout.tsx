@@ -72,7 +72,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#000000",
+  themeColor: "#0B1120",
 };
 
 export default function RootLayout({
@@ -101,14 +101,13 @@ export default function RootLayout({
         `}} />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-hp-bg text-hp-text font-sans`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-hp-bg text-hp font-sans`}
         suppressHydrationWarning
       >
         <ThemeProvider>
           <ToastProvider>
             <CommandPaletteProvider>
               <AuthInterceptor />
-              <div className="hp-bg-gradient" />
               <div className="min-h-screen">{children}</div>
               <PWAInstallPrompt />
               <PWARegister />

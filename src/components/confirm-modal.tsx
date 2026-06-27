@@ -54,10 +54,10 @@ export function ConfirmModal({
   if (!visible) return null;
 
   const iconBg = variant === 'danger' ? 'rgba(239,68,68,0.12)' : variant === 'warning' ? 'rgba(245,158,11,0.12)' : 'rgba(252,163,17,0.12)';
-  const iconColor = variant === 'danger' ? '#ef4444' : variant === 'warning' ? '#f59e0b' : '#FCA311';
+  const iconColor = variant === 'danger' ? '#ef4444' : variant === 'warning' ? '#f59e0b' : 'var(--hp-primary)';
   const confirmBg = variant === 'danger'
     ? 'linear-gradient(135deg, #ef4444, #dc2626)'
-    : 'linear-gradient(135deg, #FCA311, #E09800)';
+    : 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))';
   const confirmShadow = variant === 'danger'
     ? '0 4px 12px rgba(239,68,68,0.25)'
     : '0 4px 12px rgba(252,163,17,0.25)';
@@ -253,7 +253,7 @@ export function PromptModal({
           <button
             onClick={() => { if (value.trim()) onConfirm(value.trim()); }}
             style={{
-              background: 'linear-gradient(135deg, #FCA311, #E09800)',
+              background: 'linear-gradient(135deg, var(--hp-primary), var(--hp-primary-dark))',
               color: '#000', border: 'none', padding: '10px 24px', borderRadius: '10px',
               fontSize: '13px', fontWeight: 700, cursor: 'pointer',
               boxShadow: '0 4px 12px rgba(252,163,17,0.25)', transition: 'all 0.2s',

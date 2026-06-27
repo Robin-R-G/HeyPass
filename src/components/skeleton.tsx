@@ -13,7 +13,7 @@ export function Skeleton({ className = '', count = 1 }: SkeletonProps) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className={`animate-pulse bg-white/[0.06] rounded-lg ${className}`}
+          className={`hp-skeleton ${className}`}
         />
       ))}
     </>
@@ -22,13 +22,13 @@ export function Skeleton({ className = '', count = 1 }: SkeletonProps) {
 
 export function SkeletonCard({ lines = 3, className = '' }: { lines?: number; className?: string }) {
   return (
-    <div className={`hp-glass-card p-5 ${className}`}>
-      <Skeleton className="h-4 w-1/3 mb-3" />
-      <Skeleton className="h-3 w-2/3 mb-2" />
-      <Skeleton className="h-3 w-1/2 mb-4" />
+    <div className={`rounded-[var(--hp-radius-lg)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)] p-6 ${className}`}>
+      <Skeleton className="h-4 w-1/3 mb-4" />
+      <Skeleton className="h-3 w-2/3 mb-2.5" />
+      <Skeleton className="h-3 w-1/2 mb-5" />
       <div className="flex gap-2">
-        <Skeleton className="h-8 w-20 rounded" />
-        <Skeleton className="h-8 w-20 rounded" />
+        <Skeleton className="h-9 w-20 rounded-[var(--hp-radius-md)]" />
+        <Skeleton className="h-9 w-20 rounded-[var(--hp-radius-md)]" />
       </div>
     </div>
   );
@@ -36,12 +36,12 @@ export function SkeletonCard({ lines = 3, className = '' }: { lines?: number; cl
 
 export function SkeletonTable({ rows = 5, cols = 4 }: { rows?: number; cols?: number }) {
   return (
-    <div className="hp-glass-card overflow-hidden">
-      <div className="p-4 border-b border-white/[0.06]">
+    <div className="rounded-[var(--hp-radius-lg)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)] overflow-hidden">
+      <div className="px-4 py-3 bg-[var(--hp-surface)] border-b border-[var(--hp-border)]">
         <Skeleton className="h-4 w-1/4" />
       </div>
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 p-4 border-b border-white/[0.04]">
+        <div key={i} className="flex items-center gap-4 px-4 py-3 border-b border-[var(--hp-border)] last:border-0">
           {Array.from({ length: cols }).map((_, j) => (
             <Skeleton
               key={j}
@@ -59,13 +59,13 @@ export function SkeletonList({ rows = 5, variant = 'card' }: { rows?: number; va
     return (
       <div className="flex flex-col gap-2">
         {Array.from({ length: rows }).map((_, i) => (
-          <div key={i} className="flex items-center gap-3 p-3 bg-white/[0.02] rounded-lg">
+          <div key={i} className="flex items-center gap-3 p-3 rounded-[var(--hp-radius-md)] border border-[var(--hp-border)] bg-[var(--hp-bg-elevated)]">
             <Skeleton className="w-8 h-8 rounded-full shrink-0" />
             <div className="flex-1">
               <Skeleton className="h-3 w-1/3 mb-1.5" />
               <Skeleton className="h-2.5 w-1/2" />
             </div>
-            <Skeleton className="h-6 w-16 rounded-full" />
+            <Skeleton className="h-6 w-16 rounded-[var(--hp-radius-full)]" />
           </div>
         ))}
       </div>
@@ -89,11 +89,11 @@ export function SkeletonPage() {
           <Skeleton className="h-6 w-48 mb-2" />
           <Skeleton className="h-3 w-72" />
         </div>
-        <Skeleton className="h-9 w-32 rounded-lg" />
+        <Skeleton className="h-10 w-32 rounded-[var(--hp-radius-md)]" />
       </div>
       <div className="flex gap-3">
-        <Skeleton className="h-10 flex-1 rounded-lg" />
-        <Skeleton className="h-10 w-32 rounded-lg" />
+        <Skeleton className="h-10 flex-1 rounded-[var(--hp-radius-md)]" />
+        <Skeleton className="h-10 w-32 rounded-[var(--hp-radius-md)]" />
       </div>
       <SkeletonTable rows={4} cols={5} />
     </div>

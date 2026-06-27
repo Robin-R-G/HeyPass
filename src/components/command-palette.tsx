@@ -41,7 +41,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Keyboard shortcut to open
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -53,7 +52,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, onOpenChange]);
 
-  // Focus input when opened
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -63,7 +61,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     }
   }, [open]);
 
-  // Search on query change
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -77,7 +74,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         const data = await res.json();
         setResults(Array.isArray(data.data) ? data.data : []);
       } catch {
-        // Fallback: filter navigation items
         const filtered = NAVIGATION_ITEMS.filter(item =>
           item.title.toLowerCase().includes(query.toLowerCase())
         ).map((item, i) => ({
@@ -96,7 +92,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     return () => clearTimeout(timer);
   }, [query]);
 
-  // If no search API, show filtered nav items
   useEffect(() => {
     if (query && results.length === 0 && !loading) {
       const filtered = NAVIGATION_ITEMS.filter(item =>
@@ -142,12 +137,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   }));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
-      <div className="relative z-10 w-full max-w-[560px] mx-4 bg-[#0a0a0a] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden">
-        {/* Search Input */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-white/[0.06]">
-          <Search size={18} className="text-[#666] shrink-0" />
+    <div className="fixed inset-0 z-[var(--hp-z-modal)] flex items-start justify-center pt-[15vh]">
+      <div className="absolute inset-0 bg-black/60 animate-[hp-overlay-in_0.15s_var(--hp-ease-out)]" onClick={() => onOpenChange(false)} />
+      <div className="relative z-10 w-full max-w-[560px] mx-4 bg-[var(--hp-glass-bg)] backdrop-blur-xl border border-[var(--hp-glass-border)] rounded-[var(--hp-radius-xl)] shadow-[var(--hp-shadow-xl)] overflow-hidden animate-[hp-modal-in_0.2s_var(--hp-ease-spring)]">
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-[var(--hp-glass-border)]">
+          <Search size={18} className="text-[var(--hp-text-muted)] shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -155,30 +149,29 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
             onKeyDown={handleKeyDown}
             placeholder="Search events, people, settings..."
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-[#555] focus:outline-none"
+            className="flex-1 bg-transparent text-[var(--hp-text)] text-sm placeholder:text-[var(--hp-text-muted)] focus:outline-none"
           />
-          <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] text-[#666] bg-white/[0.04] border border-white/[0.08] rounded">
+          <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] text-[var(--hp-text-muted)] bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xs)]">
             ESC
           </kbd>
         </div>
 
-        {/* Results */}
         <div ref={listRef} className="max-h-[360px] overflow-y-auto py-2">
           {loading && (
-            <div className="px-5 py-8 text-center text-[#666] text-sm">Searching...</div>
+            <div className="px-5 py-8 text-center text-[var(--hp-text-muted)] text-sm">Searching...</div>
           )}
 
           {!loading && displayResults.length === 0 && query.trim() && (
             <div className="px-5 py-8 text-center">
-              <p className="text-sm text-[#888]">No results for &ldquo;{query}&rdquo;</p>
-              <p className="text-xs text-[#666] mt-1">Try a different search term</p>
+              <p className="text-sm text-[var(--hp-text-secondary)]">No results for &ldquo;{query}&rdquo;</p>
+              <p className="text-xs text-[var(--hp-text-muted)] mt-1">Try a different search term</p>
             </div>
           )}
 
           {!loading && displayResults.length > 0 && (
             <>
               {!query.trim() && (
-                <div className="px-5 py-2 text-[10px] font-semibold text-[#666] uppercase tracking-wider">
+                <div className="px-5 py-2 text-[10px] font-semibold text-[var(--hp-text-muted)] uppercase tracking-wider">
                   Quick Navigation
                 </div>
               )}
@@ -188,30 +181,29 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   onClick={() => handleSelect(result.href)}
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors ${
-                    index === selectedIndex ? 'bg-white/[0.06]' : 'hover:bg-white/[0.03]'
+                    index === selectedIndex ? 'bg-[var(--hp-surface-hover)]' : 'hover:bg-[var(--hp-surface)]'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center shrink-0 text-[#888]">
+                  <div className="w-8 h-8 rounded-[var(--hp-radius-sm)] bg-[var(--hp-surface)] flex items-center justify-center shrink-0 text-[var(--hp-text-muted)]">
                     {result.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-white truncate">{result.title}</div>
+                    <div className="text-sm text-[var(--hp-text)] truncate">{result.title}</div>
                     {result.subtitle && (
-                      <div className="text-xs text-[#666] truncate">{result.subtitle}</div>
+                      <div className="text-xs text-[var(--hp-text-muted)] truncate">{result.subtitle}</div>
                     )}
                   </div>
-                  <ArrowRight size={14} className="text-[#555] shrink-0" />
+                  <ArrowRight size={14} className="text-[var(--hp-text-muted)] shrink-0" />
                 </button>
               ))}
             </>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="px-5 py-2.5 border-t border-white/[0.06] flex items-center gap-4 text-[10px] text-[#666]">
-          <span><kbd className="px-1 py-0.5 bg-white/[0.04] border border-white/[0.08] rounded">↑↓</kbd> Navigate</span>
-          <span><kbd className="px-1 py-0.5 bg-white/[0.04] border border-white/[0.08] rounded">↵</kbd> Open</span>
-          <span><kbd className="px-1 py-0.5 bg-white/[0.04] border border-white/[0.08] rounded">esc</kbd> Close</span>
+        <div className="px-5 py-2.5 border-t border-[var(--hp-glass-border)] flex items-center gap-4 text-[10px] text-[var(--hp-text-muted)]">
+          <span><kbd className="px-1 py-0.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xs)]">↑↓</kbd> Navigate</span>
+          <span><kbd className="px-1 py-0.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xs)]">↵</kbd> Open</span>
+          <span><kbd className="px-1 py-0.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xs)]">esc</kbd> Close</span>
         </div>
       </div>
     </div>
@@ -225,11 +217,11 @@ export function CommandPaletteTrigger() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-1.5 bg-white/[0.04] border border-white/[0.08] rounded-lg text-sm text-[#888] hover:text-white hover:bg-white/[0.06] transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] text-sm text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] hover:border-[var(--hp-border-hover)] transition-all duration-[var(--hp-duration-fast)]"
       >
         <Search size={14} />
         <span className="hidden sm:inline">Search</span>
-        <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] text-[#666] bg-white/[0.04] border border-white/[0.08] rounded ml-2">
+        <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] text-[var(--hp-text-muted)] bg-[var(--hp-surface)] border border-[var(--hp-border)] rounded-[var(--hp-radius-xs)] ml-2">
           <span className="mr-0.5">⌘</span>K
         </kbd>
       </button>

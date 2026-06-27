@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Clock, User, Calendar, FileText, MessageCircle, Award, Settings, CreditCard, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { Clock, User, FileText, MessageCircle, Award, CreditCard, CheckCircle, XCircle } from 'lucide-react';
 
 interface ActivityItem {
   id: string;
@@ -23,17 +23,17 @@ interface ActivityTimelineProps {
 }
 
 const ACTION_ICONS: Record<string, React.ReactNode> = {
-  created: <CheckCircle size={14} className="text-[#10b981]" />,
-  updated: <FileText size={14} className="text-[#FCA311]" />,
-  deleted: <XCircle size={14} className="text-[#ef4444]" />,
-  sent: <MessageCircle size={14} className="text-[#10b981]" />,
-  published: <CheckCircle size={14} className="text-[#10b981]" />,
-  cancelled: <XCircle size={14} className="text-[#ef4444]" />,
-  generated: <Award size={14} className="text-[#FCA311]" />,
-  payment: <CreditCard size={14} className="text-[#10b981]" />,
-  invited: <User size={14} className="text-blue-400" />,
-  removed: <XCircle size={14} className="text-[#ef4444]" />,
-  default: <Clock size={14} className="text-[#888]" />,
+  created: <CheckCircle size={14} className="text-[var(--hp-success)]" />,
+  updated: <FileText size={14} className="text-[var(--hp-primary)]" />,
+  deleted: <XCircle size={14} className="text-[var(--hp-error)]" />,
+  sent: <MessageCircle size={14} className="text-[var(--hp-success)]" />,
+  published: <CheckCircle size={14} className="text-[var(--hp-success)]" />,
+  cancelled: <XCircle size={14} className="text-[var(--hp-error)]" />,
+  generated: <Award size={14} className="text-[var(--hp-primary)]" />,
+  payment: <CreditCard size={14} className="text-[var(--hp-success)]" />,
+  invited: <User size={14} className="text-[var(--hp-info)]" />,
+  removed: <XCircle size={14} className="text-[var(--hp-error)]" />,
+  default: <Clock size={14} className="text-[var(--hp-text-muted)]" />,
 };
 
 function getActionIcon(action: string): React.ReactNode {
@@ -69,10 +69,10 @@ export function ActivityTimeline({
       <div className={`flex flex-col gap-0 ${className}`}>
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="flex items-start gap-3 py-3">
-            <div className="w-8 h-8 rounded-full bg-white/[0.06] animate-pulse shrink-0" />
+            <div className="w-8 h-8 rounded-full hp-skeleton shrink-0" />
             <div className="flex-1">
-              <div className="h-3 w-2/3 bg-white/[0.06] rounded animate-pulse mb-2" />
-              <div className="h-2 w-1/3 bg-white/[0.04] rounded animate-pulse" />
+              <div className="h-3 w-2/3 hp-skeleton mb-2" />
+              <div className="h-2 w-1/3 hp-skeleton" />
             </div>
           </div>
         ))}
@@ -83,35 +83,34 @@ export function ActivityTimeline({
   if (activities.length === 0) {
     return (
       <div className="py-8 text-center">
-        <Clock size={24} className="mx-auto mb-2 text-[#444]" />
-        <p className="text-sm text-[#888]">{emptyMessage}</p>
+        <Clock size={24} className="mx-auto mb-2 text-[var(--hp-text-muted)]" />
+        <p className="text-sm text-[var(--hp-text-muted)]">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
     <div className={`relative ${className}`}>
-      {/* Timeline line */}
-      <div className="absolute left-[15px] top-0 bottom-0 w-px bg-white/[0.06]" />
+      <div className="absolute left-[15px] top-0 bottom-0 w-px bg-[var(--hp-border)]" />
 
       <div className="flex flex-col">
         {activities.map((activity) => (
           <div key={activity.id} className="flex items-start gap-3 py-3 relative">
-            <div className="w-8 h-8 rounded-full bg-[#0a0a0a] border border-white/[0.08] flex items-center justify-center shrink-0 z-10">
+            <div className="w-8 h-8 rounded-full bg-[var(--hp-bg-elevated)] border border-[var(--hp-border)] flex items-center justify-center shrink-0 z-10">
               {getActionIcon(activity.action)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-[#ccc] leading-snug">
-                <span className="text-white font-medium">{activity.actor}</span>
+              <p className="text-sm text-[var(--hp-text-secondary)] leading-snug">
+                <span className="text-[var(--hp-text)] font-medium">{activity.actor}</span>
                 {' '}{activity.action}
                 {activity.target && (
-                  <> <span className="text-white font-medium">{activity.target}</span></>
+                  <> <span className="text-[var(--hp-text)] font-medium">{activity.target}</span></>
                 )}
               </p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-[11px] text-[#666]">{timeAgo(activity.timestamp)}</span>
+                <span className="text-[11px] text-[var(--hp-text-muted)]">{timeAgo(activity.timestamp)}</span>
                 {activity.target_type && (
-                  <span className="text-[11px] text-[#555] bg-white/[0.04] px-1.5 py-0.5 rounded">{activity.target_type}</span>
+                  <span className="text-[11px] text-[var(--hp-text-muted)] bg-[var(--hp-surface)] px-1.5 py-0.5 rounded-[var(--hp-radius-xs)]">{activity.target_type}</span>
                 )}
               </div>
             </div>
