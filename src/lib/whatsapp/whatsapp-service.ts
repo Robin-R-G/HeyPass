@@ -646,12 +646,14 @@ export class WhatsAppService {
 
           if (delivery?.data?.broadcast_id) {
             const countField = event.status === 'delivered' ? 'delivered_count' : event.status === 'read' ? 'read_count' : 'failed_count';
-            await this.db.rpc('increment_broadcast_count', {
-              p_broadcast_id: delivery.data.broadcast_id,
-              p_field: countField,
-            }).catch(() => {
+            try {
+              await this.db.rpc('increment_broadcast_count', {
+                p_broadcast_id: delivery.data.broadcast_id,
+                p_field: countField,
+              });
+            } catch {
               // RPC may not exist, ignore
-            });
+            }
           }
         }
       }
