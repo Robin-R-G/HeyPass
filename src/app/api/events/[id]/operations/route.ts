@@ -94,12 +94,16 @@ export interface OpsCenterData {
   };
 }
 
+async function safeFetch<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  try { return await fn(); } catch { return fallback; }
+}
+
 async function getOpsData(clientId: string, eventId: string): Promise<OpsCenterData> {
   const [eventResult, dashboardResult, overviewResult, realtimeResult] = await Promise.all([
     supabaseAdmin.from('events').select('id, title, status, start_date, end_date, timezone').eq('id', eventId).single(),
-    attendanceDashboard.getFullDashboard(clientId, eventId).catch(() => null),
-    analyticsService.getOverview(clientId, eventId).catch(() => null),
-    analyticsService.getRealtime(clientId, eventId).catch(() => null),
+    safeFetch(() => attendanceDashboard.getFullDashboard(clientId, eventId), null),
+    safeFetch(() => analyticsService.getOverview(clientId, eventId), null),
+    safeFetch(() => analyticsService.getRealtime(clientId, eventId), null),
   ]);
 
   const event = eventResult.data || { id: eventId, title: 'Event', status: 'draft', start_date: '', end_date: '', timezone: '' };
