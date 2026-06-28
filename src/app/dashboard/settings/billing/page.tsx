@@ -122,7 +122,7 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <h1 className="text-3xl font-bold">Billing & Subscription</h1>
 
       <Tabs defaultValue="subscription">

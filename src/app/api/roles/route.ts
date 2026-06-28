@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { supabaseAdmin } from '@/lib/supabase/client';
 import { withAuth, withPermission, successResponse, errorResponse } from '@/lib/route-guard';
 import { PERMISSIONS, canManageRole } from '@/lib/permissions';
 import { createAuditLog } from '@/lib/audit';
 
 // GET /api/roles — List roles for current client
 export const GET = withAuth(async (_req: NextRequest, auth) => {
-  const { data: roles } = await supabase
+  const { data: roles } = await supabaseAdmin
     .from('roles')
     .select('*')
     .eq('client_id', auth.clientId)
@@ -25,7 +25,7 @@ export const POST = withPermission(async (req: NextRequest, auth) => {
     return errorResponse('Name and slug are required');
   }
 
-  const { data: role, error } = await supabase
+  const { data: role, error } = await supabaseAdmin
     .from('roles')
     .insert({
       client_id: auth.clientId,
@@ -64,7 +64,7 @@ export const PUT = withPermission(async (req: NextRequest, auth) => {
   }
 
   // Verify role belongs to client
-  const { data: existing } = await supabase
+  const { data: existing } = await supabaseAdmin
     .from('roles')
     .select('*')
     .eq('id', id)
@@ -80,7 +80,7 @@ export const PUT = withPermission(async (req: NextRequest, auth) => {
     return errorResponse('Cannot edit system roles');
   }
 
-  const { data: role, error } = await supabase
+  const { data: role, error } = await supabaseAdmin
     .from('roles')
     .update({
       name: name || existing.name,
@@ -117,7 +117,7 @@ export const DELETE = withPermission(async (req: NextRequest, auth) => {
     return errorResponse('Role ID is required');
   }
 
-  const { data: existing } = await supabase
+  const { data: existing } = await supabaseAdmin
     .from('roles')
     .select('*')
     .eq('id', id)
@@ -133,7 +133,7 @@ export const DELETE = withPermission(async (req: NextRequest, auth) => {
   }
 
   // Soft delete
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from('roles')
     .update({ deleted_at: new Date().toISOString() })
     .eq('id', id);

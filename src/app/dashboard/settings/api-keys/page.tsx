@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -45,7 +46,7 @@ export default function ApiKeysPage() {
 
   async function fetchKeys() {
     try {
-      const res = await fetch('/api/api-keys');
+      const res = await authFetch('/api/api-keys');
       const data = await res.json();
       setKeys(data.keys || []);
     } catch (err) {
@@ -59,17 +60,23 @@ export default function ApiKeysPage() {
     if (!form.name) { toast('Name is required', 'error'); return; }
 
     try {
-      const res = await fetch('/api/api-keys', {
+      const res = await authFetch('/api/api-keys', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
+      if (!res.ok) {
+        const data = await res.json();
+        toast(data.error || 'Failed to create key', 'error');
+        return;
+      }
       const data = await res.json();
       setNewKey(data.key);
       setShowCreate(false);
       fetchKeys();
     } catch (err) {
       console.error('Failed to create key:', err);
+      toast('Failed to create API key', 'error');
     }
   }
 
@@ -78,7 +85,7 @@ export default function ApiKeysPage() {
     if (!keyId) return;
     setConfirmDeleteKey(null);
     try {
-      await fetch(`/api/api-keys/${keyId}`, { method: 'DELETE' });
+      await authFetch(`/api/api-keys/${keyId}`, { method: 'DELETE' });
       fetchKeys();
     } catch (err) {
       console.error('Failed to delete key:', err);
@@ -90,7 +97,7 @@ export default function ApiKeysPage() {
     if (!keyId) return;
     setConfirmRegenKey(null);
     try {
-      const res = await fetch(`/api/api-keys/${keyId}/regenerate`, { method: 'POST' });
+      const res = await authFetch(`/api/api-keys/${keyId}/regenerate`, { method: 'POST' });
       const data = await res.json();
       setNewKey(data.key);
       fetchKeys();
