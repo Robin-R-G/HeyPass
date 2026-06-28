@@ -65,13 +65,21 @@ export default function ApiKeysPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
-      if (!res.ok) {
-        const data = await res.json();
-        toast(data.error || 'Failed to create key', 'error');
+      let data: Record<string, unknown> = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.error('API Keys: Response is not JSON', res.status, await res.text().catch(() => ''));
+        toast(`Server error (${res.status}). Check console for details.`, 'error');
         return;
       }
-      const data = await res.json();
-      setNewKey(data.key);
+      if (!res.ok) {
+        const errMsg = (data.error as string) || (data.message as string) || 'Failed to create key';
+        console.error('API Keys create error:', res.status, data);
+        toast(errMsg, 'error');
+        return;
+      }
+      setNewKey((data as { key?: string }).key);
       setShowCreate(false);
       fetchKeys();
     } catch (err) {
