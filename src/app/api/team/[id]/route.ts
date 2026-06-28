@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
-import { withAuth, withPermission, successResponse, errorResponse } from '@/lib/route-guard';
+import { withAuth, successResponse, errorResponse } from '@/lib/route-guard';
 import { teamService } from '@/lib/team-service';
-import { PERMISSIONS } from '@/lib/permissions';
+import { requirePermission } from '@/lib/permissions';
 
 // GET /api/team/[id] - Get member detail
 export async function GET(
@@ -25,15 +25,17 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  return withPermission(req, async (req, userId, clientId) => {
-    if (!clientId) return errorResponse('No client context', 403);
+  const guard = await requirePermission(req, 'users.edit' as any);
+  if (!guard.allowed) {
+    return errorResponse(guard.error || 'Forbidden', guard.status);
+  }
 
-    const { id } = await params;
-    const body = await req.json();
+  const auth = guard.auth!;
+  const { id } = await params;
+  const body = await req.json();
 
-    const member = await teamService.updateMember(clientId, id, body, userId);
-    return successResponse({ member });
-  }, PERMISSIONS.USERS_EDIT);
+  const member = await teamService.updateMember(auth.clientId!, id, body, auth.userId);
+  return successResponse({ member });
 }
 
 // DELETE /api/team/[id] - Remove member
@@ -41,12 +43,14 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  return withPermission(req, async (req, userId, clientId) => {
-    if (!clientId) return errorResponse('No client context', 403);
+  const guard = await requirePermission(req, 'users.remove' as any);
+  if (!guard.allowed) {
+    return errorResponse(guard.error || 'Forbidden', guard.status);
+  }
 
-    const { id } = await params;
-    await teamService.removeMember(clientId, id, userId);
+  const auth = guard.auth!;
+  const { id } = await params;
+  await teamService.removeMember(auth.clientId!, id, auth.userId);
 
-    return successResponse({ removed: true });
-  }, PERMISSIONS.USERS_REMOVE);
+  return successResponse({ removed: true });
 }
