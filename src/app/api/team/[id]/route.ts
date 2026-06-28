@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
-import { withAuth, successResponse, errorResponse } from '@/lib/route-guard';
+import { withAuth, withPermission, successResponse, errorResponse } from '@/lib/route-guard';
 import { teamService } from '@/lib/team-service';
+import { PERMISSIONS } from '@/lib/permissions';
 
 // GET /api/team/[id] - Get member detail
 export async function GET(
@@ -24,7 +25,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  return withAuth(req, async (req, userId, clientId) => {
+  return withPermission(req, async (req, userId, clientId) => {
     if (!clientId) return errorResponse('No client context', 403);
 
     const { id } = await params;
@@ -32,7 +33,7 @@ export async function PATCH(
 
     const member = await teamService.updateMember(clientId, id, body, userId);
     return successResponse({ member });
-  });
+  }, PERMISSIONS.USERS_EDIT);
 }
 
 // DELETE /api/team/[id] - Remove member
@@ -40,12 +41,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  return withAuth(req, async (req, userId, clientId) => {
+  return withPermission(req, async (req, userId, clientId) => {
     if (!clientId) return errorResponse('No client context', 403);
 
     const { id } = await params;
     await teamService.removeMember(clientId, id, userId);
 
     return successResponse({ removed: true });
-  });
+  }, PERMISSIONS.USERS_REMOVE);
 }

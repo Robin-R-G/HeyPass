@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { CommandPaletteTrigger } from '@/components/command-palette';
 import { NotificationCenter } from '@/components/notification-center';
+import { usePermissions } from '@/hooks/use-permissions';
 
 interface UserProfile {
   email: string;
@@ -19,6 +20,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [notifOpen, setNotifOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { hasPermission, is_superadmin, loading: permsLoading } = usePermissions();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -57,18 +59,22 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
           {/* Center nav */}
           <div className="hidden md:flex items-center gap-1">
-            <Link
-              href="/dashboard"
-              className={`hp-nav-item ${isActive('/dashboard') && !isActive('/dashboard/settings') && !isActive('/dashboard/events') ? 'active' : ''}`}
-            >
-              Events
-            </Link>
-            <Link
-              href="/dashboard/settings"
-              className={`hp-nav-item ${isActive('/dashboard/settings') ? 'active' : ''}`}
-            >
-              Settings
-            </Link>
+            {(is_superadmin || hasPermission('events.view')) && (
+              <Link
+                href="/dashboard"
+                className={`hp-nav-item ${isActive('/dashboard') && !isActive('/dashboard/settings') && !isActive('/dashboard/events') ? 'active' : ''}`}
+              >
+                Events
+              </Link>
+            )}
+            {(is_superadmin || hasPermission('settings.view')) && (
+              <Link
+                href="/dashboard/settings"
+                className={`hp-nav-item ${isActive('/dashboard/settings') ? 'active' : ''}`}
+              >
+                Settings
+              </Link>
+            )}
           </div>
 
           {/* Right actions */}

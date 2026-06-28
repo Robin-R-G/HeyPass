@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
-import { Loader2, Building2, Users, Calendar, Ticket, ArrowLeft, Search, Eye, Trash2, Shield, Edit, Plus, X } from 'lucide-react';
+import { Loader2, Building2, Users, Calendar, Ticket, ArrowLeft, Search, Eye, Trash2, Shield, Edit, Plus, X, UserPlus, Copy } from 'lucide-react';
 
 interface Organization {
   id: string;
@@ -17,12 +17,26 @@ interface Organization {
   max_events: number;
   max_users: number;
   created_at: string;
+  memberships?: Array<{
+    id: string;
+    user_id: string;
+    status: string;
+    role: { slug: string } | null;
+  }>;
+}
+
+interface User {
+  id: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
 }
 
 export default function OrganizationsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [orgsWithoutAdmin, setOrgsWithoutAdmin] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
@@ -31,6 +45,13 @@ export default function OrganizationsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createForm, setCreateForm] = useState({ email: '', password: '', first_name: '', last_name: '', organization_name: '', subscription_plan: 'free' });
   const [creating, setCreating] = useState(false);
+  const [showAssignAdminModal, setShowAssignAdminModal] = useState(false);
+  const [selectedOrgForAdmin, setSelectedOrgForAdmin] = useState<Organization | null>(null);
+  const [userSearch, setUserSearch] = useState('');
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [searchingUsers, setSearchingUsers] = useState(false);
+  const [assigningAdmin, setAssigningAdmin] = useState(false);
+  const [activeTab, setActiveTab] = useState<'all' | 'without-admin'>('all');
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push('/auth/login'); return; }
@@ -49,15 +70,82 @@ export default function OrganizationsPage() {
 
   const fetchOrganizations = async () => {
     try {
-      const res = await authFetch('/api/superadmin/clients');
-      if (res.ok) {
-        const data = await res.json();
+      const [allRes, withoutAdminRes] = await Promise.all([
+        authFetch('/api/superadmin/clients'),
+        authFetch('/api/superadmin/organizations-without-admin'),
+      ]);
+
+      if (allRes.ok) {
+        const data = await allRes.json();
         setOrganizations(data.data?.clients || data.clients || []);
+      }
+
+      if (withoutAdminRes.ok) {
+        const data = await withoutAdminRes.json();
+        setOrgsWithoutAdmin(data.data?.organizations || []);
       }
     } catch (err) {
       console.error('Failed to load organizations');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const searchUsers = async (query: string) => {
+    if (!query || query.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    setSearchingUsers(true);
+    try {
+      const res = await authFetch(`/api/superadmin/users?search=${encodeURIComponent(query)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const users = data.data?.users || data.users || [];
+        setSearchResults(users.map((u: any) => ({
+          id: u.id,
+          email: u.email,
+          first_name: u.first_name,
+          last_name: u.last_name,
+        })));
+      }
+    } catch {
+      setSearchResults([]);
+    } finally {
+      setSearchingUsers(false);
+    }
+  };
+
+  const handleAssignAdmin = async (userId: string) => {
+    if (!selectedOrgForAdmin) return;
+
+    setAssigningAdmin(true);
+    try {
+      const res = await authFetch('/api/superadmin/organizations-without-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          organization_id: selectedOrgForAdmin.id,
+          user_id: userId,
+        }),
+      });
+
+      if (res.ok) {
+        toast('Admin assigned successfully', 'success');
+        setShowAssignAdminModal(false);
+        setSelectedOrgForAdmin(null);
+        setSearchResults([]);
+        setUserSearch('');
+        fetchOrganizations();
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to assign admin', 'error');
+      }
+    } catch {
+      toast('Failed to assign admin', 'error');
+    } finally {
+      setAssigningAdmin(false);
     }
   };
 
@@ -176,10 +264,79 @@ export default function OrganizationsPage() {
           </div>
         </div>
 
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'all'
+                ? 'bg-[var(--hp-primary)] text-white'
+                : 'bg-[var(--hp-surface)] text-[var(--hp-text-muted)] hover:bg-[var(--hp-surface-hover)]'
+            }`}
+          >
+            All Organizations ({organizations.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('without-admin')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+              activeTab === 'without-admin'
+                ? 'bg-[var(--hp-warning)] text-white'
+                : 'bg-[var(--hp-surface)] text-[var(--hp-text-muted)] hover:bg-[var(--hp-surface-hover)]'
+            }`}
+          >
+            <Shield size={14} />
+            Without Admin ({orgsWithoutAdmin.length})
+            {orgsWithoutAdmin.length > 0 && (
+              <span className="w-2 h-2 rounded-full bg-[var(--hp-error)] animate-pulse"></span>
+            )}
+          </button>
+        </div>
+
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 py-20">
             <Loader2 size={24} className="text-[var(--hp-primary)] animate-spin" />
             <span className="text-[var(--hp-text-muted)] text-sm">Loading organizations...</span>
+          </div>
+        ) : activeTab === 'without-admin' ? (
+          <div className="space-y-3">
+            {orgsWithoutAdmin.length === 0 ? (
+              <div className="hp-glass-card p-8 text-center">
+                <Shield size={32} className="mx-auto mb-3 text-[var(--hp-success)]" />
+                <p className="text-[var(--hp-text)] font-medium">All organizations have admins</p>
+                <p className="text-sm text-[var(--hp-text-muted)]">Every organization has at least one owner assigned.</p>
+              </div>
+            ) : (
+              orgsWithoutAdmin.map(org => (
+                <div key={org.id} className="hp-glass-card px-6 py-5 border-l-4 border-l-[var(--hp-warning)]">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-[var(--hp-warning-bg)] flex items-center justify-center text-lg font-extrabold text-[var(--hp-warning)]">
+                        {org.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-[var(--hp-text)]">{org.name}</div>
+                        <div className="text-xs text-[var(--hp-text-muted)]">
+                          {org.slug} · Created {new Date(org.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </div>
+                        <div className="text-xs text-[var(--hp-warning)] mt-0.5 font-medium">
+                          No admin assigned
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          setSelectedOrgForAdmin(org);
+                          setShowAssignAdminModal(true);
+                        }} 
+                        className="hp-btn hp-btn-primary text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1"
+                      >
+                        <UserPlus size={12} /> Assign Admin
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         ) : (
           <div className="space-y-3">
@@ -195,8 +352,21 @@ export default function OrganizationsPage() {
                       <div className="text-xs text-[var(--hp-text-muted)]">
                         {org.slug} · Created {new Date(org.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </div>
-                      <div className="text-xs text-[var(--hp-text-muted)] mt-0.5">
-                        Plan: {org.subscription_plan || 'free'} · Code: {org.invitation_code || 'N/A'}
+                      <div className="text-xs text-[var(--hp-text-muted)] mt-0.5 flex items-center gap-2">
+                        Plan: {org.subscription_plan || 'free'} · Code: 
+                        <span className="text-[var(--hp-primary)] font-medium">{org.invitation_code || 'N/A'}</span>
+                        {org.invitation_code && (
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(org.invitation_code!);
+                              toast('Code copied', 'success');
+                            }}
+                            className="p-1 rounded hover:bg-white/[0.05] transition-all"
+                            title="Copy invitation code"
+                          >
+                            <Copy size={12} className="text-[var(--hp-text-muted)]" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -355,6 +525,75 @@ export default function OrganizationsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Assign Admin Modal */}
+      {showAssignAdminModal && selectedOrgForAdmin && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6" onClick={() => setShowAssignAdminModal(false)}>
+          <div className="hp-glass-card backdrop-blur-xl border border-[var(--hp-border-hover)] rounded-[var(--hp-radius-xl)] w-full max-w-[500px] p-7 sm:p-8 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold text-white">Assign Admin to {selectedOrgForAdmin.name}</h3>
+              <button onClick={() => setShowAssignAdminModal(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--hp-text-muted)] hover:text-white hover:bg-[var(--hp-surface-hover)] transition-all">
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-[10px] font-semibold text-[var(--hp-text-muted)] mb-1.5 uppercase tracking-wider">Search Users</label>
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" />
+                <input 
+                  type="text" 
+                  value={userSearch} 
+                  onChange={(e) => {
+                    setUserSearch(e.target.value);
+                    searchUsers(e.target.value);
+                  }}
+                  className="w-full pl-10 pr-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-[var(--hp-border)] rounded-[var(--hp-radius-md)] text-sm text-[var(--hp-text)] placeholder:text-[var(--hp-text-muted)] focus:outline-none focus:border-[var(--hp-border-focus)] focus:ring-2 focus:ring-[var(--hp-primary-glow)]"
+                  placeholder="Search by email or name..." 
+                />
+                {searchingUsers && (
+                  <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--hp-text-muted)] animate-spin" />
+                )}
+              </div>
+            </div>
+
+            <div className="max-h-[300px] overflow-y-auto mb-4">
+              {searchResults.length === 0 ? (
+                <p className="text-xs text-[var(--hp-text-muted)] text-center py-6">
+                  {userSearch.length < 2 ? 'Type at least 2 characters to search' : 'No users found'}
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {searchResults.map(user => (
+                    <div key={user.id} className="flex items-center justify-between bg-[var(--hp-surface)] rounded-lg px-4 py-3 hover:bg-[var(--hp-surface-hover)] transition-all">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--hp-primary)]/10 flex items-center justify-center text-xs font-bold text-[var(--hp-primary)]">
+                          {(user.first_name || user.email || '?')[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="text-xs font-medium text-white">{user.first_name} {user.last_name}</div>
+                          <div className="text-[10px] text-[var(--hp-text-muted)]">{user.email}</div>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => handleAssignAdmin(user.id)}
+                        disabled={assigningAdmin}
+                        className="text-xs font-bold px-3 py-1.5 rounded-lg border border-[var(--hp-primary)]/20 text-[var(--hp-primary)] hover:bg-[var(--hp-primary)]/10 transition-all disabled:opacity-50"
+                      >
+                        {assigningAdmin ? <Loader2 size={12} className="animate-spin" /> : 'Assign'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end">
+              <button onClick={() => setShowAssignAdminModal(false)} className="hp-btn hp-btn-secondary text-xs rounded-lg">Cancel</button>
+            </div>
           </div>
         </div>
       )}

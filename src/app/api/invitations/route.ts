@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
-import { withAuth, successResponse, errorResponse } from '@/lib/route-guard';
+import { withAuth, withPermission, successResponse, errorResponse } from '@/lib/route-guard';
 import { invitationService } from '@/lib/invitation-service';
+import { PERMISSIONS } from '@/lib/permissions';
 
 // GET /api/invitations - List invitations
 export const GET = withAuth(async (req: NextRequest, auth) => {
@@ -19,7 +20,7 @@ export const GET = withAuth(async (req: NextRequest, auth) => {
 });
 
 // POST /api/invitations - Create invitation
-export const POST = withAuth(async (req: NextRequest, auth) => {
+export const POST = withPermission(async (req: NextRequest, auth) => {
   if (!auth.clientId) return errorResponse('No client context', 403);
 
   const body = await req.json();
@@ -40,4 +41,4 @@ export const POST = withAuth(async (req: NextRequest, auth) => {
   });
 
   return successResponse({ invitation }, 201);
-});
+}, PERMISSIONS.USERS_INVITE);

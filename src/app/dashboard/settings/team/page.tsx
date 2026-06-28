@@ -7,7 +7,7 @@ import { authFetch, isAuthenticated } from '@/lib/auth-client';
 import { useToast } from '@/components/toast';
 import { useConfirm } from '@/components/confirm-dialog';
 import { StatusBadge } from '@/components/status-badge';
-import { Loader2, Users, UserPlus, Search, Filter, MoreVertical, Shield, Mail, Phone, Building, Calendar, ArrowLeft, X, Check, ChevronDown, Trash2, RefreshCw, Copy } from 'lucide-react';
+import { Loader2, Users, UserPlus, Search, Filter, MoreVertical, Shield, Mail, Phone, Building, Calendar, ArrowLeft, X, Check, ChevronDown, Trash2, RefreshCw, Copy, CheckCircle, XCircle } from 'lucide-react';
 
 interface TeamMember {
   id: string;
@@ -41,6 +41,18 @@ interface Invitation {
   role: { name: string; slug: string } | null;
 }
 
+interface PendingMember {
+  id: string;
+  status: string;
+  department: string | null;
+  phone: string | null;
+  invited_at: string | null;
+  created_at: string;
+  user: { id: string; email: string; first_name: string | null; last_name: string | null; avatar_url: string | null };
+  role: { id: string; name: string; slug: string } | null;
+  inviter: { id: string; email: string; first_name: string | null; last_name: string | null } | null;
+}
+
 export default function TeamManagementPage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -48,13 +60,20 @@ export default function TeamManagementPage() {
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [pendingMembers, setPendingMembers] = useState<PendingMember[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<'members' | 'invitations' | 'roles'>('members');
+  const [tab, setTab] = useState<'members' | 'invitations' | 'roles' | 'pending'>('members');
   const [search, setSearch] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteForm, setInviteForm] = useState({ email: '', role_id: '', department: '', phone: '', invitation_type: 'email', message: '' });
   const [inviting, setInviting] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [selectedPendingMember, setSelectedPendingMember] = useState<PendingMember | null>(null);
+  const [approveRoleId, setApproveRoleId] = useState('');
+  const [approveNotes, setApproveNotes] = useState('');
+  const [orgInvitationCode, setOrgInvitationCode] = useState<string | null>(null);
+  const [regeneratingCode, setRegeneratingCode] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) { router.push('/auth/login'); return; }
@@ -63,10 +82,11 @@ export default function TeamManagementPage() {
 
   const loadData = async () => {
     try {
-      const [membersRes, rolesRes, invRes] = await Promise.all([
+      const [membersRes, rolesRes, invRes, pendingRes] = await Promise.all([
         authFetch('/api/team'),
         authFetch('/api/roles'),
         authFetch('/api/invitations'),
+        authFetch('/api/team/pending'),
       ]);
 
       if (membersRes.ok) {
@@ -81,10 +101,63 @@ export default function TeamManagementPage() {
         const data = await invRes.json();
         setInvitations(data.data?.invitations || []);
       }
+      if (pendingRes.ok) {
+        const data = await pendingRes.json();
+        setPendingMembers(data.data?.members || []);
+      }
+
+      loadInvitationCode();
     } catch (err) {
       console.error('Failed to load team data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadInvitationCode = async () => {
+    try {
+      const res = await authFetch('/api/organization/invitation-code');
+      if (res.ok) {
+        const data = await res.json();
+        setOrgInvitationCode(data.data?.invitation_code || null);
+      }
+    } catch {
+      console.error('Failed to load invitation code');
+    }
+  };
+
+  const handleRegenerateCode = async () => {
+    const confirmed = await confirm({
+      title: 'Regenerate Invitation Code',
+      description: 'This will generate a new invitation code. The old code will no longer work. Continue?',
+      variant: 'warning',
+      confirmLabel: 'Regenerate',
+    });
+    if (!confirmed) return;
+
+    setRegeneratingCode(true);
+    try {
+      const res = await authFetch('/api/organization/invitation-code/regenerate', {
+        method: 'POST',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setOrgInvitationCode(data.data?.invitation_code);
+        toast('Invitation code regenerated', 'success');
+      } else {
+        toast('Failed to regenerate code', 'error');
+      }
+    } catch {
+      toast('Failed to regenerate code', 'error');
+    } finally {
+      setRegeneratingCode(false);
+    }
+  };
+
+  const copyInvitationCode = () => {
+    if (orgInvitationCode) {
+      navigator.clipboard.writeText(orgInvitationCode);
+      toast('Invitation code copied', 'success');
     }
   };
 
@@ -161,6 +234,28 @@ export default function TeamManagementPage() {
     }
   };
 
+  const handleReactivate = async (memberId: string) => {
+    setActionLoading(memberId);
+    try {
+      const res = await authFetch(`/api/team/${memberId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'active' }),
+      });
+      if (res.ok) {
+        toast('Member reactivated', 'success');
+        loadData();
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to reactivate member', 'error');
+      }
+    } catch (err) {
+      toast('Failed to reactivate member', 'error');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const handleRemove = async (memberId: string) => {
     const confirmed = await confirm({
       title: 'Remove Member',
@@ -215,6 +310,74 @@ export default function TeamManagementPage() {
     toast('Invite link copied', 'success');
   };
 
+  const handleApproveMember = async () => {
+    if (!selectedPendingMember) return;
+
+    setActionLoading(selectedPendingMember.id);
+    try {
+      const res = await authFetch('/api/team/pending', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          membership_id: selectedPendingMember.id,
+          action: 'approve',
+          role_id: approveRoleId || undefined,
+          notes: approveNotes || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        toast('Member approved successfully', 'success');
+        setShowApproveModal(false);
+        setSelectedPendingMember(null);
+        setApproveRoleId('');
+        setApproveNotes('');
+        loadData();
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to approve member', 'error');
+      }
+    } catch {
+      toast('Failed to approve member', 'error');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleRejectMember = async (memberId: string) => {
+    const confirmed = await confirm({
+      title: 'Reject Member',
+      description: 'Are you sure you want to reject this membership request? This action cannot be undone.',
+      variant: 'danger',
+      confirmLabel: 'Reject',
+    });
+    if (!confirmed) return;
+
+    setActionLoading(memberId);
+    try {
+      const res = await authFetch('/api/team/pending', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          membership_id: memberId,
+          action: 'reject',
+        }),
+      });
+
+      if (res.ok) {
+        toast('Member rejected', 'success');
+        loadData();
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to reject member', 'error');
+      }
+    } catch {
+      toast('Failed to reject member', 'error');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const filteredMembers = members.filter(m =>
     m.user?.email?.toLowerCase().includes(search.toLowerCase()) ||
     m.user?.first_name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -247,14 +410,52 @@ export default function TeamManagementPage() {
           </button>
         </div>
 
+        {/* Organization Invitation Code */}
+        {orgInvitationCode && (
+          <div className="hp-glass-card px-6 py-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-sm font-semibold text-white mb-1">Organization Invitation Code</h3>
+                <p className="text-xs text-[var(--hp-text-muted)]">Share this code with new members to join your organization</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 bg-[var(--hp-bg-elevated)] px-4 py-2 rounded-lg border border-white/[0.08]">
+                  <span className="text-lg font-bold text-[var(--hp-primary)] tracking-wider">{orgInvitationCode}</span>
+                  <button onClick={copyInvitationCode} className="p-1.5 rounded-md hover:bg-white/[0.05] transition-all" title="Copy code">
+                    <Copy size={14} className="text-[var(--hp-text-muted)]" />
+                  </button>
+                </div>
+                <button 
+                  onClick={handleRegenerateCode} 
+                  disabled={regeneratingCode}
+                  className="text-xs px-3 py-2 rounded-lg border border-[var(--hp-warning)]/20 text-[var(--hp-warning)] hover:bg-[var(--hp-warning-bg)] transition-all flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  <RefreshCw size={12} className={regeneratingCode ? 'animate-spin' : ''} />
+                  Regenerate
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-white/[0.03] rounded-xl p-1 w-fit">
-          {(['members', 'invitations', 'roles'] as const).map(t => (
+          {(['members', 'pending', 'invitations', 'roles'] as const).map(t => (
             <button key={t} onClick={() => setTab(t)}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
                 tab === t ? 'bg-[var(--hp-primary)] text-white' : 'text-[var(--hp-text-muted)] hover:text-white'
               }`}>
-              {t === 'members' ? `Members (${members.length})` : t === 'invitations' ? `Invitations (${invitations.filter(i => i.status === 'pending').length})` : `Roles (${roles.length})`}
+              {t === 'members' ? `Members (${members.length})` : 
+               t === 'pending' ? (
+                 <>
+                   Pending ({pendingMembers.length})
+                   {pendingMembers.length > 0 && (
+                     <span className="w-2 h-2 rounded-full bg-[var(--hp-warning)] animate-pulse"></span>
+                   )}
+                 </>
+               ) : 
+               t === 'invitations' ? `Invitations (${invitations.filter(i => i.status === 'pending').length})` : 
+               `Roles (${roles.length})`}
             </button>
           ))}
         </div>
@@ -318,7 +519,7 @@ export default function TeamManagementPage() {
                               Suspend
                             </button>
                           ) : (
-                            <button onClick={() => handleRoleChange(member.id, member.role?.id || '')} className="text-xs px-2 py-1 rounded text-[#10b981] hover:bg-[#10b981]/10 transition-all">
+                            <button onClick={() => handleReactivate(member.id)} className="text-xs px-2 py-1 rounded text-[#10b981] hover:bg-[#10b981]/10 transition-all">
                               Reactivate
                             </button>
                           )}
@@ -340,6 +541,57 @@ export default function TeamManagementPage() {
               </div>
             )}
           </>
+        ) : tab === 'pending' ? (
+          <div className="space-y-3">
+            {pendingMembers.length === 0 ? (
+              <div className="hp-glass-card p-16 text-center">
+                <CheckCircle size={40} className="text-[var(--hp-success)]/40 mx-auto mb-4" />
+                <p className="text-hp-text-secondary opacity-60 text-sm">No pending approvals</p>
+              </div>
+            ) : (
+              pendingMembers.map(member => (
+                <div key={member.id} className="hp-glass-card px-6 py-5 border-l-4 border-l-[var(--hp-warning)]">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-11 h-11 rounded-xl bg-[var(--hp-warning-bg)] flex items-center justify-center text-lg font-extrabold text-[var(--hp-warning)]">
+                        {(member.user?.first_name || member.user?.email || '?')[0].toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-white">{member.user?.first_name} {member.user?.last_name}</div>
+                        <div className="text-xs text-hp-text-secondary/60">{member.user?.email}</div>
+                        <div className="text-xs text-hp-text-secondary/60 mt-0.5">
+                          Requested role: {member.role?.name || 'Pending'} · Invited by: {member.inviter?.first_name || member.inviter?.email || 'Unknown'}
+                        </div>
+                        <div className="text-xs text-hp-text-secondary/60">
+                          Requested: {new Date(member.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          setSelectedPendingMember(member);
+                          setApproveRoleId(member.role?.id || '');
+                          setShowApproveModal(true);
+                        }}
+                        disabled={actionLoading === member.id}
+                        className="text-xs font-bold px-3 py-1.5 rounded-lg border border-[var(--hp-success)]/20 text-[var(--hp-success)] hover:bg-[var(--hp-success-bg)] transition-all disabled:opacity-50 flex items-center gap-1"
+                      >
+                        <CheckCircle size={12} /> Approve
+                      </button>
+                      <button 
+                        onClick={() => handleRejectMember(member.id)}
+                        disabled={actionLoading === member.id}
+                        className="text-xs font-bold px-3 py-1.5 rounded-lg border border-[var(--hp-error)]/20 text-[var(--hp-error)] hover:bg-[var(--hp-error-bg)] transition-all disabled:opacity-50 flex items-center gap-1"
+                      >
+                        <XCircle size={12} /> Reject
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         ) : tab === 'invitations' ? (
           <div className="space-y-3">
             {invitations.map(inv => (
@@ -455,6 +707,62 @@ export default function TeamManagementPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Approve Member Modal */}
+      {showApproveModal && selectedPendingMember && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-6" onClick={() => setShowApproveModal(false)}>
+          <div className="hp-glass-card backdrop-blur-xl border border-white/[0.12] rounded-2xl w-full max-w-[480px] p-7 sm:p-8 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-bold text-white">Approve Member</h3>
+              <button onClick={() => setShowApproveModal(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--hp-text-muted)] hover:text-[var(--hp-text)] hover:bg-[var(--hp-surface-hover)] transition-all">
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 rounded-xl bg-[var(--hp-warning-bg)] flex items-center justify-center text-lg font-extrabold text-[var(--hp-warning)]">
+                  {(selectedPendingMember.user?.first_name || selectedPendingMember.user?.email || '?')[0].toUpperCase()}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-white">{selectedPendingMember.user?.first_name} {selectedPendingMember.user?.last_name}</div>
+                  <div className="text-xs text-hp-text-secondary/60">{selectedPendingMember.user?.email}</div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Assign Role</label>
+                <select value={approveRoleId} onChange={e => setApproveRoleId(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white focus:outline-none focus:border-[var(--hp-primary)]/50">
+                  {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                </select>
+              </div>
+
+              <div className="mt-4">
+                <label className="block text-[10px] font-semibold text-hp-text-secondary/60 mb-1.5 uppercase tracking-wider">Notes (optional)</label>
+                <textarea value={approveNotes} onChange={e => setApproveNotes(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[var(--hp-bg-elevated)] border border-white/[0.08] rounded-xl text-sm text-white placeholder-[#666] focus:outline-none focus:border-[var(--hp-primary)]/50 resize-none"
+                  rows={3} placeholder="Any notes for this approval..." />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={() => setShowApproveModal(false)} className="hp-btn hp-btn-secondary text-xs rounded-lg">Cancel</button>
+              <button 
+                onClick={handleApproveMember}
+                disabled={actionLoading === selectedPendingMember.id}
+                className="hp-btn hp-btn-primary text-xs font-bold px-5 py-2.5 rounded-lg flex items-center gap-1.5"
+              >
+                {actionLoading === selectedPendingMember.id ? (
+                  <><Loader2 size={12} className="animate-spin" /> Approving...</>
+                ) : (
+                  <><CheckCircle size={12} /> Approve Member</>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

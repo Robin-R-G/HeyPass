@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requirePermission, extractAuthPayload, type AuthPayload, type PermissionName } from '@/lib/permissions';
+import { supabaseAdmin } from '@/lib/supabase/client';
+import { cacheGet, cacheSet } from '@/lib/cache';
 export { extractAuthPayload } from '@/lib/permissions';
 export { requirePermission } from '@/lib/permissions';
 
@@ -17,6 +19,27 @@ type LegacyRouteHandler = (
 interface WithPermissionOptions {
   permission: PermissionName;
   audit?: boolean;
+}
+
+async function isOrganizationSuspended(clientId: string): Promise<boolean> {
+  const cacheKey = `org_status:${clientId}`;
+  const cached = await cacheGet<string>(cacheKey);
+  
+  if (cached !== null) {
+    return cached === 'suspended';
+  }
+
+  const { data: client } = await supabaseAdmin
+    .from('clients')
+    .select('status')
+    .eq('id', clientId)
+    .is('deleted_at', null)
+    .single();
+
+  const status = client?.status || 'active';
+  await cacheSet(cacheKey, status, 60);
+  
+  return status === 'suspended';
 }
 
 export function withPermission(
@@ -42,6 +65,16 @@ export function withPermission(
         { error: 'Forbidden', message: 'No client context. Select a client first.' },
         { status: 403 }
       );
+    }
+
+    if (auth.clientId && !auth.is_superadmin) {
+      const suspended = await isOrganizationSuspended(auth.clientId);
+      if (suspended) {
+        return NextResponse.json(
+          { error: 'Forbidden', message: 'Organization is suspended. Contact support for assistance.' },
+          { status: 403 }
+        );
+      }
     }
 
     if (config) {
@@ -86,6 +119,17 @@ export function withAuth(
           { status: 403 }
         );
       }
+
+      if (!auth.is_superadmin) {
+        const suspended = await isOrganizationSuspended(auth.clientId);
+        if (suspended) {
+          return NextResponse.json(
+            { error: 'Forbidden', message: 'Organization is suspended. Contact support for assistance.' },
+            { status: 403 }
+          );
+        }
+      }
+
       return handler(req, auth.userId, auth.clientId);
     })();
   }
@@ -99,6 +143,17 @@ export function withAuth(
         { status: 401 }
       );
     }
+
+    if (auth.clientId && !auth.is_superadmin) {
+      const suspended = await isOrganizationSuspended(auth.clientId);
+      if (suspended) {
+        return NextResponse.json(
+          { error: 'Forbidden', message: 'Organization is suspended. Contact support for assistance.' },
+          { status: 403 }
+        );
+      }
+    }
+
     return routeHandler(req, auth);
   };
 }

@@ -4,46 +4,56 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { usePermissions } from '@/hooks/use-permissions';
 
 interface NavSection {
   title: string;
-  items: { label: string; href: string }[];
+  items: { label: string; href: string; permission?: string }[];
 }
 
 const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Organization',
     items: [
-      { label: 'Branding', href: '/dashboard/settings/branding' },
-      { label: 'Domains', href: '/dashboard/settings/domains' },
+      { label: 'Branding', href: '/dashboard/settings/branding', permission: 'branding.update' },
+      { label: 'Domains', href: '/dashboard/settings/domains', permission: 'settings.view' },
     ],
   },
   {
     title: 'Team',
     items: [
-      { label: 'Members', href: '/dashboard/settings/team' },
+      { label: 'Members', href: '/dashboard/settings/team', permission: 'users.view' },
     ],
   },
   {
     title: 'Integrations',
     items: [
-      { label: 'WhatsApp', href: '/dashboard/settings/whatsapp' },
-      { label: 'Artificial Intelligence', href: '/dashboard/settings/ai' },
-      { label: 'API Keys', href: '/dashboard/settings/api-keys' },
-      { label: 'Webhooks', href: '/dashboard/settings/webhooks' },
+      { label: 'WhatsApp', href: '/dashboard/settings/whatsapp', permission: 'whatsapp.view' },
+      { label: 'Artificial Intelligence', href: '/dashboard/settings/ai', permission: 'ai.view' },
+      { label: 'API Keys', href: '/dashboard/settings/api-keys', permission: 'apikey.view' },
+      { label: 'Webhooks', href: '/dashboard/settings/webhooks', permission: 'webhook.view' },
     ],
   },
   {
     title: 'Billing',
     items: [
-      { label: 'Payments', href: '/dashboard/settings/payments' },
-      { label: 'Plans', href: '/dashboard/settings/billing' },
+      { label: 'Payments', href: '/dashboard/settings/payments', permission: 'billing.view' },
+      { label: 'Plans', href: '/dashboard/settings/billing', permission: 'billing.plan_view' },
     ],
   },
 ];
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { hasPermission, is_superadmin, loading } = usePermissions();
+
+  const filteredSections = NAV_SECTIONS.map(section => ({
+    ...section,
+    items: section.items.filter(item => {
+      if (!item.permission) return true;
+      return is_superadmin || hasPermission(item.permission);
+    }),
+  })).filter(section => section.items.length > 0);
 
   return (
     <div className="flex min-h-screen">
@@ -59,7 +69,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
 
         <div className="hp-divider mx-5" />
 
-        {NAV_SECTIONS.map((section, sIdx) => (
+        {filteredSections.map((section, sIdx) => (
           <div key={section.title} className={sIdx > 0 ? 'mt-5' : ''}>
             <div className="hp-kpi-label px-5 mb-1.5">
               {section.title}

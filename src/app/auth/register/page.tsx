@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
@@ -16,11 +16,48 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [invitationCode, setInvitationCode] = useState('');
+  const [orgName, setOrgName] = useState('');
+  const [validatingCode, setValidatingCode] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const passwordsMatch = password === confirmPassword || confirmPassword === '';
   const passwordError = confirmPassword && !passwordsMatch ? 'Passwords do not match' : '';
+
+  const validateInvitationCode = async (code: string) => {
+    if (!code || code.length < 8) {
+      setOrgName('');
+      return;
+    }
+
+    setValidatingCode(true);
+    try {
+      const res = await fetch(`/api/invitation-codes/validate?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+      
+      if (res.ok && data.valid) {
+        setOrgName(data.organization_name);
+        setError('');
+      } else {
+        setOrgName('');
+        setError(data.error || 'Invalid invitation code');
+      }
+    } catch {
+      setOrgName('');
+    } finally {
+      setValidatingCode(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (invitationCode) {
+        validateInvitationCode(invitationCode);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [invitationCode]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +71,15 @@ export default function RegisterPage() {
     }
 
     try {
+      const body: any = { email, password, first_name: firstName, last_name: lastName };
+      if (invitationCode) {
+        body.invitation_code = invitationCode;
+      }
+
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, first_name: firstName, last_name: lastName }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
 
@@ -53,7 +95,11 @@ export default function RegisterPage() {
         localStorage.setItem('refresh_token', tokens.refresh_token);
       }
 
-      router.push('/dashboard');
+      if (invitationCode) {
+        router.push('/auth/pending-approval');
+      } else {
+        router.push('/dashboard');
+      }
     } catch {
       setError('Network error. Please try again.');
       setLoading(false);
@@ -94,6 +140,35 @@ export default function RegisterPage() {
             <div>
               <label htmlFor="reg-email" className="hp-form-label">Email</label>
               <Input id="reg-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" autoComplete="email" aria-required="true" />
+            </div>
+
+            {/* Invitation Code */}
+            <div>
+              <label htmlFor="reg-invite-code" className="hp-form-label">
+                Organization Invitation Code <span className="text-[var(--hp-text-muted)] font-normal">(Optional)</span>
+              </label>
+              <div className="relative">
+                <Input 
+                  id="reg-invite-code" 
+                  type="text" 
+                  value={invitationCode} 
+                  onChange={e => setInvitationCode(e.target.value.toUpperCase())} 
+                  placeholder="IEEE-RIET-AB7F" 
+                  className="uppercase tracking-wider"
+                  aria-describedby={orgName ? 'org-name-hint' : undefined}
+                />
+                {validatingCode && (
+                  <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-[var(--hp-text-muted)]" />
+                )}
+              </div>
+              {orgName && (
+                <p id="org-name-hint" className="text-xs text-[var(--hp-success)] mt-1.5">
+                  Joining: {orgName}
+                </p>
+              )}
+              {invitationCode && !orgName && !validatingCode && error && (
+                <p className="text-xs text-[var(--hp-error)] mt-1.5">{error}</p>
+              )}
             </div>
 
             {/* Password */}
