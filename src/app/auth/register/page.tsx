@@ -34,7 +34,8 @@ export default function RegisterPage() {
     setValidatingCode(true);
     try {
       const res = await fetch(`/api/invitation-codes/validate?code=${encodeURIComponent(code)}`);
-      const data = await res.json();
+      const json = await res.json();
+      const data = json.data || json;
       
       if (res.ok && data.valid) {
         setOrgName(data.organization_name);
