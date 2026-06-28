@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { authFetch, isAuthenticated, logout } from '@/lib/auth-client';
+import { authFetch, isAuthenticated, clearTokens } from '@/lib/auth-client';
 import { Loader2, Clock, CheckCircle, XCircle, Mail, ArrowLeft } from 'lucide-react';
 
 interface MembershipStatus {
@@ -76,7 +76,7 @@ export default function PendingApprovalPage() {
   };
 
   const handleLogout = async () => {
-    logout();
+    clearTokens();
     router.push('/auth/login');
   };
 
